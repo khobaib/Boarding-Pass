@@ -2,4 +2,6 @@ Options +FollowSymLinks
 
 RewriteEngine On
 
+RewriteCond $1 !^(test)
+
 RewriteRule ^(.*)$ index.php [QSA,NC,L]
