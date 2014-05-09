@@ -1,7 +1,7 @@
 <?php
 
 $host = "localhost";
-$dbname = "bp_draft";
+$dbname = "seatunity";
 $username = "cumhoc";
 $password = "ergopropterhoc";
 
@@ -29,9 +29,10 @@ $error_list = array(
     'x06' => 'email not registered',
     'x07' => 'provisional password expired',
     'x08' => 'must change provisional password',
-    'x09' => 'invalid boarding pass id',
-    'x10' => 'invalid or unknown boarding pass id.',
-    'x11' => 'invalid or unknown seatmate id'
+    'x09' => 'invalid or unknown boarding pass id.',
+    'x10' => 'invalid or unknown seatmate id',
+    'x11' => 'boarding pass already added',
+    'X12' => 'invalid or unknown boarding pass or seatmate id'
 );
 
 

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 29, 2014 at 11:11 PM
+-- Generation Time: May 06, 2014 at 01:54 AM
 -- Server version: 5.6.12-log
 -- PHP Version: 5.4.12
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `bp_draft`
 --
-CREATE DATABASE IF NOT EXISTS `bp_draft` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+CREATE DATABASE IF NOT EXISTS `bp_draft` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `bp_draft`;
 
 -- --------------------------------------------------------
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `session` (
   `session_id` varchar(30) NOT NULL,
   UNIQUE KEY `email` (`email`),
   KEY `email_2` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `session`
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `some_about_you` varchar(200) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `user`
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `user_image` (
   `type` varchar(45) DEFAULT NULL,
   `content` blob,
   UNIQUE KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user_image`

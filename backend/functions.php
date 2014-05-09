@@ -37,7 +37,9 @@ function pdo_setup() {
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         } catch (PDOException $e) {
+            echo $e->getMessage().HTML_LINE_BREAK.HTML_LINE_BREAK;
             echo $e->getTraceAsString();
+            return;
         }
 
     }
@@ -227,9 +229,3 @@ function delete_session() {
     session_unset();
     session_destroy();
 }
-# function delete_session() ends.
-
-function sql_get_id_by_email() {
-    return '( SELECT id FROM user WHERE email=:email ) ';
-}
-# function sql_get_id_by_email() ends.
