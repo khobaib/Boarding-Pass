@@ -86,7 +86,7 @@ Flight::route('POST /reg', function() {
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
             ':email'            => $json_obj->required->email,
-            ':password'         => $json_obj->required->password,
+            ':password'         => md5($json_obj->required->password),
             ':is_reg_confirmed' => $reg_confirm_id,
             ':firstname'        => $json_obj->optional->firstname,
             ':lastname'         => $json_obj->optional->lastname,
@@ -106,7 +106,8 @@ Flight::route('POST /reg', function() {
             error_response('x01', $error_list['x01']);
             return;
         }
-
+        
+        var_dump($json_obj->required->email);
         $to = $json_obj->required->email;
         $subject = 'SeatUnity: Registration Confirmation';
         $message  = '<p>Please follow the link below to confirm registration:</p>';
@@ -205,7 +206,7 @@ Flight::route('POST /login', function() {
         $stmt = $db->prepare($sql);
         $suc = $stmt->execute(array(
             ':email' => $json_obj->email,
-            ':password' => $json_obj->password
+            ':password' => md5($json_obj->password)
         ));
 
         # ERROR scenario. Wrong email and password combination.
@@ -287,7 +288,7 @@ Flight::route('POST /login', function() {
          * designed client (app) should not attempt to log in even though the 
          * user is already logged in. -Mustansir
          * 
-         * Really? what about the client wanting to manually refresh session at a time
+         * What about the client wanting to manually refresh session at a time
          * of its own choosing? -Mustansir
          */
         session_start();
@@ -444,15 +445,10 @@ Flight::route('PUT /reg', function() {
         $sql .= 'image_content=:image_content ';
         $sql .= 'WHERE email=:email ';
         
-        
-//        var_dump($json_obj->optional->image->type);
-//        return;
-    //    echo $sql.'<br />';
-    //    echo $_SESSION['email'].'<br />';
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
             ':email'                => $_SESSION['email'],
-            ':password'             => $json_obj->important->password,
+            ':password'             => md5($json_obj->important->password),
             ':is_pass_provisional'  => 0,
             ':firstname'            => $json_obj->optional->firstname,
             ':lastname'             => $json_obj->optional->lastname,
@@ -564,78 +560,73 @@ Flight::route('DELETE /passreset', function() {
     $db = pdo_setup();
     
     try {
-        
+        $sql  = 'SELECT password ';
+        $sql .= 'FROM  user ';
+        $sql .= 'WHERE email=:email ';
+
+        $stmt = $db->prepare($sql);
+        $success = $stmt->execute(array(
+            ':email' => $json_obj->email
+        ));
+
+        # ERROR scenario. Database failure.
+        if(!$success) {
+            # send error RESPONSE for database failure.
+            error_response('x01', $error_list['x01']);
+            return;
+        }
+        # ERROR scenario. email not registered.
+        if(!($stmt->rowCount() == 1)) {
+            # send error RESPONSE for the email is not registered.
+            error_response('x06', $error_list['x06']);
+            return;
+        }
+
+        $prov_pass = substr(sha1(uniqid()), 0, 8);
+
+
+        $sql  = 'UPDATE user ';
+        $sql .= 'SET ';
+        $sql .= 'password=:password, ';
+        $sql .= 'is_pass_provisional=:is_pass_provisional ';
+        $sql .= 'WHERE email=:email';
+
+        $stmt = $db->prepare($sql);
+        $success = $stmt->execute(array(
+            ':password'             => $prov_pass,
+            ':is_pass_provisional'  => (string)time(),
+            ':email'                => $json_obj->email
+        ));
+
+        # ERROR scenario. Database failure.
+        if(!($success && $stmt->rowCount() === 1)) {
+            # send error RESPONSE for database failure.
+            error_response('x01', $error_list['x01']);
+            return;
+        }
+
+        $to = $json_obj->email;
+        $subject = 'Password Reset for SeatUnity';
+        $message  = '<p>Your password has been reset.</p>';
+        $message .= '<p>User the following password to login: </p>';
+        $message .= '<p>'.$prov_pass.'</p>';
+        $message .= "<p>You can use it once within 24 hours from now</p>";
+
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
+        $headers .= 'From: noreply@seatunity.com' . "\r\n";
+        mail($to, $subject, $message, $headers);
+
+        $response = array(
+            'success' => 'true'
+        );
+        echo json_encode($response);
+        return;
     } catch (PDOException $exc) {
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
         return;
     }
     
-    $sql  = 'SELECT password ';
-    $sql .= 'FROM  user ';
-    $sql .= 'WHERE email=:email ';
-    
-    $stmt = $db->prepare($sql);
-    $success = $stmt->execute(array(
-        ':email' => $json_obj->email
-    ));
-    
-    # ERROR scenario. Database failure.
-    if(!$success) {
-        # send error RESPONSE for database failure.
-        error_response('x01', $error_list['x01']);
-        return;
-    }
-    # ERROR scenario. email not registered.
-    if(!($stmt->rowCount() == 1)) {
-        # send error RESPONSE for the email is not registered.
-        error_response('x06', $error_list['x06']);
-        return;
-    }
-    
-    $prov_pass = substr(sha1(uniqid()), 0, 8);
-    
-    
-//    var_dump(strlen(time()));
-//    return;
-    $db = pdo_setup();
-    
-    $sql  = 'UPDATE user ';
-    $sql .= 'SET ';
-    $sql .= 'password=:password, ';
-    $sql .= 'is_pass_provisional=:is_pass_provisional ';
-    $sql .= 'WHERE email=:email';
-    
-    $stmt = $db->prepare($sql);
-    $success = $stmt->execute(array(
-        ':password'             => $prov_pass,
-        ':is_pass_provisional'  => (string)time(),
-        ':email'                => $json_obj->email
-    ));
-    
-    # ERROR scenario. Database failure.
-    if(!($success && $stmt->rowCount() === 1)) {
-        # send error RESPONSE for database failure.
-        error_response('x01', $error_list['x01']);
-        return;
-    }
-    
-    $to = $json_obj->email;
-    $subject = 'Password Reset for SeatUnity';
-    $message  = '<p>Your password has been reset.</p>';
-    $message .= '<p>User the following password to login: </p>';
-    $message .= '<p>'.$prov_pass.'</p>';
-    $message .= "<p>You can use it once within 24 hours from now</p>";
-    
-    $headers  = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
-    $headers .= 'From: noreply@seatunity.com' . "\r\n";
-    mail($to, $subject, $message, $headers);
-    
-    $response = array(
-        'success' => 'true'
-    );
-    echo json_encode($response);
-    return;
 });
 
 # Send info of newly added boarding pass (BP)

@@ -37,8 +37,7 @@ function pdo_setup() {
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         } catch (PDOException $e) {
-            echo $e->getMessage().HTML_LINE_BREAK.HTML_LINE_BREAK;
-            echo $e->getTraceAsString();
+            error_response('x01', $error_list['x01'].' '.$exc->getMessage());
             return;
         }
 
@@ -225,8 +224,12 @@ function delete_session() {
         ':email'        => $_SESSION['email'],
         ':session_id'   => ''
     ));
+    
+    # ERROR scenario. Database failure.
     if(!($suc && $stmt->rowCount() === 1)) {
-        throw new Exception("database failure. suc={$suc}, rowCount={$stmt->rowCount()}");
+        # send error RESPONSE for database failure.
+        error_response('x01', $error_list['x01']);
+        return;
     }
     # delete the actual sessaion.
     session_unset();
