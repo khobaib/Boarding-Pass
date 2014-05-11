@@ -33,8 +33,6 @@ Flight::route('POST /reg', function() {
             'age',
             'profession',
             'seating_pref',
-//            'some_about_you',     // the reason for it not be here is that it is not present the registration screen of the app.
-//            'status',             // same reasone above.
             'image' => array(
                 'name',
                 'type',
@@ -107,7 +105,6 @@ Flight::route('POST /reg', function() {
             return;
         }
         
-        var_dump($json_obj->required->email);
         $to = $json_obj->required->email;
         $subject = 'SeatUnity: Registration Confirmation';
         $message  = '<p>Please follow the link below to confirm registration:</p>';
@@ -240,7 +237,10 @@ Flight::route('POST /login', function() {
                 ':is_pass_provisional' => -1,
                 ':email' => $json_obj->email
             ));
+            
+            # ERROR scenario. Database failure.
             if(!($success && $stmt->rowCount() === 1)) {
+                # send error RESPONSE for database failure.
                 error_response('x01', $error_list['x01']);
                 return;
             }
@@ -274,6 +274,7 @@ Flight::route('POST /login', function() {
             ));
             # ERROR scenario. Database failure.
             if(!$suc) {
+                # send error RESPONSE for database failure.
                 error_response('x01', $error_list['x01']);
                 return;
             }
@@ -310,6 +311,7 @@ Flight::route('POST /login', function() {
 
         # ERROR scenario. Database failure.
         if(!$success) {
+            # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
             return;
         }
@@ -318,10 +320,14 @@ Flight::route('POST /login', function() {
             'success' => 'true',
             'PHPSESSID' => session_id()
         );
+        if($is_prov > 0) {
+            $response['PROVISIONAL'] = 'TRUE';
+        }
         echo json_encode($response);
         return;
         
     } catch (PDOException $exc) {
+        # send error RESPONSE for database failure.
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
         return;
     }
@@ -747,7 +753,7 @@ Flight::route('POST /newbp', function() {
 });
 
 # Get details of a single boarding pass (BP)
-Flight::route('GET /bpdetail/@id:[1-9][0-9]{0,2}', function($id) {
+Flight::route('GET /bpdetail/@id:[1-9][0-9]{0,10}', function($id) {
     
     $id = (int)$id;
     
@@ -798,9 +804,6 @@ Flight::route('GET /bpdetail/@id:[1-9][0-9]{0,2}', function($id) {
         }
 
         $result = $stmt->fetchAll();
-
-    //    var_dump($result);
-    //    return;
 
         $response = array(
             "success"   => "true",
@@ -894,9 +897,7 @@ Flight::route('GET /bplist', function() {
         }
 
         $result = $stmt->fetchAll();
-
-    //    var_dump($result);
-    //    return;
+        
 
         foreach ($result as $row) {
             $response['boarding_pass'][] = array(
@@ -971,9 +972,6 @@ Flight::route('GET /bpupdate', function() {
 
         $result = $stmt->fetchAll();
 
-    //    var_dump($result);
-    //    return;
-
         $response = array(
             'success' => 'true'
         );
@@ -991,7 +989,7 @@ Flight::route('GET /bpupdate', function() {
 });
 
 # Delete a boarding pass
-Flight::route('DELETE /@bpid:[1-9][0-9]{0,2}', function($bpid) {
+Flight::route('DELETE /@bpid:[1-9][0-9]{0,10}', function($bpid) {
     $bpid = (int)$bpid;
     
     global $error_list;
@@ -1053,7 +1051,7 @@ Flight::route('DELETE /@bpid:[1-9][0-9]{0,2}', function($bpid) {
 });
 
 # Collect seatmate list
-Flight::route('GET /seatmatelist/@bpid:[1-9][0-9]{0,2}', function($bpid) {
+Flight::route('GET /seatmatelist/@bpid:[1-9][0-9]{0,10}', function($bpid) {
     $bpid = (int)$bpid;
     
     global $error_list;
@@ -1134,9 +1132,6 @@ Flight::route('GET /seatmatelist/@bpid:[1-9][0-9]{0,2}', function($bpid) {
 
         $result = $stmt->fetchAll();
 
-    //    var_dump($result);
-    //    return;
-
         $response = array(
             'success'   => 'true',
             'count'     => count($result)
@@ -1167,7 +1162,7 @@ Flight::route('GET /seatmatelist/@bpid:[1-9][0-9]{0,2}', function($bpid) {
 });
 
 # Collect seatmate profile detail
-Flight::route('GET /seatmate/@id:[1-9][0-9]{0,2}/@bpid:[1-9][0-9]{0,2}', function($id, $bpid) {
+Flight::route('GET /seatmate/@id:[1-9][0-9]{0,10}/@bpid:[1-9][0-9]{0,10}', function($id, $bpid) {
     $id     = (int)$id;
     $bpid   = (int)$bpid;
     
@@ -1227,8 +1222,7 @@ Flight::route('GET /seatmate/@id:[1-9][0-9]{0,2}/@bpid:[1-9][0-9]{0,2}', functio
         }
 
         $result = $stmt->fetchAll();
-    //    var_dump($result);
-    //    return;
+        
         $response = array(
             "success" => "true",
             "id" => $id,
@@ -1251,7 +1245,7 @@ Flight::route('GET /seatmate/@id:[1-9][0-9]{0,2}/@bpid:[1-9][0-9]{0,2}', functio
 });
 
 # Send message (email) to a seatmate
-Flight::route('POST /messagemate/@id:[1-9][0-9]{0,2}', function($id) {
+Flight::route('POST /messagemate/@id:[1-9][0-9]{0,10}', function($id) {
     $id = (int)$id;
     
     global $error_list;
