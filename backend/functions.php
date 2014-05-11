@@ -178,7 +178,7 @@ function is_logged_in($sess_id) {
             
             # store info about the new session id in the database.
             $db = pdo_setup();
-            $sql  = "UPDATE session ";
+            $sql  = "UPDATE user ";
             $sql .= "SET session_id=:sess_id ";
             $sql .= "WHERE email=:email ";
             
@@ -213,14 +213,17 @@ function is_logged_in($sess_id) {
  * @throws Exception
  */
 function delete_session() {
-    # delete session record from the database.
+    # replace session record with empty string in the database.
     $db = pdo_setup();
-    $sql  = "DELETE FROM session ";
-    $sql .= "WHERE email=:email ";
+    $sql  = 'UPDATE user ';
+    $sql .= 'SET ';
+    $sql .= 'session_id=:session_id ';
+    $sql .= 'WHERE email=:email ';
 
     $stmt = $db->prepare($sql);
     $suc = $stmt->execute(array(
-        ':email'    => $_SESSION['email']
+        ':email'        => $_SESSION['email'],
+        ':session_id'   => ''
     ));
     if(!($suc && $stmt->rowCount() === 1)) {
         throw new Exception("database failure. suc={$suc}, rowCount={$stmt->rowCount()}");
