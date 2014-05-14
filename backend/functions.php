@@ -37,7 +37,7 @@ function pdo_setup() {
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         } catch (PDOException $e) {
-            error_response('x01', $error_list['x01'].' '.$exc->getMessage());
+            error_response('x01', $error_list['x01'].' '.$e->getMessage());
             return;
         }
 
