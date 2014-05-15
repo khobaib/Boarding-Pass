@@ -32,7 +32,8 @@ $error_list = array(
     'x09' => 'invalid or unknown boarding pass id',
     'x10' => 'invalid or unknown seatmate id',
     'x11' => 'boarding pass already added',
-    'x12' => 'invalid or unknown boarding pass or seatmate id'
+    'x12' => 'invalid or unknown boarding pass or seatmate id',
+    'x13' => 'registration not confirmed'
 );
 
 

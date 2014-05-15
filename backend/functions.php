@@ -147,57 +147,57 @@ function is_logged_in($sess_id) {
         }
     }
     
-    # log user out and destroy session if last activity is more than 30 mins (1800 sec) ago. (for debug: 2 mins)
-    # check to see $_SESSION['LAST_ACTIVITY'] is there. If not, there are some bad implementations.
-    if(isset($_SESSION['LAST_ACTIVITY'])) {
-        if(time() - $_SESSION['LAST_ACTIVITY'] > LAST_ACTIVITY) {
-            # invalidate session.
-            delete_session();
-            # RETURN STATEMENT.
-            return FALSE;
-        } else {
-            $_SESSION['LAST_ACTIVITY'] = time();
-        }
-    } else {
-        if(isset($_SESSION['email'])) {
-            throw new Exception("ERROR: LAST_ACTIVITY was not set. BAD implementation");
-        }
-        return FALSE;
-    }
+//    # log user out and destroy session if last activity is more than 30 mins (1800 sec) ago. (for debug: 2 mins)
+//    # check to see $_SESSION['LAST_ACTIVITY'] is there. If not, there are some bad implementations.
+//    if(isset($_SESSION['LAST_ACTIVITY'])) {
+//        if(time() - $_SESSION['LAST_ACTIVITY'] > LAST_ACTIVITY) {
+//            # invalidate session.
+//            delete_session();
+//            # RETURN STATEMENT.
+//            return FALSE;
+//        } else {
+//            $_SESSION['LAST_ACTIVITY'] = time();
+//        }
+//    } else {
+//        if(isset($_SESSION['email'])) {
+//            throw new Exception("ERROR: LAST_ACTIVITY was not set. BAD implementation");
+//        }
+//        return FALSE;
+//    }
     
-    # regenerate session id if the session is active for more than 1 day. (for debug: 30 mins)
-    # check to see $_SESSION['CREATED'] is there. If not, there are some bad implementations.
-    if(isset($_SESSION['CREATED'])) {
-        if(time() - $_SESSION['CREATED'] > CREATED) {
-            # regenerate new session id and also delete old associated session file. (the true argument)
-            session_regenerate_id(TRUE);
-            
-            # set $_SESSION['CREATED'] to current files.
-            $_SESSION['CREATED'] = time();
-            
-            # store info about the new session id in the database.
-            $db = pdo_setup();
-            $sql  = "UPDATE user ";
-            $sql .= "SET session_id=:sess_id ";
-            $sql .= "WHERE email=:email ";
-            
-            $stmt = $db->prepare($sql);
-            $suc = $stmt->execute(array(
-                ':sess_id'  => session_id(),
-                ':email'    => $_SESSION['email']
-            ));
-            
-            if(!($suc && $stmt->rowCount() === 1)) {
-                error_response('01', $error_list['01']);
-                return FALSE;
-            }
-        }
-    } else {
-        if(isset($_SESSION['email'])) {
-            throw new Exception("ERROR: CREATED was not set. BAD implementation");
-        }
-        return FALSE;
-    }
+//    # regenerate session id if the session is active for more than 1 day. (for debug: 30 mins)
+//    # check to see $_SESSION['CREATED'] is there. If not, there are some bad implementations.
+//    if(isset($_SESSION['CREATED'])) {
+//        if(time() - $_SESSION['CREATED'] > CREATED) {
+//            # regenerate new session id and also delete old associated session file. (the true argument)
+//            session_regenerate_id(TRUE);
+//            
+//            # set $_SESSION['CREATED'] to current files.
+//            $_SESSION['CREATED'] = time();
+//            
+//            # store info about the new session id in the database.
+//            $db = pdo_setup();
+//            $sql  = "UPDATE user ";
+//            $sql .= "SET session_id=:sess_id ";
+//            $sql .= "WHERE email=:email ";
+//            
+//            $stmt = $db->prepare($sql);
+//            $suc = $stmt->execute(array(
+//                ':sess_id'  => session_id(),
+//                ':email'    => $_SESSION['email']
+//            ));
+//            
+//            if(!($suc && $stmt->rowCount() === 1)) {
+//                error_response('01', $error_list['01']);
+//                return FALSE;
+//            }
+//        }
+//    } else {
+//        if(isset($_SESSION['email'])) {
+//            throw new Exception("ERROR: CREATED was not set. BAD implementation");
+//        }
+//        return FALSE;
+//    }
     
     # RETURN STATEMENT.
     return isset($_SESSION['email']);
