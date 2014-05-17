@@ -241,3 +241,58 @@ function delete_session() {
     session_unset();
     session_destroy();
 }
+
+Class MailHandler {
+    public static function confirm_mail_handler($email_to, $confirmation_id) {
+        $confirm_link = $_SERVER['HTTP_HOST'].'/confirm/'.$confirmation_id;
+        
+        $from = 'noreply@seatunity.com';
+        
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
+        $headers .= 'From: '.$from."\r\n";
+        
+        # get these from database?
+        $subject = 'SeatUnity: Registration Confirmation';
+        $description = 'Please follow the link below to confirm registration:';
+        
+        ob_start();
+        include './mail_template/confirmation_tpl.php';
+        $body = ob_get_contents();
+        ob_end_clean();
+        
+        return mail($email_to, $subject, $body, $headers);
+    }
+    
+    public static function pass_reset_mail_handler($email_to, $prov_pass) {
+        $from = 'noreply@seatunity.com';        
+        
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
+        $headers .= 'From: '.$from."\r\n";
+        
+        # get these from database?
+        $subject = 'Password Reset for SeatUnity';
+        
+        $info = 'Your password has been reset.';
+        $instruction = 'Use the following password to login: ';
+        $rule = 'You can use it once within 24 hours from now';
+        
+        ob_start();
+        include'./mail_template/pass_reset_tpl.php';
+        $body = ob_get_contents();
+        ob_end_clean();
+        
+        return mail($email_to, $subject, $body, $headers);
+    }
+    
+    public static function message_mate_mail_handler($to, $message, $user_name) {
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
+        $headers .= 'From: messageservice@seatunity.com\r\n';
+        
+        $subject = $user_name.' <'.$_SESSION['email'].'> messaged you via seatunity';
+        
+        return mail($to, $subject, $message, $headers);
+    }
+}

@@ -2,6 +2,6 @@ Options +FollowSymLinks
 
 RewriteEngine On
 
-RewriteCond $1 !^(test)
+RewriteCond $1 !^(mail_template)
 
 RewriteRule ^(.*)$ index.php [QSA,NC,L]

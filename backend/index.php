@@ -72,7 +72,7 @@ Flight::route('POST /reg', function() {
         }
         
         $reg_confirm_id = substr(sha1(uniqid()), 0, 10);
-        $confirm_link = $_SERVER['HTTP_HOST'].'/confirm/'.$reg_confirm_id;
+        
         
         
         $sql  = 'INSERT INTO user ( ';
@@ -105,15 +105,17 @@ Flight::route('POST /reg', function() {
             return;
         }
         
-        $to = $json_obj->required->email;
-        $subject = 'SeatUnity: Registration Confirmation';
-        $message  = '<p>Please follow the link below to confirm registration:</p>';
-        $message .= '<a href="'.$confirm_link.'">'.$confirm_link.'</a>';
-
-        $headers  = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
-        $headers .= 'From: noreply@seatunity.com' . "\r\n";
-        mail($to, $subject, $message, $headers);
+        MailHandler::confirm_mail_handler($json_obj->required->email, $reg_confirm_id);
+        
+//        $to = $json_obj->required->email;
+//        $subject = 'SeatUnity: Registration Confirmation';
+//        $message  = '<p>Please follow the link below to confirm registration:</p>';
+//        $message .= '<a href="'.$confirm_link.'">'.$confirm_link.'</a>';
+//
+//        $headers  = 'MIME-Version: 1.0' . "\r\n";
+//        $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
+//        $headers .= 'From: noreply@seatunity.com' . "\r\n";
+//        mail($to, $subject, $message, $headers);
         
         
         # send success RESPONSE.
@@ -607,7 +609,7 @@ Flight::route('DELETE /passreset', function() {
 
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
-            ':password'             => $prov_pass,
+            ':password'             => md5($prov_pass),
             ':is_pass_provisional'  => (string)time(),
             ':email'                => $json_obj->email
         ));
@@ -618,18 +620,19 @@ Flight::route('DELETE /passreset', function() {
             error_response('x01', $error_list['x01']);
             return;
         }
-
-        $to = $json_obj->email;
-        $subject = 'Password Reset for SeatUnity';
-        $message  = '<p>Your password has been reset.</p>';
-        $message .= '<p>User the following password to login: </p>';
-        $message .= '<p>'.$prov_pass.'</p>';
-        $message .= "<p>You can use it once within 24 hours from now</p>";
-
-        $headers  = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
-        $headers .= 'From: noreply@seatunity.com' . "\r\n";
-        mail($to, $subject, $message, $headers);
+        
+        MailHandler::pass_reset_mail_handler($json_obj->email, $prov_pass);
+//        $to = $json_obj->email;
+//        $subject = 'Password Reset for SeatUnity';
+//        $message  = '<p>Your password has been reset.</p>';
+//        $message .= '<p>Use the following password to login: </p>';
+//        $message .= '<p>'.$prov_pass.'</p>';
+//        $message .= "<p>You can use it once within 24 hours from now</p>";
+//
+//        $headers  = 'MIME-Version: 1.0' . "\r\n";
+//        $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
+//        $headers .= 'From: noreply@seatunity.com' . "\r\n";
+//        mail($to, $subject, $message, $headers);
 
         $response = array(
             'success' => 'true'
@@ -1410,17 +1413,17 @@ Flight::route('POST /messagemate/@id:[1-9][0-9]{0,10}', function($id) {
             $user_name = $row->name;
         }
     }
-    
-    $to = $seatmate_email;
-    $subject = $user_name.' <'.$_SESSION['email'].'> messaged you via seatunity';
-    $message  = '<p>Hi</p>';
-    $message .= '<p>I messaged you</p>';
-    
-    $headers  = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
-//    $headers .= 'From: '.$_SESSION['email']."\r\n";
-    $headers .= 'From: messageservice@seatunity.com\r\n';
-    mail($to, $subject, $json_obj->message, $headers);
+    MailHandler::message_mate_mail_handler($seatmate_email, $json_obj->message, $user_name);
+//    $to = $seatmate_email;
+//    $subject = $user_name.' <'.$_SESSION['email'].'> messaged you via seatunity';
+//    $message  = '<p>Hi</p>';
+//    $message .= '<p>I messaged you</p>';
+//    
+//    $headers  = 'MIME-Version: 1.0' . "\r\n";
+//    $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
+////    $headers .= 'From: '.$_SESSION['email']."\r\n";
+//    $headers .= 'From: messageservice@seatunity.com\r\n';
+//    mail($to, $subject, $json_obj->message, $headers);
     
     $response = array(
         "success" => "true"
