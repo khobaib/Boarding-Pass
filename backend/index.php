@@ -1011,7 +1011,7 @@ Flight::route('GET /bpupdate', function() {
                 }
                 if($elem->id == $result[$i]->id) {
                     if($elem->version < $result[$i]->version) {
-                        $response['bp_data'][] = array(
+                        $response['boarding_passes'][] = array(
                             'id'            => $result[$i]->id,
                             'version'       => $result[$i]->version,
                             'bpdata'        => array(
@@ -1280,7 +1280,6 @@ Flight::route('GET /seatmate/@id:[1-9][0-9]{0,10}/@bpid:[1-9][0-9]{0,10}', funct
             return;
         }
         $bpinfo = $stmt->fetchAll()[0];
-//        var_dump($bpinfo);
         
         $sql  = 'SELECT user_id ';
         $sql .= 'FROM boarding_pass ';
@@ -1485,10 +1484,10 @@ Flight::route('GET /sharedflight/@mateid:[1-9][0-9]{0,10}', function($mateid) {
         
         $response = array(
             'success'   => 'true',
-            'bpinfo'    => array()
+            'boarding_passes'    => array()
         );
         foreach ($result as $row) {
-            $response['bpinfo'][] = array(
+            $response['boarding_passes'][] = array(
                 'id'                => $row->id,
                 'firstname'         => $row->firstname,
                 'lastname'          => $row->lastname,

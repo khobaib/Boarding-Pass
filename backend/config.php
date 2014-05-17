@@ -5,14 +5,25 @@ $dbname = "seatunity";
 $username = "cumhoc";
 $password = "ergopropterhoc";
 
+//$host = "localhost";
+//$dbname = "seatunity";
+//$username = "root";
+//$password = "Nayla#2405";
+
 
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
+ini_set("log_errors", 1);
+ini_set("error_log", "log/php-error.log");
 
+
+# sessions
 ini_set('session.use_cookies', 0);
 ini_set('session.use_only_cookies', 0);
 ini_set('session.use_trans_sid', 1);
 ini_set('session.gc_maxlifetime', 360);
+
+
 
 define('LAST_ACTIVITY', 30*60);
 define('CREATED', 24*60*60);

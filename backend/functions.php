@@ -117,6 +117,12 @@ function error_response($code, $message) {
             $code => $message
         )
     );
+    if(isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id'];
+    } else {
+        $user_id = 'none';
+    }
+    error_log('IP-'.Flight::request()->ip.' - uri: '.Flight::request()->base.' - method: '.Flight::request()->method.' - user_id: '.$user_id.' - '.$code.' - '.$message );
     echo json_encode($response);
 }
 # function error_response() ends.
