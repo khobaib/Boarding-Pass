@@ -1002,7 +1002,7 @@ Flight::route('GET /bpupdate', function() {
         
         $response = array(
             'success'       => 'true',
-            'bp_data'       => array()
+            'boarding_passes'       => array()
         );
         foreach ($json_obj->ver_info as $elem) {
             for ($i = 0; $i < count($result); ++$i) {
@@ -1014,20 +1014,21 @@ Flight::route('GET /bpupdate', function() {
                         $response['bp_data'][] = array(
                             'id'            => $result[$i]->id,
                             'version'       => $result[$i]->version,
-                            'stringform'    => $result[$i]->stringform,
-                            'firstname'     => $result[$i]->firstname,
-                            'lastname'      => $result[$i]->lastname,
-                            'PNR'           => $result[$i]->PNR,
-                            'travel_from'   => $result[$i]->travel_from,
-                            'travel_to'     => $result[$i]->travel_to,
-                            'carrier'       => $result[$i]->carrier,
-                            'flight_no'     => $result[$i]->flight_no,
-                            'julian_date'   => $result[$i]->julian_date,
-                            'compartment_code'  => $result[$i]->compartment_code,
-                            'seat'          => $result[$i]->seat,
-                            'departure'     => $result[$i]->departure,
-                            'arrival'       => $result[$i]->arrival,
-                            'year'          => $result[$i]->year
+                            'bpdata'        => array(
+                                'stringform'    => $result[$i]->stringform,
+                                'firstname'     => $result[$i]->firstname,
+                                'lastname'      => $result[$i]->lastname,
+                                'PNR'           => $result[$i]->PNR,
+                                'travel_from'   => $result[$i]->travel_from,
+                                'travel_to'     => $result[$i]->travel_to,
+                                'carrier'       => $result[$i]->carrier,
+                                'flight_no'     => $result[$i]->flight_no,
+                                'julian_date'   => $result[$i]->julian_date,
+                                'compartment_code'  => $result[$i]->compartment_code,
+                                'seat'          => $result[$i]->seat,
+                                'departure'     => $result[$i]->departure,
+                                'arrival'       => $result[$i]->arrival,
+                            )
                         );
                     }
                     $result[$i] = NULL;
@@ -1410,10 +1411,6 @@ Flight::route('POST /messagemate/@id:[1-9][0-9]{0,10}', function($id) {
             $user_name = $row->name;
         }
     }
-    var_dump($result);
-    return;
-//    var_dump($result);
-//    return;
     
     $to = $seatmate_email;
     $subject = $user_name.' <'.$_SESSION['email'].'> messaged you via seatunity';
@@ -1486,8 +1483,6 @@ Flight::route('GET /sharedflight/@mateid:[1-9][0-9]{0,10}', function($mateid) {
 
         $result = $stmt->fetchAll();
         
-//        var_dump($result);
-//        return;
         $response = array(
             'success'   => 'true',
             'bpinfo'    => array()
