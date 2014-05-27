@@ -1,7 +1,7 @@
 <?php
 
 $host = "localhost";
-$dbname = "seatunity";
+$dbname = "seatunity_token";
 $username = "cumhoc";
 $password = "ergopropterhoc";
 

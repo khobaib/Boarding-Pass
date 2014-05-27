@@ -30,7 +30,7 @@ function get_the_json() {
  * @return \PDO
  */
 function pdo_setup() {
-    global $db, $host, $dbname, $username, $password;
+    global $db, $host, $dbname, $username, $password, $error_list;
     if($db == NULL) {
         try {
             $db = new PDO("mysql:host={$host};dbname={$dbname}", $username, $password);
@@ -98,7 +98,6 @@ function json_schema_validation($valid_json_schema, $json_obj) {
     if($is_error) {
         # send error RESPONSE for JSON request is in invalid format.
         error_response('x00', $error_list['x00']);
-        return TRUE;
     }
     return FALSE;
 }
@@ -124,6 +123,7 @@ function error_response($code, $message) {
     }
     error_log('IP-'.Flight::request()->ip.' - uri: '.Flight::request()->base.' - method: '.Flight::request()->method.' - user_id: '.$user_id.' - '.$code.' - '.$message );
     echo json_encode($response);
+    exit;
 }
 # function error_response() ends.
 
@@ -136,77 +136,48 @@ function error_response($code, $message) {
  * @return boolean
  * @throws Exception
  */
-function is_logged_in($sess_id) {
+function is_logged_in($token) {
     
     global $error_list;
     
-    session_id($sess_id);
-    session_start();
+    $db = pdo_setup();
+//    session_id($sess_id);
+//    session_start();
     
+    $sql  = 'SELECT id, email, is_pass_provisional ';
+    $sql .= 'FROM user ';
+    $sql .= 'WHERE token=:token ';
+    
+    $stmt = $db->prepare($sql);
+    $suc = $stmt->execute(array(
+        ':token'    => $token
+    ));
+    # ERROR scenario. Database failure.
+    if(!$suc) {
+        # send error RESPONSE for database failure.
+        error_response('x01', $error_list['x01']);
+    }
+    if($stmt->rowCount() !== 1) {
+        error_response('x05', $error_list['x05']);
+    }
+    
+    $result = $stmt->fetchAll();
+    $is_prov = (int)$result[0]->is_pass_provisional;
     # log user out and destroy session if provisional password is expired.
-    if(isset($_SESSION['PROVISIONAL'])) {
-        if(time() - $_SESSION['PROVISIONAL'] > PROVISIONAL_PASS_EXPIRE) {
+    if($is_prov !== -1 && $is_prov !== 0) {
+        if(time() - $is_prov > PROVISIONAL_PASS_EXPIRE) {
             # invalidate session.
-            delete_session();
+            delete_token($result[0]->email);
             # RETURN STATEMENT.
             return FALSE;
         }
     }
     
-//    # log user out and destroy session if last activity is more than 30 mins (1800 sec) ago. (for debug: 2 mins)
-//    # check to see $_SESSION['LAST_ACTIVITY'] is there. If not, there are some bad implementations.
-//    if(isset($_SESSION['LAST_ACTIVITY'])) {
-//        if(time() - $_SESSION['LAST_ACTIVITY'] > LAST_ACTIVITY) {
-//            # invalidate session.
-//            delete_session();
-//            # RETURN STATEMENT.
-//            return FALSE;
-//        } else {
-//            $_SESSION['LAST_ACTIVITY'] = time();
-//        }
-//    } else {
-//        if(isset($_SESSION['email'])) {
-//            throw new Exception("ERROR: LAST_ACTIVITY was not set. BAD implementation");
-//        }
-//        return FALSE;
-//    }
-    
-//    # regenerate session id if the session is active for more than 1 day. (for debug: 30 mins)
-//    # check to see $_SESSION['CREATED'] is there. If not, there are some bad implementations.
-//    if(isset($_SESSION['CREATED'])) {
-//        if(time() - $_SESSION['CREATED'] > CREATED) {
-//            # regenerate new session id and also delete old associated session file. (the true argument)
-//            session_regenerate_id(TRUE);
-//            
-//            # set $_SESSION['CREATED'] to current files.
-//            $_SESSION['CREATED'] = time();
-//            
-//            # store info about the new session id in the database.
-//            $db = pdo_setup();
-//            $sql  = "UPDATE user ";
-//            $sql .= "SET session_id=:sess_id ";
-//            $sql .= "WHERE email=:email ";
-//            
-//            $stmt = $db->prepare($sql);
-//            $suc = $stmt->execute(array(
-//                ':sess_id'  => session_id(),
-//                ':email'    => $_SESSION['email']
-//            ));
-//            
-//            if(!($suc && $stmt->rowCount() === 1)) {
-//                error_response('01', $error_list['01']);
-//                return FALSE;
-//            }
-//        }
-//    } else {
-//        if(isset($_SESSION['email'])) {
-//            throw new Exception("ERROR: CREATED was not set. BAD implementation");
-//        }
-//        return FALSE;
-//    }
-    
     # RETURN STATEMENT.
-    return isset($_SESSION['email']);
+    return array(
+        'user_id'   => $result[0]->id,
+        'email'     => $result[0]->email
+    );
 }
 # function is_logged_in() ends.
 
@@ -217,18 +188,18 @@ function is_logged_in($sess_id) {
  * 
  * @throws Exception
  */
-function delete_session() {
+function delete_token($email) {
     # replace session record with empty string in the database.
     $db = pdo_setup();
     $sql  = 'UPDATE user ';
     $sql .= 'SET ';
-    $sql .= 'session_id=:session_id ';
+    $sql .= 'token=:token ';
     $sql .= 'WHERE email=:email ';
 
     $stmt = $db->prepare($sql);
     $suc = $stmt->execute(array(
-        ':email'        => $_SESSION['email'],
-        ':session_id'   => ''
+        ':email'        => $email,
+        ':token'   => ''
     ));
     
     # ERROR scenario. Database failure.
@@ -237,9 +208,9 @@ function delete_session() {
         error_response('x01', $error_list['x01']);
         return;
     }
-    # delete the actual sessaion.
-    session_unset();
-    session_destroy();
+//    # delete the actual sessaion.
+//    session_unset();
+//    session_destroy();
 }
 
 Class MailHandler {
@@ -295,4 +266,9 @@ Class MailHandler {
         
         return mail($to, $subject, $message, $headers);
     }
+}
+
+function generate_token() {
+//    return sha1(uniqid());
+    return uniqid();
 }

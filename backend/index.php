@@ -42,9 +42,11 @@ Flight::route('POST /reg', function() {
     );
     
     # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
+//    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
+//        return;
+//    }
+    
+    json_schema_validation($valid_json_schema, $json_obj);
     
     # initialize database.
     $db = pdo_setup();
@@ -68,11 +70,9 @@ Flight::route('POST /reg', function() {
         if(count($result) != 0) {
             # send error RESPONSE for the email is already in use.
             error_response('x03', $error_list['x03']);
-            return;
         }
         
         $reg_confirm_id = substr(sha1(uniqid()), 0, 10);
-        
         
         
         $sql  = 'INSERT INTO user ( ';
@@ -102,7 +102,6 @@ Flight::route('POST /reg', function() {
         if(!($success && $stmt->rowCount() === 1)) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
         
         MailHandler::confirm_mail_handler($json_obj->required->email, $reg_confirm_id);
@@ -128,7 +127,6 @@ Flight::route('POST /reg', function() {
     } catch (PDOException $e) {
         # send error RESPONSE for database failure.
         error_response('x01', $error_list['x01'].'. '.$e->getMessage());
-        return;
     }
 });
 
@@ -153,7 +151,6 @@ Flight::route('GET /confirm/@id:[0-9a-z]{10}', function($id) {
     if(!($success && $stmt->rowCount() === 1)) {
         # send error RESPONSE for database failure.
         error_response('x01', $error_list['x01']);
-        return;
     }
     
     $sql  = 'UPDATE user ';
@@ -171,7 +168,6 @@ Flight::route('GET /confirm/@id:[0-9a-z]{10}', function($id) {
     if(!($success && $stmt->rowCount() === 1)) {
         # send error RESPONSE for database failure.
         error_response('x01', $error_list['x01']);
-        return;
     }
     
     echo 'thank you for signing up with us.';
@@ -188,11 +184,11 @@ Flight::route('POST /login', function() {
         'password'
     );
     
-    # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
-    
+//    # ERROR scenario. JSON format validation.
+//    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
+//        return;
+//    }
+    json_schema_validation($valid_json_schema, $json_obj);
     # validate user email and password.
     # initialize database.
     $db = pdo_setup();
@@ -213,7 +209,6 @@ Flight::route('POST /login', function() {
         if(!($suc && $stmt->rowCount() === 1)) {
             # send error RESPONSE for username password combination is wrong.
             error_response('x04', $error_list['x04']);
-            return;
         }
 
         $result = $stmt->fetchAll();
@@ -225,7 +220,6 @@ Flight::route('POST /login', function() {
         # ERROR scenario. Registration not confirmed.
         if($is_confirmed !== 1) {
             error_response('x13', $error_list['x13']);
-            return;
         }
         
         if($is_prov !== 0) {
@@ -233,9 +227,8 @@ Flight::route('POST /login', function() {
             if($is_prov === -1 || time() - $is_prov > PROVISIONAL_PASS_EXPIRE) {
                 # send error RESPONSE for provisional password expired. (07)
                 error_response('x07', $error_list['x07']);
-                return;
             }
-            $_SESSION['PROVISIONAL'] = $is_prov;
+//            $_SESSION['PROVISIONAL'] = $is_prov;
 
             $sql  = 'UPDATE user ';
             $sql .= 'SET ';
@@ -252,12 +245,11 @@ Flight::route('POST /login', function() {
             if(!($success && $stmt->rowCount() === 1)) {
                 # send error RESPONSE for database failure.
                 error_response('x01', $error_list['x01']);
-                return;
             }
         }
 
         # check to see whether the user was already logged in.
-        $sql  = 'SELECT session_id FROM user ';
+        $sql  = 'SELECT token FROM user ';
         $sql .= 'WHERE email=:email ';
         $stmt = $db->prepare($sql);
         $suc = $stmt->execute(array(
@@ -265,28 +257,22 @@ Flight::route('POST /login', function() {
         ));
         # if so, the row count should be other than empty string (''). In that case, destroy the session and set its reference in user table to empty string ('').
         $result1 = $stmt->fetchAll();
-        if($suc && !empty($result1->session_id)) {
+        if($suc && !empty($result1->token)) {
             $result1 = $stmt->fetchAll();
-            # destroy session.
-            session_id($result1[0]->session_id);
-            session_start();
-            session_unset();
-            session_destroy();
             # remove reference from database.
             $sql  = 'UPDATE user ';
             $sql .= 'SET ';
-            $sql .= 'session_id=:session_id ';
+            $sql .= 'token=:token ';
             $sql .= 'WHERE email=:email ';
             $stmt = $db->prepare($sql);
             $suc = $stmt->execute(array(
                 ':email'        => $json_obj->email,
-                ':session_id'   => ''
+                ':token'   => ''
             ));
             # ERROR scenario. Database failure.
             if(!$suc) {
                 # send error RESPONSE for database failure.
                 error_response('x01', $error_list['x01']);
-                return;
             }
         }
         /**
@@ -302,33 +288,29 @@ Flight::route('POST /login', function() {
          * What about the client wanting to manually refresh session at a time
          * of its own choosing? -Mustansir
          */
-        session_start();
-        $_SESSION['user_id'] = $user_id;
-        $_SESSION['email'] = $json_obj->email;
-//        $_SESSION['CREATED'] = time();
-//        $_SESSION['LAST_ACTIVITY'] = time();
-
+        
+        $token = generate_token();
+        
         $sql  = 'UPDATE user ';
         $sql .= 'SET ';
-        $sql .= 'session_id=:session_id ';
+        $sql .= 'token=:token ';
         $sql .= 'WHERE email=:email ';
 
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
             ':email' => $json_obj->email,
-            ':session_id' => session_id()
+            ':token' => $token
         ));
 
         # ERROR scenario. Database failure.
         if(!$success) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
         # send success RESPONSE.
         $response = array(
             'success' => 'true',
-            'session_id' => session_id()
+            'token' => $token
         );
         if($is_prov > 0) {
             $response['PROVISIONAL'] = 'TRUE';
@@ -339,7 +321,6 @@ Flight::route('POST /login', function() {
     } catch (PDOException $exc) {
         # send error RESPONSE for database failure.
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
-        return;
     }
 
 });
@@ -352,21 +333,19 @@ Flight::route('POST /logout', function() {
     $json_obj = get_the_json();
     
     $valid_json_schema = array(
-        'session_id'
+        'token'
     );
     
-    # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
+//    # ERROR scenario. JSON format validation.
+//    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
+//        return;
+//    }
     
-    # ERROR scenario. None logged in.
-    if(!is_logged_in($json_obj->session_id)) {
-        error_response('x05', $error_list['x05']);
-        return;
-    }
+    json_schema_validation($valid_json_schema, $json_obj, $error_list);
+     
+    $user_info = is_logged_in($json_obj->token);
     
-    delete_session();
+    delete_token($user_info['email']);
     
     # send SUCCESS response.
     $response = array(
@@ -384,7 +363,7 @@ Flight::route('PUT /reg', function() {
     $json_obj = get_the_json();
     
     $valid_json_schema = array(
-        'session_id',
+        'token',
         'important' => array(
             'password'
         ),
@@ -407,15 +386,13 @@ Flight::route('PUT /reg', function() {
     );
     
     # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
+//    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
+//        return;
+//    }
+    json_schema_validation($valid_json_schema, $json_obj, $error_list);
     
     # ERROR scenario. None logged in.
-    if(!is_logged_in($json_obj->session_id)) {
-        error_response('x05', $error_list['x05']);
-        return;
-    }
+    $user_info = is_logged_in($json_obj->token);
     
     $db = pdo_setup();
     
@@ -427,20 +404,18 @@ Flight::route('PUT /reg', function() {
 
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
-            ':email' => $_SESSION['email']
+            ':email' => $user_info['email']
         ));
         # ERROR scenario. Database failure.
         if(!($success && $stmt->rowCount() === 1)) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
         $result = $stmt->fetchAll();
         # ERROR scenario. Must change provisional password.
         if((int)$result[0]->is_pass_provisional !== 0 && $result[0]->password === $json_obj->important->password) {
             # send error RESPONSE for provisional password was not changed.
             error_response('x08', $error_list['x08']);
-            return;
         }
 
         $sql  = 'UPDATE user ';
@@ -463,7 +438,7 @@ Flight::route('PUT /reg', function() {
         
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
-            ':email'                => $_SESSION['email'],
+            ':email'                => $user_info['email'],
             ':password'             => md5($json_obj->important->password),
             ':is_pass_provisional'  => 0,
             ':firstname'            => $json_obj->optional->firstname,
@@ -484,7 +459,6 @@ Flight::route('PUT /reg', function() {
         if(!$success) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
 
         # send SUCCESS response.
@@ -495,7 +469,6 @@ Flight::route('PUT /reg', function() {
         return;
     } catch (PDOException $exc) {
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
-        return;
     }
     
 });
@@ -508,20 +481,23 @@ Flight::route('POST /statusupdate', function() {
     $json_obj = get_the_json();
     
     $valid_json_schema = array(
-        'session_id',
+        'token',
         'status'
     );
     
-    # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
+//    # ERROR scenario. JSON format validation.
+//    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
+//        return;
+//    }
+//    
+//    # ERROR scenario. None logged in.
+//    if(!is_logged_in($json_obj->session_id)) {
+//        error_response('x05', $error_list['x05']);
+//    }
+    json_schema_validation($valid_json_schema, $json_obj, $error_list);
     
     # ERROR scenario. None logged in.
-    if(!is_logged_in($json_obj->session_id)) {
-        error_response('x05', $error_list['x05']);
-        return;
-    }
+    $user_info = is_logged_in($json_obj->token);
     
     $db = pdo_setup();
     
@@ -534,14 +510,13 @@ Flight::route('POST /statusupdate', function() {
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
             ':status'   => $json_obj->status,
-            ':email'    => $_SESSION['email']
+            ':email'    => $user_info['email']
         ));
 
         # ERROR scenario. Database failure.
         if(!$success) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
 
         # send SUCCESS response.
@@ -552,9 +527,7 @@ Flight::route('POST /statusupdate', function() {
         return;
     } catch (PDOException $exc) {
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
-        return;
     }
-    
 });
 
 # Reset forgotten password and mail provisional pass
@@ -569,9 +542,7 @@ Flight::route('DELETE /passreset', function() {
     );
     
     # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
+    json_schema_validation($valid_json_schema, $json_obj, $error_list);
     
     $db = pdo_setup();
     
@@ -589,13 +560,11 @@ Flight::route('DELETE /passreset', function() {
         if(!$success) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
         # ERROR scenario. email not registered.
         if(!($stmt->rowCount() == 1)) {
             # send error RESPONSE for the email is not registered.
             error_response('x06', $error_list['x06']);
-            return;
         }
 
         $prov_pass = substr(sha1(uniqid()), 0, 8);
@@ -618,7 +587,6 @@ Flight::route('DELETE /passreset', function() {
         if(!($success && $stmt->rowCount() === 1)) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
         
         MailHandler::pass_reset_mail_handler($json_obj->email, $prov_pass);
@@ -641,7 +609,6 @@ Flight::route('DELETE /passreset', function() {
         return;
     } catch (PDOException $exc) {
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
-        return;
     }
     
 });
@@ -654,7 +621,7 @@ Flight::route('POST /newbp', function() {
     
     $valid_json_schema = array(
         'authentication' => array(
-            'session_id'
+            'token'
         ),
         'version',
         'year',
@@ -676,15 +643,10 @@ Flight::route('POST /newbp', function() {
     );
     
     # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
+    json_schema_validation($valid_json_schema, $json_obj, $error_list);
     
     # ERROR scenario. None logged in.
-    if(!is_logged_in($json_obj->authentication->session_id)) {
-        error_response('x05', $error_list['x05']);
-        return;
-    }
+    $user_info = is_logged_in($json_obj->authentication->token);
     
     $db = pdo_setup();
     
@@ -693,10 +655,11 @@ Flight::route('POST /newbp', function() {
         $sql  = 'SELECT id ';
         $sql .= 'FROM boarding_pass ';
         $sql .= 'WHERE user_id=:user_id AND carrier=:carrier AND flight_no=:flight_no AND julian_date=:julian_date ';
-
+        
+        
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
-            ':user_id'      => $_SESSION['user_id'],
+            ':user_id'      => $user_info['user_id'],
             ':carrier'      => $json_obj->bpdata->carrier,
             ':flight_no'    => $json_obj->bpdata->flight_no,
             ':julian_date'  => $json_obj->bpdata->julian_date
@@ -706,16 +669,14 @@ Flight::route('POST /newbp', function() {
         if(!$success) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
 
 
         if(!($stmt->rowCount() === 0)) {
             # send error RESPONSE for the boarding pass is already added.
             error_response('x11', $error_list['x11']);
-            return;
         }
-
+        
         # store in the database.
         $sql  = 'INSERT INTO boarding_pass ( ';
         $sql .= 'user_id, stringform, firstname, lastname, PNR, travel_from, travel_to, carrier, flight_no, julian_date, compartment_code, seat, departure, arrival, year ';
@@ -725,7 +686,7 @@ Flight::route('POST /newbp', function() {
 
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
-            ':user_id'          => $_SESSION['user_id'],
+            ':user_id'          => $user_info['user_id'],
             ':stringform'       => $json_obj->bpdata->stringform,
             ':firstname'        => $json_obj->bpdata->firstname,
             ':lastname'         => $json_obj->bpdata->lastname,
@@ -746,7 +707,6 @@ Flight::route('POST /newbp', function() {
         if(!($success && $stmt->rowCount() === 1)) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
 
         # send SUCCESS response.
@@ -758,7 +718,6 @@ Flight::route('POST /newbp', function() {
         return;
     } catch (PDOException $exc) {
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
-        return;
     }
     
 });
@@ -773,45 +732,38 @@ Flight::route('GET /bpdetail/@id:[1-9][0-9]{0,10}', function($id) {
     $json_obj = get_the_json();
     
     $valid_json_schema = array(
-        'session_id'
+        'token'
     );
     
     # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
-    
+    json_schema_validation($valid_json_schema, $json_obj, $error_list);
     
     # ERROR scenario. None logged in.
-    if(!is_logged_in($json_obj->session_id)) {
-        error_response('x05', $error_list['x05']);
-        return;
-    }
+    $user_info = is_logged_in($json_obj->token);
     
     $db = pdo_setup();
     
     try {
         $sql  = 'SELECT * ';
         $sql .= 'FROM boarding_pass ';
-        $sql .= 'WHERE id=:id ';
+        $sql .= 'WHERE id=:id AND user_id=:user_id ';
 
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
-            ':id' => $id
+            ':id'       => $id,
+            ':user_id'  => $user_info['user_id']
         ));
 
         # ERROR scenario. Database failure.
         if(!$success) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
 
         # ERROR scenario. Invalid or unknown boarding pass id.
         if(!($stmt->rowCount() === 1)) {
             # ERROR scenario. Invalid or unknown boarding pass id.
             error_response('x09', $error_list['x09']);
-            return;
         }
 
         $result = $stmt->fetchAll();
@@ -820,6 +772,7 @@ Flight::route('GET /bpdetail/@id:[1-9][0-9]{0,10}', function($id) {
             "success"   => "true",
             "version"   => $result[0]->version,
             "bpdata"    => array(
+                'id'                => $result[0]->id,
                 "stringform"        => $result[0]->stringform,
                 "firstname"         => $result[0]->firstname,
                 "lastname"          => $result[0]->lastname,
@@ -839,7 +792,6 @@ Flight::route('GET /bpdetail/@id:[1-9][0-9]{0,10}', function($id) {
         return;
     } catch (PDOException $exc) {
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
-        return;
     }
     
 });
@@ -851,21 +803,15 @@ Flight::route('GET /bplist', function() {
     $json_obj = get_the_json();
     
     $valid_json_schema = array(
-        'session_id',
+        'token',
         'boarding_pass'
     );
     
     # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
-    
+    json_schema_validation($valid_json_schema, $json_obj, $error_list);
     
     # ERROR scenario. None logged in.
-    if(!is_logged_in($json_obj->session_id)) {
-        error_response('x05', $error_list['x05']);
-        return;
-    }
+    $user_info = is_logged_in($json_obj->token);
     
     $db = pdo_setup();
     
@@ -880,13 +826,12 @@ Flight::route('GET /bplist', function() {
         } else {
             # send error RESPONSE for JSON request is in invalid format.
             error_response('x00', $error_list['x00']);
-            return TRUE;
         }
         $sql .= 'ORDER BY year ASC, julian_date DESC';
 
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
-            ':user_id'      => $_SESSION['user_id'],
+            ':user_id'      => $user_info['user_id'],
             ':year'         => (int)date('Y'),
             ':julian_date'  => gregoriantojd(date('n'), date('j'), date('Y')) - gregoriantojd(1, 1, date('Y')) - 1
         ));
@@ -894,7 +839,6 @@ Flight::route('GET /bplist', function() {
         if(!$success) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
 
         $response = array(
@@ -936,7 +880,6 @@ Flight::route('GET /bplist', function() {
         return;
     } catch (PDOException $exc) {
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
-        return;
     }
     
 });
@@ -949,23 +892,17 @@ Flight::route('GET /bpupdate', function() {
     $json_obj = get_the_json();
     
     $valid_json_schema = array(
-        'session_id',
+        'token',
         'ver_info'
     );
     
     # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
-    
-    $count = count($json_obj->ver_info);
-    
+    json_schema_validation($valid_json_schema, $json_obj, $error_list);
     
     # ERROR scenario. None logged in.
-    if(!is_logged_in($json_obj->session_id)) {
-        error_response('x05', $error_list['x05']);
-        return;
-    }
+    $user_info = is_logged_in($json_obj->token);
+    
+    $count = count($json_obj->ver_info);
     
     $db = pdo_setup();
     
@@ -983,28 +920,25 @@ Flight::route('GET /bpupdate', function() {
         
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
-            ':user_id'      => $_SESSION['user_id']
+            ':user_id'      => $user_info['user_id']
         ));
 
         # ERROR scenario. Database failure.
         if(!$success) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
         
         # ERROR scenario. Invalid or unknown boarding pass id.
         if(!($stmt->rowCount() === $count)) {
             # ERROR scenario. Invalid or unknown boarding pass id.
             error_response('x09', $error_list['x09']);
-            return;
         }
         
         $result = $stmt->fetchAll();
         
-        
         $response = array(
-            'success'       => 'true',
+            'success'               => 'true',
             'boarding_passes'       => array()
         );
         foreach ($json_obj->ver_info as $elem) {
@@ -1044,7 +978,6 @@ Flight::route('GET /bpupdate', function() {
         return;
     } catch (PDOException $exc) {
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
-        return;
     }
     
 });
@@ -1058,19 +991,14 @@ Flight::route('DELETE /@bpid:[1-9][0-9]{0,10}', function($bpid) {
     $json_obj = get_the_json();
     
     $valid_json_schema = array(
-        'session_id'
+        'token'
     );
     
     # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
+    json_schema_validation($valid_json_schema, $json_obj, $error_list);
     
     # ERROR scenario. None logged in.
-    if(!is_logged_in($json_obj->session_id)) {
-        error_response('x05', $error_list['x05']);
-        return;
-    }
+    $user_info = is_logged_in($json_obj->token);
     
     $db = pdo_setup();
     
@@ -1081,7 +1009,7 @@ Flight::route('DELETE /@bpid:[1-9][0-9]{0,10}', function($bpid) {
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
             ':id'       => $bpid,
-            ':user_id'  => $_SESSION['user_id']
+            ':user_id'  => $user_info['user_id']
         ));
 
 
@@ -1089,13 +1017,11 @@ Flight::route('DELETE /@bpid:[1-9][0-9]{0,10}', function($bpid) {
         if(!$success) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
 
         # ERROR scenario. invalid or unknown boarding pass id.
         if($stmt->rowCount() !== 1) {
             error_response('x09', $error_list['x09']);
-            return;
         }
 
         $response = array(
@@ -1106,7 +1032,6 @@ Flight::route('DELETE /@bpid:[1-9][0-9]{0,10}', function($bpid) {
         return;
     } catch (PDOException $exc) {
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
-        return;
     }
     
 });
@@ -1120,19 +1045,14 @@ Flight::route('GET /seatmatelist/@bpid:[1-9][0-9]{0,10}', function($bpid) {
     $json_obj = get_the_json();
     
     $valid_json_schema = array(
-        'session_id'
+        'token'
     );
     
     # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
+    json_schema_validation($valid_json_schema, $json_obj, $error_list);
     
     # ERROR scenario. None logged in.
-    if(!is_logged_in($json_obj->session_id)) {
-        error_response('x05', $error_list['x05']);
-        return;
-    }
+    $user_info = is_logged_in($json_obj->token);
     
     $db = pdo_setup();
     
@@ -1145,26 +1065,22 @@ Flight::route('GET /seatmatelist/@bpid:[1-9][0-9]{0,10}', function($bpid) {
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
             ':id'       => $bpid,
-            ':user_id'  => $_SESSION['user_id']
+            ':user_id'  => $user_info['user_id']
         ));
         
         # ERROR scenario. Database failure.
         if(!$success) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
         
         # ERROR scenario. Invalid or unknown boarding pass id.
         if($stmt->rowCount() !== 1) {
             # send error RESPONSE for database failure.
             error_response('x09', $error_list['x09']);
-            return;
         }
         $bprow = $stmt->fetchAll()[0];
         
-//        var_dump($bprow);
-//        return;
         # Get user_id for all boarding passes other than this boarding pass which correspond to the same flight.
         $sql  = 'SELECT user_id ';
         $sql .= 'FROM boarding_pass ';
@@ -1175,17 +1091,15 @@ Flight::route('GET /seatmatelist/@bpid:[1-9][0-9]{0,10}', function($bpid) {
             ':carrier'      => $bprow->carrier,
             ':flight_no'    => $bprow->flight_no,
             ':julian_date'  => $bprow->julian_date,
-            ':user_id'      => $_SESSION['user_id']
+            ':user_id'      => $user_info['user_id']
         ));
         
         # ERROR scenario. Database failure.
         if(!$success) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
         $result = $stmt->fetchAll();
-//        var_dump($result);
         
         $sql  = 'SELECT id, CONCAT_WS(\' \', firstname, lastname) AS name, profession, image_name, image_type, image_content ';
         $sql .= 'FROM user ';
@@ -1203,7 +1117,6 @@ Flight::route('GET /seatmatelist/@bpid:[1-9][0-9]{0,10}', function($bpid) {
         if(!$success) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
         
         $result = $stmt->fetchAll();
@@ -1228,122 +1141,66 @@ Flight::route('GET /seatmatelist/@bpid:[1-9][0-9]{0,10}', function($bpid) {
         
     } catch (PDOException $exc) {
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
-        return;
     }
     
 });
 
 # Collect seatmate profile detail
-Flight::route('GET /seatmate/@id:[1-9][0-9]{0,10}/@bpid:[1-9][0-9]{0,10}', function($id, $bpid) {
+Flight::route('GET /seatmate/@id:[1-9][0-9]{0,10}', function($id) {
     $id     = (int)$id;
-    $bpid   = (int)$bpid;
+//    $bpid   = (int)$bpid;
     
     global $error_list;
     
     $json_obj = get_the_json();
     
     $valid_json_schema = array(
-        'session_id'
+        'token'
     );
     
     # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
+    json_schema_validation($valid_json_schema, $json_obj, $error_list);
     
     # ERROR scenario. None logged in.
-    if(!is_logged_in($json_obj->session_id)) {
-        error_response('x05', $error_list['x05']);
-        return;
-    }
+    $user_info = is_logged_in($json_obj->token);
     
     $db = pdo_setup();
     
-    try {
-        $sql  = 'SELECT id, carrier, flight_no, julian_date, year ';
-        $sql .= 'FROM boarding_pass ';
-        $sql .= 'WHERE id=:bpid AND user_id=:user_id';
-        
-        $stmt = $db->prepare($sql);
-        $success = $stmt->execute(array(
-            ':bpid'         => $bpid,
-            ':user_id'      => $_SESSION['user_id']
-        ));
-        
-        # ERROR scenario. Database failure.
-        if(!$success) {
-            # send error RESPONSE for database failure.
-            error_response('x01', $error_list['x01']);
-            return;
-        }
-        # ERROR scenario. Invalid or unknown boarding pass id.
-        if($stmt->rowCount() !== 1) {
-            # send error RESPONSE for database failure.
-            error_response('x09', $error_list['x09']);
-            return;
-        }
-        $bpinfo = $stmt->fetchAll()[0];
-        
-        $sql  = 'SELECT user_id ';
-        $sql .= 'FROM boarding_pass ';
-        $sql .= 'WHERE user_id=:user_id AND carrier=:carrier AND flight_no=:flight_no AND julian_date=:julian_date AND year=:year ';
-        
-        $stmt = $db->prepare($sql);
-        $success = $stmt->execute(array(
-            ':user_id'      => $id,
-            ':carrier'      => $bpinfo->carrier,
-            ':flight_no'    => $bpinfo->flight_no,
-            ':julian_date'  => $bpinfo->julian_date,
-            ':year'         => $bpinfo->year
-        ));
-        # ERROR scenario. Database failure.
-        if(!$success) {
-            # send error RESPONSE for database failure.
-            error_response('x01', $error_list['x01']);
-            return;
-        }
-        # ERROR scenario. invalid or unknown seatmate id.
-        if($stmt->rowCount() !== 1) {
-            error_response('x10', $error_list['x10']);
-            return;
-        }
-        
+    try {        
         $sql  = 'SELECT CONCAT_WS(\' \', firstname, lastname) AS name, gender, age, live_in, seating_pref, some_about_you, status ';
         $sql .= 'FROM user ';
         $sql .= 'WHERE id=:id ';
-        
+//        
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
             ':id'       => $id
         ));
-        
+//        
         # ERROR scenario. Database failure.
         if(!$success) {
             # send error RESPONSE for database failure.
             error_response('x01', $error_list['x01']);
-            return;
         }
         
-        $user_info = $stmt->fetchAll()[0];
+        $seatmate_info = $stmt->fetchAll()[0];
         
         $response = array(
             'success' => 'true',
             'id' => $id,
             'seatmate_data_additional' => array(
-                'name'              => $user_info->name,
-                'gender'            => $user_info->gender,
-                'age'               => $user_info->age,
-                'live_in'           => $user_info->live_in,
-                'seating_pref'      => $user_info->seating_pref,
-                'some_about_you'    => $user_info->some_about_you,
-                'status'            => $user_info->status
+                'name'              => $seatmate_info->name,
+                'gender'            => $seatmate_info->gender,
+                'age'               => $seatmate_info->age,
+                'live_in'           => $seatmate_info->live_in,
+                'seating_pref'      => $seatmate_info->seating_pref,
+                'some_about_you'    => $seatmate_info->some_about_you,
+                'status'            => $seatmate_info->status
             )
         );
         echo json_encode($response);
         return;
     } catch (PDOException $exc) {
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
-        return;
     }
     
 });
@@ -1357,79 +1214,61 @@ Flight::route('POST /messagemate/@id:[1-9][0-9]{0,10}', function($id) {
     $json_obj = get_the_json();
     
     $valid_json_schema = array(
-        'session_id',
+        'token',
         'message'
     );
     
     # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
+    json_schema_validation($valid_json_schema, $json_obj, $error_list);
     
     # ERROR scenario. None logged in.
-    if(!is_logged_in($json_obj->session_id)) {
-        error_response('x05', $error_list['x05']);
-        return;
-    }
+    $user_info = is_logged_in($json_obj->token);
     
     $db = pdo_setup();
     
     try {
+        $sql  = 'SELECT email, CONCAT_WS(\' \', firstname, lastname) AS name ';
+        $sql .= 'FROM   user ';
+        $sql .= 'WHERE  id IN ( :user_id, :seatmate_id ) ';
+
+        $stmt = $db->prepare($sql);
+        $success = $stmt->execute(array(
+            ':user_id'      => (int)$user_info['user_id'],
+            ':seatmate_id'  => (int)$id
+        ));
+
+        # ERROR scenario. Database failure.
+        if(!$success) {
+            # send error RESPONSE for database failure.
+            error_response('x01', $error_list['x01']);
+        }
+
+        # ERROR scenario. invalid or unknown seatmate id.
+        if($stmt->rowCount() !== 2) {
+            error_response('x10', $error_list['x10']);
+        }
+        $result = $stmt->fetchAll();
+
+        foreach ($result as $row) {
+            if($row->email !== $user_info['email']) {
+                $seatmate_email = $row->email;
+                $seatmate_name = $row->name;
+            } else {
+                $user_name = $row->name;
+            }
+        }
+        MailHandler::message_mate_mail_handler($seatmate_email, $json_obj->message, $user_name);
+
+        $response = array(
+            "success" => "true"
+        );
+        echo json_encode($response);
+        return;
         
     } catch (PDOException $exc) {
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
-        return;
     }
 
-    $sql  = 'SELECT email, CONCAT_WS(\' \', firstname, lastname) AS name ';
-    $sql .= 'FROM   user ';
-    $sql .= 'WHERE  id IN ( :user_id, :seatmate_id ) ';
-    
-    $stmt = $db->prepare($sql);
-    $success = $stmt->execute(array(
-        ':user_id'      => (int)$_SESSION['user_id'],
-        ':seatmate_id'  => (int)$id
-    ));
-    
-    # ERROR scenario. Database failure.
-    if(!$success) {
-        # send error RESPONSE for database failure.
-        error_response('x01', $error_list['x01']);
-        return;
-    }
-    
-    # ERROR scenario. invalid or unknown seatmate id.
-    if($stmt->rowCount() !== 2) {
-        error_response('x10', $error_list['x10']);
-        return;
-    }
-    $result = $stmt->fetchAll();
-    
-    foreach ($result as $row) {
-        if($row->email !== $_SESSION['email']) {
-            $seatmate_email = $row->email;
-            $seatmate_name = $row->name;
-        } else {
-            $user_name = $row->name;
-        }
-    }
-    MailHandler::message_mate_mail_handler($seatmate_email, $json_obj->message, $user_name);
-//    $to = $seatmate_email;
-//    $subject = $user_name.' <'.$_SESSION['email'].'> messaged you via seatunity';
-//    $message  = '<p>Hi</p>';
-//    $message .= '<p>I messaged you</p>';
-//    
-//    $headers  = 'MIME-Version: 1.0' . "\r\n";
-//    $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
-////    $headers .= 'From: '.$_SESSION['email']."\r\n";
-//    $headers .= 'From: messageservice@seatunity.com\r\n';
-//    mail($to, $subject, $json_obj->message, $headers);
-    
-    $response = array(
-        "success" => "true"
-    );
-    echo json_encode($response);
-    return;
 });
 
 # Collect info of shared flight with a particular seatmate
@@ -1441,19 +1280,14 @@ Flight::route('GET /sharedflight/@mateid:[1-9][0-9]{0,10}', function($mateid) {
     $json_obj = get_the_json();
     
     $valid_json_schema = array(
-        'session_id'
+        'token'
     );
     
     # ERROR scenario. JSON format validation.
-    if(json_schema_validation($valid_json_schema, $json_obj, $error_list)) {
-        return;
-    }
+    json_schema_validation($valid_json_schema, $json_obj, $error_list);
     
     # ERROR scenario. None logged in.
-    if(!is_logged_in($json_obj->session_id)) {
-        error_response('x05', $error_list['x05']);
-        return;
-    }
+    $user_info = is_logged_in($json_obj->token);
     
     $db = pdo_setup();
     
@@ -1509,7 +1343,6 @@ Flight::route('GET /sharedflight/@mateid:[1-9][0-9]{0,10}', function($mateid) {
         return;
     } catch (PDOException $exc) {
         error_response('x01', $error_list['x01'].' '.$exc->getMessage());
-        return;
     }
 });
 
