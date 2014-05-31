@@ -5,7 +5,7 @@
         </style>
     </head>
     <body>
-        <p><?php echo $description; ?></p>
+        <p>Please follow the link below to confirm registration: </p>
         <a href="<?php echo $confirm_link; ?>"><?php echo $confirm_link; ?></a>
     </body>
 </html>

@@ -1,14 +1,20 @@
 <?php
 
-$host = "localhost";
-$dbname = "seatunity";
-$username = "cumhoc";
-$password = "ergopropterhoc";
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'seatunity');
+define('DB_USER', 'cumhoc');
+define('DB_PASS', 'ergopropterhoc');
 
-//$host = "localhost";
-//$dbname = "seatunity";
-//$username = "root";
-//$password = "Nayla#2405";
+
+//define('DB_HOST', 'localhost');
+//define('DB_NAME', 'seatunity');
+//define('DB_USER', 'root');
+//define('DB_PASS', 'Nayla#2405');
+
+
+# directory for profile images.
+define('PROFILE_IMG_DIR', getcwd().'/images/profile_images');
+$profile_img_dir = getcwd().'/images/profile_images';
 
 
 error_reporting(E_ALL | E_STRICT);
@@ -44,7 +50,8 @@ $error_list = array(
     'x10' => 'invalid or unknown seatmate id',
     'x11' => 'boarding pass already added',
     'x12' => 'invalid or unknown boarding pass or seatmate id',
-    'x13' => 'registration not confirmed'
+    'x13' => 'registration not confirmed',
+    'x14' => 'invalid directory path'
 );
 
 

@@ -33,7 +33,7 @@ function pdo_setup() {
     global $db, $host, $dbname, $username, $password, $error_list;
     if($db == NULL) {
         try {
-            $db = new PDO("mysql:host={$host};dbname={$dbname}", $username, $password);
+            $db = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASS);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         } catch (PDOException $e) {
@@ -109,18 +109,13 @@ function json_schema_validation($valid_json_schema, $json_obj) {
  * @param type $code
  * @param type $message
  */
-function error_response($code, $message) {
+function error_response($code, $message, $user_id='none') {
     $response = array(
         'success' => 'false',
         'error' => array(
             $code => $message
         )
     );
-    if(isset($_SESSION['user_id'])) {
-        $user_id = $_SESSION['user_id'];
-    } else {
-        $user_id = 'none';
-    }
     error_log('IP-'.Flight::request()->ip.' - uri: '.Flight::request()->base.' - method: '.Flight::request()->method.' - user_id: '.$user_id.' - '.$code.' - '.$message );
     echo json_encode($response);
     exit;
@@ -141,10 +136,8 @@ function is_logged_in($token) {
     global $error_list;
     
     $db = pdo_setup();
-//    session_id($sess_id);
-//    session_start();
     
-    $sql  = 'SELECT id, email, is_pass_provisional ';
+    $sql  = 'SELECT id, email, language, is_pass_provisional ';
     $sql .= 'FROM user ';
     $sql .= 'WHERE token=:token ';
     
@@ -157,6 +150,7 @@ function is_logged_in($token) {
         # send error RESPONSE for database failure.
         error_response('x01', $error_list['x01']);
     }
+    
     if($stmt->rowCount() !== 1) {
         error_response('x05', $error_list['x05']);
     }
@@ -176,7 +170,8 @@ function is_logged_in($token) {
     # RETURN STATEMENT.
     return array(
         'user_id'   => $result[0]->id,
-        'email'     => $result[0]->email
+        'email'     => $result[0]->email,
+        'lang'      => $result[0]->language
     );
 }
 # function is_logged_in() ends.
@@ -208,14 +203,19 @@ function delete_token($email) {
         error_response('x01', $error_list['x01']);
         return;
     }
-//    # delete the actual sessaion.
-//    session_unset();
-//    session_destroy();
 }
 
 Class MailHandler {
-    public static function confirm_mail_handler($email_to, $confirmation_id) {
-        $confirm_link = $_SERVER['HTTP_HOST'].'/confirm/'.$confirmation_id;
+    
+    private $db;
+    
+    function __construct() {
+        $this->db = pdo_setup();
+    }
+
+
+    public static function confirm_mail_handler($language, $email_to, $confirmation_id) {
+        $confirm_link = $_SERVER['HTTP_HOST'].Flight::request()->base.'/confirm/'.$confirmation_id;
         
         $from = 'noreply@seatunity.com';
         
@@ -223,46 +223,45 @@ Class MailHandler {
         $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
         $headers .= 'From: '.$from."\r\n";
         
-        # get these from database?
-        $subject = 'SeatUnity: Registration Confirmation';
-        $description = 'Please follow the link below to confirm registration:';
+        ob_start();
+        include './mail_template/'.$language.'/confirmation_subject.php';
+        $subject = ob_get_contents();
+        ob_end_clean();
         
         ob_start();
-        include './mail_template/confirmation_tpl.php';
+        include './mail_template/'.$language.'/confirmation_tpl.php';
         $body = ob_get_contents();
         ob_end_clean();
         
         return mail($email_to, $subject, $body, $headers);
     }
     
-    public static function pass_reset_mail_handler($email_to, $prov_pass) {
+    public static function pass_reset_mail_handler($language, $email_to, $prov_pass) {
         $from = 'noreply@seatunity.com';        
         
         $headers  = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
         $headers .= 'From: '.$from."\r\n";
         
-        # get these from database?
-        $subject = 'Password Reset for SeatUnity';
-        
-        $info = 'Your password has been reset.';
-        $instruction = 'Use the following password to login: ';
-        $rule = 'You can use it once within 24 hours from now';
+        ob_start();
+        include './mail_template/'.$language.'/pass_reset_subject.php';
+        $subject = ob_get_contents();
+        ob_end_clean();
         
         ob_start();
-        include'./mail_template/pass_reset_tpl.php';
+        include './mail_template/'.$language.'/pass_reset_tpl.php';
         $body = ob_get_contents();
         ob_end_clean();
         
         return mail($email_to, $subject, $body, $headers);
     }
     
-    public static function message_mate_mail_handler($to, $message, $user_name) {
+    public static function message_mate_mail_handler($to, $message, $user_info) {
         $headers  = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-utf-8' . "\r\n";
         $headers .= 'From: messageservice@seatunity.com\r\n';
         
-        $subject = $user_name.' <'.$_SESSION['email'].'> messaged you via seatunity';
+        $subject = $user_info['name'].' <'.$user_info['email'].'> messaged you via seatunity';
         
         return mail($to, $subject, $message, $headers);
     }
@@ -270,5 +269,58 @@ Class MailHandler {
 
 function generate_token() {
 //    return sha1(uniqid());
-    return uniqid();
+    return sha1(uniqid());
+}
+
+function check_dir_path($path) {
+    if(!is_dir($path)) {
+        error_response('x14', $error_list['x14']);
+    }
+}
+
+function get_next_insert_id($db) {
+    global $error_list;
+    
+    # get the next insert id to use it in saving the user's profile image.
+    $sql  = "SHOW TABLE STATUS LIKE 'user' ";
+
+    $stmt = $db->prepare($sql);
+    $suc = $stmt->execute();
+    
+    # ERROR scenario. Database failure.
+    if(!($suc)) {
+        # send error RESPONSE for database failure.
+        error_response('x01', $error_list['x01']);
+    }
+    
+    $result = $stmt->fetch();
+    
+    return $result->Auto_increment;
+}
+
+function save_image_in_filesystem($img_data, $img_dir, $save_id) {
+    
+    if(empty($img_data->name)) {
+        return;
+    }
+
+    check_dir_path($img_dir);
+
+    $dir_list = scandir($img_dir);
+
+    $imgs_of_user = array_filter($dir_list, function($var) use ($save_id) {
+        if(stripos($var, $save_id.'_') === 0) {
+            return TRUE;
+        }
+    });
+
+    foreach ($imgs_of_user as $file) {
+        if(is_file($img_dir.'/'.$file)) {
+            unlink($img_dir.'/'.$file);
+        }
+    }
+    
+    file_put_contents($img_dir.'/'.$save_id.'_'.$img_data->name, base64_decode($img_data->content));
+    
+    return $save_id.'_'.$img_data->name;
 }
