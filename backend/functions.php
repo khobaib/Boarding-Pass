@@ -62,6 +62,7 @@ function validation_callback($value, $key, $ar) {
     if(gettype($key) === 'integer') {
         if(!isset($json_obj->$value)) {
             $ar[2] = TRUE;
+            $ar[3][] = $value;
         }
     } else {
         if(is_array($validator[$key])) {
@@ -69,10 +70,12 @@ function validation_callback($value, $key, $ar) {
                 array_walk($validator[$key], 'validation_callback', array($validator[$key], $json_obj->$key, &$ar[2]));
             } else {
                 $ar[2] = TRUE;
+                $ar[3][] = $key;
             }
         } else {
             if(!isset($json_obj->$key)) {
                 $ar[2] = TRUE;
+                $ar[3][] = $key;
             }
         }
     }
@@ -93,11 +96,12 @@ function json_schema_validation($valid_json_schema, $json_obj) {
     
     # keep track of schema validation error.
     $is_error = FALSE;
+    $errors = array();
     # recursively check every fields for their existence.
-    array_walk($valid_json_schema, 'validation_callback', array($valid_json_schema, $json_obj, &$is_error));
+    array_walk($valid_json_schema, 'validation_callback', array($valid_json_schema, $json_obj, &$is_error, &$errors));
     if($is_error) {
         # send error RESPONSE for JSON request is in invalid format.
-        error_response('x00', $error_list['x00']);
+        error_response('x00', $error_list['x00'].': problem with field(s): '.implode(', ', $errors));
     }
     return FALSE;
 }
@@ -113,7 +117,8 @@ function error_response($code, $message, $user_id='none') {
     $response = array(
         'success' => 'false',
         'error' => array(
-            $code => $message
+            'code'      => $code,
+            'message'   => $message
         )
     );
     error_log('IP-'.Flight::request()->ip.' - uri: '.Flight::request()->base.' - method: '.Flight::request()->method.' - user_id: '.$user_id.' - '.$code.' - '.$message );
@@ -323,4 +328,16 @@ function save_image_in_filesystem($img_data, $img_dir, $save_id) {
     file_put_contents($img_dir.'/'.$save_id.'_'.$img_data->name, base64_decode($img_data->content));
     
     return $save_id.'_'.$img_data->name;
+}
+
+
+function get_profile_img_url($image_name) {
+    $image_path = getcwd().'/images/profile_images/'.$image_name;
+    if(!is_file($image_path)) {
+        $image_url = '';
+    } else {
+        $image_url = Flight::request()->base.'/images/profile_images/'.$image_name;
+    }
+    
+    return $image_url;
 }

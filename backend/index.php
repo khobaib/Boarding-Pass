@@ -17,25 +17,16 @@ Flight::route('POST /reg', function() {
     # do server side validation.
     #   validate json request
     $valid_json_schema = array(
-        'required' => array(
-            'email',
-            'password'
-        ),
-        'optional' => array(
-            'language',
-            'firstname',
-            'lastname',
-            'gender',
-            'live_in',
-            'age',
-            'profession',
-            'seating_pref',
-            'image' => array(
-                'name',
-                'type',
-                'content'
-            )
-        )
+        'email',
+        'password',
+        'firstname',
+        'lastname',
+        'gender',
+        'live_in',
+        'age',
+        'profession',
+        'seating_pref',
+        'language'
     );
     
     json_schema_validation($valid_json_schema, $json_obj);
@@ -44,7 +35,7 @@ Flight::route('POST /reg', function() {
     $db = pdo_setup();
     
     # ERROR scenario. email format validation.
-    if(!$em = filter_var($json_obj->required->email, FILTER_VALIDATE_EMAIL)) {
+    if(!$em = filter_var($json_obj->email, FILTER_VALIDATE_EMAIL)) {
         # Sending error RESPONSE for invalid email
         error_response('x02', $error_list['x02']);
         return;
@@ -69,28 +60,33 @@ Flight::route('POST /reg', function() {
         
         $next_insert_id = get_next_insert_id($db);
         
-        $image_name = save_image_in_filesystem($json_obj->optional->image, PROFILE_IMG_DIR, $next_insert_id);
+//        $image_name = save_image_in_filesystem((object)array(
+//            'name'      => $json_obj->image_name,
+//            'type'      => $json_obj->image_type,
+//            'content'   => $json_obj->image_content
+//        ), PROFILE_IMG_DIR, $next_insert_id);
         
         $sql  = 'INSERT INTO user ( ';
-        $sql .= 'email, password, language, is_reg_confirmed, firstname, lastname, gender, live_in, age, profession, seating_pref, image_name ';
+        $sql .= 'email, password, language, is_reg_confirmed, firstname, lastname, gender, live_in, age, profession, seating_pref ';
         $sql .= ') VALUES ( ';
-        $sql .= ':email, :password, :language, :is_reg_confirmed, :firstname, :lastname, :gender, :live_in, :age, :profession, :seating_pref, :image_name ';
+        $sql .= ':email, :password, :language, :is_reg_confirmed, :firstname, :lastname, :gender, :live_in, :age, :profession, :seating_pref ';
         $sql .= ') ';
 
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
-            ':email'            => $json_obj->required->email,
-            ':password'         => md5($json_obj->required->password),
-            ':language'         => $json_obj->optional->language,
-            ':is_reg_confirmed' => $reg_confirm_id,
-            ':firstname'        => $json_obj->optional->firstname,
-            ':lastname'         => $json_obj->optional->lastname,
-            ':gender'           => $json_obj->optional->gender,
-            ':live_in'          => $json_obj->optional->live_in,
-            ':age'              => $json_obj->optional->age,
-            ':profession'       => $json_obj->optional->profession,
-            ':seating_pref'     => $json_obj->optional->seating_pref,
-            ':image_name'       => $image_name
+            ':email'            => $json_obj->email,
+            ':password'         => md5($json_obj->password),
+            ':language'         => $json_obj->language,
+            # Commented out for dev purpose. Must be on production.
+//            ':is_reg_confirmed' => $reg_confirm_id,
+            ':is_reg_confirmed' => 1,
+            ':firstname'        => $json_obj->firstname,
+            ':lastname'         => $json_obj->lastname,
+            ':gender'           => $json_obj->gender,
+            ':live_in'          => $json_obj->live_in,
+            ':age'              => $json_obj->age,
+            ':profession'       => $json_obj->profession,
+            ':seating_pref'     => $json_obj->seating_pref
         ));
         
         # ERROR scenario. Database failure.
@@ -99,7 +95,8 @@ Flight::route('POST /reg', function() {
             error_response('x01', $error_list['x01']);
         }
         
-        MailHandler::confirm_mail_handler($json_obj->optional->language, $json_obj->required->email, $reg_confirm_id);
+        # Commented out for development purpose
+//        MailHandler::confirm_mail_handler($json_obj->optional->language, $json_obj->required->email, $reg_confirm_id);
         
         
         # send success RESPONSE.
@@ -179,7 +176,7 @@ Flight::route('POST /login', function() {
     
     try {
         # check against the database whether the email and password combination are valid.
-        $sql  = 'SELECT id, is_pass_provisional, is_reg_confirmed ';
+        $sql  = 'SELECT * ';
         $sql .= 'FROM user ';
         $sql .= 'WHERE email=:email and password=:password ';
 
@@ -251,9 +248,19 @@ Flight::route('POST /login', function() {
         }
         # send success RESPONSE.
         $response = array(
-            'success' => 'true',
-            'token' => $token
+            'success'       => 'true',
+            'token'         => $token,
+            'language'      => $result[0]->language,
+            'firstname'     => $result[0]->firstname,
+            'lastname'      => $result[0]->lastname,
+            'gender'        => $result[0]->gender,
+            'live_in'       => $result[0]->live_in,
+            'age'           => $result[0]->age,
+            'profession'    => $result[0]->profession,
+            'seating_pref'  => $result[0]->seating_pref,
+            'image_url'     => get_profile_img_url($result[0]->image_name)
         );
+        
         if($is_prov > 0) {
             $response['PROVISIONAL'] = 'TRUE';
         }
@@ -301,26 +308,20 @@ Flight::route('PUT /reg', function() {
     
     $valid_json_schema = array(
         'token',
-        'important' => array(
-            'password'
-        ),
-        'optional' => array(
-            'language',
-            'firstname',
-            'lastname',
-            'gender',
-            'live_in',
-            'age',
-            'profession',
-            'seating_pref',
-            'some_about_you',
-            'status',
-            'image' => array(
-                'name',
-                'type',
-                'content'
-            )
-        )
+        'password',
+        'language',
+        'firstname',
+        'lastname',
+        'gender',
+        'live_in',
+        'age',
+        'profession',
+        'seating_pref',
+        'some_about_you',
+        'status',
+        'image_name',
+        'image_type',
+        'image_content'
     );
     
     # ERROR scenario. JSON format validation.
@@ -355,7 +356,11 @@ Flight::route('PUT /reg', function() {
             error_response('x08', $error_list['x08']);
         }
         
-        $image_name = save_image_in_filesystem($json_obj->optional->image, PROFILE_IMG_DIR, $user_info['user_id']);
+        $image_name = save_image_in_filesystem((object)array(
+            'name'      => $json_obj->image_name,
+            'type'      => $json_obj->image_type,
+            'content'   => $json_obj->image_content
+        ), PROFILE_IMG_DIR, $user_info['user_id']);
         
         $sql  = 'UPDATE user ';
         $sql .= 'SET ';
@@ -377,18 +382,18 @@ Flight::route('PUT /reg', function() {
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
             ':email'                => $user_info['email'],
-            ':password'             => md5($json_obj->important->password),
-            ':language'             => $json_obj->optional->language,
+            ':password'             => md5($json_obj->password),
+            ':language'             => $json_obj->language,
             ':is_pass_provisional'  => 0,
-            ':firstname'            => $json_obj->optional->firstname,
-            ':lastname'             => $json_obj->optional->lastname,
-            ':gender'               => $json_obj->optional->gender,
-            ':live_in'              => $json_obj->optional->live_in,
-            ':age'                  => $json_obj->optional->age,
-            ':profession'           => $json_obj->optional->profession,
-            ':seating_pref'         => $json_obj->optional->seating_pref,
-            ':some_about_you'       => $json_obj->optional->some_about_you,
-            ':status'               => $json_obj->optional->status,
+            ':firstname'            => $json_obj->firstname,
+            ':lastname'             => $json_obj->lastname,
+            ':gender'               => $json_obj->gender,
+            ':live_in'              => $json_obj->live_in,
+            ':age'                  => $json_obj->age,
+            ':profession'           => $json_obj->profession,
+            ':seating_pref'         => $json_obj->seating_pref,
+            ':some_about_you'       => $json_obj->some_about_you,
+            ':status'               => $json_obj->status,
             ':image_name'           => $image_name
         ));
 
@@ -1063,9 +1068,9 @@ Flight::route('GET /seatmatelist/@carrier/@flight_no/@julian_date', function($ca
             
             $image_path = getcwd().'/images/profile_images/'.$row->image_name;
             if(!is_file($image_path)) {
-                $image_uri = '';
+                $image_url = '';
             } else {
-                $image_uri = Flight::request()->base.'/images/profile_images/'.$row->image_name;
+                $image_url = Flight::request()->base.'/images/profile_images/'.$row->image_name;
             }
             
             $response['seatmatelist'][] = array(
@@ -1073,7 +1078,7 @@ Flight::route('GET /seatmatelist/@carrier/@flight_no/@julian_date', function($ca
                 'name'          => $row->name,
                 'profession'    => $row->profession,
                 'seat'          => $row->seat,
-                'image_name'    => $image_uri
+                'image_url'     => $image_url
             );
         }
         
