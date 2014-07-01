@@ -258,6 +258,7 @@ Flight::route('POST /login', function() {
             'age'           => $result[0]->age,
             'profession'    => $result[0]->profession,
             'seating_pref'  => $result[0]->seating_pref,
+            'some_about_you'=> $result[0]->some_about_you,
             'image_url'     => get_profile_img_url($result[0]->image_name)
         );
         
@@ -551,21 +552,19 @@ Flight::route('POST /newbp', function() {
         ),
         'version',
         'year',
-        'bpdata' => array(
-            'stringform',
-            'firstname',
-            'lastname',
-            'PNR',
-            'travel_from',
-            'travel_to',
-            'carrier',
-            'flight_no',
-            'julian_date',
-            'compartment_code',
-            'seat',
-            'departure',
-            'arrival'
-        )
+        'stringform',
+        'firstname',
+        'lastname',
+        'PNR',
+        'travel_from',
+        'travel_to',
+        'carrier',
+        'flight_no',
+        'julian_date',
+        'compartment_code',
+        'seat',
+        'departure',
+        'arrival'
     );
     
     # ERROR scenario. JSON format validation.
@@ -586,9 +585,9 @@ Flight::route('POST /newbp', function() {
         $stmt = $db->prepare($sql);
         $success = $stmt->execute(array(
             ':user_id'      => $user_info['user_id'],
-            ':carrier'      => $json_obj->bpdata->carrier,
-            ':flight_no'    => $json_obj->bpdata->flight_no,
-            ':julian_date'  => $json_obj->bpdata->julian_date
+            ':carrier'      => $json_obj->carrier,
+            ':flight_no'    => $json_obj->flight_no,
+            ':julian_date'  => $json_obj->julian_date
         ));
         
         # ERROR scenario. Database failure.
@@ -609,19 +608,19 @@ Flight::route('POST /newbp', function() {
             $stmt = $db->prepare($sql);
             $success = $stmt->execute(array(
                 ':user_id'          => $user_info['user_id'],
-                ':stringform'       => $json_obj->bpdata->stringform,
-                ':firstname'        => $json_obj->bpdata->firstname,
-                ':lastname'         => $json_obj->bpdata->lastname,
-                ':PNR'              => $json_obj->bpdata->PNR,
-                ':travel_from'      => $json_obj->bpdata->travel_from,
-                ':travel_to'        => $json_obj->bpdata->travel_to,
-                ':carrier'          => $json_obj->bpdata->carrier,
-                ':flight_no'        => $json_obj->bpdata->flight_no,
-                ':julian_date'      => $json_obj->bpdata->julian_date,
-                ':compartment_code' => $json_obj->bpdata->compartment_code,
-                ':seat'             => $json_obj->bpdata->seat,
-                ':departure'        => $json_obj->bpdata->departure,
-                ':arrival'          => $json_obj->bpdata->arrival,
+                ':stringform'       => $json_obj->stringform,
+                ':firstname'        => $json_obj->firstname,
+                ':lastname'         => $json_obj->lastname,
+                ':PNR'              => $json_obj->PNR,
+                ':travel_from'      => $json_obj->travel_from,
+                ':travel_to'        => $json_obj->travel_to,
+                ':carrier'          => $json_obj->carrier,
+                ':flight_no'        => $json_obj->flight_no,
+                ':julian_date'      => $json_obj->julian_date,
+                ':compartment_code' => $json_obj->compartment_code,
+                ':seat'             => $json_obj->seat,
+                ':departure'        => $json_obj->departure,
+                ':arrival'          => $json_obj->arrival,
                 ':year'             => $json_obj->year
             ));
 
@@ -751,22 +750,20 @@ Flight::route('GET /bpdetail/@id:[1-9][0-9]{0,10}', function($id) {
         $response = array(
             "success"   => "true",
             "version"   => $result[0]->version,
-            "bpdata"    => array(
-                'id'                => $result[0]->id,
-                "stringform"        => $result[0]->stringform,
-                "firstname"         => $result[0]->firstname,
-                "lastname"          => $result[0]->lastname,
-                "PNR"               => $result[0]->PNR,
-                "travel_from"       => $result[0]->travel_from,
-                "travel_to"         => $result[0]->travel_to,
-                "carrier"           => $result[0]->carrier,
-                "flight_no"         => $result[0]->flight_no,
-                "julian_date"       => $result[0]->julian_date,
-                "compartment_code"  => $result[0]->compartment_code,
-                "seat"              => $result[0]->seat,
-                "departure"         => $result[0]->departure,
-                "arrival"           => $result[0]->arrival
-            )
+            'id'                => $result[0]->id,
+            "stringform"        => $result[0]->stringform,
+            "firstname"         => $result[0]->firstname,
+            "lastname"          => $result[0]->lastname,
+            "PNR"               => $result[0]->PNR,
+            "travel_from"       => $result[0]->travel_from,
+            "travel_to"         => $result[0]->travel_to,
+            "carrier"           => $result[0]->carrier,
+            "flight_no"         => $result[0]->flight_no,
+            "julian_date"       => $result[0]->julian_date,
+            "compartment_code"  => $result[0]->compartment_code,
+            "seat"              => $result[0]->seat,
+            "departure"         => $result[0]->departure,
+            "arrival"           => $result[0]->arrival
         );
         
         Flight::json($response);
@@ -839,21 +836,19 @@ Flight::route('GET /bplist', function() {
             $response['boarding_pass'][] = array(
                 'id'        => $row->id,
                 'version'   => $row->user_id,
-                'bpdata'    => array(
-                    "stringform"        => $result[0]->stringform,
-                    'firstname'         => $row->firstname,
-                    'lastname'          => $row->lastname,
-                    'PNR'               => $row->PNR,
-                    'travel_from'       => $row->travel_from,
-                    'travel_to'         => $row->travel_to,
-                    'carrier'           => $row->carrier,
-                    'flight_no'         => $row->flight_no,
-                    'julian_date'       => $row->julian_date,
-                    'compartment_code'  => $row->compartment_code,
-                    'seat'              => $row->seat,
-                    'departure'         => $row->departure,
-                    'arrival'           => $row->arrival
-                )
+                "stringform"        => $result[0]->stringform,
+                'firstname'         => $row->firstname,
+                'lastname'          => $row->lastname,
+                'PNR'               => $row->PNR,
+                'travel_from'       => $row->travel_from,
+                'travel_to'         => $row->travel_to,
+                'carrier'           => $row->carrier,
+                'flight_no'         => $row->flight_no,
+                'julian_date'       => $row->julian_date,
+                'compartment_code'  => $row->compartment_code,
+                'seat'              => $row->seat,
+                'departure'         => $row->departure,
+                'arrival'           => $row->arrival
             );
         }
         
@@ -932,21 +927,19 @@ Flight::route('GET /bpupdate', function() {
                         $response['boarding_passes'][] = array(
                             'id'            => $result[$i]->id,
                             'version'       => $result[$i]->version,
-                            'bpdata'        => array(
-                                'stringform'    => $result[$i]->stringform,
-                                'firstname'     => $result[$i]->firstname,
-                                'lastname'      => $result[$i]->lastname,
-                                'PNR'           => $result[$i]->PNR,
-                                'travel_from'   => $result[$i]->travel_from,
-                                'travel_to'     => $result[$i]->travel_to,
-                                'carrier'       => $result[$i]->carrier,
-                                'flight_no'     => $result[$i]->flight_no,
-                                'julian_date'   => $result[$i]->julian_date,
-                                'compartment_code'  => $result[$i]->compartment_code,
-                                'seat'          => $result[$i]->seat,
-                                'departure'     => $result[$i]->departure,
-                                'arrival'       => $result[$i]->arrival,
-                            )
+                            'stringform'    => $result[$i]->stringform,
+                            'firstname'     => $result[$i]->firstname,
+                            'lastname'      => $result[$i]->lastname,
+                            'PNR'           => $result[$i]->PNR,
+                            'travel_from'   => $result[$i]->travel_from,
+                            'travel_to'     => $result[$i]->travel_to,
+                            'carrier'       => $result[$i]->carrier,
+                            'flight_no'     => $result[$i]->flight_no,
+                            'julian_date'   => $result[$i]->julian_date,
+                            'compartment_code'  => $result[$i]->compartment_code,
+                            'seat'          => $result[$i]->seat,
+                            'departure'     => $result[$i]->departure,
+                            'arrival'       => $result[$i]->arrival
                         );
                     }
                     $result[$i] = NULL;
@@ -1137,15 +1130,13 @@ Flight::route('GET /seatmate/@id:[1-9][0-9]{0,10}', function($id) {
         $response = array(
             'success' => 'true',
             'id' => $id,
-            'seatmate_data_additional' => array(
-                'name'              => $seatmate_info->name,
-                'gender'            => $seatmate_info->gender,
-                'age'               => $seatmate_info->age,
-                'live_in'           => $seatmate_info->live_in,
-                'seating_pref'      => $seatmate_info->seating_pref,
-                'some_about_you'    => $seatmate_info->some_about_you,
-                'status'            => $seatmate_info->status
-            )
+            'name'              => $seatmate_info->name,
+            'gender'            => $seatmate_info->gender,
+            'age'               => $seatmate_info->age,
+            'live_in'           => $seatmate_info->live_in,
+            'seating_pref'      => $seatmate_info->seating_pref,
+            'some_about_you'    => $seatmate_info->some_about_you,
+            'status'            => $seatmate_info->status
         );
         
         Flight::json($response);
