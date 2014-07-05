@@ -75,8 +75,6 @@ public class UploadPicActivity extends Activity {
 				  directory.delete();
 			  }
 			  directory.mkdirs(); 
-			 
-			
 			String mainDir = directory.toString();
 			String photoFileName = "profile_pic_"+System.currentTimeMillis() + ".png";
 			picFile = new File(mainDir, photoFileName);

@@ -41,12 +41,10 @@ public class AcountActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setContentView(R.layout.acount);
         pager = (ViewPager) findViewById(R.id.pager);
 		indicator = (TabPageIndicator)findViewById(R.id.indicator);
-		
-		 adapter = new PostRetreiveAdapter(getSupportFragmentManager());
+		adapter = new PostRetreiveAdapter(getSupportFragmentManager());
 		pager.setAdapter(adapter);
 		indicator.setViewPager(pager,0);
  

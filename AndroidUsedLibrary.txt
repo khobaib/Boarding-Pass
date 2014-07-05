@@ -1,0 +1,8 @@
+1. Zxing library
+  Link: https://github.com/zxing/zxing
+2. FilePicker library
+  Link: https://github.com/Touhid18/FilePicker
+3.JakeWharton/ActionBarSherlock
+  Link: https://github.com/JakeWharton/ActionBarSherlock
+4. mariotaku/viewpagerindicator
+  Link: https://github.com/mariotaku/viewpagerindicator

@@ -37,13 +37,7 @@ public class SplasActivity extends Activity {
         setContentView(R.layout.splash);
         File directory = Constants.APP_DIRECTORY;
         Handler handler=new Handler();
-        
-        
-        
-        
-        
-        
-        handler.postDelayed(new Runnable() {
+         handler.postDelayed(new Runnable() {
         	@Override
 			public void run() {
 				Intent intent=new Intent(SplasActivity.this, MainActivity.class);

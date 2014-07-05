@@ -93,7 +93,6 @@ public class FragmentBoardingPasses extends Fragment{
 			@Override
 			public void onClick(View arg0) {
 				if(list.size()>0){
-				//	FragmentUpcomingBoardingPassDetails details=new FragmentUpcomingBoardingPassDetails(highlitedboardingpass);
 					parent.startUpCommingBoadingDetails(highlitedboardingpass);
 				}
 			}
