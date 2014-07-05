@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#5c5c5c"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="13dp"
+        android:background="@drawable/rounded_layout_white" >
+
+        <ImageView
+            android:id="@+id/img_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:src="@drawable/seatunity_logo" />
+
+        <TextView
+            android:id="@+id/tv_reminder_msz"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_logo"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="14dp"
+            android:gravity="center"
+            android:textSize="17dp"
+            android:textColor="#31465d" 
+            android:text="@string/txt_reminder_msz"
+            />
+
+        <ImageView
+            android:id="@+id/img_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_reminder_msz"
+           android:layout_above="@+id/tv_login"
+           android:layout_marginLeft="25dp"
+           android:layout_marginRight="25dp"
+            android:src="@drawable/ic_users_connection" />
+
+        <TextView
+            android:id="@+id/tv_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_reminder_msz"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="15dp"
+            android:textSize="20dp"
+            android:textColor="#0099cc"
+            android:text="@string/txt_login" />
+
+        <TextView
+           android:id="@+id/tv_signup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:layout_alignRight="@+id/tv_reminder_msz"
+             android:textSize="20dp"
+            android:textColor="#0099cc"
+            android:text="@string/txt_register"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

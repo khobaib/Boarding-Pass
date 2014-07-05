@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#666666"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/re_add_boarding_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="40dp"
+        android:background="#ffffff" >
+
+        <TextView
+            android:id="@+id/tv_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="15dp"
+            android:text="@string/txt_add"
+            android:textColor="#33B5E5"
+            android:textSize="28dp" />
+
+        <View
+            android:id="@+id/vw_gap"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/tv_add"
+            android:background="#33B5E5" >
+        </View>
+
+        <RelativeLayout
+            android:id="@+id/re_main"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:layout_below="@+id/vw_gap" >
+
+            <View
+                android:id="@+id/vw_middle"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:background="#d3d3d3" >
+            </View>
+
+            <TextView
+                android:id="@+id/tv_add_boardingpasswith_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/img_from_camera"
+                android:layout_margin="10dp"
+                android:layout_toLeftOf="@+id/vw_middle"
+                android:text="@string/txt_scan_boardingpass"
+                android:textColor="#000000"
+                android:textSize="13dp" />
+
+            <TextView
+                android:id="@+id/tv_add_fromsdcard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/tv_add_boardingpasswith_camera"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
+                android:layout_toRightOf="@+id/vw_middle"
+                android:text="@string/txt_add_from_locall"
+                android:textColor="#000000"
+                android:textSize="13dp" />
+
+            <ImageView
+                android:id="@+id/img_from_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/vw_middle"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/alert_img_from_camera" />
+
+            <ImageView
+                android:id="@+id/img_from_sdcard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/tv_add_fromsdcard"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/vw_middle"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/alert_image_from_sdcard" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/vw_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/re_main"
+            android:background="#d3d3d3" >
+        </View>
+
+        <RelativeLayout
+            android:id="@+id/re_bottom_holder"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/vw_bottom" >
+
+            <TextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/txt_cancel"
+                android:textColor="#000000" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/img_imtotest"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/lsplash" />
+
+</RelativeLayout>

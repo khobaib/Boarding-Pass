@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/app_theme" >
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="Upload Photo"
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/background_login" >
+
+        <RelativeLayout
+            android:id="@+id/rlTopButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp" >
+
+            <Button
+                android:id="@+id/b_take_pic"
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="10dp"
+                android:onClick="onClickTakePic"
+                android:text="Take Picture"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/b_go_gallery"
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:layout_alignTop="@+id/b_take_pic"
+                android:layout_toRightOf="@+id/b_take_pic"
+                android:onClick="onClickGoToGallery"
+                android:text="Go to Gallery"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_profile_pic"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_below="@+id/rlTopButtons"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:src="@drawable/profile_default" />
+
+        <Button
+            android:id="@+id/b_update"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_below="@+id/iv_profile_pic"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:onClick="onClickUpdate"
+            android:text="Update"
+            android:textColor="@color/white"
+            android:textSize="25dp" />
+    </RelativeLayout>
+
+</RelativeLayout>

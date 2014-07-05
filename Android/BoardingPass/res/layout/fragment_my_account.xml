@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E7E7E7"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="7dp"
+        android:background="@drawable/rounded_layout_white"
+        android:padding="9dp" >
+
+        <ImageView
+            android:id="@+id/img_prof_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_add_photo" />
+
+        <ImageView
+            android:id="@+id/img_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/img_prof_pic"
+            android:layout_alignLeft="@+id/img_prof_pic"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_camera_my_profile" />
+
+        <TextView
+            android:id="@+id/tv_uname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/img_prof_pic"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/img_prof_pic"
+            android:text="Maja Mikes"
+            android:textColor="#000000"
+            android:textSize="17dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/img_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/img_prof_pic"
+            android:src="@drawable/ic_edit_my_profile" />
+
+        <ImageView
+            android:id="@+id/img_email_msz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/img_prof_pic"
+            android:src="@drawable/ic_mail_my_account" />
+
+        <ImageView
+            android:id="@+id/img_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/img_camera"
+            android:layout_alignLeft="@+id/img_email_msz"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_status_my_profile" />
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/img_email_msz"
+            android:text="maub_son85@gil.com"
+            android:textColor="#777777" />
+
+        <TextView
+            android:id="@+id/tv_stataus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/img_status"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/img_status"
+            android:singleLine="true"
+            android:text="I like to play football. Football is my favourite sports.
+             Messi is my favourite sports man..."
+            android:textColor="#777777" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:background="@drawable/rounded_layout_white" >
+
+        <ListView
+            android:id="@+id/lv_setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            
+             android:divider="#4db8db"
+            android:dividerHeight="0.1dp"
+             >
+        </ListView>
+
+    </RelativeLayout>
+    <Spinner
+        android:id="@+id/spn_country"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/et_username"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="12dp" />
+
+</LinearLayout>

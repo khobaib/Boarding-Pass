@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="170dp"
+    android:background="#FFFFFF"
+    android:layoutDirection="rtl"
+    android:orientation="horizontal"
+    android:paddingTop="2dp" >
+
+    <TextView
+        android:id="@+id/tv_success"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:text="@string/txt_email_senttomail"
+        android:textColor="#777777"
+        android:textSize="17dp" />
+
+    <TextView
+        android:id="@+id/tv_confirm_mail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="50dp"
+        android:text="@string/txt_confirmtaion"
+        android:textColor="#F74A3E"
+        android:textSize="14dp" />
+
+    <LinearLayout
+        android:id="@+id/le_ok"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/tv_confirm_mail"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/darker_gray"
+        tools:ignore="Orientation" >
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/re_ok"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/le_ok"
+         >
+
+        <Button
+            android:id="@+id/ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textColor="#000000"
+            android:background="@android:color/transparent"
+            android:text="@string/txt_ok" />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="counter_text_bg">#ff485685</color>
+    <color name="list_background_pressed">#ff4db8db</color>
+        <color name="list_background">#ff2d3e50</color>
+                <color name="list_divider">#ff564885</color>
+        
+     <color name="contents_text">#ff000000</color>
+  <color name="encode_view">#ffffffff</color>
+  <color name="possible_result_points">#c0ffbd21</color> <!-- Android standard ICS color -->
+  <color name="result_minor_text">#ffc0c0c0</color>
+  <color name="result_points">#c099cc00</color> <!-- Android standard ICS color -->
+  <color name="result_text">#ffffffff</color>
+  <color name="result_view">#b0000000</color>
+  <color name="status_text">#ffffffff</color>
+  <color name="transparent">#00000000</color>
+  <color name="viewfinder_laser">#ffcc0000</color> <!-- Android standard ICS color -->
+  <color name="viewfinder_mask">#60000000</color>
+    
+  
+  
+      <color name="black">#ff000000</color>
+    <color name="black_transparent_back">#90000000</color>
+    <color name="half_transparent">#7F000000</color>
+    <color name="red">#ffff0000</color>
+    <color name="white">#ffffffff</color>
+    <color name="gray70">#ffb3b3b3</color>
+    <color name="tab_text_normal">#ff646464</color>
+    <color name="gray_snow2">#ffEEE9E9</color>
+    <color name="gray70_transparent_back">#90b3b3b3</color>
+    <color name="background">#FFEFEFEF</color>
+    <color name="android_green">#FFA4C639</color>
+    <color name="honeycombish_blue">#FF58BAED</color>
+    <color name="rawsienna">#ffc76114</color>
+    <color name="crimson">#ffdc143c</color>
+    <color name="lightpink1">#ffffaeb9</color>
+    <color name="palevioletred1">#ffff82ab</color>
+    <color name="violetred1">#ffff3e96</color>
+    <color name="orchid">#ffda70d6</color>
+    <color name="violetred">#ffd02090</color>
+    <color name="plum2">#ffeeaeee</color>
+    <color name="magenta">#ffff00ff</color>
+    <color name="indigo">#ff4B0082</color>
+    <color name="app_theme">#ff9a374b</color>
+    <color name="app_theme_orange">#ffff5a22</color>
+    <color name="app_theme_yellow">#ffffd400</color>
+    <color name="app_theme_pink">#ffde2f92</color>
+<!--     <color name="app_theme_purple">#ff9a3393</color> -->
+    <color name="app_theme_blue">#ff380982</color>
+    <color name="app_theme_purple_transparent">#a59a3393</color>
+    
+</resources>
