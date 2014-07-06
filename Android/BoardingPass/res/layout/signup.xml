@@ -13,6 +13,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="50dp"
         android:ems="10"
+        android:textSize="14dp"
         android:hint="@string/txt_email" >
 
         <requestFocus />
@@ -36,6 +37,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/txt_password"
+            android:textSize="14dp"
             android:inputType="textPassword" >
         </EditText>
 
@@ -45,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:textSize="14dp"
             android:hint="@string/txt_confirm_password"
             android:inputType="textPassword" >
         </EditText>
@@ -79,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:textSize="14dp"
             android:hint="@string/txt_first_name" >
         </EditText>
 
@@ -88,15 +92,85 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:textSize="14dp"
             android:hint="@string/txt_last_name" >
         </EditText>
+    </LinearLayout>
+    <LinearLayout
+         android:id="@+id/le_gender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       android:background="@color/radio_selected_geneder"
+       android:padding="1dp"
+        android:layout_below="@+id/le_name"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+         >
+
+        <RadioGroup
+        android:id="@+id/rdgrp_gender"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:divider="@color/radio_selected_geneder"
+        
+        android:layout_alignParentLeft="true"
+        android:orientation="horizontal"
+        android:weightSum="3"
+         >
+
+        <RadioButton
+            android:id="@+id/radio_female"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:checked="true"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/radio_background"
+            android:button="@android:color/transparent"
+            android:textSize="14dp"
+            android:text="@string/txt_gender_female" />
+         <View
+             android:layout_width="1dp"
+             android:layout_height="match_parent"
+             android:background="@color/radio_selected_geneder"
+             />
+
+        <RadioButton
+            android:id="@+id/radio_male"
+            android:layout_width="0dp"
+             android:layout_height="match_parent"
+                        android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14dp"
+            android:background="@drawable/radio_background"
+            android:button="@android:color/transparent"
+            android:text="@string/txt_gender_male" />
+        <View
+             android:layout_width="1dp"
+             android:layout_height="match_parent"
+             android:background="@color/radio_selected_geneder"
+             />
+        <RadioButton
+            android:id="@+id/radio_not_say"
+            android:layout_width="0dp"
+             android:layout_height="match_parent"
+                        android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14dp"
+            android:background="@drawable/radio_background"
+            android:button="@android:color/transparent"
+            android:text="@string/txt_gender_rather_not_say" />
+     </RadioGroup>
+        
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/le_liveage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/le_name"
+        android:layout_below="@+id/le_gender"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
@@ -109,19 +183,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:textSize="14dp"
             android:hint="@string/txt_livein" >
         </EditText>
 
         <Spinner
             android:id="@+id/s_age"
             android:layout_width="0dp"
-            android:background="#ffffff"
+            android:textSize="14dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-                        android:layout_weight="1"
-            
+             android:layout_weight="1"
             android:paddingLeft="42dp"
-            android:textSize="24dp" />
+             />
 
         <EditText
             android:id="@+id/et_age"
@@ -152,6 +226,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:textSize="14dp"
             android:hint="@string/txt_profession" >
         </EditText>
 
@@ -161,6 +236,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:textSize="14dp"
             android:hint="@string/txt_seatting_pref"
             android:singleLine="true" >
         </EditText>
@@ -187,6 +263,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
+        android:textSize="14dp"
         android:text="@string/txt_signup_message"
         android:textColor="#0099cc" />
 

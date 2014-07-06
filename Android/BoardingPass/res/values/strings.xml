@@ -13,7 +13,7 @@
     <string name="txt_sm_about">Something about you</string>
     <string name="txt_say_sm_about">Say something about you</string>
     <string name="txt_confirm">Confirm</string>
-   
+    <string name="txt_gender_rather_not_say">Rather not say</string>
     <string name="txt_sign_out_msz">Are you sure you want to sign out?</string>
     <string name="app_name">Seat Unity</string>
     <string name="txt_select_country">Select country</string>

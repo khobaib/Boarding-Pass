@@ -55,6 +55,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -66,8 +68,10 @@ public class FragmentSignUp extends Fragment{
 	TextView tv_signup_message,tv_sign_message;
 	EditText et_email,et_password,et_confirm_password,et_first_name,et_last_name,et_livein,et_age,et_profession,et_seatting_pref;
 	Button bt_register;
-	String email="",password="",confirmpassword="",firstname="",lastname="",livein="",age="",profession="",seating="";
+	String email="",gender,password="",confirmpassword="",firstname="",lastname="",livein="",age="",profession="",seating="";
 	Spinner s_age;
+	RadioGroup rdgrp_gender;
+
 	ArrayList<String> agelist=new ArrayList<String>();
 	String[] NoCore_Array = new String [5];
 	{ 
@@ -105,9 +109,9 @@ public class FragmentSignUp extends Fragment{
 		re_ok.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-			
-					dialog.dismiss();
-					
+
+				dialog.dismiss();
+
 			}
 		});
 		dialog.show();
@@ -118,6 +122,8 @@ public class FragmentSignUp extends Fragment{
 			Bundle savedInstanceState) {
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.signup,
 				container, false);
+		rdgrp_gender=(RadioGroup) v.findViewById(R.id.rdgrp_gender);
+
 		initview(v);
 		return v;
 	}
@@ -142,7 +148,7 @@ public class FragmentSignUp extends Fragment{
 
 			@Override
 			public void onClick(View v) {
-			
+
 				// TODO Auto-generated method stub
 				//email,password,confirmpassword,firstname,lastname,livein,age,profession,seating
 				email=et_email.getText().toString();
@@ -245,6 +251,8 @@ public class FragmentSignUp extends Fragment{
 
 	public void callsignUp(){
 		if((!email.equals(""))&&(!password.equals(""))&&(!password.equals(""))){
+
+
 			String signupdata="";
 			signupdata=getJsonObjet();
 			AsyncaTaskApiCall apicalling=new AsyncaTaskApiCall(FragmentSignUp.this, signupdata, getActivity());
@@ -293,9 +301,21 @@ public class FragmentSignUp extends Fragment{
 			loginObj.put("firstname",firstname);
 			loginObj.put("lastname",lastname);
 			loginObj.put("seating_pref","male");
-			loginObj.put("gender","male");
 			loginObj.put("language","english");
 			loginObj.put("live_in",livein);
+			int selected =  rdgrp_gender.getCheckedRadioButtonId();
+			RadioButton rb_gender;
+			if(selected==R.id.radio_female){
+
+				gender=getActivity().getResources().getString(R.string.txt_gender_female);
+			}
+			else if(selected==R.id.radio_male){
+				gender=getActivity().getResources().getString(R.string.txt_gender_male);
+			}
+			else if(selected==R.id.radio_not_say){
+				gender=getActivity().getResources().getString(R.string.txt_gender_rather_not_say);
+			}
+			loginObj.put("gender",gender);
 			if(selectedageposition!=-1){
 				loginObj.put("age",agelist.get(selectedageposition));
 			}
@@ -305,9 +325,6 @@ public class FragmentSignUp extends Fragment{
 			loginObj.put("profession",profession);
 			loginObj.put("seating_pref",seating);
 			return loginObj.toString();
-		
-
-
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -326,20 +343,42 @@ public class FragmentSignUp extends Fragment{
 				showCustomDialog();
 				//		showCustomDialog();
 
-//				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_email_sent), 
-//						Toast.LENGTH_SHORT).show();
+				//				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_email_sent), 
+				//						Toast.LENGTH_SHORT).show();
 			}
 			else{
 				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_signup_failed), 
 						Toast.LENGTH_SHORT).show();
 			}
-	
+
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			
+
+	}
+	
+	public void showDialogForGender(final CharSequence[] items,String title)
+	{
+		AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+		builder.setTitle(title);
+		builder.setPositiveButton(getActivity().getResources().getString(R.string.txt_cancel), new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		});
+
+		builder.setSingleChoiceItems(items,-1, new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+			}
+		});
+		builder.show();
+
 	}
 }
 

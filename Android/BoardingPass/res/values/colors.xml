@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+<color name="radio_selected_geneder">#ffBCBCBC</color>
     <color name="counter_text_bg">#ff485685</color>
     <color name="list_background_pressed">#ff4db8db</color>
         <color name="list_background">#ff2d3e50</color>
