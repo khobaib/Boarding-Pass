@@ -9,6 +9,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.seatunity.boardingpass.AcountActivity;
 import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
@@ -50,15 +52,16 @@ import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class FragmentReminder extends Fragment{
-	
+
 	BoardingPassApplication appInstance;
 	AccountListFragment parent;
+	TextView tv_login,tv_signup;
 	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
-		
+
 	}
 
 	@Override
@@ -66,8 +69,35 @@ public class FragmentReminder extends Fragment{
 			Bundle savedInstanceState) {
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_reminder,
 				container, false);
+		tv_login=(TextView) v.findViewById(R.id.tv_login);
+		tv_signup=(TextView) v.findViewById(R.id.tv_signup);
+		tv_signup.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent=new Intent(getActivity(), AcountActivity.class);
+				intent.putExtra("to", "1");
+				startActivity(intent);
+				//getActivity().finish();
+			}
+		});
+		tv_login.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent=new Intent(getActivity(), AcountActivity.class);
+				intent.putExtra("to", "0");
+				startActivity(intent);
+				//getActivity().finish();
+			}
+		});
+
+
+		
 		return v;
 	}
-	
+
 }
 

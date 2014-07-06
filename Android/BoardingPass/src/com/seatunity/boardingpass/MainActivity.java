@@ -1,8 +1,6 @@
 package com.seatunity.boardingpass;
-
 import java.util.ArrayList;
 import java.util.Stack;
-
 import com.seatunity.boardingpass.adapter.NavDrawerListAdapter;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.fragment.AccountListFragment;
@@ -16,7 +14,6 @@ import com.seatunity.boardingpass.fragment.PastBoardingPassListFragment;
 import com.seatunity.boardingpass.fragment.TabFragment;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.model.BoardingPass;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -40,7 +37,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
 public class MainActivity extends FragmentActivity {
@@ -62,7 +58,6 @@ public class MainActivity extends FragmentActivity {
 	private FragmentManager fragmentManager;
 	int lastselectedposition=-1;
 	int prevselectedposition=-2;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -83,9 +78,6 @@ public class MainActivity extends FragmentActivity {
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1), true, "22"));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1), true, "50+"));
 		navMenuIcons.recycle();
 		mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 		adapter = new NavDrawerListAdapter(getApplicationContext());
@@ -93,16 +85,17 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-				R.drawable.ic_drawer, //nav menu toggle icon
-				R.string.app_name, // nav drawer open - description for accessibility
-				R.string.app_name // nav drawer close - description for accessibility
+				R.drawable.ic_navigation_drawer_closed, 
+				R.string.app_name, 
+				R.string.app_name 
 				) {
 			public void onDrawerClosed(View view) {
 				getActionBar().setTitle(mTitle);
+				getActionBar().setIcon(R.drawable.ic_navigation_drawer_closed);
 				invalidateOptionsMenu();
 			}
-
 			public void onDrawerOpened(View drawerView) {
+				getActionBar().setIcon(R.drawable.ic_navigation_drawer_open);
 				getActionBar().setTitle(mDrawerTitle);
 				invalidateOptionsMenu();
 			}
@@ -131,19 +124,42 @@ public class MainActivity extends FragmentActivity {
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle presses on the action bar items
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
-		}
-		switch (item.getItemId()) {
-		case R.id.action_settings:
+		}	    switch (item.getItemId()) {
+		case R.id.add:
+			openSearch();
+			return true;
+		case R.id.delete:
+			//openSearch();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	public void openSearch(){
+		Fragment fragment = new HomeListFragment(1);
+		FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack("0").commit();
+		mDrawerList.setItemChecked(0, true);
+		//mDrawerList.setSelection(0);
+	}
+
+	//	@Override
+	//	public boolean onOptionsItemSelected(MenuItem item) {
+	//		if (mDrawerToggle.onOptionsItemSelected(item)) {
+	//			return true;
+	//		}
+	//		switch (item.getItemId()) {
+	//		case R.id.action_settings:
+	//			return true;
+	//		default:
+	//			return super.onOptionsItemSelected(item);
+	//		}
+	//	}
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		// if nav drawer is opened, hide the action items
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
 		menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
 		return super.onPrepareOptionsMenu(menu);
@@ -152,51 +168,24 @@ public class MainActivity extends FragmentActivity {
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@SuppressLint("NewApi")
 	public void displayView(int position) {
-		// update the main content by replacing fragments
 		lastselectedposition=position;
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(MainActivity.this);
 		dbInstance.open();
 		ArrayList<BoardingPass> list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
-		
+
 		dbInstance.close();
 		String email=appInstance.getUserCred().getEmail();
-		
+
 		Fragment fragment = null;
 		switch (position) {
 		case 0:
-			
-			 fragment = new HomeListFragment();
-//			fragment=new TabFragment() {
-//				
-//				@Override
-//				public void onBackPressed() {
-//					// TODO Auto-generated method stub
-//					
-//				}
-//			};
-//			if((email.equals(""))&&(list.size()<1)){
-//				fragment = new HomeFragment();
-//				
-//			}
-//			else if((!email.equals(""))&&(list.size()<1)){
-//				fragment = new FragmentAddBoardingPassDuringLogin();
-//				
-//			}
-//			else{
-//				
-//				fragment = new FragmentBoardingPasses();
-//				
-//
-//			}
-			
+			fragment = new HomeListFragment(0);
 			break;
 		case 1:
 			fragment = new AccountListFragment();
-			
 			break;
 		case 2:
 			fragment = new PastBoardingPassListFragment();
-			
 			break;
 		default:
 			break;
@@ -204,78 +193,12 @@ public class MainActivity extends FragmentActivity {
 
 		if (fragment != null) {
 			FragmentManager fragmentManager = getFragmentManager();
-			
-			
-//				
-//				FragmentManager fragmentManager = getFragmentManager();
-//				FragmentTransaction ft = fragmentManager.beginTransaction();
-////				
-//				if(position==0){
-//					
-//					if(fragmentStack.size()<1){
-//						fragmentStack.push(fragment);
-//						fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack(""+position).commit();
-//						
-//
-//					}
-//					else{
-//							fragment=fragmentStack.peek();
-//							fragmentStack.push(fragment);
-//							fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack(""+position).commit();
-//						 
-//					}
-//					Log.e("size", ""+fragmentStack.size());
-//
-//				}
-//				else if(position==1){
-//					if(fragmentStack1.size()<1){
-//						fragmentStack1.push(fragment);
-//						fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack(""+position).commit();
-//						
-//
-//					}
-//					else{
-//						fragment=fragmentStack1.peek();
-//						fragmentStack1.push(fragment);
-//						fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack(""+position).commit();
-//						
-//					}
-//				}
-//				else if(position==2){
-////					if(fragmentStack.size()>1){
-//////						fragmentStack2.lastElement().onPause();
-//////						ft.hide(fragmentStack2.lastElement());
-////
-////					}
-////					fragmentStack2.push(fragment);
-//					if(fragmentStack2.size()<1){
-//						fragmentStack2.push(fragment);
-//						fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack(""+position).commit();
-//						
-//
-//					}
-//					else{
-//						fragment=fragmentStack2.peek();
-//						//fragmentStack2.push(fragment);
-//						fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack(""+position).commit();
-//						
-//						 
-//					}
-//				}
-//				
-//				mDrawerList.setItemChecked(position, true);
-//				mDrawerList.setSelection(position);
-//				setTitle(navMenuTitles[position]);
-//				mDrawerLayout.closeDrawer(mDrawerList);
-//			}
-			
-	
-		fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack(""+position).commit();
-		prevselectedposition=position;
-		mDrawerList.setItemChecked(position, true);
-		mDrawerList.setSelection(position);
-		setTitle(navMenuTitles[position]);
-		mDrawerLayout.closeDrawer(mDrawerList);
+			fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack(""+position).commit();
+			prevselectedposition=position;
+			mDrawerList.setItemChecked(position, true);
+			mDrawerList.setSelection(position);
+			setTitle(navMenuTitles[position]);
+			mDrawerLayout.closeDrawer(mDrawerList);
 		}
 	}
 
@@ -309,7 +232,7 @@ public class MainActivity extends FragmentActivity {
 	}
 	public void close() {
 		finisssh();
-		
+
 	}
 
 	public void finisssh(){
@@ -319,70 +242,4 @@ public class MainActivity extends FragmentActivity {
 	public void onBackPressed() {
 		activeFragment.onBackPressed();
 	}
-//	@Override
-//	public void onBackPressed() {
-//		// TODO Auto-generated method stub
-//		super.onBackPressed();
-//		getFragmentManager().popBackStack();
-//		fm.beginTransaction().add(R.id.frame_container, newFragment).addToBackStack("fragBack").commit();
-//		.add(R.id.frame_container, fragment).addToBackStack(""+position).commit();
-//	}
-//	@Override
-//	public void onBackPressed() {
-//		Log.e("pos", fragmentStack.size()+" "+fragmentStack1.size()+" "+fragmentStack2.size()+"  "+lastselectedposition);
-//		if(lastselectedposition==0){
-//			if (fragmentStack.size()>1) {
-//				FragmentTransaction ft = fragmentManager.beginTransaction();
-//				fragmentStack.lastElement().onPause();
-//				ft.remove(fragmentStack.pop());
-//				fragmentStack.lastElement().onResume();
-//				ft.show(fragmentStack.lastElement());
-//				ft.commit();
-//
-//			} else {
-//				super.onBackPressed();
-//			}
-//			
-//		}
-//		else if(lastselectedposition==1){
-//			if (fragmentStack1.size()>1) {
-//				FragmentTransaction ft = fragmentManager.beginTransaction();
-//				fragmentStack1.lastElement().onPause();
-//				ft.remove(fragmentStack1.pop());
-//				fragmentStack1.lastElement().onResume();
-//				ft.show(fragmentStack1.lastElement());
-//				ft.commit();
-//				Log.e("size", ""+fragmentStack.size());
-//			} else {
-//				super.onBackPressed();
-//			}
-//			
-//		}
-//		else if(lastselectedposition==2){
-//			if (fragmentStack2.size()>1) {
-//				FragmentTransaction ft = fragmentManager.beginTransaction();
-//				fragmentStack2.lastElement().onPause();
-//				ft.remove(fragmentStack2.pop());
-//				fragmentStack2.lastElement().onResume();
-//				ft.show(fragmentStack2.lastElement());
-//				ft.commit();
-//			} else {
-//				super.onBackPressed();
-//			}
-//		
-//		}
-//
-//		
-//	}
-//	
-//	@Override
-//	public void onBackPressed() {
-//		// TODO Auto-generated method stub
-//		FragmentManager fragmentManager = getFragmentManager();
-//		if(fragmentManager.getBackStackEntryCount()<0){
-//			super.onBackPressed();
-//		}
-//		
-//	}
-
 }

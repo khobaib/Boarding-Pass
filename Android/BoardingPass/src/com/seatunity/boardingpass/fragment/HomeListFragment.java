@@ -27,6 +27,13 @@ import android.widget.Toast;
 public class HomeListFragment extends TabFragment{
 	protected Stack<Fragment> backEndStack;
 	BoardingPassApplication appInstance;
+	int from;
+	public HomeListFragment(int from){
+		this.from=from;
+	}
+	public HomeListFragment(){
+		this.from=from;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,26 +46,32 @@ public class HomeListFragment extends TabFragment{
 		
 		dbInstance.close();
 		String email=appInstance.getUserCred().getEmail();
-		
-		if((email.equals(""))&&(list.size()<1)){
-			HomeFragment fragment = new HomeFragment();
-			fragment.parent = this;
-			backEndStack.push(fragment);
-			
-		}
-		else if((!email.equals(""))&&(list.size()<1)){
-			FragmentAddBoardingPassDuringLogin fragment = new FragmentAddBoardingPassDuringLogin();
-			fragment.parent = this;
-			backEndStack.push(fragment);
-			
+		if(from==0){
+			if((email.equals(""))&&(list.size()<1)){
+				HomeFragment fragment = new HomeFragment();
+				fragment.parent = this;
+				backEndStack.push(fragment);
+			}
+			else if((!email.equals(""))&&(list.size()<1)){
+				FragmentAddBoardingPassDuringLogin fragment = new FragmentAddBoardingPassDuringLogin();
+				fragment.parent = this;
+				backEndStack.push(fragment);
+				
+			}
+			else{
+				
+				FragmentBoardingPasses fragment = new FragmentBoardingPasses();
+				fragment.parent = this;
+				backEndStack.push(fragment);
+
+			}
 		}
 		else{
-			
-			FragmentBoardingPasses fragment = new FragmentBoardingPasses();
-			fragment.parent = this;
-			backEndStack.push(fragment);
-
+			FragmentAddBoardingPass newFragment = new FragmentAddBoardingPass() ;
+			newFragment.parent = this;
+			backEndStack.push(newFragment);
 		}
+		
 		
 		
 		

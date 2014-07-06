@@ -182,8 +182,8 @@ public class FragmentLogin extends Fragment{
 				usercred.setPassword(password);
 				appInstance.setUserCred(usercred);
 				appInstance.setRememberMe(true);
-				Intent intent=new Intent(getActivity(), MainActivity.class);
-		    	startActivity(intent);
+//				Intent intent=new Intent(getActivity(), MainActivity.class);
+//		    	startActivity(intent);
 		    	getActivity().finish();		
 				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_login_success), Toast.LENGTH_SHORT).show();
 				

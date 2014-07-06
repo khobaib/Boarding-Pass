@@ -86,8 +86,6 @@ public class FragmentPastBoardingPasses extends Fragment{
 		tv_start_time=(TextView) v.findViewById(R.id.tv_start_time);
 		tv_arrival_time=(TextView) v.findViewById(R.id.tv_arrival_time);
 		
-
-		
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 		dbInstance.open();
 		list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();

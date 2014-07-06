@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.seatunity.boardingpass.fragment.FragmentLogin;
 import com.seatunity.boardingpass.fragment.FragmentSignUp;
+import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.viewpagerindicator.TabPageIndicator;
 
 import android.annotation.SuppressLint;
@@ -35,6 +36,7 @@ public class AcountActivity extends FragmentActivity {
 	public ViewPager pager;
 	public TabPageIndicator indicator;
 	FragmentPagerAdapter adapter;
+	BoardingPassApplication appInstance;
 	private static final String[] CONTENT = new String[] {"LOGIN","REGISTER"};
 	
     @Override
@@ -42,11 +44,18 @@ public class AcountActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.acount);
+        String chooser= getIntent().getExtras().getString("to");
         pager = (ViewPager) findViewById(R.id.pager);
 		indicator = (TabPageIndicator)findViewById(R.id.indicator);
 		adapter = new PostRetreiveAdapter(getSupportFragmentManager());
 		pager.setAdapter(adapter);
-		indicator.setViewPager(pager,0);
+		if(chooser.equals("0")){
+			indicator.setViewPager(pager,0);
+		}
+		else{
+			indicator.setViewPager(pager,1);
+
+		}
  
        
     }

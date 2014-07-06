@@ -71,6 +71,7 @@ public class HomeFragment extends Fragment {
     }
     public void onclickprofile(){
     	Intent intent=new Intent(getActivity(), AcountActivity.class);
+    	intent.putExtra("to", "0");
     	startActivity(intent);
     	getActivity().finish();
     	

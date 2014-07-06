@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-
+    <string-array name="nav_drawer_items">
+        <item>Home</item>
+        <item>My Account</item>
+        <item>Past Boarding Passes</item>
+        
+    </string-array>
     <string-array name="seating_pref">
         <item>Relax</item>
         <item>Work</item>
