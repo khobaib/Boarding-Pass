@@ -35,6 +35,7 @@ import com.google.zxing.Reader;
 import com.google.zxing.Result;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.common.HybridBinarizer;
+import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
@@ -54,14 +55,21 @@ public class FragmentAddBoardingPass extends Fragment {
 	BoardingPassApplication appInstance;
 	BoardingPass boardingPass;
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
+	}
+	@Override
 	public void onResume() {
 		super.onResume();
 		Log.e("calledadd", "onResume");
+		
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Log.e("calledadd", "onCreateView");
+		super.onCreate(savedInstanceState);
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
 		//M1SUMON/UWEMR         EYWX9ZS DHABARLH 2074 102M037A0016 355>2180KO3075BOS 022052227001 262202331497901  LH                     *30601001205
 
@@ -117,7 +125,6 @@ public class FragmentAddBoardingPass extends Fragment {
 	}
 	public void onclicksdcard(){
 		Intent intent = new Intent(getActivity(), FilePickerActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivityForResult(intent, 10);
 
 	}
@@ -131,29 +138,61 @@ public class FragmentAddBoardingPass extends Fragment {
 			}
 		});
 	}
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+	public  void getResultFromActivity(int requestCode, int resultCode, String  path){
+		File f = new File(path);
+		Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
+		if (bmp != null){
+			scanBarcodeFromImage(bmp);
+		}
+		if (f.exists())
+			f.delete();
+	}
 
-		tv_add_boardingpasswith_camera.setText("gefcefckhgdfc");
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		if (requestCode == 0) {
+			Log.e("tag", "2");
+
 			if (resultCode == getActivity().RESULT_OK) {
+				Log.e("tag", "3");
+
 				String contents = intent.getStringExtra("SCAN_RESULT");
 				String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 				saveScannedBoardingPasstodatabes(contents,format);
 			} else if (resultCode == getActivity().RESULT_CANCELED) {
+				Log.e("tag", "4");
+
 			}
 		}
 
 		else if (requestCode == 10) {
+			Log.e("tag", "5");
+
 			if (resultCode == getActivity().RESULT_OK) {
+				Log.e("tag", "16");
+
 				int format=intent.getIntExtra(FilePickerActivity.FILE_FORMAT_KEY, 0);
 				String filepath=intent.getStringExtra(FilePickerActivity.FILE_PATH);
 				if(format==FilePickerActivity.PDF_FILE){
 					GetBoardingPassFromPDF(filepath);
+					Log.e("tag", "7");
+
 				}
 				else if(format==FilePickerActivity.PASSBOOK_FILE){
-					String boardingpass=PkpassReader.getFormattedStringFromPassFile(filepath);
+					try {
+						Log.e("tag", "8");
+
+						String boardingpass=PkpassReader.getPassbookBarcodeString(filepath);
+						Log.e("json Object", boardingpass);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						Log.e("tag", "19");
+
+						e.printStackTrace();
+					}
 				}
 				else if(format==FilePickerActivity.IMAGE_FILE){
+					Log.e("tag", "10");
+
 					Bitmap bitmap = BitmapFactory.decodeFile(filepath);
 					scanBarcodeFromImage(bitmap);
 				}
@@ -165,24 +204,27 @@ public class FragmentAddBoardingPass extends Fragment {
 		}
 		else if (requestCode == 12) {
 			if (resultCode == getActivity().RESULT_OK) {
-				byte[] ba = intent.getByteArrayExtra("bitmap_ba");
-				Bitmap bmp = BitmapFactory.decodeByteArray(ba, 0, ba.length);
+				File f = new File(intent.getStringExtra("bitmap_file_path"));
+				Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
 				if (bmp != null){
-					Log.e("tag", "4");
 					scanBarcodeFromImage(bmp);
 				}
-			} else if (resultCode == getActivity().RESULT_CANCELED) {
+				if (f.exists())
+					f.delete();
+			} 
+			else if (resultCode == getActivity().RESULT_CANCELED) {
 			}
+
 		}
+
 	}
 
 	public void GetBoardingPassFromPDF(String filepath){
 		Intent intent = new Intent(getActivity(), MuPDFActivity.class);
 		intent.setAction("com.touhiDroid.PDF.GET_BITMAP");
 		intent.setData(Uri.parse(filepath));
-		startActivityForResult(intent, 12);
-
-		
+		((MainActivity)getActivity()).holder=FragmentAddBoardingPass.this;
+		getActivity().startActivityForResult(intent, 12);
 	}
 	public void saveScannedBoardingPasstodatabes(String contents,String format){
 
@@ -212,7 +254,6 @@ public class FragmentAddBoardingPass extends Fragment {
 
 		}
 
-		// 
 	}
 
 	public void SaveboardingPasstoServer(BoardingPass bpass){
@@ -297,7 +338,7 @@ public class FragmentAddBoardingPass extends Fragment {
 				Result result = reader.decode(bitmap, decodeHints);
 				Log.e("text", result.getText())  ;
 				Log.e("format", result.getBarcodeFormat().toString())  ;
-				saveScannedBoardingPasstodatabes(result.getText(),result.getBarcodeFormat().toString());
+				//saveScannedBoardingPasstodatabes(result.getText(),result.getBarcodeFormat().toString());
 
 			} catch (NotFoundException e) {
 				e.printStackTrace();

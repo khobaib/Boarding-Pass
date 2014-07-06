@@ -28,24 +28,10 @@ public class PkpassReader {
 
 public static String getFormattedStringFromPassFile(String fileName) {
 	
-//	path = "";
-//	StringTokenizer tokens = new StringTokenizer(fileName, "/");
-//	while (tokens.hasMoreTokens()){
-//		String str = tokens.nextToken();
-//		passFileName = str;
-//		if(!fileName.equals(path+str))
-//			path += "/"+str;
-//	}
-//	QRCodeMultiReader q=
+
 		JSONObject jObj = getJSONFromPass(fileName);
 		String retStr = "";
 		try {
-//			retStr = " description: " + jObj.get("description");
-//			retStr += "\n formatVersion: " + jObj.get("formatVersion");
-//			retStr += "\n organizationName: " + jObj.get("organizationName");
-//			retStr = "\n passTypeIdentifier: " + jObj.get("passTypeIdentifier");
-//			retStr += "\n serialNumber: " + jObj.get("serialNumber");
-//			retStr += "\n teamIdentifier: " + jObj.get("teamIdentifier");
 			retStr += "\n barcode: " + jObj.get("barcode");
 		} catch (JSONException e) {
 			Log.e("getFormattedStringFromPassFile", "JSONException", e);
@@ -59,14 +45,13 @@ public static String getFormattedStringFromPassFile(String fileName) {
 		Log.d("Touhid", fileName);
 		try {
 			String zfileName;
-			is = new FileInputStream(fileName);
+			is = new FileInputStream(path+passFileName);
 			zis = new ZipInputStream(new BufferedInputStream(is));
 			ZipEntry ze;
 			byte[] buffer = new byte[8192];
 			int count;
 
 			while ((ze = zis.getNextEntry()) != null) {
-				// zapis do souboru
 				if (ze.isDirectory())
 					continue;
 				zfileName = ze.getName();
@@ -75,14 +60,9 @@ public static String getFormattedStringFromPassFile(String fileName) {
 				if (zfileName.startsWith(fileName)) {
 					FileOutputStream fout = new FileOutputStream(path
 							+ zfileName);
-					Log.d("Touhid_uzip", "FileOutputStream (fout) made as: "
-							+ path + zfileName);
-
 					while ((count = zis.read(buffer)) != -1) {
 						fout.write(buffer, 0, count);
 					}
-
-					Log.d("Touhid_uzip", "Closing fout...");
 					fout.close();
 					zis.closeEntry();
 					Log.d("Touhid_uzip",
@@ -107,11 +87,78 @@ public static String getFormattedStringFromPassFile(String fileName) {
 
 			}
 			zis.close();
-			Log.d("Touhid_uzip", "ZipInputStream (zis) closed.");
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 		return null;
 	}
+	 /** 
+     * Static function returning the barcode information as a {@link JSONObject} 
+     * , which is formatted as described <a href= 
+     * "https://developer.apple.com/library/ios/documentation/userexperience/Reference/PassKit_Bundle/Chapters/LowerLevel.html#//apple_ref/doc/uid/TP40012026-CH3-SW3" 
+     * >here.</a> 
+     *  
+     * @param pkpassFilePath 
+     *            The absolute file path of the {@code*.pkpass} file, usually 
+     *            got from {@code file.getAbsolutePath()}, where {@code file} is 
+     *            the {@link File} object of type {@code*.pkpass} only. 
+     * @return {@link JSONObject} formatted as described <a href= 
+     *         "https://developer.apple.com/library/ios/documentation/userexperience/Reference/PassKit_Bundle/Chapters/LowerLevel.html#//apple_ref/doc/uid/TP40012026-CH3-SW3" 
+     *         >here</a>, or {@code  null} if file is invalid or any other error 
+     *         occurs. 
+     * @throws JSONException 
+     *             if the pass.json is ill-formed or doesn't have the field 
+     *             "barcode" as defined <a href= 
+     *             "https://developer.apple.com/library/ios/documentation/userexperience/Reference/PassKit_Bundle/Chapters/LowerLevel.html#//apple_ref/doc/uid/TP40012026-CH3-SW3" 
+     *             >here</a>. 
+     * */
+    public static JSONObject getPassbookBarcode(String pkpassFilePath) 
+            throws JSONException { 
+        path = ""; 
+        StringTokenizer tokens = new StringTokenizer(pkpassFilePath, "/"); 
+        while (tokens.hasMoreTokens()) { 
+            String str = tokens.nextToken(); 
+            passFileName = str; 
+            if (!pkpassFilePath.equals(path + "/" + str)) 
+                path += "/" + str; 
+        } 
+        path += "/"; 
+        Log.d("getPassbookBarcode", path + ", " + passFileName); 
+        return (JSONObject) getJSONFromPass("pass").get("barcode"); 
+    } 
+  
+    /** 
+     * Static function returning the barcode information as a String formattable 
+     * as {@link JSONObject} , which can be formatted as described <a href= 
+     * "https://developer.apple.com/library/ios/documentation/userexperience/Reference/PassKit_Bundle/Chapters/LowerLevel.html#//apple_ref/doc/uid/TP40012026-CH3-SW3" 
+     * >here</a>. 
+     *  
+     * @param pkpassFilePath 
+     *            The absolute file path of the {@code*.pkpass} file, usually 
+     *            got from {@code file.getAbsolutePath()}, where {@code file} is 
+     *            the {@link File} object of type {@code*.pkpass} only. 
+     * @return String Formattable as a {@link JSONObject} 
+     *  
+     * @throws JSONException 
+     *             if the pass.json is ill-formed or doesn't have the field 
+     *             "barcode" as defined <a href= 
+     *             "https://developer.apple.com/library/ios/documentation/userexperience/Reference/PassKit_Bundle/Chapters/LowerLevel.html#//apple_ref/doc/uid/TP40012026-CH3-SW3" 
+     *             >here</a>. 
+     * */
+    public static String getPassbookBarcodeString(String pkpassFilePath) 
+            throws JSONException { 
+        path = ""; 
+        StringTokenizer tokens = new StringTokenizer(pkpassFilePath, "/"); 
+        while (tokens.hasMoreTokens()) { 
+            String str = tokens.nextToken(); 
+            passFileName = str; 
+            if (!pkpassFilePath.equals(path + "/" + str)) 
+                path += "/" + str; 
+        } 
+        path += "/"; 
+        Log.d("getPassbookBarcodeString", path + ", " + passFileName); 
+        return getJSONFromPass("pass").get("barcode").toString(); 
+    } 
+  
 }

@@ -66,6 +66,8 @@ public class FragmentMyAccount extends Fragment{
 	ListView lv_setting;
 	Spinner spn_country;
 	AccountListFragment parent;
+	TextView tv_uname,tv_email,tv_stataus;
+	
 	public FragmentMyAccount(){
 	}
 	@SuppressLint("NewApi")
@@ -88,12 +90,18 @@ public class FragmentMyAccount extends Fragment{
 			Bundle savedInstanceState) {
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_my_account,
 				container, false);
+		tv_uname=(TextView) v.findViewById(R.id.tv_uname);
+		tv_email=(TextView) v.findViewById(R.id.tv_email);
+		tv_stataus=(TextView) v.findViewById(R.id.tv_stataus);
 		img_prof_pic=(ImageView) v.findViewById(R.id.img_prof_pic);
 		lv_setting=(ListView) v.findViewById(R.id.lv_setting);
-		adapter=new AdapterForSettings(getActivity(), setting_criteria);
+		adapter=new AdapterForSettings(getActivity(), setting_criteria,appInstance.getUserCred());
 		lv_setting.setAdapter(adapter);
 		img_edit=(ImageView) v.findViewById(R.id.img_edit);
 		spn_country=(Spinner) v.findViewById(R.id.spn_country);
+		tv_uname.setText(appInstance.getUserCred().getFirstname());
+		tv_email.setText(appInstance.getUserCred().getEmail());
+		tv_stataus.setText(appInstance.getUserCred().getStatus());
 		img_edit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -160,6 +168,17 @@ public class FragmentMyAccount extends Fragment{
 		.setPositiveButton(getActivity().getResources().getString(R.string.txt_confirm), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.cancel();
+				try {
+					JSONObject loginObj = new JSONObject();
+					loginObj.put("token", appInstance.getUserCred().getToken());
+				
+					AsyncaTaskApiCall logoutcall=new AsyncaTaskApiCall(appInstance,FragmentMyAccount.this, loginObj.toString(),
+							getActivity(), "logout");
+					logoutcall.execute();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		})
 		.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel), new DialogInterface.OnClickListener() {
@@ -249,6 +268,9 @@ public class FragmentMyAccount extends Fragment{
 		final Dialog dialog = new Dialog(getActivity());
 		dialog.setContentView(R.layout.edit_user_name);
 		dialog.show();
+	}
+	public void successfullyLoggedout(){
+		
 	}
 
 

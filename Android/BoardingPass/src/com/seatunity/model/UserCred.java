@@ -25,6 +25,9 @@ public class UserCred {
 		if(userObj != null){
 			String jsonString = userObj.toString();
 			userCred = gson.fromJson(jsonString, UserCred.class);
+			if(userCred.some_about_you==null){
+				userCred.setSomethinAbout("");
+			}
 		}
 		return userCred;
 	}

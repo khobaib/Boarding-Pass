@@ -1,9 +1,14 @@
 package com.seatunity.boardingpass;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Stack;
+
+import org.json.JSONException;
+
 import com.seatunity.boardingpass.adapter.NavDrawerListAdapter;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.fragment.AccountListFragment;
+import com.seatunity.boardingpass.fragment.FragmentAddBoardingPass;
 import com.seatunity.boardingpass.fragment.FragmentAddBoardingPassDuringLogin;
 import com.seatunity.boardingpass.fragment.FragmentMyAccount;
 import com.seatunity.boardingpass.fragment.FragmentBoardingPasses;
@@ -13,7 +18,10 @@ import com.seatunity.boardingpass.fragment.HomeListFragment;
 import com.seatunity.boardingpass.fragment.PastBoardingPassListFragment;
 import com.seatunity.boardingpass.fragment.TabFragment;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
+import com.seatunity.boardingpass.utilty.PkpassReader;
 import com.seatunity.model.BoardingPass;
+import com.touhiDroid.filepicker.FilePickerActivity;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -25,6 +33,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -58,6 +68,7 @@ public class MainActivity extends FragmentActivity {
 	private FragmentManager fragmentManager;
 	int lastselectedposition=-1;
 	int prevselectedposition=-2;
+	public FragmentAddBoardingPass holder;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -222,6 +233,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		Toast.makeText(MainActivity.this, "Calling from"+requestCode, 2000).show();
 		if (requestCode == 0) {
 			if (resultCode == RESULT_OK) {
 				String contents = data.getStringExtra("SCAN_RESULT");
@@ -229,11 +241,79 @@ public class MainActivity extends FragmentActivity {
 			} else if (resultCode == RESULT_CANCELED) {
 			}
 		}
+		else if (requestCode == 12) {
+			if (resultCode == RESULT_OK) {
+				String path=data.getStringExtra("bitmap_file_path");
+				Log.e("test", "1 "+holder+" "+path );
+				holder.getResultFromActivity(requestCode, resultCode, path);
+			} 
+			else if (resultCode == RESULT_CANCELED) {
+			}
+
+		}
 	}
 	public void close() {
 		finisssh();
 
 	}
+	
+//	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+//
+//		Toast.makeText(getActivity(), "Calling"+requestCode, 2000).show();
+//		tv_add_boardingpasswith_camera.setText("gefcefckhgdfc");
+//		if (requestCode == 0) {
+//			if (resultCode == getActivity().RESULT_OK) {
+//				String contents = intent.getStringExtra("SCAN_RESULT");
+//				String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+//				saveScannedBoardingPasstodatabes(contents,format);
+//			} else if (resultCode == getActivity().RESULT_CANCELED) {
+//			}
+//		}
+//
+//		else if (requestCode == 10) {
+//			if (resultCode == getActivity().RESULT_OK) {
+//				int format=intent.getIntExtra(FilePickerActivity.FILE_FORMAT_KEY, 0);
+//				String filepath=intent.getStringExtra(FilePickerActivity.FILE_PATH);
+//				if(format==FilePickerActivity.PDF_FILE){
+//					GetBoardingPassFromPDF(filepath);
+//				}
+//				else if(format==FilePickerActivity.PASSBOOK_FILE){
+//					try {
+//						String boardingpass=PkpassReader.getPassbookBarcodeString(filepath);
+//						Log.e("json Object", boardingpass);
+//					} catch (JSONException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+//				else if(format==FilePickerActivity.IMAGE_FILE){
+//					Bitmap bitmap = BitmapFactory.decodeFile(filepath);
+//					scanBarcodeFromImage(bitmap);
+//				}
+//
+//			} else if (resultCode == getActivity().RESULT_CANCELED) {
+//				Log.i("App","Scan unsuccessful");
+//
+//			}
+//		}
+//		else if (requestCode == 12) {
+//			if (resultCode == getActivity().RESULT_OK) {
+//				
+//				File f = new File(intent.getStringExtra("bitmap_file_path"));
+//				   Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
+//				  
+//				
+//				if (bmp != null){
+//					Log.e("tag", "4");
+//					scanBarcodeFromImage(bmp);
+//				}
+//				 if (f.exists())
+//					    f.delete();
+//			} else if (resultCode == getActivity().RESULT_CANCELED) {
+//			}
+//		}
+//	}
+//
 
 	public void finisssh(){
 		super.onBackPressed();

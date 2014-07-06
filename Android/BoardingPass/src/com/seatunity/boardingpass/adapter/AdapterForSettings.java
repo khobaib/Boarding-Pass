@@ -7,6 +7,8 @@ import com.seatunity.boardingpass.NavDrawerItem;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
+import com.seatunity.model.UserCred;
+
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -23,11 +25,13 @@ public class AdapterForSettings extends BaseAdapter {
      String day;
     private Context context;
     private ArrayList<String>list;
+    UserCred userCred;
     
      
-    public AdapterForSettings(Context context,ArrayList<String>list){
+    public AdapterForSettings(Context context,ArrayList<String>list, UserCred userCred){
         this.context = context;
         this.list=list;
+        this.userCred=userCred;
         
        
 
@@ -70,6 +74,28 @@ public class AdapterForSettings extends BaseAdapter {
         else {
 			holder = (ViewHolder) convertView.getTag();
 		}
+    	 if(position==0){
+    		 holder.tv_info.setText(userCred.getLive_in());
+    	 }
+    	 else if(position==1){
+    		 holder.tv_info.setText(userCred.getAge());
+    	 }
+    	 else if(position==2){
+    		 holder.tv_info.setText(userCred.getGender());
+    	 }
+    	 else if(position==3){
+    		 holder.tv_info.setText(userCred.getProfession());
+    	 }
+    	 else if(position==4){
+    		 holder.tv_info.setText(userCred.getSeating_pref());
+    	 }
+    	 else if(position==5){
+    		 holder.tv_info.setText(userCred.getSomethinAbout());
+    	 }
+    	 else if(position==5){
+    		 holder.tv_info.setText(userCred.getSomethinAbout());
+    	 }
+    	 
     	 holder.tv_seeting_criteria.setText(list.get(position));
         return convertView;
     }

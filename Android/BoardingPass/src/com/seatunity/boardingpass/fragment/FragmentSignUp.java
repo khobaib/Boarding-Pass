@@ -141,6 +141,16 @@ public class FragmentSignUp extends Fragment{
 		et_age=(EditText) v.findViewById(R.id.et_age);
 		et_profession=(EditText) v.findViewById(R.id.et_profession);
 		et_seatting_pref=(EditText) v.findViewById(R.id.et_seatting_pref);
+		et_seatting_pref.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				String[] seating_pref_list = getActivity().getResources().getStringArray(R.array.seating_pref); 
+				String title=getActivity().getResources().getString(R.string.txt_seatting_pref_cap);
+				showDialogForSeatingPref(seating_pref_list,title);
+			}
+		});
 		String text = "<font color=#000000>By registering, you acknowledge that you have read and agreed to the SeatUnit</font>" +
 				" <font color=#0099cc>Terms of Conditions</font>";
 		tv_sign_message.setText(Html.fromHtml(text));
@@ -159,7 +169,7 @@ public class FragmentSignUp extends Fragment{
 				livein=et_livein.getText().toString();
 				age=et_age.getText().toString();
 				profession=et_profession.getText().toString();
-				seating=et_seatting_pref.getText().toString();
+				//seating=et_seatting_pref.getText().toString();
 				et_email.addTextChangedListener(new TextWatcher() {          
 					@Override
 					public void onTextChanged(CharSequence s, int start, int before, int count) {                                   
@@ -359,7 +369,7 @@ public class FragmentSignUp extends Fragment{
 
 	}
 	
-	public void showDialogForGender(final CharSequence[] items,String title)
+	public void showDialogForSeatingPref(final CharSequence[] items,String title)
 	{
 		AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
 		builder.setTitle(title);
@@ -375,6 +385,9 @@ public class FragmentSignUp extends Fragment{
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				 seating=items[which].toString();
+				 et_seatting_pref.setText(seating);
+				dialog.cancel();
 			}
 		});
 		builder.show();

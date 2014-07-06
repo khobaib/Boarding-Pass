@@ -58,7 +58,9 @@
     <string name="txt_signup_failed">Sign up is failed. Please try again</string>
     <string name="txt_login_failed">Log-in failed. Please try again</string>
     <string name="txt_login_success">Log-in successfull</string>
-    <string name="txt_select_city">Select City</string>
+        <string name="txt_logout_success">Successfully logged-out </string>
+      <string name="txt_logout_failed">Failed to sign-out. Please try again </string>
+    <string name="txt_select_city">Age</string>
     <string name="txt_add_boardingpass">Add your boarding pass and find out with who
                              you share your fight</string>
     <string name="txt_say_to_register">Register for free to use our social features and
