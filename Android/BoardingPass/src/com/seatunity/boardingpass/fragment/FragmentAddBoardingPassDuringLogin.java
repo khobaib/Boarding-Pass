@@ -72,13 +72,12 @@ public class FragmentAddBoardingPassDuringLogin extends Fragment{
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		Log.e("Login", "onResume");
+		
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Log.e("Login", "onCreateView");
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_add_screen_loggedin,
 				container, false);
 		img_add_boardingpass=(ImageView) v.findViewById(R.id.img_add_boardingpass);
@@ -88,7 +87,6 @@ public class FragmentAddBoardingPassDuringLogin extends Fragment{
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				onclickaddboardingpass();	
 			}
 		});

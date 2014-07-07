@@ -31,6 +31,8 @@ public class AccountListFragment extends TabFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		//Log.e("testting", "AccountListFragment");
 		appInstance =(BoardingPassApplication)getActivity().getApplication();
 
 		backEndStack = new Stack<Fragment>();
@@ -60,6 +62,7 @@ public class AccountListFragment extends TabFragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		Log.e("testting", "AccountListFragmentononCreateView");
 		ViewParent parent = (ViewParent) container.getParent();
 		View v = inflater.inflate(R.layout.fragment_tab3, container, false);
 		return v;
@@ -67,7 +70,10 @@ public class AccountListFragment extends TabFragment{
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB) public void onStart( ) {
 		//	Constants.GOTABFROMWRITETOPIC=2;
+	//	Log.e("testting", "AccountListFragmentonStart");
 
+		((MainActivity)getActivity()).mDrawerList.setItemChecked(1, true);
+		((MainActivity)getActivity()).mDrawerList.setSelection(1);
 		Fragment fragment = backEndStack.peek();
 		FragmentManager fragmentManager = getActivity().getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
@@ -103,7 +109,6 @@ public class AccountListFragment extends TabFragment{
 			} else {
 				backEndStack.pop();
 				Fragment frg = backEndStack.peek();
-				Log.d("1", "4");
 				FragmentManager fragmentManager = getActivity().getFragmentManager();
 				FragmentTransaction fragmentTransaction = fragmentManager
 						.beginTransaction();

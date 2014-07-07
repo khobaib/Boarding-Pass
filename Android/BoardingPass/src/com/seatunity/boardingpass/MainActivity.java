@@ -51,7 +51,7 @@ import android.widget.Toast;
 @SuppressLint("NewApi")
 public class MainActivity extends FragmentActivity {
 	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerList;
+	public ListView mDrawerList;
 	public TabFragment activeFragment;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private CharSequence mDrawerTitle;
@@ -61,22 +61,17 @@ public class MainActivity extends FragmentActivity {
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
 	BoardingPassApplication appInstance;
-	public  Stack<Fragment> fragmentStack;
-	public  Stack<Fragment> fragmentStack1;
-	public  Stack<Fragment> fragmentStack2;
-	public  Stack<String> indicator;
 	private FragmentManager fragmentManager;
 	int lastselectedposition=-1;
 	int prevselectedposition=-2;
+	int selectedposition=0;
 	public FragmentAddBoardingPass holder;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//Log.e("main", "onCreate");
 		setContentView(R.layout.activity_main);
-		fragmentStack = new Stack<Fragment>();
-		fragmentStack1 = new Stack<Fragment>();
-		fragmentStack2 = new Stack<Fragment>();
-		indicator=new Stack<>();
+		
 		fragmentManager = getFragmentManager();
 		appInstance =(BoardingPassApplication)getApplication();
 		mTitle = mDrawerTitle = getTitle();
@@ -112,11 +107,22 @@ public class MainActivity extends FragmentActivity {
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-		if (savedInstanceState == null) {
-			displayView(0);
-		}
+		//if (savedInstanceState == null) {
 		displayView(0);
+//		}
+		
+	}
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//Log.e("main", "onResume");
+
+//		if (savedInstanceState == null) {
+//			displayView(0);
+//		}
+		
+		//displayView(selectedposition);
 	}
 
 	private class SlideMenuClickListener implements
@@ -124,6 +130,7 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+			selectedposition=position;
 			displayView(position);
 		}
 	}
@@ -157,18 +164,7 @@ public class MainActivity extends FragmentActivity {
 		//mDrawerList.setSelection(0);
 	}
 
-	//	@Override
-	//	public boolean onOptionsItemSelected(MenuItem item) {
-	//		if (mDrawerToggle.onOptionsItemSelected(item)) {
-	//			return true;
-	//		}
-	//		switch (item.getItemId()) {
-	//		case R.id.action_settings:
-	//			return true;
-	//		default:
-	//			return super.onOptionsItemSelected(item);
-	//		}
-	//	}
+	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
@@ -179,6 +175,8 @@ public class MainActivity extends FragmentActivity {
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@SuppressLint("NewApi")
 	public void displayView(int position) {
+		
+
 		lastselectedposition=position;
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(MainActivity.this);
 		dbInstance.open();
@@ -222,29 +220,29 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
+		//Log.e("main", "onPostCreate");
+
 		mDrawerToggle.syncState();
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+	//	Log.e("main", "onConfigurationChanged");
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Toast.makeText(MainActivity.this, "Calling from"+requestCode, 2000).show();
 		if (requestCode == 0) {
 			if (resultCode == RESULT_OK) {
 				String contents = data.getStringExtra("SCAN_RESULT");
-				Log.d("TAG", "contents: " + contents);
 			} else if (resultCode == RESULT_CANCELED) {
 			}
 		}
 		else if (requestCode == 12) {
 			if (resultCode == RESULT_OK) {
 				String path=data.getStringExtra("bitmap_file_path");
-				Log.e("test", "1 "+holder+" "+path );
 				holder.getResultFromActivity(requestCode, resultCode, path);
 			} 
 			else if (resultCode == RESULT_CANCELED) {

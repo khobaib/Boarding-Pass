@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-        <string name="txt_boarding_pass_added_successfully">Boarding pass added successfully</string>
-     <string name="txt_psnger">Passanger</string>
+   <string name="txt_please_enter">Please enter </string>
+    <string name="txt_boarding_pass_added_successfully">Boarding pass added successfully</string>
+    <string name="txt_psnger">Passanger</string>
     <string name="txt_invalid_borading_pass">Invalid boarding pass. Please enter valid boarding pass</string>
     <string name="msg_error">Error</string>
-	<string name="msg_invalid_value">Invalid value</string>
- <string name="txt_reminder_msz">Login or register for free to use your social features and to connect with your seatmates</string>
+    <string name="msg_invalid_value">Invalid value</string>
+    <string name="txt_reminder_msz">Login or register for free to use your social features and to connect with your seatmates</string>
     <string name="txt_enter_old_pass">Please enter your old password</string>
     <string name="txt_enter_new_pass">Enter your new password</string>
     <string name="txt_confirm_new_pass">Confirm your new password</string>
@@ -37,8 +38,7 @@
     <string name="txt_jfk">JFK</string>
     <string name="txt_flight_no">Flight</string>
     <string name="txt_seat_nno">Seat</string>
-        <string name="txt_class">Class</string>
-    
+    <string name="txt_class">Class</string>
     <string name="txt_seatmate">Seatmates</string>
     <string name="txt_boarding_pass">Boarding Pass</string>
     <string name="txt_user_name">User Name</string>
@@ -46,7 +46,6 @@
     <string name="txt_myaccounts">My Account</string>
     <string name="txt_past_boarding_passes">Past Boarding Passes</string>
     <string name="txt_ok">OK</string>
-   
     <string name="txt_add">Add</string>
     <string name="txt_cancel">Cancel</string>
     <string name="txt_scan_boardingpass">Scan your boarding pass code</string>
@@ -58,8 +57,10 @@
     <string name="txt_signup_failed">Sign up is failed. Please try again</string>
     <string name="txt_login_failed">Log-in failed. Please try again</string>
     <string name="txt_login_success">Log-in successfull</string>
-        <string name="txt_logout_success">Successfully logged-out </string>
-      <string name="txt_logout_failed">Failed to sign-out. Please try again </string>
+     <string name="txt_update_success">Successfully update your profile</string>
+    <string name="txt_update_failed">Failed to update your profile. Please try again... </string>
+    <string name="txt_logout_success">Successfully logged-out </string>
+    <string name="txt_logout_failed">Failed to sign-out. Please try again </string>
     <string name="txt_select_city">Age</string>
     <string name="txt_add_boardingpass">Add your boarding pass and find out with who
                              you share your fight</string>

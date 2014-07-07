@@ -95,6 +95,10 @@ public class AdapterForSettings extends BaseAdapter {
     	 else if(position==5){
     		 holder.tv_info.setText(userCred.getSomethinAbout());
     	 }
+    	 else {
+    		 holder.tv_info.setText("");
+    	 }
+    	 
     	 
     	 holder.tv_seeting_criteria.setText(list.get(position));
         return convertView;

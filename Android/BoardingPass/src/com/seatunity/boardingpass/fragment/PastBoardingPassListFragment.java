@@ -32,7 +32,7 @@ public class PastBoardingPassListFragment extends TabFragment{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		appInstance =(BoardingPassApplication)getActivity().getApplication();
-
+		//Log.e("testting", "PastBoardingPassListFragment");
 		backEndStack = new Stack<Fragment>();
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 		dbInstance.open();
@@ -52,6 +52,7 @@ public class PastBoardingPassListFragment extends TabFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		ViewParent parent = (ViewParent) container.getParent();
+		Log.e("testting", "PastBoardingPassListFragmentonCreateView");
 //		if (parent instanceof View) {
 //			((TextView) ((View) parent).findViewById(R.id.welcome_title))
 //			.setText(this.getTag());
@@ -61,8 +62,10 @@ public class PastBoardingPassListFragment extends TabFragment{
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB) public void onStart( ) {
+		//Log.e("testting", "PastBoardingPassListFragmentStart");
 	//	Constants.GOTABFROMWRITETOPIC=2;
-
+		((MainActivity)getActivity()).mDrawerList.setItemChecked(2, true);
+		((MainActivity)getActivity()).mDrawerList.setSelection(2);
 		Fragment fragment = backEndStack.peek();
 		FragmentManager fragmentManager = getActivity().getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager

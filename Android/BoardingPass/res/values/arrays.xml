@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+    <string-array name="upload_photo_from">
+        <item>Take Picture</item>
+        <item>Go to Gallery</item>
+    </string-array>
     <string-array name="nav_drawer_items">
         <item>Home</item>
         <item>My Account</item>

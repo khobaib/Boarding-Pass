@@ -38,6 +38,7 @@ public class HomeListFragment extends TabFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//Log.e("testting", "HomeListFragment");
 		appInstance =(BoardingPassApplication)getActivity().getApplication();
 		backEndStack = new Stack<Fragment>();
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
@@ -80,6 +81,7 @@ public class HomeListFragment extends TabFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		ViewParent parent = (ViewParent) container.getParent();
+		Log.e("testting", "HomeListFragmentononCreateView");
 //		if (parent instanceof View) {
 //			((TextView) ((View) parent).findViewById(R.id.welcome_title))
 //			.setText(this.getTag());
@@ -90,6 +92,9 @@ public class HomeListFragment extends TabFragment{
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB) public void onStart( ) {
 	//	Constants.GOTABFROMWRITETOPIC=2;
+		//Log.e("testting", "HomeListFragmentonStart");
+		((MainActivity)getActivity()).mDrawerList.setItemChecked(0, true);
+		((MainActivity)getActivity()).mDrawerList.setSelection(0);
 
 		Fragment fragment = backEndStack.peek();
 		FragmentManager fragmentManager = getActivity().getFragmentManager();

@@ -25,66 +25,68 @@ import android.widget.Toast;
 
 
 
- public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
-	 FragmentSignUp signuplisenar;
-	 FragmentLogin loginlisenar;
-	 FragmentAddBoardingPass bpassaddlisenar;
-	 FragmentMyAccount myaccountlisenar;
-	 String body;
-	 BoardingPassApplication appInstance;
-	 String myaccounturl;
-	 JsonParser jsonParser;
-	 ProgressDialog pd;
-	 Context context;
-	 public AsyncaTaskApiCall( BoardingPassApplication appInstance,FragmentMyAccount myaccountlisenar,String body,Context context, String myaccounturl){
-		 this.myaccountlisenar=myaccountlisenar;
-		 this.body=body;
-		 this.appInstance=appInstance;
-		 this.myaccounturl=myaccounturl;
-		 this.context=context;
-		 jsonParser=new JsonParser();
-		 pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
-				 context.getResources().getString(R.string.txt_please_wait), true);
-		 
-	 }
-	 public AsyncaTaskApiCall(FragmentAddBoardingPass bpassaddlisenar,String body,Context context){
-		 this.bpassaddlisenar=bpassaddlisenar;
-		 this.body=body;
-		 this.context=context;
-		 jsonParser=new JsonParser();
-		 pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
-				 context.getResources().getString(R.string.txt_please_wait), true);
-		 
-	 }
-	 public AsyncaTaskApiCall(FragmentSignUp signuplisenar,String body,Context context){
-		 this.signuplisenar=signuplisenar;
-		 this.body=body;
-		 this.context=context;
-		 jsonParser=new JsonParser();
-		 pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
-				 context.getResources().getString(R.string.txt_please_wait), true);
-		 
-	 }
-	 public AsyncaTaskApiCall(FragmentLogin loginlisenar,String body,Context context){
-		 this.loginlisenar=loginlisenar;
-		 this.body=body;
-		 this.context=context;
-		 jsonParser=new JsonParser();
-		 pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
-				 context.getResources().getString(R.string.txt_please_wait), true);
-		 
-	 }
+public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
+	FragmentSignUp signuplisenar;
+	FragmentLogin loginlisenar;
+	FragmentAddBoardingPass bpassaddlisenar;
+	FragmentMyAccount myaccountlisenar;
+	String body;
+	BoardingPassApplication appInstance;
+
+	String myaccounturl;
+	JsonParser jsonParser;
+	ProgressDialog pd;
+	Context context;
+	public AsyncaTaskApiCall( BoardingPassApplication appInstance,FragmentMyAccount myaccountlisenar,String body,Context context, 
+			String myaccounturl){
+		this.myaccountlisenar=myaccountlisenar;
+		this.body=body;
+		this.appInstance=appInstance;
+		this.myaccounturl=myaccounturl;
+		this.context=context;
+		jsonParser=new JsonParser();
+		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+				context.getResources().getString(R.string.txt_please_wait), true);
+
+	}
+	public AsyncaTaskApiCall(FragmentAddBoardingPass bpassaddlisenar,String body,Context context){
+		this.bpassaddlisenar=bpassaddlisenar;
+		this.body=body;
+		this.context=context;
+		jsonParser=new JsonParser();
+		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+				context.getResources().getString(R.string.txt_please_wait), true);
+
+	}
+	public AsyncaTaskApiCall(FragmentSignUp signuplisenar,String body,Context context){
+		this.signuplisenar=signuplisenar;
+		this.body=body;
+		this.context=context;
+		jsonParser=new JsonParser();
+		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+				context.getResources().getString(R.string.txt_please_wait), true);
+
+	}
+	public AsyncaTaskApiCall(FragmentLogin loginlisenar,String body,Context context){
+		this.loginlisenar=loginlisenar;
+		this.body=body;
+		this.context=context;
+		jsonParser=new JsonParser();
+		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+				context.getResources().getString(R.string.txt_please_wait), true);
+
+	}
 	@Override
 	protected ServerResponse doInBackground(Void... params) {
 		ServerResponse response=null;
 		if(signuplisenar!=null){
 			String url = Constants.baseurl+"reg";
-			 response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
 					body, null);
 		}
 		else if(loginlisenar!=null){
 			String url = Constants.baseurl+"login";
-			 response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
 					body, null);
 		}
 		else if(bpassaddlisenar!=null){
@@ -93,9 +95,17 @@ import android.widget.Toast;
 					body, null);
 		}
 		else if(myaccountlisenar!=null){
+
 			String url = Constants.baseurl+myaccounturl;
-			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
-					body, null);
+			if(myaccounturl.equals("reg")){
+				response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_PUT, url, null,
+						body, null);
+			}
+			else{
+				response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+						body, null);
+			}
+
 		}
 		return response;
 
@@ -104,16 +114,16 @@ import android.widget.Toast;
 	@Override
 	protected void onPostExecute(ServerResponse result) {
 		super.onPostExecute(result);
-	
+
 		UserCred ucrCred=new UserCred("", "", "", "", "", "", "", "", "", "", "", "", "", "");
 		Log.e("responses", result.getjObj().toString());
 		if( pd!=null){ 
 			if(pd.isShowing()){
 				pd.cancel();
 			}
-			
+
 		}
-		 if(signuplisenar!=null){
+		if(signuplisenar!=null){
 			signuplisenar.callBackFromApicall(result);
 		}
 		else if(loginlisenar!=null){
@@ -122,15 +132,15 @@ import android.widget.Toast;
 		else if(bpassaddlisenar!=null){
 			bpassaddlisenar.addBoardingPassonBackendSuccess(result.getjObj());
 		}
-		 if((myaccountlisenar!=null)&&(myaccounturl.equals("logout"))){
-			 JSONObject job=result.getjObj();
-			 try {
+		else if((myaccountlisenar!=null)&&(myaccounturl.equals("logout"))){
+			JSONObject job=result.getjObj();
+			try {
 				if(job.get("success").equals("true")){
 					myaccountlisenar.getActivity().finish();
 					appInstance.setUserCred(ucrCred);
 					Toast.makeText(context, context.getResources().getString(R.string.txt_logout_success),
 							Toast.LENGTH_SHORT).show();
-				 }
+				}
 				else{
 					Toast.makeText(context, context.getResources().getString(R.string.txt_logout_failed),
 							Toast.LENGTH_SHORT).show();
@@ -139,15 +149,34 @@ import android.widget.Toast;
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			 
-		 }
-//		 if((myaccountlisenar!=null)&&(myaccounturl.equals("logout"))){
-//			 JSONObject job=result.getjObj();
-//			 "success": "true"
-//			 appInstance.setUserCred(ucrCred);
-//		 }
-		
+
+		}
+		else if((myaccountlisenar!=null)&&(myaccounturl.equals("reg"))){
+			JSONObject job=result.getjObj();
+			try {
+				if(job.get("success").equals("true")){
+					appInstance.setUserCred(ucrCred);
+					Toast.makeText(context, context.getResources().getString(R.string.txt_update_success),
+							Toast.LENGTH_SHORT).show();
+					myaccountlisenar.successfullyUpdateYourProfile();
+				}
+				else{
+					Toast.makeText(context, context.getResources().getString(R.string.txt_update_failed),
+							Toast.LENGTH_SHORT).show();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		//		 if((myaccountlisenar!=null)&&(myaccounturl.equals("logout"))){
+		//			 JSONObject job=result.getjObj();
+		//			 "success": "true"
+		//			 appInstance.setUserCred(ucrCred);
+		//		 }
+
 	}
-	
-	
+
+
 }

@@ -63,7 +63,7 @@ public class FragmentAddBoardingPass extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.e("calledadd", "onResume");
+		
 		
 	}
 	@Override
@@ -76,7 +76,6 @@ public class FragmentAddBoardingPass extends Fragment {
 		View rootView = inflater.inflate(R.layout.add_boarding_passs, container, false);
 		img_imtotest=(ImageView)rootView.findViewById(R.id.img_imtotest);
 		img_imtotest.setVisibility(View.GONE);
-
 		tv_add_boardingpasswith_camera=(TextView) rootView.findViewById(R.id.tv_add_boardingpasswith_camera);
 		img_from_sdcard=(ImageView) rootView.findViewById(R.id.img_from_sdcard);
 		tv_add_fromsdcard=(TextView) rootView.findViewById(R.id.tv_add_fromsdcard);
@@ -150,8 +149,6 @@ public class FragmentAddBoardingPass extends Fragment {
 
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		if (requestCode == 0) {
-			Log.e("tag", "2");
-
 			if (resultCode == getActivity().RESULT_OK) {
 				Log.e("tag", "3");
 
