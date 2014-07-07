@@ -2,7 +2,9 @@
 package com.seatunity.boardingpass.fragment;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -13,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.seatunity.boardingpass.EditUserNameActivity;
 import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.PasswordChangeActivity;
@@ -21,6 +24,7 @@ import com.seatunity.boardingpass.UploadPicActivity;
 import com.seatunity.boardingpass.adapter.AdapterForSettings;
 import com.seatunity.boardingpass.adapter.NothingSelectedSpinnerAdapter;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
+import com.seatunity.boardingpass.utilty.Base64;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.boardingpass.utilty.PkpassReader;
@@ -30,21 +34,25 @@ import com.seatunity.model.UserCred;
 import com.touhiDroid.filepicker.FilePickerActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -109,17 +117,58 @@ public class FragmentMyAccount extends Fragment{
 		tv_email.setText(appInstance.getUserCred().getEmail());
 		tv_stataus.setText(appInstance.getUserCred().getStatus());
 	}
+	public void uploadProfileImage(Bitmap bitmap){
+		try {
+			JSONObject loginObj = new JSONObject();
+			loginObj.put("token", appInstance.getUserCred().getToken());
+			loginObj.put("password", appInstance.getUserCred().getPassword());
+			loginObj.put("language", appInstance.getUserCred().getLanguage());
+			loginObj.put("firstname", appInstance.getUserCred().getFirstname());
+			loginObj.put("lastname", appInstance.getUserCred().getLastname());
+			loginObj.put("gender", appInstance.getUserCred().getGender());
+			loginObj.put("live_in", appInstance.getUserCred().getLive_in());
+			loginObj.put("age", appInstance.getUserCred().getAge());
+			loginObj.put("profession", appInstance.getUserCred().getProfession());
+			loginObj.put("seating_pref", appInstance.getUserCred().getSeating_pref());
+			loginObj.put("some_about_you", appInstance.getUserCred().getSomethinAbout());
+			loginObj.put("status", appInstance.getUserCred().getStatus());
+			loginObj.put("image_name", appInstance.getUserCred().getLastname()+System.currentTimeMillis()+".png");
+			loginObj.put("image_type", "image/png");
+			ByteArrayOutputStream bao = new ByteArrayOutputStream();
+			bitmap.compress(CompressFormat.JPEG,100, bao);
+			byte[] ba = bao.toByteArray();
+			String base64Str = Base64.encodeBytes(ba);
+			
+			loginObj.put("image_content", base64Str);
+
+			
+
+			AsyncaTaskApiCall logoutcall=new AsyncaTaskApiCall(appInstance,FragmentMyAccount.this, loginObj.toString(),
+					getActivity(), "reg");
+			logoutcall.execute();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		//Log.e("inside", "onResume");
+		Log.e("inside", "onResume");
 
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
 		userCred=appInstance.getUserCred();
-		if(photo!=null){
-			img_prof_pic.setImageBitmap(photo);
+		if(Constants.photo!=null){
+			
+			uploadProfileImage(Constants.photo);
+			//Constants.photo=null;
 		}
+		else{
+			ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url()
+					, img_prof_pic);
+		}
+		
 		setView();
 		
 	}
@@ -434,19 +483,54 @@ public class FragmentMyAccount extends Fragment{
 		dialog.setContentView(R.layout.edit_user_name);
 		dialog.show();
 	}
-	public void successfullyUpdateYourProfile(){
+	public void successfullyUpdateYourProfile(String imageurl){
+		if(!imageurl.equals("")){
+			userCred.setImage_url(imageurl);
+			ByteArrayOutputStream bao = new ByteArrayOutputStream();
+			Constants.photo.compress(CompressFormat.JPEG,100, bao);
+			byte[] ba = bao.toByteArray();
+			Bitmap bitmap2=BitmapFactory.decodeByteArray(ba, 0, ba.length);
+			img_prof_pic.setImageBitmap(bitmap2);
+			
+		}
 		appInstance.setUserCred(userCred);
 		adapter.notifyDataSetChanged();
+		Constants.photo=null;
 	}
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		//img_prof_pic.setVisibility(View.GONE);
 		Log.e("inside", "onActivityResult");
-		if (requestCode == 0) {
 			if (requestCode == ACTION_REQUEST_GALLERY) {
-				Uri selectedImageUri = data.getData();
-				Log.e("Uri", selectedImageUri.toString());
-			} else if (requestCode ==ACTION_REQUEST_CAMERA) {
+				
+				try {
+					Uri selectedImageUri = data.getData();
+					 String tempPath =getPath(selectedImageUri,getActivity());
+					 File file=new File(tempPath);
+					 ImageScale scaleimage=new ImageScale();
+						final Bitmap photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
+						file.delete();
+						ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+						photo.compress(Bitmap.CompressFormat.PNG, 80, bytes);
+						img_prof_pic.setImageBitmap(photo);  
+						Constants.photo=photo;
+						File f = new File(tempPath);
+						f.createNewFile();
+						FileOutputStream fo = new FileOutputStream(f);
+						fo.write(bytes.toByteArray());
+						fo.close();
+					    Toast.makeText(getActivity(), "gvgv"+photo.getHeight(), 2000).show();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+//	                Constants.photo=photo;
+//	                img_prof_pic.setImageBitmap(photo);  
+	                
+	       } 
+			else if (requestCode ==ACTION_REQUEST_CAMERA) {
 				try
 				{
 
@@ -457,42 +541,16 @@ public class FragmentMyAccount extends Fragment{
 					if(file.exists()){
 						ImageScale scaleimage=new ImageScale();
 						final Bitmap photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
-						Log.e("bitmap ", ""+photo.getHeight()+"   "+photo.getWidth());
-						//Bitmap p=Bitmap.createScaledBitmap(photo, photo.getWidth()/6, photo.getHeight()/6,true);
 						file.delete();
 						ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 						photo.compress(Bitmap.CompressFormat.PNG, 80, bytes);
 						img_prof_pic.setImageBitmap(photo);  
+						Constants.photo=photo;
 						File f = new File(filepath);
 						f.createNewFile();
 						FileOutputStream fo = new FileOutputStream(f);
 						fo.write(bytes.toByteArray());
 						fo.close();
-
-						Toast.makeText(getActivity(), ""+img_prof_pic+" "+photo.getHeight(),
-								3000).show();
-						
-//					img_prof_pic.post(new Runnable() {
-//					        @Override
-//					        public void run()
-//					        {
-//					        	img_prof_pic.setImageBitmap(photo);  
-//					        }
-//					    });
-//						String thumnilpath=drectorythumb+"/"+photofromcamera;
-//						Log.e("path", thumnilpath);
-//						//	photo=Bitmap.createScaledBitmap(photo, photo.getWidth()/6, photo.getHeight()/600,true);
-//						Log.e("path", "a  "+ p);
-//						bytes = new ByteArrayOutputStream();
-//						p.compress(Bitmap.CompressFormat.PNG, 80, bytes);
-//
-//						File filethumb = new File(thumnilpath);
-//						filethumb.createNewFile();
-//						FileOutputStream fothumb = new FileOutputStream(filethumb);
-//						fothumb.write(bytes.toByteArray());
-//						fothumb.close();
-
-
 					}
 
 				}
@@ -500,25 +558,19 @@ public class FragmentMyAccount extends Fragment{
 				{
 					Log.e("Could not save", e.toString());
 				}
-				 
-				//photo = (Bitmap) data.getExtras().get("data");
-				//img_prof_pic=(ImageView) v.findViewById(R.id.img_prof_pic);
-				 
+				//07-07 19:41:40.050: E/Uri(25119): content://media/external/images/media/766
 
-			}
 		}
 	}
-
-	private void handleSmallCameraPhoto(final Bitmap bmp) {
-		img_prof_pic.post(new Runnable() {
-			@Override
-			public void run()
-			{
-				img_prof_pic.setImageBitmap(bmp);
-			}
-		});
-	}
 	
+	public String getPath(Uri uri, Activity activity) {
+	        String[] projection = { MediaColumns.DATA };
+	        Cursor cursor = activity
+	                .managedQuery(uri, projection, null, null, null);
+	        int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
+	        cursor.moveToFirst();
+	        return cursor.getString(column_index);
+	    }
 	public void createfolder(){
 		String newFolder = "/Lipberryfinal";
 		String thumb="/Lipberrythumb";

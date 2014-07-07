@@ -53,7 +53,8 @@ public class AccountListFragment extends TabFragment{
 			backEndStack.push(fragment);
 
 		}
-
+		((MainActivity)getActivity()).mDrawerList.setItemChecked(1, true);
+		((MainActivity)getActivity()).mDrawerList.setSelection(1);
 
 
 
@@ -68,7 +69,7 @@ public class AccountListFragment extends TabFragment{
 		return v;
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB) public void onStart( ) {
+	public void onStart( ) {
 		//	Constants.GOTABFROMWRITETOPIC=2;
 	//	Log.e("testting", "AccountListFragmentonStart");
 
@@ -83,17 +84,7 @@ public class AccountListFragment extends TabFragment{
 		super.onStart();
 	}
 
-	public void startAddBoardingPass() {
-		//		FragmentAddBoardingPass newFragment = new FragmentAddBoardingPass() ;
-		//		newFragment.parent = this;
-		//		FragmentManager fragmentManager = getActivity().getFragmentManager();
-		//		FragmentTransaction fragmentTransaction = fragmentManager
-		//				.beginTransaction();
-		//		fragmentTransaction.replace(R.id.tab3Content, newFragment);
-		//		fragmentTransaction.addToBackStack(null);
-		//		backEndStack.push(newFragment);
-		//		fragmentTransaction.commitAllowingStateLoss();
-	}
+	
 	public void clearr(){
 		backEndStack.pop();
 	}

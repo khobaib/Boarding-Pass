@@ -1,4 +1,7 @@
 package com.seatunity.boardingpass.utilty;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.UserCred;
 
@@ -12,10 +15,18 @@ import android.util.Log;
 public class BoardingPassApplication extends Application {
 	private static Context context;
 	protected SharedPreferences User;
+	
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+		.cacheInMemory(true).cacheOnDisc(true).build();
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+				getApplicationContext()).defaultDisplayImageOptions(
+						defaultOptions).build();
+		ImageLoader.getInstance().init(config);
+
 		context = getApplicationContext();
 		User = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 	}

@@ -9,12 +9,17 @@ import java.util.regex.Pattern;
 
 import android.R.array;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 
 public class Constants {
 	
+
+	public static String DOMAIN_NAME="http://seatunity.net";
+	public static Bitmap photo=null;
+	public static int SELECTEDPOSITION=0;
 	public static String getDayandYear(int dayOfYear){
 		    Calendar calendar = Calendar.getInstance();
 		    calendar.set(Calendar.DAY_OF_YEAR, dayOfYear);

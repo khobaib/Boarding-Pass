@@ -18,6 +18,7 @@ import com.seatunity.boardingpass.fragment.HomeListFragment;
 import com.seatunity.boardingpass.fragment.PastBoardingPassListFragment;
 import com.seatunity.boardingpass.fragment.TabFragment;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
+import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.boardingpass.utilty.PkpassReader;
 import com.seatunity.model.BoardingPass;
 import com.touhiDroid.filepicker.FilePickerActivity;
@@ -64,7 +65,7 @@ public class MainActivity extends FragmentActivity {
 	private FragmentManager fragmentManager;
 	int lastselectedposition=-1;
 	int prevselectedposition=-2;
-	int selectedposition=0;
+	
 	public FragmentAddBoardingPass holder;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +123,7 @@ public class MainActivity extends FragmentActivity {
 //			displayView(0);
 //		}
 		
-		//displayView(selectedposition);
+		displayView(Constants.SELECTEDPOSITION);
 	}
 
 	private class SlideMenuClickListener implements
@@ -130,7 +131,7 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			selectedposition=position;
+			Constants.SELECTEDPOSITION=position;
 			displayView(position);
 		}
 	}

@@ -16,16 +16,18 @@ import com.seatunity.model.Member;
 import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
 
 
-public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
+@TargetApi(Build.VERSION_CODES.HONEYCOMB) public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	FragmentSignUp signuplisenar;
 	FragmentLogin loginlisenar;
 	FragmentAddBoardingPass bpassaddlisenar;
@@ -121,6 +123,7 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 			if(pd.isShowing()){
 				pd.cancel();
 			}
+			//07-07 21:37:59.678: E/ImageLoader(28304): 
 
 		}
 		if(signuplisenar!=null){
@@ -154,13 +157,15 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 		else if((myaccountlisenar!=null)&&(myaccounturl.equals("reg"))){
 			JSONObject job=result.getjObj();
 			try {
-				if(job.get("success").equals("true")){
+				if(job.getString("success").equals("true")){
 					appInstance.setUserCred(ucrCred);
 					Toast.makeText(context, context.getResources().getString(R.string.txt_update_success),
 							Toast.LENGTH_SHORT).show();
-					myaccountlisenar.successfullyUpdateYourProfile();
+					String imageurl=job.getString("image_url");
+					myaccountlisenar.successfullyUpdateYourProfile(imageurl);
 				}
 				else{
+					Constants.photo=null;
 					Toast.makeText(context, context.getResources().getString(R.string.txt_update_failed),
 							Toast.LENGTH_SHORT).show();
 				}
