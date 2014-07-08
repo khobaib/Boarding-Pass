@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import org.json.JSONException;
 
+import com.bugsense.trace.BugSenseHandler;
 import com.seatunity.boardingpass.adapter.NavDrawerListAdapter;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.fragment.AccountListFragment;
@@ -70,7 +71,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//Log.e("main", "onCreate");
+		 BugSenseHandler.initAndStartSession(MainActivity.this, "2b60c090");
 		setContentView(R.layout.activity_main);
 		try {
 			Constants.SELECTEDPOSITION=getIntent().getExtras().getInt("select");
@@ -118,6 +119,11 @@ public class MainActivity extends FragmentActivity {
 //		}
 		
 	}
+	 @Override
+	    protected void onStop() {
+	        super.onStop();
+	        BugSenseHandler.closeSession(MainActivity.this);
+	    }
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub

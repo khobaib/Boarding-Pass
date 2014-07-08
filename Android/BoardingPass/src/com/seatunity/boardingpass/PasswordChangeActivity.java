@@ -5,6 +5,7 @@ import java.util.Calendar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.bugsense.trace.BugSenseHandler;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.fragment.FragmentMyAccount;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
@@ -49,6 +50,7 @@ public class PasswordChangeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        BugSenseHandler.initAndStartSession(PasswordChangeActivity.this, "2b60c090");
         appInstance =(BoardingPassApplication)getApplication();
         userCred=appInstance.getUserCred();
         setContentView(R.layout.change_password);
@@ -57,6 +59,11 @@ public class PasswordChangeActivity extends Activity {
         et_confirm_new_pass=(EditText) findViewById(R.id.et_confirm_new_pass);
         back=et_confirm_new_pass.getBackground();
         editTextControl();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        BugSenseHandler.closeSession(PasswordChangeActivity.this);
     }
     public void editTextControl(){
     	et_confirm_new_pass.addTextChangedListener(new TextWatcher() {          
@@ -167,9 +174,6 @@ public class PasswordChangeActivity extends Activity {
 			loginObj.put("image_name", "");
 			loginObj.put("image_type", "");
 			loginObj.put("image_content", "");
-			
-
-			
 			AsyncaTaskApiCall logoutcall=new AsyncaTaskApiCall(appInstance,PasswordChangeActivity.this, loginObj.toString(),
 					PasswordChangeActivity.this, "reg");
 			logoutcall.execute();

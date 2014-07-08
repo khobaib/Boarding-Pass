@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.bugsense.trace.BugSenseHandler;
 import com.seatunity.apicall.JsonParser;
 import com.seatunity.boardingpass.utilty.Constants;
 
@@ -54,12 +55,17 @@ public class UploadPicActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		 BugSenseHandler.initAndStartSession(UploadPicActivity.this, "2b60c090");
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.upload_pic);
 		iv_profile_pic=(ImageView) findViewById(R.id.iv_profile_pic);
 
 	}
-
+	  @Override
+	    protected void onStop() {
+	        super.onStop();
+	        BugSenseHandler.closeSession(UploadPicActivity.this);
+	    }
 	@Override
 	protected void onStart() {
 		super.onStart();

@@ -2,6 +2,7 @@ package com.seatunity.boardingpass;
 
 import java.util.ArrayList;
 
+import com.bugsense.trace.BugSenseHandler;
 import com.seatunity.boardingpass.fragment.FragmentLogin;
 import com.seatunity.boardingpass.fragment.FragmentSignUp;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
@@ -44,6 +45,7 @@ public class AcountActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BugSenseHandler.initAndStartSession(AcountActivity.this, "2b60c090");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.acount);
        
@@ -62,7 +64,11 @@ public class AcountActivity extends FragmentActivity {
  
        
     }
- 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        BugSenseHandler.closeSession(AcountActivity.this);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);

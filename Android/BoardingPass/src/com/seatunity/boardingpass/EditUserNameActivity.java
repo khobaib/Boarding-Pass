@@ -2,6 +2,7 @@ package com.seatunity.boardingpass;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.bugsense.trace.BugSenseHandler;
 import com.seatunity.boardingpass.utilty.Constants;
 
 import android.annotation.SuppressLint;
@@ -32,11 +33,16 @@ public class EditUserNameActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BugSenseHandler.initAndStartSession(EditUserNameActivity.this, "2b60c090");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.edit_user_name);
  
     }
- 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        BugSenseHandler.closeSession(EditUserNameActivity.this);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);

@@ -3,6 +3,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.bugsense.trace.BugSenseHandler;
 import com.google.zxing.BarcodeFormat;
 import com.seatunity.boardingpass.utilty.Constants;
 
@@ -34,6 +35,7 @@ public class SplasActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BugSenseHandler.initAndStartSession(SplasActivity.this, "2b60c090");
         setContentView(R.layout.splash);
         File directory = Constants.APP_DIRECTORY;
         Handler handler=new Handler();
@@ -46,6 +48,12 @@ public class SplasActivity extends Activity {
 				}
 		},4000);
     }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        BugSenseHandler.closeSession(SplasActivity.this);
+    }
+
  
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

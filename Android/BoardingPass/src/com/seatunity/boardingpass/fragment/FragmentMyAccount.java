@@ -138,11 +138,7 @@ public class FragmentMyAccount extends Fragment{
 			bitmap.compress(CompressFormat.JPEG,100, bao);
 			byte[] ba = bao.toByteArray();
 			String base64Str = Base64.encodeBytes(ba);
-			
 			loginObj.put("image_content", base64Str);
-
-			
-
 			AsyncaTaskApiCall logoutcall=new AsyncaTaskApiCall(appInstance,FragmentMyAccount.this, loginObj.toString(),
 					getActivity(), "reg");
 			logoutcall.execute();
@@ -376,7 +372,6 @@ public class FragmentMyAccount extends Fragment{
 					loginObj.put("image_name", "");
 					loginObj.put("image_type", "");
 					loginObj.put("image_content", "");
-
 					if(postion==0){
 						String country=items[which].toString();
 						loginObj.put("live_in", country);
