@@ -26,7 +26,8 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                 android:onClick="Cancel"  >
 
                 <ImageView
                     android:id="@+id/img_cross"
@@ -56,7 +57,8 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:onClick="ChangeStatus" >
 
                 <ImageView
                     android:id="@+id/img_accept"

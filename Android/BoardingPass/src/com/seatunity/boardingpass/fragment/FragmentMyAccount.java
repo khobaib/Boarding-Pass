@@ -78,14 +78,14 @@ import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class FragmentMyAccount extends Fragment{
-	ImageView img_edit,img_prof_pic;
+	ImageView img_edit,img_prof_pic,img_status;
 	ArrayList<String>setting_criteria;
 	BoardingPassApplication appInstance;
 	AdapterForSettings adapter;
 	ListView lv_setting;
 	Spinner spn_country;
 	AccountListFragment parent;
-	TextView tv_uname,tv_email,tv_stataus;
+	TextView tv_uname,tv_email,tv_stataus,tv_statau;
 	UserCred userCred;
 	int ACTION_REQUEST_CAMERA=0;
 	int ACTION_REQUEST_GALLERY=1;
@@ -180,7 +180,23 @@ public class FragmentMyAccount extends Fragment{
 		tv_stataus=(TextView) v.findViewById(R.id.tv_stataus);
 		img_prof_pic=(ImageView) v.findViewById(R.id.img_prof_pic);
 		lv_setting=(ListView) v.findViewById(R.id.lv_setting);
-		
+		img_status=(ImageView) v.findViewById(R.id.img_status);
+		tv_stataus.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				ShowStatus();
+			}
+		});
+		img_status.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				ShowStatus();
+			}
+		});
 		img_edit=(ImageView) v.findViewById(R.id.img_edit);
 		spn_country=(Spinner) v.findViewById(R.id.spn_country);
 
@@ -250,6 +266,22 @@ public class FragmentMyAccount extends Fragment{
 				}
 			}
 		});
+	}
+	public void ShowStatus(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle(getActivity().getResources().getString(R.string.txt_status))
+		.setMessage(appInstance.getUserCred().getStatus())
+		.setCancelable(false)
+		.setPositiveButton(getActivity().getResources().getString(R.string.txt_ok), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+				
+			}
+		})
+		.setTitle(getActivity().getResources().getString(R.string.acc_sign_out))
+		.setIcon(R.drawable.ic_sing_out);
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 	public void Signout(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

@@ -88,7 +88,7 @@
             android:layout_marginRight="40dp"
             android:layout_marginTop="3dp"
             android:layout_toRightOf="@+id/img_status"
-            android:singleLine="true"
+           android:maxLines = "2"
             android:text="I like to play football. Football is my favourite sports.
              Messi is my favourite sports man..."
             android:textColor="#777777" />
