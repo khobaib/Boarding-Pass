@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.seatunity.apicall.JsonParser;
+import com.seatunity.boardingpass.PasswordChangeActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.fragment.FragmentAddBoardingPass;
 import com.seatunity.boardingpass.fragment.FragmentLogin;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 	FragmentLogin loginlisenar;
 	FragmentAddBoardingPass bpassaddlisenar;
 	FragmentMyAccount myaccountlisenar;
+	PasswordChangeActivity passwordchangelisenar;
 	String body;
 	BoardingPassApplication appInstance;
 
@@ -39,6 +41,18 @@ import android.widget.Toast;
 	JsonParser jsonParser;
 	ProgressDialog pd;
 	Context context;
+	public AsyncaTaskApiCall( BoardingPassApplication appInstance,PasswordChangeActivity passwordchangelisenar,String body,Context context, 
+			String myaccounturl){
+		this.passwordchangelisenar=passwordchangelisenar;
+		this.body=body;
+		this.appInstance=appInstance;
+		this.myaccounturl=myaccounturl;
+		this.context=context;
+		jsonParser=new JsonParser();
+		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+				context.getResources().getString(R.string.txt_please_wait), true);
+
+	}
 	public AsyncaTaskApiCall( BoardingPassApplication appInstance,FragmentMyAccount myaccountlisenar,String body,Context context, 
 			String myaccounturl){
 		this.myaccountlisenar=myaccountlisenar;
@@ -109,6 +123,14 @@ import android.widget.Toast;
 			}
 
 		}
+		
+		else if(passwordchangelisenar!=null){
+
+			String url = Constants.baseurl+myaccounturl;
+			
+				response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_PUT, url, null,
+						body, null);
+		}
 		return response;
 
 	}
@@ -159,8 +181,7 @@ import android.widget.Toast;
 			try {
 				if(job.getString("success").equals("true")){
 					appInstance.setUserCred(ucrCred);
-					Toast.makeText(context, context.getResources().getString(R.string.txt_update_success),
-							Toast.LENGTH_SHORT).show();
+					
 					String imageurl=job.getString("image_url");
 					myaccountlisenar.successfullyUpdateYourProfile(imageurl);
 				}
@@ -175,11 +196,26 @@ import android.widget.Toast;
 			}
 
 		}
-		//		 if((myaccountlisenar!=null)&&(myaccounturl.equals("logout"))){
-		//			 JSONObject job=result.getjObj();
-		//			 "success": "true"
-		//			 appInstance.setUserCred(ucrCred);
-		//		 }
+		else if(passwordchangelisenar!=null){
+			JSONObject job=result.getjObj();
+			try {
+				if(job.getString("success").equals("true")){
+					appInstance.setUserCred(ucrCred);
+					Toast.makeText(context, context.getResources().getString(R.string.txt_update_success),
+							Toast.LENGTH_SHORT).show();
+					passwordchangelisenar.SuccessUpdateProfile();
+				}
+				else{
+					
+					Toast.makeText(context, context.getResources().getString(R.string.txt_update_failed),
+							Toast.LENGTH_SHORT).show();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
 
 	}
 

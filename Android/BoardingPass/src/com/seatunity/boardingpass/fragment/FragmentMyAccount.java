@@ -184,8 +184,7 @@ public class FragmentMyAccount extends Fragment{
 		tv_stataus=(TextView) v.findViewById(R.id.tv_stataus);
 		img_prof_pic=(ImageView) v.findViewById(R.id.img_prof_pic);
 		lv_setting=(ListView) v.findViewById(R.id.lv_setting);
-		adapter=new AdapterForSettings(getActivity(), setting_criteria,userCred);
-		lv_setting.setAdapter(adapter);
+		
 		img_edit=(ImageView) v.findViewById(R.id.img_edit);
 		spn_country=(Spinner) v.findViewById(R.id.spn_country);
 
@@ -209,6 +208,14 @@ public class FragmentMyAccount extends Fragment{
 
 			}
 		});
+		setlistView();
+
+		return v;
+	}
+	public void setlistView(){
+		userCred=appInstance.getUserCred();
+		adapter=new AdapterForSettings(getActivity(), setting_criteria,userCred);
+		lv_setting.setAdapter(adapter);
 		lv_setting.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
@@ -247,8 +254,6 @@ public class FragmentMyAccount extends Fragment{
 				}
 			}
 		});
-
-		return v;
 	}
 	public void Signout(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -484,17 +489,15 @@ public class FragmentMyAccount extends Fragment{
 		dialog.show();
 	}
 	public void successfullyUpdateYourProfile(String imageurl){
+		Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_update_success),
+				Toast.LENGTH_SHORT).show();
 		if(!imageurl.equals("")){
 			userCred.setImage_url(imageurl);
-			ByteArrayOutputStream bao = new ByteArrayOutputStream();
-			Constants.photo.compress(CompressFormat.JPEG,100, bao);
-			byte[] ba = bao.toByteArray();
-			Bitmap bitmap2=BitmapFactory.decodeByteArray(ba, 0, ba.length);
-			img_prof_pic.setImageBitmap(bitmap2);
-			
+			appInstance.setUserCred(userCred);
+			ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url(), img_prof_pic);
 		}
 		appInstance.setUserCred(userCred);
-		adapter.notifyDataSetChanged();
+		setlistView();
 		Constants.photo=null;
 	}
 	@Override
@@ -507,18 +510,17 @@ public class FragmentMyAccount extends Fragment{
 					 String tempPath =getPath(selectedImageUri,getActivity());
 					 File file=new File(tempPath);
 					 ImageScale scaleimage=new ImageScale();
-						final Bitmap photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
+						Bitmap photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
 						file.delete();
 						ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 						photo.compress(Bitmap.CompressFormat.PNG, 80, bytes);
-						img_prof_pic.setImageBitmap(photo);  
+						photo=scaleimage.getResizedBitmap(photo, 120, 120);
 						Constants.photo=photo;
 						File f = new File(tempPath);
 						f.createNewFile();
 						FileOutputStream fo = new FileOutputStream(f);
 						fo.write(bytes.toByteArray());
 						fo.close();
-					    Toast.makeText(getActivity(), "gvgv"+photo.getHeight(), 2000).show();
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -540,11 +542,10 @@ public class FragmentMyAccount extends Fragment{
 
 					if(file.exists()){
 						ImageScale scaleimage=new ImageScale();
-						final Bitmap photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
+						 Bitmap photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
 						file.delete();
 						ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-						photo.compress(Bitmap.CompressFormat.PNG, 80, bytes);
-						img_prof_pic.setImageBitmap(photo);  
+						photo=scaleimage.getResizedBitmap(photo, 120, 120);
 						Constants.photo=photo;
 						File f = new File(filepath);
 						f.createNewFile();

@@ -72,7 +72,12 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		//Log.e("main", "onCreate");
 		setContentView(R.layout.activity_main);
-		
+		try {
+			Constants.SELECTEDPOSITION=getIntent().getExtras().getInt("select");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fragmentManager = getFragmentManager();
 		appInstance =(BoardingPassApplication)getApplication();
 		mTitle = mDrawerTitle = getTitle();

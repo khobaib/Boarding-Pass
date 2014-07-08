@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+     <string name="txt_newand_old_pass_missmatchced">New password and old password mis-matched</string>
+    <string name="txt_please_enter_correct_password">Please enter correct password</string>
    <string name="txt_please_enter">Please enter </string>
     <string name="txt_boarding_pass_added_successfully">Boarding pass added successfully</string>
     <string name="txt_psnger">Passanger</string>
@@ -9,7 +11,7 @@
     <string name="txt_reminder_msz">Login or register for free to use your social features and to connect with your seatmates</string>
     <string name="txt_enter_old_pass">Please enter your old password</string>
     <string name="txt_enter_new_pass">Enter your new password</string>
-    <string name="txt_confirm_new_pass">Confirm your new password</string>
+    <string name="txt_confirm_new_pass">Please confirm your new password</string>
     <string name="txt_edit_profesion">Edit Profession</string>
     <string name="txt_sm_about">Something about you</string>
     <string name="txt_say_sm_about">Say something about you</string>
