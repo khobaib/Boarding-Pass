@@ -7,6 +7,7 @@
     <string name="txt_boarding_pass_added_successfully">Boarding pass added successfully</string>
     <string name="txt_psnger">Passanger</string>
     <string name="txt_invalid_borading_pass">Invalid boarding pass. Please enter valid boarding pass</string>
+    <string name="txt_failed_to_scan">Failed to scan barcode</string>
     <string name="msg_error">Error</string>
     <string name="msg_invalid_value">Invalid value</string>
     <string name="txt_reminder_msz">Login or register for free to use your social features and to connect with your seatmates</string>

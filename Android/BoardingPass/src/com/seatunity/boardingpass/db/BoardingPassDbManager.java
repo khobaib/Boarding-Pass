@@ -125,7 +125,7 @@ public class BoardingPassDbManager {
 	}
 	public static boolean isExist(SQLiteDatabase db, String stringformtocheck) throws SQLException {
 		boolean itemExist = false;
-		Cursor c = db.query(TABLE_BOARDING_PASS_LIST, null, stringform + "=" + stringformtocheck, null, null, null, null);
+		Cursor c = db.query(TABLE_BOARDING_PASS_LIST, null, id + "=" + stringformtocheck, null, null, null, null);
 		if ((c != null) && (c.getCount() > 0)) {
 			itemExist = true;
 		}

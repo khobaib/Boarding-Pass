@@ -1,10 +1,8 @@
 package com.seatunity.boardingpass;
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.bugsense.trace.BugSenseHandler;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.fragment.FragmentMyAccount;

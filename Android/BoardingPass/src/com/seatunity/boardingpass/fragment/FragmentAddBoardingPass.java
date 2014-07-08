@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -58,13 +59,13 @@ public class FragmentAddBoardingPass extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 	}
 	@Override
 	public void onResume() {
 		super.onResume();
-		
-		
+
+
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -179,6 +180,9 @@ public class FragmentAddBoardingPass extends Fragment {
 						Log.e("tag", "8");
 
 						String boardingpass=PkpassReader.getPassbookBarcodeString(filepath);
+						//07-08 20:58:22.389: E/json Object(3012): {"message":"M1Towhi\/UWEMR         EYWX9ZS DHABARLH 2074 185M037A0016 355>2180KO3075BOS 022052227001 262202331497901  LH                     *30601001205","messageEncoding":"iso-8859-1","format":"PKBarcodeFormatQR"}
+						JSONObject job=new JSONObject(boardingpass);
+						saveScannedBoardingPasstodatabes(job.getString("message"),job.getString("format"));
 						Log.e("json Object", boardingpass);
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
@@ -294,14 +298,32 @@ public class FragmentAddBoardingPass extends Fragment {
 			if(success.equals("true")){
 				String id=result.getString("id");
 				boardingPass.setId(id);
-				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_boarding_pass_added_successfully),
-						Toast.LENGTH_SHORT).show();
+				Context context;
+
+				if(getActivity()==null){
+
+				}
+				else{
+					Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_boarding_pass_added_successfully),
+							Toast.LENGTH_SHORT).show();
+				}
 				setBoardingpassInLocalDB();
 
 			}
 			else{
-				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_invalid_borading_pass),
-						Toast.LENGTH_SHORT).show();
+				try {
+					if(getActivity()==null){
+
+					}
+					else{
+						Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_invalid_borading_pass),
+								Toast.LENGTH_SHORT).show();
+					}
+					
+				} catch (android.content.res.Resources.NotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -320,6 +342,7 @@ public class FragmentAddBoardingPass extends Fragment {
 
 	public void scanBarcodeFromImage(Bitmap bmap){
 		Bitmap bMap = bmap;
+		
 		try {
 			int[] intArray = new int[bMap.getWidth() * bMap.getHeight()];
 			bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(),
@@ -335,16 +358,24 @@ public class FragmentAddBoardingPass extends Fragment {
 				Result result = reader.decode(bitmap, decodeHints);
 				Log.e("text", result.getText())  ;
 				Log.e("format", result.getBarcodeFormat().toString())  ;
-				//saveScannedBoardingPasstodatabes(result.getText(),result.getBarcodeFormat().toString());
+				saveScannedBoardingPasstodatabes(result.getText(),result.getBarcodeFormat().toString());
 
 			} catch (NotFoundException e) {
+				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_failed_to_scan),
+						Toast.LENGTH_SHORT).show();
 				e.printStackTrace();
 			} catch (ChecksumException e) {
+				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_failed_to_scan),
+						Toast.LENGTH_SHORT).show();
 				e.printStackTrace();
 			} catch (FormatException e) {
 				e.printStackTrace();
+				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_failed_to_scan),
+						Toast.LENGTH_SHORT).show();
 			} catch (NullPointerException e) {
 				e.printStackTrace();
+				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_failed_to_scan),
+						Toast.LENGTH_SHORT).show();
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

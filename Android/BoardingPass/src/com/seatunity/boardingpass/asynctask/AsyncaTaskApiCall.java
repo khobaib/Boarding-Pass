@@ -11,6 +11,7 @@ import com.seatunity.boardingpass.fragment.FragmentAddBoardingPass;
 import com.seatunity.boardingpass.fragment.FragmentLogin;
 import com.seatunity.boardingpass.fragment.FragmentMyAccount;
 import com.seatunity.boardingpass.fragment.FragmentSignUp;
+import com.seatunity.boardingpass.networkstatetracker.NetworkStateReceiver;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
@@ -42,6 +43,17 @@ import android.widget.Toast;
 	JsonParser jsonParser;
 	ProgressDialog pd;
 	Context context;
+	NetworkStateReceiver netstatelisenaer;
+	
+	public AsyncaTaskApiCall(NetworkStateReceiver netstatelisenaer,String body,Context context){
+		this.netstatelisenaer=netstatelisenaer;
+		this.body=body;
+		this.context=context;
+		jsonParser=new JsonParser();
+//		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+//				context.getResources().getString(R.string.txt_please_wait), true);
+
+	}
 	public AsyncaTaskApiCall( BoardingPassApplication appInstance,EditUserNameActivity usernameLisenar,String body,Context context, 
 			String myaccounturl){
 		this.usernameLisenar=usernameLisenar;
@@ -118,7 +130,20 @@ import android.widget.Toast;
 			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
 					body, null);
 		}
+		else if(netstatelisenaer!=null){
+			
+			String url = Constants.baseurl+"newbp";
+			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+					body, null);
+		}
+		else if(netstatelisenaer!=null){
+			
+			String url = Constants.baseurl+"newbp";
+			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+					body, null);
+		}
 		else if(bpassaddlisenar!=null){
+		
 			String url = Constants.baseurl+"newbp";
 			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
 					body, null);
@@ -174,6 +199,9 @@ import android.widget.Toast;
 		}
 		else if(loginlisenar!=null){
 			loginlisenar.callBackFromApicall(result);
+		}
+		else if(netstatelisenaer!=null){
+			netstatelisenaer.addBoardingPassonBackendSuccess(result.getjObj());
 		}
 		else if(bpassaddlisenar!=null){
 			bpassaddlisenar.addBoardingPassonBackendSuccess(result.getjObj());
