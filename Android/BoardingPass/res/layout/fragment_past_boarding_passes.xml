@@ -11,7 +11,7 @@
         android:id="@+id/re_details_holder"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.60"
+        android:layout_weight="1.45"
         android:background="#7C7C7C" >
 
         <LinearLayout
@@ -114,6 +114,7 @@
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="12dp"
+                            android:gravity="center"
                             android:text="@string/txt_seat_nno"
                             android:textColor="#777777"
                             android:textSize="17dp" />
@@ -162,11 +163,12 @@
 
                         <TextView
                             android:id="@+id/tv_to"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="12dp"
                             android:text="@string/txt_seat_nno"
+                            android:gravity="center"
                             android:textColor="#777777"
                             android:textSize="17dp" />
 
@@ -209,6 +211,7 @@
                     android:layout_marginBottom="7dp"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="3dp"
+                     android:textSize="18dp"
                     android:layout_weight="1"
                     android:textColor="#ffffff"
                     android:background="@drawable/rounded_seatmate_button"
@@ -223,6 +226,7 @@
                     android:layout_marginRight="12dp"
                     android:layout_weight="1"
                     android:textColor="#ffffff"
+                    android:textSize="18dp"
                     android:background="@drawable/rounded_seatmate_button"
                     android:text="@string/txt_boarding_pass" />
             </LinearLayout>

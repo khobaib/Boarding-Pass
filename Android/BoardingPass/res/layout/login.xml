@@ -52,6 +52,7 @@
        android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
+        android:textSize="23dp"
         android:background="@drawable/rounded_button"
         android:textColor="#ffffff"
         android:text="@string/txt_login" />
@@ -64,6 +65,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
          android:textColor="#0099cc"
+          android:textSize="23dp"
          android:text="@string/txt_forgot_pass" />
 
 </RelativeLayout>

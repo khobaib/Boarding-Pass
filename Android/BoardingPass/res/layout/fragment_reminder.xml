@@ -30,7 +30,7 @@
             android:layout_marginRight="25dp"
             android:layout_marginTop="14dp"
             android:gravity="center"
-            android:textSize="17dp"
+            android:textSize="19dp"
             android:textColor="#31465d" 
             android:text="@string/txt_reminder_msz"
             />
@@ -53,7 +53,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="15dp"
-            android:textSize="20dp"
+            android:textSize="23dp"
             android:textColor="#0099cc"
             android:text="@string/txt_login" />
 
@@ -64,7 +64,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="15dp"
             android:layout_alignRight="@+id/tv_reminder_msz"
-             android:textSize="20dp"
+             android:textSize="23dp"
             android:textColor="#0099cc"
             android:text="@string/txt_register"/>
 

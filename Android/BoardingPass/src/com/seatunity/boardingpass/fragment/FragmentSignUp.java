@@ -240,7 +240,7 @@ public class FragmentSignUp extends Fragment{
 	private void setcity(){
 
 		ArrayAdapter  adapter2 = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_spinner_dropdown_item, agelist);
+				R.drawable.contact_spinner_row_nothing_selected_age, agelist);
 		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		s_age.setAdapter( new  NothingSelectedSpinnerAdapter(
 				adapter2, R.drawable.contact_spinner_row_nothing_selected_age, getActivity()));
