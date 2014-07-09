@@ -48,8 +48,11 @@ public class JsonParser {
 		StringBuilder sb = null;
 		if (urlParams != null) {
 			String paramString = URLEncodedUtils.format(urlParams, "utf-8");
-			url += "?" + paramString;            
+			url += "?" + paramString;     
+			
+			Log.d(TAG, "content body = " + content);
 		}
+		Log.d(TAG, "url after param added = " + url);
 	try {
 				URL urltoconnect = new URL(url);
 				HttpURLConnection connection = (HttpURLConnection) urltoconnect
@@ -73,6 +76,9 @@ public class JsonParser {
 				connection.connect();
 				int statusCode = connection.getResponseCode();
 				
+				//07-09 17:23:44.360: E/AndroidRuntime(10182): android.database.sqlite.SQLiteException: unrecognized token: "[Ljava.lang.String;@4292bca8": , while compiling: UPDATE boardingpass SET departure=?,lastname=?,PNR=?,firstname=?,flight_no=?,julian_date=?,id=?,seat=?,compartment_code=?,arrival=?,carrier=?,stringform=?,codetype=?,travel_to=?,travel_from=? WHERE stringform= ?[Ljava.lang.String;@4292bca8
+
+			//	Ljava.lang.String;@4292bca8": , while compiling: UPDATE boardingpass SET departure=?,lastname=?,PNR=?,firstname=?
 //				HttpPost httpPost = new HttpPost(url);
 //				httpPost.setHeader("Content-Type", "application/json");
 //				httpPost.setHeader("Accept", "application/json");

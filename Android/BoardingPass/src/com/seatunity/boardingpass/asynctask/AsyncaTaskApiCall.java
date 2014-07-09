@@ -43,13 +43,15 @@ import android.widget.Toast;
 	JsonParser jsonParser;
 	ProgressDialog pd;
 	Context context;
+	BoardingPass bpass;
 	NetworkStateReceiver netstatelisenaer;
 	
-	public AsyncaTaskApiCall(NetworkStateReceiver netstatelisenaer,String body,Context context){
+	public AsyncaTaskApiCall(NetworkStateReceiver netstatelisenaer,BoardingPass bpass,String body,Context context){
 		this.netstatelisenaer=netstatelisenaer;
 		this.body=body;
 		this.context=context;
 		jsonParser=new JsonParser();
+		this.bpass=bpass;
 //		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
 //				context.getResources().getString(R.string.txt_please_wait), true);
 
@@ -201,7 +203,7 @@ import android.widget.Toast;
 			loginlisenar.callBackFromApicall(result);
 		}
 		else if(netstatelisenaer!=null){
-			netstatelisenaer.addBoardingPassonBackendSuccess(result.getjObj());
+			netstatelisenaer.addBoardingPassonBackendSuccess(result.getjObj(),bpass);
 		}
 		else if(bpassaddlisenar!=null){
 			bpassaddlisenar.addBoardingPassonBackendSuccess(result.getjObj());

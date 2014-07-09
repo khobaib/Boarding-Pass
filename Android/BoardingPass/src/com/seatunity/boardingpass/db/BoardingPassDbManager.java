@@ -120,29 +120,36 @@ public class BoardingPassDbManager {
 		cv.put(arrival , boardingPass.getArrival());
 		cv.put(codetype , boardingPass.getCodetype());
 		cv.put(id , boardingPass.getId());
-
-		return db.update(TABLE_BOARDING_PASS_LIST, cv, stringform + "=" + boardingPass.getStringform(), null); 
+		return db.update(TABLE_BOARDING_PASS_LIST, cv, stringform + " = ?",
+	            new String[] { String.valueOf(boardingPass.getStringform()) });
+	//	return db.update(TABLE_BOARDING_PASS_LIST, cv, stringform + "= ?" + new String[] {boardingPass.getStringform()}, null); 
 	}
 	public static boolean isExist(SQLiteDatabase db, String stringformtocheck) throws SQLException {
 		boolean itemExist = false;
-		Cursor c = db.query(TABLE_BOARDING_PASS_LIST, null, id + "=" + stringformtocheck, null, null, null, null);
+		Cursor c = db.query(TABLE_BOARDING_PASS_LIST, null, stringform + "= ?", new String[] {stringformtocheck}, null, null, null);
 		if ((c != null) && (c.getCount() > 0)) {
 			itemExist = true;
 		}
 		return itemExist;
 	}
 	public static void insertOrupdate(SQLiteDatabase db, BoardingPass boardingPass){
-		if(boardingPass.getId().equals("-1")){
-			insert(db, boardingPass);
-		}
-		else{
-			if(isExist(db, boardingPass.getId())){
-				update(db, boardingPass);
+//		if(boardingPass.getId().equals("-1")){
+//			insert(db, boardingPass);
+//		}
+//		else{
+			if(isExist(db, boardingPass.getStringform())){
+				if(boardingPass.getId().equals("-1")){
+					update(db, boardingPass);
+				}
+				else{
+					update(db, boardingPass);
+				}
+				
 			}
 			else{
 				insert(db, boardingPass);
 			}
-		}
+//		}
 		
 	}
 }

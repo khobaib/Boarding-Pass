@@ -37,7 +37,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 				dbInstance.open();
 				
 				ArrayList<BoardingPass> list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
-				//dbInstance.close();
+				dbInstance.close();
 				
 				if(!appInstance.getUserCred().getEmail().equals("")){
 					for(int i=0;i<list.size();i++){
@@ -45,7 +45,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 							boardingPass=list.get(i);
 							String bpassdata="";
 							bpassdata=getJsonObjet(list.get(i));
-							AsyncaTaskApiCall apicalling=new AsyncaTaskApiCall(NetworkStateReceiver.this, bpassdata,context);
+							AsyncaTaskApiCall apicalling=new AsyncaTaskApiCall(NetworkStateReceiver.this,boardingPass, bpassdata,context);
 							apicalling.execute();
 						}
 					}
@@ -54,23 +54,27 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 				
 			} else if(intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY,Boolean.FALSE)) {
 				Toast.makeText(context, "Not Connected", 2000).show();
+				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
+				dbInstance.open();
 				
+				ArrayList<BoardingPass> list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+				dbInstance.close();
+				for(int i=0;i<list.size();i++){
+					Log.e("i", list.get(i).getId());
+				}
 			}
 		}
 	}
 	
-	public void addBoardingPassonBackendSuccess(JSONObject result){
+	public void addBoardingPassonBackendSuccess(JSONObject result,BoardingPass bpass){
 		Log.e("result", result.toString());
 		try {
 			String success=result.getString("success");
 			if(success.equals("true")){
 				String id=result.getString("id");
-				boardingPass.setId(id);
+				bpass.setId(id);
 				Context context;
-
-				
-				setBoardingpassInLocalDB();
-
+				setBoardingpassInLocalDB(bpass);
 			}
 			
 		} catch (JSONException e) {
@@ -80,11 +84,11 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 
 	}
 	
-	public void setBoardingpassInLocalDB(){
+	public void setBoardingpassInLocalDB(BoardingPass bpass){
+		Log.e("data", "ab  "+bpass.getStringform());
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
 		dbInstance.open();
-		dbInstance.insertOrUpdateBoardingPass(boardingPass);
-		ArrayList<BoardingPass>list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+		dbInstance.insertOrUpdateBoardingPass(bpass);
 		dbInstance.close();	
 	}
 	public String getJsonObjet(BoardingPass bpass){
