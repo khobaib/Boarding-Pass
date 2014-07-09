@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment {
     }
     
     public void onclickaddboardingpass(){
-    	parent.startAddBoardingPass();
+    	((MainActivity)getActivity()).openDialogToAddBoardingPass();
 		
 
     }

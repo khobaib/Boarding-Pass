@@ -2,7 +2,7 @@ package com.seatunity.model;
 
 public class BoardingPass {
 	String stringform,firstname,lastname,PNR,travel_from,travel_to,carrier,flight_no,julian_date,compartment_code,
-	seat,departure,arrival,codetype;
+	seat,departure,arrival,codetype,travel_from_name,travel_to_name,carrier_name;
 	String id="-1";
 	
 	public BoardingPass(String stringform,String firstname,String lastname,String PNR,String travel_from,
@@ -25,6 +25,25 @@ public class BoardingPass {
 		this.id=id;
 		
 	}
+	public void setTravel_from_name(String travel_from_name){
+		this.travel_from_name=travel_from_name;
+	}
+	public String getTravel_from_name(){
+		return this.travel_from_name;
+	}
+	public void setTravel_to_name(String travel_to_name){
+		this.travel_to_name=travel_to_name;
+	}
+	public String getTravel_to_name(){
+		return this.travel_to_name;
+	}
+	public void setCarrier_name(String carrier_name){
+		this.carrier_name=carrier_name;
+	}
+	public String getCarrier_name(){
+		return this.carrier_name;
+	}
+
 	public void setCodetype(String codetype){
 		this.codetype=codetype;
 	}

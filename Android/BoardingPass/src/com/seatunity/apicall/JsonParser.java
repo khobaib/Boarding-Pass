@@ -49,11 +49,13 @@ public class JsonParser {
 		if (urlParams != null) {
 			String paramString = URLEncodedUtils.format(urlParams, "utf-8");
 			url += "?" + paramString;     
+		
 			
-			Log.d(TAG, "content body = " + content);
 		}
-		Log.d(TAG, "url after param added = " + url);
+		Log.d(TAG, "content body = " + content);
+		
 	try {
+		Log.d(TAG, "url after param added = " + url);
 				URL urltoconnect = new URL(url);
 				HttpURLConnection connection = (HttpURLConnection) urltoconnect
 			            .openConnection();
@@ -66,7 +68,9 @@ public class JsonParser {
 				connection.setRequestMethod("GET");
 						connection.connect();
 						int statusCode = connection.getResponseCode();
-			} else if(reqType == Constants.REQUEST_TYPE_POST){
+			} 
+			
+			else if(reqType == Constants.REQUEST_TYPE_POST){
 				connection.setRequestMethod("POST");
 				String str =  content;
 				byte[] outputInBytes = str.getBytes("UTF-8");

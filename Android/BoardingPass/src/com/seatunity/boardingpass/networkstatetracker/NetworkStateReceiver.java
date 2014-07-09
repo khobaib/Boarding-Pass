@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
-import com.seatunity.boardingpass.fragment.FragmentAddBoardingPass;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.model.BoardingPass;
 

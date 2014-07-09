@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+      <string name="txt_failed_to_get_list">Failed to bring Please check your internet connecttion</string>
+       <string name="txt_please_check_internet">Please check your internet connecttion</string>
+    
      <string name="txt_newand_old_pass_missmatchced">New password and old password mis-matched</string>
     <string name="txt_please_enter_correct_password">Please enter correct password</string>
    <string name="txt_please_enter">Please enter </string>

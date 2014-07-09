@@ -100,9 +100,11 @@ public class FragmentAddBoardingPassDuringLogin extends Fragment{
        
 		return v;
 	}
-	public void onclickaddboardingpass(){
-		parent.startAddBoardingPass();
-    }
+	 public void onclickaddboardingpass(){
+	    	((MainActivity)getActivity()).openDialogToAddBoardingPass();
+			
+
+	    }
 	
 }
 

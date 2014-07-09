@@ -1,13 +1,16 @@
 package com.seatunity.boardingpass.asynctask;
 
+import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.seatunity.apicall.JsonParser;
 import com.seatunity.boardingpass.EditUserNameActivity;
+import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.PasswordChangeActivity;
 import com.seatunity.boardingpass.R;
-import com.seatunity.boardingpass.fragment.FragmentAddBoardingPass;
+import com.seatunity.boardingpass.fragment.FragmentBoardingPasses;
 import com.seatunity.boardingpass.fragment.FragmentLogin;
 import com.seatunity.boardingpass.fragment.FragmentMyAccount;
 import com.seatunity.boardingpass.fragment.FragmentSignUp;
@@ -15,6 +18,7 @@ import com.seatunity.boardingpass.networkstatetracker.NetworkStateReceiver;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
+import com.seatunity.model.BoardingPassList;
 import com.seatunity.model.Member;
 import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
@@ -33,7 +37,7 @@ import android.widget.Toast;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB) public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	FragmentSignUp signuplisenar;
 	FragmentLogin loginlisenar;
-	FragmentAddBoardingPass bpassaddlisenar;
+	MainActivity bpassaddlisenar;
 	FragmentMyAccount myaccountlisenar;
 	PasswordChangeActivity passwordchangelisenar;
 	String body;
@@ -44,8 +48,19 @@ import android.widget.Toast;
 	ProgressDialog pd;
 	Context context;
 	BoardingPass bpass;
+	FragmentBoardingPasses retreivelisenar;
 	NetworkStateReceiver netstatelisenaer;
-	
+	public AsyncaTaskApiCall(FragmentBoardingPasses retreivelisenar,String body,Context context){
+		this.body=body;
+		this.appInstance=appInstance;
+		this.myaccounturl=myaccounturl;
+		this.context=context;
+		this.retreivelisenar=retreivelisenar;
+		jsonParser=new JsonParser();
+		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+				context.getResources().getString(R.string.txt_please_wait), true);
+
+	}
 	public AsyncaTaskApiCall(NetworkStateReceiver netstatelisenaer,BoardingPass bpass,String body,Context context){
 		this.netstatelisenaer=netstatelisenaer;
 		this.body=body;
@@ -92,7 +107,7 @@ import android.widget.Toast;
 				context.getResources().getString(R.string.txt_please_wait), true);
 
 	}
-	public AsyncaTaskApiCall(FragmentAddBoardingPass bpassaddlisenar,String body,Context context){
+	public AsyncaTaskApiCall(MainActivity bpassaddlisenar,String body,Context context){
 		this.bpassaddlisenar=bpassaddlisenar;
 		this.body=body;
 		this.context=context;
@@ -179,6 +194,13 @@ import android.widget.Toast;
 				response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_PUT, url, null,
 						body, null);
 		}
+		else if(retreivelisenar!=null){
+
+			String url = Constants.baseurl+"bplist";
+			
+				response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+						body, null);
+		}
 		return response;
 
 	}
@@ -186,9 +208,8 @@ import android.widget.Toast;
 	@Override
 	protected void onPostExecute(ServerResponse result) {
 		super.onPostExecute(result);
-
+Log.e("response", "ab "+result.getjObj().toString());
 		UserCred ucrCred=new UserCred("", "", "", "", "", "", "", "", "", "", "", "", "", "");
-		Log.e("responses", result.getjObj().toString());
 		if( pd!=null){ 
 			if(pd.isShowing()){
 				pd.cancel();
@@ -268,6 +289,25 @@ import android.widget.Toast;
 			}
 
 		}
+		else if(retreivelisenar!=null){
+			JSONObject job=result.getjObj();
+			try {
+				if(job.getString("success").equals("true")){
+					BoardingPassList  list=BoardingPassList.getBoardingPassListObject(job);
+					retreivelisenar.lodedLodaedfromServer(list.getBoardingPassList());
+				}
+				else{
+					
+					Toast.makeText(context, job.getString("message"),
+							Toast.LENGTH_SHORT).show();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		
 		
 		else if(usernameLisenar!=null){
 			JSONObject job=result.getjObj();

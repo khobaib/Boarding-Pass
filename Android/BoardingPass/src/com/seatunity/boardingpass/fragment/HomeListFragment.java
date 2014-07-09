@@ -53,12 +53,12 @@ public class HomeListFragment extends TabFragment{
 				fragment.parent = this;
 				backEndStack.push(fragment);
 			}
-			else if((!email.equals(""))&&(list.size()<1)){
-				FragmentAddBoardingPassDuringLogin fragment = new FragmentAddBoardingPassDuringLogin();
-				fragment.parent = this;
-				backEndStack.push(fragment);
-				
-			}
+//			else if((!email.equals(""))&&(list.size()<1)){
+//				FragmentAddBoardingPassDuringLogin fragment = new FragmentAddBoardingPassDuringLogin();
+//				fragment.parent = this;
+//				backEndStack.push(fragment);
+//				
+//			}
 			else{
 				
 				FragmentBoardingPasses fragment = new FragmentBoardingPasses();
@@ -67,11 +67,11 @@ public class HomeListFragment extends TabFragment{
 
 			}
 		}
-		else{
-			FragmentAddBoardingPass newFragment = new FragmentAddBoardingPass() ;
-			newFragment.parent = this;
-			backEndStack.push(newFragment);
-		}
+//		else{
+//			FragmentAddBoardingPass newFragment = new FragmentAddBoardingPass() ;
+//			newFragment.parent = this;
+//			backEndStack.push(newFragment);
+//		}
 		
 		
 		
@@ -115,17 +115,17 @@ public class HomeListFragment extends TabFragment{
 		fragmentTransaction.commitAllowingStateLoss();
 	}
 
-	public void startAddBoardingPass() {
-		FragmentAddBoardingPass newFragment = new FragmentAddBoardingPass() ;
-		newFragment.parent = this;
-		FragmentManager fragmentManager = getActivity().getFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager
-				.beginTransaction();
-		fragmentTransaction.replace(R.id.tab3Content, newFragment);
-		fragmentTransaction.addToBackStack(null);
-		backEndStack.push(newFragment);
-		fragmentTransaction.commitAllowingStateLoss();
-	}
+//	public void startAddBoardingPass() {
+//		FragmentAddBoardingPass newFragment = new FragmentAddBoardingPass() ;
+//		newFragment.parent = this;
+//		FragmentManager fragmentManager = getActivity().getFragmentManager();
+//		FragmentTransaction fragmentTransaction = fragmentManager
+//				.beginTransaction();
+//		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+//		fragmentTransaction.addToBackStack(null);
+//		backEndStack.push(newFragment);
+//		fragmentTransaction.commitAllowingStateLoss();
+//	}
 	public void clearr(){
 		backEndStack.pop();
 	}
