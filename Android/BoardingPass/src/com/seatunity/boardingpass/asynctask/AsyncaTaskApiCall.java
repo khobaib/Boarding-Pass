@@ -14,6 +14,7 @@ import com.seatunity.boardingpass.fragment.FragmentBoardingPasses;
 import com.seatunity.boardingpass.fragment.FragmentLogin;
 import com.seatunity.boardingpass.fragment.FragmentMyAccount;
 import com.seatunity.boardingpass.fragment.FragmentSignUp;
+import com.seatunity.boardingpass.fragment.FragmentUpcomingBoardingPassDetails;
 import com.seatunity.boardingpass.networkstatetracker.NetworkStateReceiver;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
@@ -50,6 +51,35 @@ import android.widget.Toast;
 	BoardingPass bpass;
 	FragmentBoardingPasses retreivelisenar;
 	NetworkStateReceiver netstatelisenaer;
+	FragmentUpcomingBoardingPassDetails deletelisenar;
+	NetworkStateReceiver deletelisenarfromnetstate;
+	public AsyncaTaskApiCall(NetworkStateReceiver deletelisenarfromnetstate,String body,Context context, 
+			String myaccounturl,BoardingPass bpass){
+		this.bpass=bpass;
+		this.deletelisenarfromnetstate=deletelisenarfromnetstate;
+		this.body=body;
+		this.appInstance=appInstance;
+		this.myaccounturl=myaccounturl;
+		this.context=context;
+		jsonParser=new JsonParser();
+		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+				context.getResources().getString(R.string.txt_please_wait), true);
+
+	}
+	public AsyncaTaskApiCall(FragmentUpcomingBoardingPassDetails deletelisenar,String body,Context context, 
+			String myaccounturl){
+		this.deletelisenar=deletelisenar;
+		this.body=body;
+		this.appInstance=appInstance;
+		this.myaccounturl=myaccounturl;
+		this.context=context;
+		jsonParser=new JsonParser();
+		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+				context.getResources().getString(R.string.txt_please_wait), true);
+
+	}
+	
+	
 	public AsyncaTaskApiCall(FragmentBoardingPasses retreivelisenar,String body,Context context){
 		this.body=body;
 		this.appInstance=appInstance;
@@ -178,7 +208,8 @@ import android.widget.Toast;
 			}
 
 		}
-		
+		//07-10 21:16:50.479: W/System.err(14670): java.io.FileNotFoundException: 
+
 		else if(passwordchangelisenar!=null){
 
 			String url = Constants.baseurl+myaccounturl;
@@ -194,6 +225,20 @@ import android.widget.Toast;
 				response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_PUT, url, null,
 						body, null);
 		}
+		else if(deletelisenar!=null){
+
+			String url = Constants.baseurl+myaccounturl;
+			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+						body, null);
+		}
+		else if(deletelisenarfromnetstate!=null){
+
+			String url = Constants.baseurl+myaccounturl;
+			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+						body, null);
+		}
+		
+		
 		else if(retreivelisenar!=null){
 
 			String url = Constants.baseurl+"bplist";
@@ -307,8 +352,41 @@ Log.e("response", "ab "+result.getjObj().toString());
 			}
 
 		}
+		else if(deletelisenar!=null){
+			JSONObject job=result.getjObj();
+			try {
+				if(job.getString("success").equals("true")){
+					BoardingPassList  list=BoardingPassList.getBoardingPassListObject(job);
+					deletelisenar.updateDatabaseWithoutServernotification(1);
+				}
+				else{
+					
+					Toast.makeText(context, job.getString("message"),
+							Toast.LENGTH_SHORT).show();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
-		
+		else if(deletelisenarfromnetstate!=null){
+			JSONObject job=result.getjObj();
+			try {
+				if(job.getString("success").equals("true")){
+					BoardingPassList  list=BoardingPassList.getBoardingPassListObject(job);
+					deletelisenarfromnetstate.updateDatabaseWithoutServernotification(bpass);
+				}
+				else{
+					
+				
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//deletelisenarfromnetstate
 		else if(usernameLisenar!=null){
 			JSONObject job=result.getjObj();
 			try {

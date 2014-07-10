@@ -4,10 +4,15 @@ public class BoardingPass {
 	String stringform,firstname,lastname,PNR,travel_from,travel_to,carrier,flight_no,julian_date,compartment_code,
 	seat,departure,arrival,codetype,travel_from_name,travel_to_name,carrier_name;
 	String id="-1";
-	
+	boolean deletestate=false;
 	public BoardingPass(String stringform,String firstname,String lastname,String PNR,String travel_from,
 			String travel_to,String carrier,String flight_no,String julian_date,String compartment_code,
-			String seat,String departure,String arrival,String codetype,String id ){
+			String seat,String departure,String arrival,String codetype,String id,String travel_from_name,
+			String travel_to_name,String carrier_name,boolean deletestate ){
+		this.deletestate=deletestate;
+		this.carrier_name=carrier_name;
+		this.travel_from_name=this.travel_from_name;
+		this.travel_to_name=travel_to_name;
 		this.codetype=codetype;
 		this.stringform=stringform;
 		this.firstname=firstname;
@@ -24,6 +29,12 @@ public class BoardingPass {
 		this.arrival=arrival;
 		this.id=id;
 		
+	}
+	public void setDeletestate(boolean deletestate){
+		this.deletestate=deletestate;
+	}
+	public boolean getDeletestate(){
+		return this.deletestate;
 	}
 	public void setTravel_from_name(String travel_from_name){
 		this.travel_from_name=travel_from_name;

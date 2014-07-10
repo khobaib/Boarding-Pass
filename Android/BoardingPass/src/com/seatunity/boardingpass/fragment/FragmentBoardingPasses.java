@@ -133,19 +133,26 @@ public class FragmentBoardingPasses extends Fragment{
 	}
 	public void lodedLodaedfromServer(ArrayList<BoardingPass> listfromserver){
 		this.list=listfromserver;
-		//07-09 20:45:46.108: E/response(5999): ab {"boarding_pass":[{"departure":"3 ","lastname":"HABCD","PNR":"YWX9ZS","firstname":"MR CKL        ","flight_no":"2551 ","julian_date":"175","version":"4","id":"20","travel_to_name":"Munich","seat":"024A","compartment_code":"M","travel_from_name":"Lviv","arrival":"9 ","carrier":"LH","stringform":"M1HABCD\/CKLMR         EYWX9ZS LWOMUCLH 2551 175M024A0008 355>2180OO3075BOS 022052227001 262202331497901  LH                     *30601001205","carrier_name":"Lufthansa","travel_to":"MUC","travel_from":"LWO"},{"departure":"3 ","lastname":"HAMID","PNR":"YWX9ZS","firstname":"MR FOT        ","flight_no":"2551 ","julian_date":"275","version":"4","id":"21","travel_to_name":"Munich","seat":"024A","compartment_code":"M","travel_from_name":"Lviv","arrival":"9 ","carrier":"LH","stringform":"M1HABCD\/CKLMR         EYWX9ZS LWOMUCLH 2551 175M024A0008 355>2180OO3075BOS 022052227001 262202331497901  LH                     *30601001205","carrier_name":"Lufthansa","travel_to":"MUC","travel_from":"LWO"}],"count":2,"success":"true"}
-
 		setlist();
 		Log.e("Tag", " k");
 				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
 				dbInstance.open();
-				dbInstance.insertOrUpdateBoardingPassList(list);
+				for(int i=0;i<list.size();i++){
+					Log.e("testing", ""+i+"  "+list.get(i).getStringform());
+					dbInstance.insertOrUpdateBoardingPass(list.get(i));
+				}
+				
 				list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
 				dbInstance.close();
 				setlist();
 
 	}
 	public void  setlist(){
+		for (int i=0;i<list.size();i++){
+			if(list.get(i).getDeletestate()){
+				list.remove(i);
+			}
+		}
 		if(list.size()>0){
 			AdapterForBoardingPass adapter=new AdapterForBoardingPass(getActivity(), list);
 			lv_boarding_pass.setAdapter(adapter);

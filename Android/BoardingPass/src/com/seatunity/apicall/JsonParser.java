@@ -162,11 +162,11 @@ public class JsonParser {
 			} else if(reqType == Constants.REQUEST_TYPE_DELETE){
 				connection.setRequestProperty("Content-Type","application/json"); 
 				connection.setRequestMethod("DELETE");
-				String str =  content;
-				byte[] outputInBytes = str.getBytes("UTF-8");
-				OutputStream os = connection.getOutputStream();
-				os.write( outputInBytes );    
-				os.close();
+//				String str =  content;
+//				byte[] outputInBytes = str.getBytes("UTF-8");
+//				OutputStream os = connection.getOutputStream();
+//				os.write( outputInBytes );    
+//				os.close();
 				connection.connect();
 				int statusCode = connection.getResponseCode();
 //				connection.connect();

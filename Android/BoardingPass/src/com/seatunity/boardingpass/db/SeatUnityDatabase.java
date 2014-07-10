@@ -25,7 +25,6 @@ public class SeatUnityDatabase {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			BoardingPassDbManager.createTable(db);
-
 		}
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -58,6 +57,9 @@ public class SeatUnityDatabase {
 			insertOrUpdateBoardingPass(boardingPasseslist.get(i));
 		}
 
+	}
+	public void DeleteBoardingPass(BoardingPass boardingPass) {
+		BoardingPassDbManager.delete(this.db, boardingPass);
 	}
 	public void insertOrUpdateBoardingPass(BoardingPass boardingPass) {
 		BoardingPassDbManager.insertOrupdate(this.db, boardingPass);

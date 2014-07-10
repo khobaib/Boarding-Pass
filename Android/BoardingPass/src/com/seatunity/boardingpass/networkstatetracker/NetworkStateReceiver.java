@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
+import com.seatunity.boardingpass.fragment.FragmentUpcomingBoardingPassDetails;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.model.BoardingPass;
 
@@ -40,7 +41,12 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 				
 				if(!appInstance.getUserCred().getEmail().equals("")){
 					for(int i=0;i<list.size();i++){
-						if(list.get(i).getId().equals("-1")){
+						if(list.get(i).getDeletestate()){
+							String url="bpdelete/"+list.get(i).getId();
+							AsyncaTaskApiCall callserver=new AsyncaTaskApiCall(NetworkStateReceiver.this, getJsonObjet(), context, url,list.get(i));
+							callserver.execute();
+						}
+						else if(list.get(i).getId().equals("-1")){
 							boardingPass=list.get(i);
 							String bpassdata="";
 							bpassdata=getJsonObjet(list.get(i));
@@ -52,7 +58,6 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 				}
 				
 			} else if(intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY,Boolean.FALSE)) {
-				Toast.makeText(context, "Not Connected", 2000).show();
 				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
 				dbInstance.open();
 				
@@ -63,6 +68,18 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 				}
 			}
 		}
+	}
+	public String getJsonObjet(){
+
+		try {
+			JSONObject loginObj = new JSONObject();
+			loginObj.put("token",appInstance.getUserCred().getToken());
+			return loginObj.toString();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
 	public void addBoardingPassonBackendSuccess(JSONObject result,BoardingPass bpass){
@@ -116,5 +133,12 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 			e.printStackTrace();
 		}
 		return "";
+	}
+	
+	public void updateDatabaseWithoutServernotification(BoardingPass bpass){
+		SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
+		dbInstance.open();
+		dbInstance.DeleteBoardingPass(bpass);
+		dbInstance.close();
 	}
 }

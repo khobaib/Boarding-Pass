@@ -28,6 +28,11 @@ public class BoardingPassDbManager {
 	private static String arrival="arrival";
 	private static String codetype="codetype";
 	private static String id="id";
+	private static String travel_from_name="travel_from_name";
+	private static String travel_to_name="travel_to_name";
+	private static String carrier_name="carrier_name";
+	private static String deletestate="deletestate";
+	
 	private static final String CREATE_TABLE_EDUCATION_LIST = "create table " + TABLE_BOARDING_PASS_LIST + " ( "
 			+ TABLE_PRIMARY_KEY + " integer primary key autoincrement, "
 			+ stringform + " text, " 
@@ -44,6 +49,10 @@ public class BoardingPassDbManager {
 			+ departure + " text, "
 			+ arrival + " text, "
 			+ codetype + " text, "
+			+ travel_from_name + " text, "
+			+ travel_to_name + " text, "
+			+ carrier_name + " text, "
+			+ deletestate + " text, "
 			+ id + " text);";
 	public static long insert(SQLiteDatabase db, BoardingPass boardingPass) throws SQLException {
 		ContentValues cv = new ContentValues();
@@ -62,7 +71,10 @@ public class BoardingPassDbManager {
 		cv.put(arrival , boardingPass.getArrival());
 		cv.put(codetype , boardingPass.getCodetype());
 		cv.put(id , boardingPass.getId());
-
+		cv.put(travel_from_name , boardingPass.getId());
+		cv.put(travel_to_name , boardingPass.getId());
+		cv.put(carrier_name , boardingPass.getId());
+		cv.put(deletestate , boardingPass.getId());
 
 		return db.insert(TABLE_BOARDING_PASS_LIST, null, cv);
 	}
@@ -75,7 +87,7 @@ public class BoardingPassDbManager {
 	public static List<BoardingPass> retrieve(SQLiteDatabase db) throws SQLException {
 		List<BoardingPass> boardingPasslistlist =new ArrayList<BoardingPass>();
 		Cursor c = db.query(TABLE_BOARDING_PASS_LIST, null, null, null, null, null, null);
-		if(c != null && c.getCount() > 0){
+		if(c != null && c.getCount() >= 0){
 			c.moveToFirst();
 			while(!c.isAfterLast()){
 				String stringform_local = c.getString(c.getColumnIndex(stringform));
@@ -92,10 +104,15 @@ public class BoardingPassDbManager {
 				String departure_local = c.getString(c.getColumnIndex(departure));
 				String arrival_local = c.getString(c.getColumnIndex(arrival));
 				String codetype_local = c.getString(c.getColumnIndex(codetype));
+				String travel_from_name_local =c.getString(c.getColumnIndex(travel_from_name));
+				String travel_to_name_local =c.getString(c.getColumnIndex(travel_to_name));
+				String carrier_name_local =c.getString(c.getColumnIndex(carrier_name));
+				boolean deletestate_local =Boolean.parseBoolean(c.getString(c.getColumnIndex(deletestate)));
 				String id_local =c.getString(c.getColumnIndex(id));
 				BoardingPass bpass=new BoardingPass(stringform_local,firstname_local,lastname_local,PNR_local,travel_from_local,
 						travel_to_local,carrier_local,flight_no_local,julian_date_local,compartment_code_local,
-						seat_local,departure_local,arrival_local,codetype_local,id_local);
+						seat_local,departure_local,arrival_local,codetype_local,id_local,travel_from_name_local
+						,travel_to_name_local,carrier_name_local,deletestate_local);
 				boardingPasslistlist.add(bpass);
 
 				c.moveToNext();
@@ -120,9 +137,18 @@ public class BoardingPassDbManager {
 		cv.put(arrival , boardingPass.getArrival());
 		cv.put(codetype , boardingPass.getCodetype());
 		cv.put(id , boardingPass.getId());
+		cv.put(travel_from_name , boardingPass.getId());
+		cv.put(travel_to_name , boardingPass.getId());
+		
+		cv.put(deletestate , boardingPass.getDeletestate());
 		return db.update(TABLE_BOARDING_PASS_LIST, cv, stringform + " = ?",
-	            new String[] { String.valueOf(boardingPass.getStringform()) });
-	//	return db.update(TABLE_BOARDING_PASS_LIST, cv, stringform + "= ?" + new String[] {boardingPass.getStringform()}, null); 
+				new String[] { String.valueOf(boardingPass.getStringform()) });
+		//	return db.update(TABLE_BOARDING_PASS_LIST, cv, stringform + "= ?" + new String[] {boardingPass.getStringform()}, null); 
+	}
+	public static void delete(SQLiteDatabase db,BoardingPass boardingPass) throws SQLException {
+		 db.delete(TABLE_BOARDING_PASS_LIST, stringform + " = ?",
+				new String[] { String.valueOf(boardingPass.getStringform())});
+
 	}
 	public static boolean isExist(SQLiteDatabase db, String stringformtocheck) throws SQLException {
 		boolean itemExist = false;
@@ -133,23 +159,34 @@ public class BoardingPassDbManager {
 		return itemExist;
 	}
 	public static void insertOrupdate(SQLiteDatabase db, BoardingPass boardingPass){
-//		if(boardingPass.getId().equals("-1")){
-//			insert(db, boardingPass);
-//		}
-//		else{
-			if(isExist(db, boardingPass.getStringform())){
-				if(boardingPass.getId().equals("-1")){
-					update(db, boardingPass);
-				}
-				else{
-					update(db, boardingPass);
-				}
-				
+
+		if(isExist(db, boardingPass.getStringform())){
+			Log.e("tag", "1");
+			if(boardingPass.getId().equals("-1")){
+				Log.e("tag", "2");
+
+				update(db, boardingPass);
+				Log.e("tag", "3");
+
 			}
 			else{
-				insert(db, boardingPass);
+				Log.e("tag", "4");
+
+				update(db, boardingPass);
+				Log.e("tag", "5");
+
 			}
-//		}
+
+		}
+		else{
+			Log.e("tag", "6");
+
+			insert(db, boardingPass);
+			Log.e("tag", "7");
+
+		}
 		
+
+
 	}
 }

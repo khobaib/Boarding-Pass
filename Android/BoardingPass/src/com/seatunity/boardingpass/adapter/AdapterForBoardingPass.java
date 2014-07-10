@@ -67,7 +67,9 @@ public class AdapterForBoardingPass extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
     	LayoutInflater mInflater;
+    	
     	 ViewHolder holder = new ViewHolder();
+    	 Log.e("deletestate", ""+list.get(position).getDeletestate());
     	String date=Constants.getDayandYear(Integer.parseInt(list.get(position).getJulian_date()));
     	String[] dateParts = date.split(":");
 		month=dateParts[1];
@@ -95,7 +97,7 @@ public class AdapterForBoardingPass extends BaseAdapter {
         		list.get(position).getTravel_to());
         holder.tv_flight_date.setText(month+day);
         holder.tv_start_time.setText(list.get(position).getDeparture());
-        holder.tv_arrival_time.setText(list.get(position).getArrival());
+        holder.tv_arrival_time.setText(""+list.get(position).getArrival());
         holder.tv_seat_no.setText(context.getResources().getString(R.string.txt_seat_nno)+
         		" "+list.get(position).getSeat());
 

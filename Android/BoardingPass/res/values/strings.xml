@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="txt_delete_boarding_pass">Delete Boarding Pass</string>
+        <string name="txt_delete_boarding_pass_text">Are you sure you want to delete boarding pass</string>
+    
       <string name="txt_failed_to_get_list">Failed to bring Please check your internet connecttion</string>
        <string name="txt_please_check_internet">Please check your internet connecttion</string>
     

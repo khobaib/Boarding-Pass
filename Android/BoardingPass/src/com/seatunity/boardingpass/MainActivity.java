@@ -81,7 +81,8 @@ public class MainActivity extends FragmentActivity {
 	private DrawerLayout mDrawerLayout;
 	public ListView mDrawerList;
 	public TabFragment activeFragment;
-	private ActionBarDrawerToggle mDrawerToggle;
+	public MenuItem item;
+	public ActionBarDrawerToggle mDrawerToggle;
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
 	private String[] navMenuTitles;
@@ -180,6 +181,8 @@ MainActivity lisenar;
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
+		item = menu.findItem(R.id.delete);
+		item.setVisible(false);
 		return true;
 	}
 	@Override
@@ -189,10 +192,12 @@ MainActivity lisenar;
 			return true;
 		}	    switch (item.getItemId()) {
 		case R.id.add:
+			
 			openDialogToAddBoardingPass();
 			return true;
 		case R.id.delete:
 			//openSearch();
+			//item.setVisible(false);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
