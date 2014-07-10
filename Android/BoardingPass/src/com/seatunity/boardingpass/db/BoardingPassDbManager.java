@@ -71,10 +71,10 @@ public class BoardingPassDbManager {
 		cv.put(arrival , boardingPass.getArrival());
 		cv.put(codetype , boardingPass.getCodetype());
 		cv.put(id , boardingPass.getId());
-		cv.put(travel_from_name , boardingPass.getId());
-		cv.put(travel_to_name , boardingPass.getId());
-		cv.put(carrier_name , boardingPass.getId());
-		cv.put(deletestate , boardingPass.getId());
+		cv.put(travel_from_name , boardingPass.getTravel_from());
+		cv.put(travel_to_name , boardingPass.getTravel_to_name());
+		cv.put(carrier_name , boardingPass.getCarrier_name());
+		cv.put(deletestate , ""+boardingPass.getDeletestate());
 
 		return db.insert(TABLE_BOARDING_PASS_LIST, null, cv);
 	}
@@ -137,10 +137,10 @@ public class BoardingPassDbManager {
 		cv.put(arrival , boardingPass.getArrival());
 		cv.put(codetype , boardingPass.getCodetype());
 		cv.put(id , boardingPass.getId());
-		cv.put(travel_from_name , boardingPass.getId());
-		cv.put(travel_to_name , boardingPass.getId());
-		
-		cv.put(deletestate , boardingPass.getDeletestate());
+		cv.put(travel_from_name , boardingPass.getTravel_from());
+		cv.put(travel_to_name , boardingPass.getTravel_to_name());
+		cv.put(carrier_name , boardingPass.getCarrier_name());
+		cv.put(deletestate , ""+boardingPass.getDeletestate());
 		return db.update(TABLE_BOARDING_PASS_LIST, cv, stringform + " = ?",
 				new String[] { String.valueOf(boardingPass.getStringform()) });
 		//	return db.update(TABLE_BOARDING_PASS_LIST, cv, stringform + "= ?" + new String[] {boardingPass.getStringform()}, null); 
