@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.seatunity.boardingpass.AcountActivity;
+import com.seatunity.boardingpass.ForgotPassActivity;
 import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
@@ -55,7 +56,7 @@ import android.widget.Toast;
 @SuppressLint("NewApi")
 public class FragmentLogin extends Fragment{
 	EditText et_email,et_password;
-	TextView tv_errorshow;
+	TextView tv_errorshow,tv_forgot_pass;
 	Button bt_login;
 	String email,password;
 	BoardingPassApplication appInstance;
@@ -80,7 +81,7 @@ public class FragmentLogin extends Fragment{
 		et_email=(EditText) v.findViewById(R.id.et_email);
 		et_password=(EditText) v.findViewById(R.id.et_password);
 		bt_login=(Button) v.findViewById(R.id.bt_login);
-		
+		tv_forgot_pass=(TextView) v.findViewById(R.id.tv_forgot_pass);
 		et_password.addTextChangedListener(new TextWatcher() {          
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {                                   
@@ -146,6 +147,15 @@ public class FragmentLogin extends Fragment{
 							Toast.LENGTH_SHORT).show();
 				}
 				
+			}
+		});
+		tv_forgot_pass.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent intent=new Intent(getActivity(), ForgotPassActivity.class);
+				startActivity(intent);
 			}
 		});
 	}

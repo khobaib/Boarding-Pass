@@ -58,7 +58,7 @@
         android:text="@string/txt_login" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/tv_forgot_pass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/bt_login"

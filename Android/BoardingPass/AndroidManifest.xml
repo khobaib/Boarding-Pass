@@ -104,6 +104,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/HomeActivityTheme" >
         </activity>
+            <activity
+            android:name="com.seatunity.boardingpass.ForgotPassActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/HomeActivityTheme" >
+        </activity>
         <activity
             android:name="com.seatunity.boardingpass.PasswordChangeActivity"
             android:screenOrientation="portrait"

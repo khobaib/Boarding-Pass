@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.seatunity.apicall.JsonParser;
 import com.seatunity.boardingpass.EditUserNameActivity;
+import com.seatunity.boardingpass.ForgotPassActivity;
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.PasswordChangeActivity;
 import com.seatunity.boardingpass.R;
@@ -53,6 +54,16 @@ import android.widget.Toast;
 	NetworkStateReceiver netstatelisenaer;
 	FragmentUpcomingBoardingPassDetails deletelisenar;
 	NetworkStateReceiver deletelisenarfromnetstate;
+	ForgotPassActivity forgotlisenar;
+	public AsyncaTaskApiCall(ForgotPassActivity forgotlisenar,String body,Context context){
+		this.forgotlisenar=forgotlisenar;
+		this.body=body;
+		this.context=context;
+		jsonParser=new JsonParser();
+		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+				context.getResources().getString(R.string.txt_please_wait), true);
+
+	}
 	public AsyncaTaskApiCall(NetworkStateReceiver deletelisenarfromnetstate,String body,Context context, 
 			String myaccounturl,BoardingPass bpass){
 		this.bpass=bpass;
@@ -169,6 +180,11 @@ import android.widget.Toast;
 		ServerResponse response=null;
 		if(signuplisenar!=null){
 			String url = Constants.baseurl+"reg";
+			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+					body, null);
+		}
+		else if(forgotlisenar!=null){
+			String url = Constants.baseurl+"passreset/en";
 			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
 					body, null);
 		}
@@ -386,6 +402,7 @@ Log.e("response", "ab "+result.getjObj().toString());
 				e.printStackTrace();
 			}
 		}
+		
 		//deletelisenarfromnetstate
 		else if(usernameLisenar!=null){
 			JSONObject job=result.getjObj();
@@ -399,6 +416,25 @@ Log.e("response", "ab "+result.getjObj().toString());
 				else{
 					
 					Toast.makeText(context, context.getResources().getString(R.string.txt_update_failed),
+							Toast.LENGTH_SHORT).show();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		
+		else if(forgotlisenar!=null){
+			JSONObject job=result.getjObj();
+		try {
+				if(job.getString("success").equals("true")){
+					Toast.makeText(context, context.getResources().getString(R.string.txt_emailsen_success),
+							Toast.LENGTH_SHORT).show();
+					forgotlisenar.SuccessGetNewPass();
+				}
+				else{
+					Toast.makeText(context, context.getResources().getString(R.string.txt_emailsen_failure),
 							Toast.LENGTH_SHORT).show();
 				}
 			} catch (JSONException e) {

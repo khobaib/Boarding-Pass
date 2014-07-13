@@ -245,7 +245,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 
 		dbInstance.close();
 	}
-	
+
 	public String getJsonObjet(){
 
 		try {
