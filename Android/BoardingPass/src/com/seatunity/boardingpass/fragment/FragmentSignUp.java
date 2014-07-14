@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -288,12 +290,9 @@ public class FragmentSignUp extends Fragment{
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub                          
 			}                       
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub                          
-
 			}
 		});
 
@@ -307,7 +306,7 @@ public class FragmentSignUp extends Fragment{
 			loginObj.put("firstname",firstname);
 			loginObj.put("lastname",lastname);
 			loginObj.put("seating_pref","male");
-			loginObj.put("language","english");
+			loginObj.put("language",Locale.getDefault().getLanguage());
 			loginObj.put("live_in",livein);
 			int selected =  rdgrp_gender.getCheckedRadioButtonId();
 			RadioButton rb_gender;
@@ -344,13 +343,8 @@ public class FragmentSignUp extends Fragment{
 		try {
 			success = jsonObject.getString("success");
 			if(success.equals("true")){
-				//getActivity().finish();
 				((AcountActivity)getActivity()).indicator.setViewPager(((AcountActivity)getActivity()).pager, 0);
 				showCustomDialog();
-				//		showCustomDialog();
-
-				//				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_email_sent), 
-				//						Toast.LENGTH_SHORT).show();
 			}
 			else{
 				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_signup_failed), 

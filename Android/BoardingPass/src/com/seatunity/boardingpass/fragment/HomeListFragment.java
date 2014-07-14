@@ -2,11 +2,18 @@ package com.seatunity.boardingpass.fragment;
 
 import java.util.ArrayList;
 import java.util.Stack;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.model.BoardingPass;
+import com.seatunity.model.SeatMate;
+import com.seatunity.model.SeatMetList;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Fragment;
@@ -27,6 +34,7 @@ import android.widget.Toast;
 public class HomeListFragment extends TabFragment{
 	protected Stack<Fragment> backEndStack;
 	BoardingPassApplication appInstance;
+	ArrayList<BoardingPass>list;
 	int from;
 	public HomeListFragment(int from){
 		this.from=from;
@@ -34,7 +42,20 @@ public class HomeListFragment extends TabFragment{
 	public HomeListFragment(){
 		this.from=from;
 	}
+	public String getJsonObjet(){
 
+		try {
+			JSONObject loginObj = new JSONObject();
+			loginObj.put("token",appInstance.getUserCred().getToken());
+			loginObj.put("boarding_pass","all");
+
+			return loginObj.toString();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -103,7 +124,20 @@ public class HomeListFragment extends TabFragment{
 		fragmentTransaction.commitAllowingStateLoss();
 		super.onStart();
 	}
+	public void startFragmentSingleSeatmet(SeatMate seatmate,BoardingPass bpass) {
+		Log.e("insideList", bpass.getTravel_from_name());
+		FragmentSingleSeatMet newFragment = new FragmentSingleSeatMet(seatmate,bpass) ;
+		newFragment.parent = this;
+		FragmentManager fragmentManager = getActivity().getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager
+				.beginTransaction();
+		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+		fragmentTransaction.addToBackStack(null);
+		backEndStack.push(newFragment);
+		fragmentTransaction.commitAllowingStateLoss();
+	}
 	public void startUpCommingBoadingDetails(BoardingPass bpass) {
+		Log.e("insideList", bpass.getTravel_from_name());
 		FragmentUpcomingBoardingPassDetails newFragment = new FragmentUpcomingBoardingPassDetails(bpass) ;
 		newFragment.parent = this;
 		FragmentManager fragmentManager = getActivity().getFragmentManager();
@@ -114,18 +148,30 @@ public class HomeListFragment extends TabFragment{
 		backEndStack.push(newFragment);
 		fragmentTransaction.commitAllowingStateLoss();
 	}
+	public void startSeatmetList(SeatMetList seatmetlist,BoardingPass bpass) {
+		Log.e("insideList3", bpass.getTravel_from_name());
+		FragmentSeatMet newFragment = new FragmentSeatMet(seatmetlist,bpass) ;
+		newFragment.parent = this;
+		FragmentManager fragmentManager = getActivity().getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager
+				.beginTransaction();
+		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+		fragmentTransaction.addToBackStack(null);
+		backEndStack.push(newFragment);
+		fragmentTransaction.commitAllowingStateLoss();
+	}
 
-//	public void startAddBoardingPass() {
-//		FragmentAddBoardingPass newFragment = new FragmentAddBoardingPass() ;
-//		newFragment.parent = this;
-//		FragmentManager fragmentManager = getActivity().getFragmentManager();
-//		FragmentTransaction fragmentTransaction = fragmentManager
-//				.beginTransaction();
-//		fragmentTransaction.replace(R.id.tab3Content, newFragment);
-//		fragmentTransaction.addToBackStack(null);
-//		backEndStack.push(newFragment);
-//		fragmentTransaction.commitAllowingStateLoss();
-//	}
+	public void startAddBoardingPassDuringLogin() {
+		FragmentAddBoardingPassDuringLogin newFragment = new FragmentAddBoardingPassDuringLogin() ;
+		newFragment.parent = this;
+		FragmentManager fragmentManager = getActivity().getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager
+				.beginTransaction();
+		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+		fragmentTransaction.addToBackStack(null);
+		backEndStack.push(newFragment);
+		fragmentTransaction.commitAllowingStateLoss();
+	}
 	public void clearr(){
 		backEndStack.pop();
 	}

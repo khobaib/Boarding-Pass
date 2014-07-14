@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E7E7E7"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="7dp"
+        android:background="@drawable/rounded_layout_white"
+        android:padding="9dp" >
+
+        <ImageView
+            android:id="@+id/img_prof_pic"
+            android:layout_width="135dp"
+            android:layout_height="150dp"
+            android:layout_alignParentLeft="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_add_photo" />
+
+        <TextView
+            android:id="@+id/tv_uname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/img_prof_pic"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@+id/img_prof_pic"
+            android:text="Maja Mikes"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_profession"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_uname"
+            android:layout_below="@+id/tv_uname"
+            android:layout_marginTop="4dp"
+            android:text="gjkh"
+            android:textColor="#777777" />
+
+        <TextView
+            android:id="@+id/tv_seat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_profession"
+            android:layout_below="@+id/tv_profession"
+            android:layout_marginTop="4dp"
+            android:text="Seat"
+            android:textColor="#777777" />
+
+        <TextView
+            android:id="@+id/tv_shared_flight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_seat"
+            android:layout_below="@+id/tv_seat"
+            android:layout_marginTop="4dp"
+            android:text="4 Shared flight"
+            android:textColor="#218fcd" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_shared_flight"
+            android:layout_below="@+id/tv_shared_flight"
+            android:maxLines="3"
+            android:text="Hi, we are on the same flight! I am very glad that we will die together when I hijack the plane an
+            d fly it into a building! Wow, we have soooo much in common"
+            android:textColor="#777777" />
+
+        <TextView
+            android:id="@+id/tv_live_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/img_prof_pic"
+            android:layout_below="@+id/img_prof_pic"
+            android:layout_marginTop="4dp"
+            android:text="Live in Germany"
+            android:textColor="#777777" />
+
+        <TextView
+            android:id="@+id/tv_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_live_in"
+            android:layout_below="@+id/tv_live_in"
+            android:text="Age 25"
+            android:textColor="#777777" />
+
+        <TextView
+            android:id="@+id/tv_class"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_age"
+            android:layout_below="@+id/tv_age"
+            android:text="Prefered to business"
+            android:textColor="#777777" />
+
+        <TextView
+            android:id="@+id/tv_dot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_class"
+            android:layout_below="@+id/tv_class"
+            android:layout_marginTop="-5dp"
+            android:text="......................."
+            android:textColor="#218fcd"
+            android:textSize="22dp" />
+
+        <TextView
+            android:id="@+id/tv_sothn_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_dot"
+            android:layout_below="@+id/tv_dot"
+            android:text="Hi, we are on the same flight! I am very glad that we will  fly it into a building! Wow, we have soooo much in common"
+            android:textColor="#777777" />
+
+        <Button
+            android:id="@+id/btn_seatmate"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_below="@+id/tv_sothn_about"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_seatmate_button"
+            android:text="@string/txt_seatmate"
+            android:textColor="#ffffff"
+            android:textSize="21dp" />
+    </RelativeLayout>
+
+</LinearLayout>

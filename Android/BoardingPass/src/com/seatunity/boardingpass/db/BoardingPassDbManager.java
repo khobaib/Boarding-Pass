@@ -71,7 +71,7 @@ public class BoardingPassDbManager {
 		cv.put(arrival , boardingPass.getArrival());
 		cv.put(codetype , boardingPass.getCodetype());
 		cv.put(id , boardingPass.getId());
-		cv.put(travel_from_name , boardingPass.getTravel_from());
+		cv.put(travel_from_name , boardingPass.getTravel_from_name());
 		cv.put(travel_to_name , boardingPass.getTravel_to_name());
 		cv.put(carrier_name , boardingPass.getCarrier_name());
 		cv.put(deletestate , ""+boardingPass.getDeletestate());
@@ -137,7 +137,7 @@ public class BoardingPassDbManager {
 		cv.put(arrival , boardingPass.getArrival());
 		cv.put(codetype , boardingPass.getCodetype());
 		cv.put(id , boardingPass.getId());
-		cv.put(travel_from_name , boardingPass.getTravel_from());
+		cv.put(travel_from_name , boardingPass.getTravel_from_name());
 		cv.put(travel_to_name , boardingPass.getTravel_to_name());
 		cv.put(carrier_name , boardingPass.getCarrier_name());
 		cv.put(deletestate , ""+boardingPass.getDeletestate());

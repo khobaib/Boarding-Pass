@@ -6,16 +6,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,15 +38,19 @@ import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
+import com.seatunity.model.SeatMetList;
 @SuppressLint("NewApi")
 public class FragmentUpcomingBoardingPassDetails extends Fragment {
 	BoardingPass bpass;
 	//BoardingPassApplication appInstance;
 	public FragmentUpcomingBoardingPassDetails(BoardingPass bpass){
 		this.bpass=bpass;
+		Log.e("insideList5", bpass.getTravel_from_name());
 	}
+	SeatMetList list;
 	HomeListFragment parent;
 	ImageView img_barcode;
+	Button btn_seatmate;
 	BoardingPassApplication appInstance;
 	BoardingPass boardingPass;
 	TextView tv_name_carrier,tv_month_inside_icon,tv_date_inside_icon,tv_from_air,tv_to_air,tv_start_time,tv_arrival_time,
@@ -51,6 +61,8 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
 		View rootView = inflater.inflate(R.layout.fragment_boarding_details, container, false);
+		btn_seatmate=(Button) rootView.findViewById(R.id.btn_seatmate);
+		
 		img_barcode=(ImageView) rootView.findViewById(R.id.img_barcode);
 		tv_name_carrier=(TextView) rootView.findViewById(R.id.tv_name_carrier);
 		tv_month_inside_icon=(TextView) rootView.findViewById(R.id.tv_month_inside_icon);
@@ -84,8 +96,55 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 		tv_date_inside_icon.setText(dateofmonth);
 
 		generateBArcode();
+		btn_seatmate.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				if((Constants.isOnline(getActivity()))&&(!appInstance.getUserCred().getEmail().equals(""))){
+					callSeatmet();
+				}
+				else{
+					sowAlertMessage();
+				}
+				
+			}
+		});
 		return rootView;
 	}
+	
+	public void sowAlertMessage(){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				getActivity());
+		alertDialogBuilder
+		.setMessage(getResources().getString(R.string.txt_seatmet_message_only_online))
+		.setCancelable(false)
+		.setPositiveButton(getResources().getString(R.string.txt_ok),new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int id) {
+				
+				dialog.cancel();
+			}
+		});
+		
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
+	}
+	public void callSeatmet(){
+		AsyncaTaskApiCall getlist=new AsyncaTaskApiCall(FragmentUpcomingBoardingPassDetails.this,getJsonObjet(),getActivity(),bpass);
+		getlist.execute();
+	}
+	public void callBackSeatmetList(SeatMetList list){
+		this.list=list;
+		if(list.getBoardingPassList().size()>0){
+			parent.startSeatmetList(list,bpass);
+		}
+		else{
+			Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_getseatmate_failure),
+					Toast.LENGTH_SHORT).show();
+		}
+		
+	}
+
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
@@ -98,6 +157,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 				// TODO Auto-generated method stub
 				deleteBoardingPass();
 				return false;
+				
 			}
 		});
 	}

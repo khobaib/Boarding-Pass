@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="txt_no_shared_flight">There is no shared flight.</string>
+         <string name="txt_failed_to_get_seatmet">Failed to get seatmates list. Please try again</string>
+    <string name="txt_live_in">Live in</string>
+     <string name="txt_prefer_to">Prefer to</string>
+     <string name="txt_message">Message.</string>
+    <string name="txt_send_email">please type message to send email.</string>
+     <string name="txt_seatmet_message_only_online">The seatmates list is only vailable in the online mode</string>
+    <string name="txt_getseatmate_failure">Failed to get seatmates. Pleasze try again</string>
     <string name="txt_emailsen_failure">No account accociated with this email. Please try again.</string>
+    <string name="txt_emailsent_success">Email is sent successfully</string>
 <string name="txt_emailsen_success">Password is sent to your email. Please check your email</string>
     <string name="txt_delete_boarding_pass">Delete Boarding Pass</string>
     <string name="txt_send">Send</string>
@@ -47,8 +56,8 @@
     <string name="acc_som_about_you">Something about you</string>
     <string name="acc_change_pass">Change password</string>
     <string name="acc_sign_out">Sign out</string>
-    <string name="txt_cdg">CDG</string>
-    <string name="txt_jfk">JFK</string>
+    <string name="txt_cdg">CDGKK</string>
+    <string name="txt_jfk">JFKKK</string>
     <string name="txt_flight_no">Flight</string>
     <string name="txt_seat_nno">Seat</string>
     <string name="txt_class">Class</string>
@@ -60,6 +69,7 @@
     <string name="txt_past_boarding_passes">Past Boarding Passes</string>
     <string name="txt_ok">OK</string>
     <string name="txt_add">Add</string>
+    <string name="txt_shared_flight_title">Shared Flights</string>
     <string name="txt_cancel">Cancel</string>
     <string name="txt_scan_boardingpass">Scan your boarding pass code</string>
     <string name="txt_add_from_locall">Add locally stored</string>

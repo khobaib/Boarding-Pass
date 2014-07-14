@@ -11,7 +11,7 @@ public class BoardingPass {
 			String travel_to_name,String carrier_name,boolean deletestate ){
 		this.deletestate=deletestate;
 		this.carrier_name=carrier_name;
-		this.travel_from_name=this.travel_from_name;
+		this.travel_from_name=travel_from_name;
 		this.travel_to_name=travel_to_name;
 		this.codetype=codetype;
 		this.stringform=stringform;

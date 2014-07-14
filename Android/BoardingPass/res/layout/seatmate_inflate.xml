@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical"
+      android:padding="10dp"
+    >
+
+    <ImageView
+        android:id="@+id/img_profile"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+      android:scaleType="fitXY"
+      android:src="@drawable/ic_add_photo"
+        />
+
+    <TextView
+        android:id="@+id/txt_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/img_profile"
+        android:layout_marginLeft="4dp"
+        android:layout_toRightOf="@+id/img_profile"
+         android:textColor="#2D3E50"
+        android:text="Alfred fred" />
+
+    <TextView
+        android:id="@+id/tv_prof"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txt_name"
+        android:layout_below="@+id/txt_name"
+         android:textColor="#777777"
+         android:layout_marginTop="4dp"
+        android:text="Fasion Designer" />
+
+    <TextView
+        android:id="@+id/tv_seat_pref"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+           android:layout_marginTop="4dp"
+        android:layout_alignLeft="@+id/tv_prof"
+        android:layout_below="@+id/tv_prof"
+         android:textColor="#777777"
+        android:text="TextView" />
+
+    <ImageView
+        android:id="@+id/img_send_msz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/img_profile"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_send_message" />
+
+</RelativeLayout>

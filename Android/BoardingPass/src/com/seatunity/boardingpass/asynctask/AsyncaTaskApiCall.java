@@ -11,9 +11,12 @@ import com.seatunity.boardingpass.ForgotPassActivity;
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.PasswordChangeActivity;
 import com.seatunity.boardingpass.R;
+import com.seatunity.boardingpass.R.id;
+import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.fragment.FragmentBoardingPasses;
 import com.seatunity.boardingpass.fragment.FragmentLogin;
 import com.seatunity.boardingpass.fragment.FragmentMyAccount;
+import com.seatunity.boardingpass.fragment.FragmentSeatMet;
 import com.seatunity.boardingpass.fragment.FragmentSignUp;
 import com.seatunity.boardingpass.fragment.FragmentUpcomingBoardingPassDetails;
 import com.seatunity.boardingpass.networkstatetracker.NetworkStateReceiver;
@@ -22,6 +25,7 @@ import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.BoardingPassList;
 import com.seatunity.model.Member;
+import com.seatunity.model.SeatMetList;
 import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 
@@ -55,6 +59,37 @@ import android.widget.Toast;
 	FragmentUpcomingBoardingPassDetails deletelisenar;
 	NetworkStateReceiver deletelisenarfromnetstate;
 	ForgotPassActivity forgotlisenar;
+	FragmentUpcomingBoardingPassDetails seatmetlisenar;
+	FragmentSeatMet sendmessgae;
+	String receiverid;
+
+//	FragmentSeatMet singlebpasslisenar;
+//	public AsyncaTaskApiCall(FragmentSeatMet singlebpasslisenar,String body,Context context){
+//		this.singlebpasslisenar=singlebpasslisenar;
+//		this.body=body;
+//		this.context=context;
+//		jsonParser=new JsonParser();
+//		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+//				context.getResources().getString(R.string.txt_please_wait), true);
+//	}
+	public AsyncaTaskApiCall(FragmentSeatMet sendmessgae,String body,Context context,String receiverid){
+		this.sendmessgae=sendmessgae;
+		this.body=body;
+		this.context=context;
+		this.receiverid=receiverid;
+		jsonParser=new JsonParser();
+		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+				context.getResources().getString(R.string.txt_please_wait), true);
+	}
+	public AsyncaTaskApiCall(FragmentUpcomingBoardingPassDetails seatmetlisenar,String body,Context context,BoardingPass bpass){
+		this.bpass=bpass;
+		this.seatmetlisenar=seatmetlisenar;
+		this.body=body;
+		this.context=context;
+		jsonParser=new JsonParser();
+		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+				context.getResources().getString(R.string.txt_please_wait), true);
+	}
 	public AsyncaTaskApiCall(ForgotPassActivity forgotlisenar,String body,Context context){
 		this.forgotlisenar=forgotlisenar;
 		this.body=body;
@@ -62,7 +97,6 @@ import android.widget.Toast;
 		jsonParser=new JsonParser();
 		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
 				context.getResources().getString(R.string.txt_please_wait), true);
-
 	}
 	public AsyncaTaskApiCall(NetworkStateReceiver deletelisenarfromnetstate,String body,Context context, 
 			String myaccounturl,BoardingPass bpass){
@@ -173,13 +207,26 @@ import android.widget.Toast;
 		jsonParser=new JsonParser();
 		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
 				context.getResources().getString(R.string.txt_please_wait), true);
-
 	}
 	@Override
 	protected ServerResponse doInBackground(Void... params) {
 		ServerResponse response=null;
 		if(signuplisenar!=null){
 			String url = Constants.baseurl+"reg";
+			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+					body, null);
+		}
+		else if(seatmetlisenar!=null){
+			String url = Constants.baseurl+"seatmatelist/"+bpass.getCarrier()+"/"+bpass.getFlight_no()+"/"
+					+bpass.getJulian_date();
+			url=url.replace(" ", "");
+			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+					body, null);
+		}
+		//singlebpasslisenar
+		else if(sendmessgae!=null){
+			//sendmessgae
+			String url = Constants.baseurl+"messagemate/"+this.receiverid;;
 			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
 					body, null);
 		}
@@ -269,14 +316,11 @@ import android.widget.Toast;
 	@Override
 	protected void onPostExecute(ServerResponse result) {
 		super.onPostExecute(result);
-Log.e("response", "ab "+result.getjObj().toString());
 		UserCred ucrCred=new UserCred("", "", "", "", "", "", "", "", "", "", "", "", "", "");
 		if( pd!=null){ 
 			if(pd.isShowing()){
 				pd.cancel();
 			}
-			//07-07 21:37:59.678: E/ImageLoader(28304): 
-
 		}
 		if(signuplisenar!=null){
 			signuplisenar.callBackFromApicall(result);
@@ -296,6 +340,11 @@ Log.e("response", "ab "+result.getjObj().toString());
 				if(job.get("success").equals("true")){
 					myaccountlisenar.getActivity().finish();
 					appInstance.setUserCred(ucrCred);
+					SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
+					dbInstance.open();
+					dbInstance.droptableBoardingPassDbManager();
+					dbInstance.createtableBoardingPassDbManager();
+					dbInstance.close();
 					Toast.makeText(context, context.getResources().getString(R.string.txt_logout_success),
 							Toast.LENGTH_SHORT).show();
 				}
@@ -424,7 +473,27 @@ Log.e("response", "ab "+result.getjObj().toString());
 			}
 
 		}
+		//seatmetlisenar
 		
+		else if(seatmetlisenar!=null){
+			JSONObject job=result.getjObj();
+		try {
+				if(job.getString("success").equals("true")){
+					
+					
+					SeatMetList  seatmet_listlist=SeatMetList.getSeatmetListObj(job);
+					seatmetlisenar.callBackSeatmetList(seatmet_listlist);
+				}
+				else{
+					Toast.makeText(context, context.getResources().getString(R.string.txt_getseatmate_failure),
+							Toast.LENGTH_SHORT).show();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
 		else if(forgotlisenar!=null){
 			JSONObject job=result.getjObj();
 		try {
@@ -443,7 +512,25 @@ Log.e("response", "ab "+result.getjObj().toString());
 			}
 
 		}
+		else if(sendmessgae!=null){
+			JSONObject job=result.getjObj();
+		try {
+				if(job.getString("success").equals("true")){
+					Toast.makeText(context, context.getResources().getString(R.string.txt_emailsent_success),
+							Toast.LENGTH_SHORT).show();
+					sendmessgae.Successmessagesent();
+				}
+				else{
+					Toast.makeText(context, job.getString("message"),
+							Toast.LENGTH_SHORT).show();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
+		}
+		
 	}
 
 

@@ -4,33 +4,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E7E7E7"
-    android:orientation="vertical"
-    android:weightSum="3.60" >
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:id="@+id/re_details_holder"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.45"
-        android:background="#7C7C7C" >
+        android:layout_height="wrap_content"
+        android:background="#7C7C7C"
+        android:paddingBottom="10dp" >
 
         <LinearLayout
             android:id="@+id/re_top_holder"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="7dp"
             android:layout_marginLeft="7dp"
             android:layout_marginRight="7dp"
             android:layout_marginTop="7dp"
             android:background="@drawable/rounded_layout_white"
-            android:orientation="vertical"
-            android:weightSum="3.60" >
+            android:orientation="vertical" >
 
             <RelativeLayout
                 android:id="@+id/re_top_top_holder"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2.60" >
+                android:layout_height="wrap_content" >
 
                 <RelativeLayout
                     android:id="@+id/img_icon"
@@ -95,7 +92,7 @@
 
                 <LinearLayout
                     android:layout_width="200dp"
-                    android:layout_height="120dp"
+                    android:layout_height="140dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignTop="@+id/img_icon"
                     android:layout_marginLeft="12dp"
@@ -105,7 +102,7 @@
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" >
+                        android:layout_weight="1.05" >
 
                         <TextView
                             android:id="@+id/tv_from"
@@ -138,14 +135,14 @@
                             android:layout_centerVertical="true"
                             android:text="@string/txt_cdg"
                             android:textColor="#2D3E50"
-                            android:textSize="24dp"
+                            android:textSize="26dp"
                             android:textStyle="bold" />
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.4" >
+                        android:layout_weight="0.3" >
 
                         <ImageView
                             android:id="@+id/im_plane"
@@ -159,7 +156,7 @@
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" >
+                        android:layout_weight="1.05" >
 
                         <TextView
                             android:id="@+id/tv_to"
@@ -167,8 +164,8 @@
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="12dp"
-                            android:text="@string/txt_seat_nno"
                             android:gravity="center"
+                            android:text="@string/txt_seat_nno"
                             android:textColor="#777777"
                             android:textSize="17dp" />
 
@@ -180,7 +177,7 @@
                             android:layout_centerVertical="true"
                             android:text="@string/txt_jfk"
                             android:textColor="#2D3E50"
-                            android:textSize="24dp"
+                            android:textSize="26dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -196,47 +193,13 @@
                     </RelativeLayout>
                 </LinearLayout>
             </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/le_top_bottom_holder"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:weightSum="2" >
-
-                <Button
-                    android:id="@+id/btn_seatmate"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="3dp"
-                     android:textSize="18dp"
-                    android:layout_weight="1"
-                    android:textColor="#ffffff"
-                    android:background="@drawable/rounded_seatmate_button"
-                    android:text="@string/txt_seatmate" />
-
-                <Button
-                    android:id="@+id/btn_boarding_pass"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_weight="1"
-                    android:textColor="#ffffff"
-                    android:textSize="18dp"
-                    android:background="@drawable/rounded_seatmate_button"
-                    android:text="@string/txt_boarding_pass" />
-            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/re_list_holder"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
@@ -244,7 +207,7 @@
         android:background="@drawable/rounded_layout_white" >
 
         <ListView
-            android:id="@+id/lv_boarding_pass"
+            android:id="@+id/lv_seat_met_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

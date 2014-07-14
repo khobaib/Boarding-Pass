@@ -2,6 +2,7 @@ package com.seatunity.boardingpass;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import com.bugsense.trace.BugSenseHandler;
 import com.google.zxing.BarcodeFormat;
@@ -37,6 +38,7 @@ public class SplasActivity extends Activity {
         super.onCreate(savedInstanceState);
         BugSenseHandler.initAndStartSession(SplasActivity.this, "2b60c090");
         setContentView(R.layout.splash);
+        Log.e("tagged", Locale.getDefault().getLanguage());
         File directory = Constants.APP_DIRECTORY;
         Handler handler=new Handler();
          handler.postDelayed(new Runnable() {
