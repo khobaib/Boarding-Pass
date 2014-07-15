@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content" >
+
+<TextView
+    android:id="@+id/ab_basemaps_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="TextView"
+    android:textSize="17sp"
+    android:textColor="#ffffff" />
+
+<TextView
+    android:id="@+id/ab_basemaps_subtitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/ab_basemaps_title"
+    android:text="TextView"
+   android:textColor="#ffffff"
+    android:textSize="11sp" />
+
+</RelativeLayout>

@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.R;
+import com.seatunity.boardingpass.adapter.AdapterBaseMaps;
 import com.seatunity.boardingpass.adapter.AdapterForBoardingPass;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
@@ -20,6 +21,8 @@ import com.seatunity.model.BoardingPass;
 import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -71,15 +74,16 @@ public class FragmentBoardingPasses extends Fragment{
 	ListView lv_boarding_pass;
 	TextView tv_from,tv_to,tv_month_inside_icon,tv_date_inside_icon,tv_seat_no,tv_flight_no,
 	tv_start_time,tv_arrival_time,tv_cdg,tv_jfk;
-	
+
 	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
 		context=getActivity();
+		
 	}
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -137,19 +141,19 @@ public class FragmentBoardingPasses extends Fragment{
 		this.list=listfromserver;
 		setlist();
 		Log.e("Tag", " k");
-				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
-				dbInstance.open();
-				for(int i=0;i<list.size();i++){
-					Log.e("testing", ""+i+"  "+list.get(i).getTravel_from_name());
-					dbInstance.insertOrUpdateBoardingPass(list.get(i));
-				}
-				
-				list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
-				dbInstance.close();
-				setlist();
-				if(list.size()<1){
-					parent.startAddBoardingPassDuringLogin();
-				}
+		SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
+		dbInstance.open();
+		for(int i=0;i<list.size();i++){
+			Log.e("testing", ""+i+"  "+list.get(i).getTravel_from_name());
+			dbInstance.insertOrUpdateBoardingPass(list.get(i));
+		}
+
+		list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+		dbInstance.close();
+		setlist();
+		if(list.size()<1){
+			parent.startAddBoardingPassDuringLogin();
+		}
 
 	}
 	public void  setlist(){
@@ -195,14 +199,14 @@ public class FragmentBoardingPasses extends Fragment{
 		String[] dateParts = date.split(":");
 		String month=dateParts[1];
 		String dateofmonth=dateParts[0];
-		
+
 		tv_cdg.setText(bpass.getTravel_from_name());
 		tv_jfk.setText(bpass.getTravel_to_name());
 		tv_from.setText(bpass.getTravel_from());
 		tv_to.setText(bpass.getTravel_to());
 		tv_month_inside_icon.setText(month);
 		tv_date_inside_icon.setText(dateofmonth);
-		
+
 		tv_seat_no.setText(context.getResources().getString(R.string.txt_seat_nno)+
 				"Seat "+bpass.getSeat());
 		tv_flight_no.setText(context.getResources().getString(R.string.txt_flight_no)+

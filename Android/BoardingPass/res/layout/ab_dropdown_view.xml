@@ -1,0 +1,16 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#2D3E50" >
+
+    <TextView
+        android:id="@+id/ab_basemaps_dropdown_title"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:height="50dp"
+        android:paddingLeft="15dp"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+</RelativeLayout>

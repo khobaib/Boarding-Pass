@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#881e35"
+    android:orientation="vertical" >
+
+    <View  
+        android:id="@+id/vw_wall"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+          android:background="#ffffff"
+          android:layout_alignParentTop="true">
+    </View>
+
+    <ListView
+        android:id="@+id/alert_list"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/cancel_button"
+        android:layout_below="@+id/vw_wall"
+        android:background="#ffffff"
+        android:divider="#60AC39"
+        android:dividerHeight="1dp" >
+    </ListView>
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="#881e35"
+        android:paddingBottom="5dp"
+        android:text="@string/txt_cancel"
+        android:textColor="#60AC39"
+        android:textSize="24dp" />
+
+</RelativeLayout>

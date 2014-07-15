@@ -1,8 +1,15 @@
 package com.seatunity.model;
 
 public class SeatMate {
-	String id,name,gender,age,profession,live_in,seating_pref,some_about_you,status,seat,travel_class,image_url;
+	String id,name,gender,age,profession,live_in,seating_pref,some_about_you,status,seat,travel_class,image_url,
+	shared_flight;
 	
+	public void setShared_flight(String shared_flight){
+		this.shared_flight=shared_flight;
+	}
+	public String getShared_flight(){
+		return this.shared_flight;
+	}
 	public void setImage_url(String image_url){
 		this.image_url=image_url;
 	}

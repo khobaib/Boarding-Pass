@@ -218,6 +218,21 @@
             android:divider="#4db8db"
             android:dividerHeight="0.5dp" >
         </ListView>
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="9dp"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:padding="5dp"
+              android:background="@drawable/rounded_button_loginfailure"
+       		 android:textColor="#777777"
+       		 android:visibility="gone"/>
+
     </RelativeLayout>
 
 </LinearLayout>

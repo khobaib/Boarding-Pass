@@ -10,12 +10,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.seatunity.apicall.JsonParser;
 import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.adapter.AdapterForBoardingPass;
+import com.seatunity.boardingpass.adapter.AdapterForBoardingPassFromAlert;
 import com.seatunity.boardingpass.adapter.AdapterForSeatmet;
+import com.seatunity.boardingpass.alert.LisAlertDialog;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
@@ -27,6 +30,7 @@ import com.seatunity.model.SeatMetList;
 import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
@@ -64,8 +68,7 @@ import android.widget.Toast;
 @SuppressLint("NewApi")
 public class FragmentSingleSeatMet extends Fragment{
 	HomeListFragment parent;
-	ImageView img_add_boardingpass;
-    TextView tv_add_boardingpass;
+	ImageView img_prof_pic;
 	BoardingPassApplication appInstance;
 	SeatMate seatmate;
 	JsonParser jsonParser;
@@ -99,7 +102,6 @@ public class FragmentSingleSeatMet extends Fragment{
 			Bundle savedInstanceState) {
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_single_seatmate,
 				container, false);
-		//tv_uname,tv_profession,tv_seat,tv_shared_flight,tv_status,tv_live_in,tv_age,tv_class,tv_sothn_about
 		tv_uname=(TextView) v.findViewById(R.id.tv_uname);
 		tv_profession=(TextView) v.findViewById(R.id.tv_profession);
 		tv_shared_flight=(TextView) v.findViewById(R.id.tv_shared_flight);
@@ -110,11 +112,10 @@ public class FragmentSingleSeatMet extends Fragment{
 		tv_seat=(TextView) v.findViewById(R.id.tv_seat);
 		tv_live_in=(TextView) v.findViewById(R.id.tv_live_in);
 		btn_seatmate=(Button) v.findViewById(R.id.btn_seatmate);
+		img_prof_pic=(ImageView) v.findViewById(R.id.img_prof_pic);
 		tv_shared_flight.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				try {
 					JSONObject loginObj = new JSONObject();
 					loginObj.put("token", appInstance.getUserCred().getToken());
@@ -125,9 +126,6 @@ public class FragmentSingleSeatMet extends Fragment{
 						Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.
 								txt_check_internet), Toast.LENGTH_SHORT).show();
 					}
-					
-//					AsyncaTaskApiCall sendmessage=new AsyncaTaskApiCall(lisenar, loginObj.toString(), context, list.get(position).getId());
-//					sendmessage.execute();
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -151,11 +149,13 @@ public class FragmentSingleSeatMet extends Fragment{
 		tv_profession.setText(seatmate.getProfession());
 		tv_seat.setText(seatmate.getTravel_class()+", "+seatmate.getSeat());
 		tv_status.setText(seatmate.getStatus());
-		
 		tv_live_in.setText(getActivity().getResources().getString(R.string.txt_live_in)+seatmate.getLive_in());
 		tv_age.setText(getActivity().getResources().getString(R.string.txt_age)+seatmate.getName());
 		tv_class.setText(getActivity().getResources().getString(R.string.txt_prefer_to)+seatmate.getSeating_pref());
 		tv_sothn_about.setText(seatmate.getSome_about_you());
+		if((seatmate.getImage_url()!=null)&&(!seatmate.getImage_url().equals(""))){
+			ImageLoader.getInstance().displayImage(seatmate.getImage_url(), img_prof_pic);
+		}
 	}
 	public String getJsonObjet(){
 
@@ -164,7 +164,6 @@ public class FragmentSingleSeatMet extends Fragment{
 			loginObj.put("token",appInstance.getUserCred().getToken());
 			return loginObj.toString();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "";
@@ -179,12 +178,10 @@ public class FragmentSingleSeatMet extends Fragment{
 		}
 		@Override
 		protected ServerResponse doInBackground(Void... params) {
-			///sharedflight/@mateid
 				String url = Constants.baseurl+"sharedflight/"+seatmate.getId();
 				ServerResponse response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
 						loginData, null);
 				return response;
-			
 		}
 
 		@Override
@@ -198,8 +195,6 @@ public class FragmentSingleSeatMet extends Fragment{
 			try {
 				if(job.getString("success").equals("true")){
 					BoardingPassListForSharedFlight  list=BoardingPassListForSharedFlight.getBoardingPassListObject(job);
-//					Toast.makeText(getActivity(), ""+list.getBoardingPassList().size(),
-//							Toast.LENGTH_SHORT).show();
 					if(list.getBoardingPassList().size()>0){
 						showAlertDilogToshowSharedFlight(list.getBoardingPassList());
 					}
@@ -214,7 +209,6 @@ public class FragmentSingleSeatMet extends Fragment{
 					
 				}
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -234,7 +228,6 @@ public class FragmentSingleSeatMet extends Fragment{
 				ServerResponse response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
 						loginData, null);
 				return response;
-			
 		}
 
 		@Override
@@ -249,14 +242,12 @@ public class FragmentSingleSeatMet extends Fragment{
 					if(job.getString("success").equals("true")){
 						Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_emailsent_success),
 								Toast.LENGTH_SHORT).show();
-						
 					}
 					else{
 						Toast.makeText(getActivity(), job.getString("message"),
 								Toast.LENGTH_SHORT).show();
 					}
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}
@@ -361,7 +352,7 @@ public class FragmentSingleSeatMet extends Fragment{
                 getActivity());
          builderSingle.setTitle(getActivity().getResources().getString(R.string.txt_shared_flight_title));
          
-        final  AdapterForBoardingPass arrayAdapter=new AdapterForBoardingPass(getActivity(), item);
+        final  AdapterForBoardingPassFromAlert arrayAdapter=new AdapterForBoardingPassFromAlert(getActivity(), item);
        
         builderSingle.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel),
                 new DialogInterface.OnClickListener() {
@@ -381,6 +372,9 @@ public class FragmentSingleSeatMet extends Fragment{
                     }
                 });
         builderSingle.show();
+        
+//        LisAlertDialog dialog=new LisAlertDialog(getActivity(), item);
+//        dialog.show_alert();
 	}
 
 

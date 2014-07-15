@@ -130,7 +130,7 @@
             android:layout_marginTop="5dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_seatmate_button"
-            android:text="@string/txt_seatmate"
+            android:text="@string/txt_send"
             android:textColor="#ffffff"
             android:textSize="21dp" />
     </RelativeLayout>

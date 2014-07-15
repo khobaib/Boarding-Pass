@@ -12,21 +12,25 @@ import org.json.JSONObject;
 import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
+import com.seatunity.boardingpass.adapter.AdapterBaseMaps;
 import com.seatunity.boardingpass.adapter.AdapterForSeatmet;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.BoardingPassList;
+import com.seatunity.model.SeatMate;
 import com.seatunity.model.SeatMetList;
 import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 
 import android.app.ProgressDialog;
+import android.app.ActionBar.OnNavigationListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -60,12 +64,13 @@ import android.widget.Toast;
 public class FragmentSeatMet extends Fragment{
 	HomeListFragment parent;
 	ImageView img_add_boardingpass;
-    TextView tv_add_boardingpass;
+	TextView tv_add_boardingpass;
 	BoardingPassApplication appInstance;
 	SeatMetList seatmet_listobj;
 	BoardingPass bpass;
+	ArrayList<String> itemList;
 	TextView tv_from,tv_to,tv_month_inside_icon,tv_date_inside_icon,tv_seat_no,tv_flight_no,
-	tv_start_time,tv_arrival_time,tv_jfk,tv_cdg;
+	tv_start_time,tv_arrival_time,tv_jfk,tv_cdg,tv_message;
 	ListView lv_seat_met_list;
 	@SuppressLint("NewApi")
 	@Override
@@ -78,15 +83,13 @@ public class FragmentSeatMet extends Fragment{
 		this.seatmet_listobj=seatmet_listobj;
 		this.bpass=bpass;
 	}
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_seat_mate,
 				container, false);
+		tv_message=(TextView) v.findViewById(R.id.tv_message);
 		tv_from=(TextView) v.findViewById(R.id.tv_from);
 		tv_to=(TextView) v.findViewById(R.id.tv_to);
 		tv_month_inside_icon=(TextView) v.findViewById(R.id.tv_month_inside_icon);
@@ -98,20 +101,156 @@ public class FragmentSeatMet extends Fragment{
 		tv_cdg=(TextView) v.findViewById(R.id.tv_cdg);
 		tv_jfk=(TextView) v.findViewById(R.id.tv_jfk);
 		lv_seat_met_list=(ListView) v.findViewById(R.id.lv_seat_met_list);
-		AdapterForSeatmet adapter=new AdapterForSeatmet(appInstance.getUserCred().getToken(),FragmentSeatMet.this,getActivity(), seatmet_listobj.getBoardingPassList());
-		lv_seat_met_list.setAdapter(adapter);
+		setListView(0);
+		setDetailsBoaredingpass();
+		return v;
+	}
+	public void setListView(int i){
+		AdapterForSeatmet adapter;
+		
+		if(i==0){
+			ArrayList<SeatMate> seatmatelist_all=new ArrayList<SeatMate>(seatmet_listobj.getBoardingPassList());
+			if(seatmatelist_all.size()>0){
+				lv_seat_met_list.setVisibility(View.VISIBLE);
+				tv_message.setVisibility(View.GONE);
+				adapter=new AdapterForSeatmet(appInstance.getUserCred().getToken(),FragmentSeatMet.this,getActivity(), seatmet_listobj.getBoardingPassList());
+				lv_seat_met_list.setAdapter(adapter);
+			}
+			else{
+				lv_seat_met_list.setVisibility(View.GONE);
+				tv_message.setVisibility(View.VISIBLE);
+				tv_message.setText(getActivity().getResources().getString(R.string.txt_noseatmate_isfound)+" "+itemList.get(i)
+						+" "+getActivity().getResources().getString(R.string.txt_is_found));
+			}
+			
+		}
+		else if(i==1){
+			ArrayList<SeatMate> seatmatelist_firstclass=new ArrayList<SeatMate>();
+			for(int k=0;k<seatmet_listobj.getBoardingPassList().size();k++){
+				if(seatmet_listobj.getBoardingPassList().get(k).getTravel_class().equals("First Class")){
+					seatmatelist_firstclass.add(seatmet_listobj.getBoardingPassList().get(k));
+				}
+			}
+			if(seatmatelist_firstclass.size()>0){
+				lv_seat_met_list.setVisibility(View.VISIBLE);
+				tv_message.setVisibility(View.GONE);
+				adapter=new AdapterForSeatmet(appInstance.getUserCred().getToken(),FragmentSeatMet.this,getActivity(), seatmatelist_firstclass);
+				lv_seat_met_list.setAdapter(adapter);
+			}
+			else{
+				lv_seat_met_list.setVisibility(View.GONE);
+				tv_message.setVisibility(View.VISIBLE);
+				tv_message.setText(getActivity().getResources().getString(R.string.txt_noseatmate_isfound)+" "+itemList.get(i)
+						+" "+getActivity().getResources().getString(R.string.txt_is_found));
+			}
+			
+		}
+		else if(i==2){
+
+			ArrayList<SeatMate> seatmatelist_business_class=new ArrayList<SeatMate>();
+			for(int k=0;k<seatmet_listobj.getBoardingPassList().size();k++){
+				if(seatmet_listobj.getBoardingPassList().get(k).getTravel_class().equals("Business Class")){
+					seatmatelist_business_class.add(seatmet_listobj.getBoardingPassList().get(k));
+				}
+			}
+			if(seatmatelist_business_class.size()>0){
+				lv_seat_met_list.setVisibility(View.VISIBLE);
+				tv_message.setVisibility(View.GONE);
+				adapter=new AdapterForSeatmet(appInstance.getUserCred().getToken(),FragmentSeatMet.this,getActivity(), seatmatelist_business_class);
+				lv_seat_met_list.setAdapter(adapter);
+			}
+			else{
+				lv_seat_met_list.setVisibility(View.GONE);
+				tv_message.setVisibility(View.VISIBLE);
+				tv_message.setText(getActivity().getResources().getString(R.string.txt_noseatmate_isfound)+" "+itemList.get(i)
+						+" "+getActivity().getResources().getString(R.string.txt_is_found));
+			}
+			
+		}
+		else if(i==3){
+//			ArrayList<SeatMate> seatmatelist_firstclass=new ArrayList<SeatMate>();
+//			for(int k=0;k<seatmet_listobj.getBoardingPassList().size();k++){
+//				if(seatmet_listobj.getBoardingPassList().get(k).getShared_flight().equals("First Class")){
+//					seatmatelist_firstclass.add(seatmet_listobj.getBoardingPassList().get(k));
+//				}
+//			}
+			
+			ArrayList<SeatMate> seatmatelist_economy_calss=new ArrayList<SeatMate>();
+			for(int k=0;k<seatmet_listobj.getBoardingPassList().size();k++){
+				if((seatmet_listobj.getBoardingPassList().get(k).getTravel_class().equals("Economy Class"))||
+						(seatmet_listobj.getBoardingPassList().get(k).getTravel_class().equals("Premium Economy"))){
+					seatmatelist_economy_calss.add(seatmet_listobj.getBoardingPassList().get(k));
+				}
+			}
+			if(seatmatelist_economy_calss.size()>0){
+				lv_seat_met_list.setVisibility(View.VISIBLE);
+				tv_message.setVisibility(View.GONE);
+				adapter=new AdapterForSeatmet(appInstance.getUserCred().getToken(),FragmentSeatMet.this,getActivity(),seatmatelist_economy_calss);
+				lv_seat_met_list.setAdapter(adapter);
+			}
+			else{
+				lv_seat_met_list.setVisibility(View.GONE);
+				tv_message.setVisibility(View.VISIBLE);
+				tv_message.setText(getActivity().getResources().getString(R.string.txt_noseatmate_isfound)+" "+itemList.get(i)
+						+" "+getActivity().getResources().getString(R.string.txt_is_found));
+			}
+			
+		}
+		
 		lv_seat_met_list.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
 				// TODO Auto-generated method stub
+
 				parent.startFragmentSingleSeatmet(seatmet_listobj.getBoardingPassList().get(position), bpass);
-				
+
 			}
 		});
-		setDetailsBoaredingpass();
-		return v;
+	}
+	public void setActionBarNavigation(boolean show){
+		final ActionBar actionBar = getActivity().getActionBar();
+
+		OnNavigationListener imll=new OnNavigationListener() {
+
+			@Override
+			public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+				setListView(itemPosition);
+				return false;
+			}
+		};
+		String[] class_list = getActivity().getResources().getStringArray(R.array.seat_class); 
+		 itemList =new ArrayList<String>(Arrays.asList(class_list));
+
+		AdapterBaseMaps adapter=new AdapterBaseMaps(getActivity(), itemList);
+		ArrayAdapter<String> aAdpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, itemList);
+
+		if(show){
+			actionBar.setDisplayShowTitleEnabled(false);
+			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+			actionBar.setListNavigationCallbacks(adapter,imll);
+		}
+		else{
+			actionBar.setDisplayShowTitleEnabled(true);
+			actionBar.setNavigationMode(ActionBar.DISPLAY_SHOW_TITLE);
+			actionBar.setListNavigationCallbacks(null,null);
+		}
+
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		setActionBarNavigation(false);
+
+	}
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		setActionBarNavigation(true);
 	}
 	public String getJsonObjet(){
 
@@ -125,7 +264,7 @@ public class FragmentSeatMet extends Fragment{
 		}
 		return "";
 	}
-	
+
 	public void setDetailsBoaredingpass(){
 		String date=Constants.getDayandYear(Integer.parseInt(bpass.getJulian_date()));
 		String[] dateParts = date.split(":");
@@ -145,10 +284,10 @@ public class FragmentSeatMet extends Fragment{
 		tv_cdg.setText(bpass.getTravel_from_name());
 		tv_jfk.setText(bpass.getTravel_to_name());
 	}
-	
+
 	public void Successmessagesent(){
 	}
 
-	
+
 }
 

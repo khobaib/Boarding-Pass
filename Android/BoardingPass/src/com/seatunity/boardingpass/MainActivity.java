@@ -127,6 +127,7 @@ MainActivity lisenar;
 		mDrawerList.setAdapter(adapter);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
+		
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
 				R.drawable.ic_navigation_drawer_closed, 
 				R.string.app_name, 

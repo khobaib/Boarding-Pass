@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+     <string name="txt_noseatmate_isfound">No seatmate of </string>
+     <string name="txt_is_found">is found.</string>
     <string name="txt_no_shared_flight">There is no shared flight.</string>
          <string name="txt_failed_to_get_seatmet">Failed to get seatmates list. Please try again</string>
     <string name="txt_live_in">Live in</string>
@@ -105,7 +107,7 @@
     <string name="txt_age">Age</string>
     <string name="txt_profession">Profession</string>
     <string name="txt_seatting_pref_cap">Seatting Preference</string>
-    <string name="txt_seatting_pref">Seatting preference</string>
+    <string name="txt_seatting_pref">Seating preference</string>
     <string name="txt_register">Register</string>
     <string name="txt_register_msz">By registering, you acknowledge that you have read and agreed to the SeatUnit</string>
     <string name="txt_term_and_condition">Terms of Conditions</string>

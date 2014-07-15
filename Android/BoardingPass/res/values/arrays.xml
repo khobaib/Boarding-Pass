@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+     <string-array name="seat_class">
+        <item>All Seatmates</item>
+        <item>First Class</item>
+        <item>Business Class</item>
+        <item>Economy Class</item>
+    </string-array>
     <string-array name="upload_photo_from">
         <item>Take Picture</item>
         <item>Go to Gallery</item>

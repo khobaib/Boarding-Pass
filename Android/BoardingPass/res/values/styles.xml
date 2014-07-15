@@ -50,12 +50,13 @@
         <item name="background">@drawable/home_abs_back</item>
         <item name="android:background">@drawable/home_abs_back</item>
         <item name="android:titleTextStyle" tools:targetApi="honeycomb">@style/MyActionBarTextStyle</item>
+       
         <item name="titleTextStyle">@style/MyActionBarTextStyle</item>
     </style>
 
     <style name="MyActionBarTextStyle" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">22dp</item>
+        <item name="android:textSize">17dp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
