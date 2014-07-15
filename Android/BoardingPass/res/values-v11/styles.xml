@@ -21,7 +21,7 @@
 
     <style name="Theme.Example" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarItemBackground" tools:ignore="NewApi">@drawable/selectable_background_example</item>
-        <item name="android:popupMenuStyle">@style/PopupMenu.Example</item>
+       
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Example</item>
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Example</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Example</item>

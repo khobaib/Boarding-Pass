@@ -1,5 +1,6 @@
 package com.seatunity.boardingpass;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Stack;
@@ -55,6 +56,7 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -67,6 +69,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -97,13 +100,27 @@ public class MainActivity extends FragmentActivity {
 	ImageView img_from_camera,img_from_sdcard;
 	TextView tv_add_boardingpasswith_camera,tv_add_fromsdcard;
 	RelativeLayout vw_bottom;
-MainActivity lisenar;
+	MainActivity lisenar;
+	private void getOverflowMenu() {
+
+		try {
+			ViewConfiguration config = ViewConfiguration.get(this);
+			Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+			if(menuKeyField != null) {
+			
+				menuKeyField.setAccessible(true);
+				menuKeyField.setBoolean(config, false);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		BugSenseHandler.initAndStartSession(MainActivity.this, "2b60c090");
 		setContentView(R.layout.activity_main);
-		
+		getOverflowMenu() ;
 		try {
 			Constants.SELECTEDPOSITION=getIntent().getExtras().getInt("select");
 		} catch (Exception e) {
@@ -127,7 +144,7 @@ MainActivity lisenar;
 		mDrawerList.setAdapter(adapter);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
-		
+
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
 				R.drawable.ic_navigation_drawer_closed, 
 				R.string.app_name, 
@@ -193,7 +210,7 @@ MainActivity lisenar;
 			return true;
 		}	    switch (item.getItemId()) {
 		case R.id.add:
-			
+
 			openDialogToAddBoardingPass();
 			return true;
 		case R.id.delete:
@@ -210,7 +227,8 @@ MainActivity lisenar;
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-		menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+		menu.findItem(R.id.action_settings).setVisible(false);
+		//
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -496,7 +514,7 @@ MainActivity lisenar;
 		}
 	}
 
-	
+
 	public void GetBoardingPassFromPDF(String filepath){
 		Intent intent = new Intent(MainActivity.this, MuPDFActivity.class);
 		intent.setAction("com.touhiDroid.PDF.GET_BITMAP");
@@ -594,7 +612,7 @@ MainActivity lisenar;
 						Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_invalid_borading_pass),
 								Toast.LENGTH_SHORT).show();
 					}
-					
+
 				} catch (android.content.res.Resources.NotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -617,7 +635,7 @@ MainActivity lisenar;
 
 	public void scanBarcodeFromImage(Bitmap bmap){
 		Bitmap bMap = bmap;
-		
+
 		try {
 			int[] intArray = new int[bMap.getWidth() * bMap.getHeight()];
 			bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(),

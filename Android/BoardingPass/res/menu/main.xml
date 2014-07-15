@@ -1,26 +1,43 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-         
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Refresh -->
-    <item android:id="@+id/delete"
-          android:icon="@drawable/ic_action_discard"
-          android:title="Refreash"
-          android:showAsAction="ifRoom" />
-
-     <item android:id="@+id/add"
-          android:icon="@drawable/ic_action_new"
-          android:title="Test"
-          android:showAsAction="ifRoom"/>
-     
-    <!-- Location Found -->
-  
-
+    <item
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_action_discard"
+        android:showAsAction="ifRoom"
+        android:title="Refreash"/>
+    <item
+        android:id="@+id/add"
+        android:icon="@drawable/ic_action_new"
+        android:showAsAction="ifRoom"
+        android:title="Test"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
-  <item android:id="@+id/action_location_found"
-          android:icon="@drawable/ic_action_overflow"
-          android:title="Found"
-          android:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/over_flow"
+        android:icon="@drawable/ic_action_overflow"
+        android:showAsAction="always" tools:ignore="MenuTitle">
+        <menu>
+            <item
+                android:id="@+id/share"
+                android:icon="@drawable/ic_share"
+                android:showAsAction="never"
+               
+                android:title="@string/share"/>
+            <item
+                android:id="@+id/refresh"
+                android:icon="@drawable/ic_action_refresh"
+                android:showAsAction="never"
+                android:title="@string/refresh"/>
+            <item
+                android:id="@+id/about"
+                android:icon="@drawable/ic_about"
+                android:showAsAction="never"
+                android:title="@string/about"/>
+        </menu>
+    </item>
+
 </menu>

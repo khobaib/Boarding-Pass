@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="share">Share App</string>
+    <string name="refresh">Refresh</string>
+ 	<string name="about">About</string>
+ 	
      <string name="txt_noseatmate_isfound">No seatmate of </string>
      <string name="txt_is_found">is found.</string>
     <string name="txt_no_shared_flight">There is no shared flight.</string>
@@ -58,8 +62,8 @@
     <string name="acc_som_about_you">Something about you</string>
     <string name="acc_change_pass">Change password</string>
     <string name="acc_sign_out">Sign out</string>
-    <string name="txt_cdg">CDGKK</string>
-    <string name="txt_jfk">JFKKK</string>
+    <string name="txt_cdg">CDG</string>
+    <string name="txt_jfk">JFK</string>
     <string name="txt_flight_no">Flight</string>
     <string name="txt_seat_nno">Seat</string>
     <string name="txt_class">Class</string>

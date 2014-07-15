@@ -211,10 +211,10 @@ public class FragmentBoardingPasses extends Fragment{
 		String month=dateParts[1];
 		String dateofmonth=dateParts[0];
 
-		tv_cdg.setText(bpass.getTravel_from_name());
-		tv_jfk.setText(bpass.getTravel_to_name());
-		tv_from.setText(bpass.getTravel_from());
-		tv_to.setText(bpass.getTravel_to());
+		tv_cdg.setText(bpass.getTravel_from());
+		tv_jfk.setText(bpass.getTravel_to());
+		tv_from.setText(bpass.getTravel_from_name());
+		tv_to.setText(bpass.getTravel_to_name());
 		tv_month_inside_icon.setText(month);
 		tv_date_inside_icon.setText(dateofmonth);
 
