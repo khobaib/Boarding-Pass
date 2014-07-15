@@ -38,7 +38,7 @@ public class SplasActivity extends Activity {
         super.onCreate(savedInstanceState);
         BugSenseHandler.initAndStartSession(SplasActivity.this, "2b60c090");
         setContentView(R.layout.splash);
-        Log.e("tagged", Locale.getDefault().getLanguage());
+        
         File directory = Constants.APP_DIRECTORY;
         Handler handler=new Handler();
          handler.postDelayed(new Runnable() {

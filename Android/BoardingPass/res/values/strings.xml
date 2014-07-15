@@ -54,7 +54,7 @@
     <string name="acc_age">Age</string>
     <string name="acc_gender">Gender</string>
     <string name="acc_prof">Profession</string>
-    <string name="acc_seatting_pref">Seatting preferences</string>
+    <string name="acc_seatting_pref">Seating preferences</string>
     <string name="acc_som_about_you">Something about you</string>
     <string name="acc_change_pass">Change password</string>
     <string name="acc_sign_out">Sign out</string>
@@ -106,7 +106,7 @@
     <string name="txt_livein">Live in</string>
     <string name="txt_age">Age</string>
     <string name="txt_profession">Profession</string>
-    <string name="txt_seatting_pref_cap">Seatting Preference</string>
+    <string name="txt_seatting_pref_cap">Seating Preference</string>
     <string name="txt_seatting_pref">Seating preference</string>
     <string name="txt_register">Register</string>
     <string name="txt_register_msz">By registering, you acknowledge that you have read and agreed to the SeatUnit</string>

@@ -2,6 +2,7 @@
 package com.seatunity.boardingpass.fragment;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.http.NameValuePair;
@@ -66,6 +67,7 @@ public class FragmentBoardingPasses extends Fragment{
 	TextView tv_errorshow;
 	Button bt_login;
 	ArrayList<BoardingPass>list;
+	ArrayList<BoardingPass>list_greaterthan;
 	Button btn_boarding_pass;
 	String email,password;
 	Context context;
@@ -87,7 +89,7 @@ public class FragmentBoardingPasses extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_past_boarding_passes,
+		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_boarding_passes,
 				container, false);
 		lv_boarding_pass=(ListView) v.findViewById(R.id.lv_boarding_pass);
 		tv_cdg=(TextView) v.findViewById(R.id.tv_cdg);
@@ -157,17 +159,26 @@ public class FragmentBoardingPasses extends Fragment{
 
 	}
 	public void  setlist(){
+		Calendar c = Calendar.getInstance(); 
+		int dayofyear = c.get(Calendar.DAY_OF_YEAR);
+		 list_greaterthan=new ArrayList<BoardingPass>();
+		//list_greaterthan.clear();
 		for (int i=0;i<list.size();i++){
 			Log.e("test", "t "+list.get(i).getTravel_from_name());
+			int ju_date=Integer.parseInt(list.get(i).getJulian_date());
+			if((ju_date>=dayofyear)){
+				 list_greaterthan.add(list.get(i));
+				
+			}
 			if(list.get(i).getDeletestate()){
 				list.remove(i);
 			}
 		}
-		if(list.size()>0){
-			AdapterForBoardingPass adapter=new AdapterForBoardingPass(getActivity(), list);
+		if(list_greaterthan.size()>0){
+			AdapterForBoardingPass adapter=new AdapterForBoardingPass(getActivity(), list_greaterthan);
 			lv_boarding_pass.setAdapter(adapter);
-			setDetailsBoaredingpass(list.get(0));
-			highlitedboardingpass=list.get(0);
+			setDetailsBoaredingpass(list_greaterthan.get(0));
+			highlitedboardingpass=list_greaterthan.get(0);
 		}
 		lv_boarding_pass.setOnItemClickListener(new OnItemClickListener() {
 
@@ -175,8 +186,8 @@ public class FragmentBoardingPasses extends Fragment{
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
 				// TODO Auto-generated method stub
-				setDetailsBoaredingpass(list.get(position));
-				highlitedboardingpass=list.get(position);
+				setDetailsBoaredingpass(list_greaterthan.get(position));
+				highlitedboardingpass=list_greaterthan.get(position);
 			}
 		});
 	}

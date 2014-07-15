@@ -1,33 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#E7E7E7"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
     android:orientation="vertical" >
-
     <RelativeLayout
-        android:id="@+id/re_details_holder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#7C7C7C"
-        android:paddingBottom="10dp" >
-
-        <LinearLayout
-            android:id="@+id/re_top_holder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="7dp"
-            android:layout_marginLeft="7dp"
-            android:layout_marginRight="7dp"
-            android:layout_marginTop="7dp"
-            android:background="@drawable/rounded_layout_white"
-            android:orientation="vertical" >
-
-            <RelativeLayout
                 android:id="@+id/re_top_top_holder"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_weight="2.60" >
 
                 <RelativeLayout
                     android:id="@+id/img_icon"
@@ -92,7 +73,7 @@
 
                 <LinearLayout
                     android:layout_width="200dp"
-                    android:layout_height="140dp"
+                    android:layout_height="100dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignTop="@+id/img_icon"
                     android:layout_marginLeft="12dp"
@@ -102,7 +83,7 @@
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1.05" >
+                        android:layout_weight="1" >
 
                         <TextView
                             android:id="@+id/tv_from"
@@ -125,6 +106,7 @@
                             android:layout_marginTop="7dp"
                             android:text="22.00"
                             android:textColor="#777777"
+                            android:visibility="gone"
                             android:textSize="17dp" />
 
                         <TextView
@@ -135,14 +117,14 @@
                             android:layout_centerVertical="true"
                             android:text="@string/txt_cdg"
                             android:textColor="#2D3E50"
-                            android:textSize="26dp"
+                            android:textSize="24dp"
                             android:textStyle="bold" />
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.3" >
+                        android:layout_weight="0.4" >
 
                         <ImageView
                             android:id="@+id/im_plane"
@@ -156,7 +138,7 @@
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1.05" >
+                        android:layout_weight="1" >
 
                         <TextView
                             android:id="@+id/tv_to"
@@ -164,8 +146,8 @@
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="12dp"
-                            android:gravity="center"
                             android:text="@string/txt_seat_nno"
+                            android:gravity="center"
                             android:textColor="#777777"
                             android:textSize="17dp" />
 
@@ -177,7 +159,7 @@
                             android:layout_centerVertical="true"
                             android:text="@string/txt_jfk"
                             android:textColor="#2D3E50"
-                            android:textSize="26dp"
+                            android:textSize="24dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -188,52 +170,12 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="7dp"
                             android:text="24.00"
+                            android:visibility="gone"
                             android:textColor="#777777"
                             android:textSize="17dp" />
                     </RelativeLayout>
                 </LinearLayout>
             </RelativeLayout>
-        </LinearLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/re_list_holder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_weight="2"
-        android:background="@drawable/rounded_layout_white" >
-
-        <ListView
-            android:id="@+id/lv_seat_met_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="9dp"
-            android:layout_marginRight="9dp"
-            android:layout_marginTop="5dp"
-            android:divider="#4db8db"
-            android:dividerHeight="0.5dp" >
-        </ListView>
-
-        <TextView
-            android:id="@+id/tv_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="9dp"
-            android:layout_marginRight="9dp"
-            android:layout_marginTop="25dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:padding="15dp"
-              android:background="@drawable/rounded_button_loginfailure"
-       		 android:textColor="#777777"
-       		 android:textSize="17dp"
-       		 android:visibility="gone"/>
-
-    </RelativeLayout>
+    
 
 </LinearLayout>
