@@ -3,6 +3,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Stack;
 
 import org.json.JSONException;
@@ -36,6 +37,7 @@ import com.seatunity.boardingpass.fragment.PastBoardingPassListFragment;
 import com.seatunity.boardingpass.fragment.TabFragment;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
+import com.seatunity.boardingpass.utilty.GetResources;
 import com.seatunity.boardingpass.utilty.PkpassReader;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.BoardingPassParser;
@@ -52,6 +54,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -96,6 +99,7 @@ public class MainActivity extends FragmentActivity {
 	private FragmentManager fragmentManager;
 	int lastselectedposition=-1;
 	BoardingPass boardingPass;
+	HomeListFragment fragHome;
 	int prevselectedposition=-2;
 	ImageView img_from_camera,img_from_sdcard;
 	TextView tv_add_boardingpasswith_camera,tv_add_fromsdcard;
@@ -217,11 +221,63 @@ public class MainActivity extends FragmentActivity {
 			//openSearch();
 			//item.setVisible(false);
 			return true;
+		case R.id.share:
+			//openSearch();
+			//item.setVisible(false);
+			ShareApp();
+			return true;
+		case R.id.about:
+			if(lastselectedposition==0){
+				fragHome.startFragmentAbout();
+			}
+			else{
+				displayView(3);
+			
+			}
+			return true;
+		case R.id.refresh:
+			Intent intent=new Intent(MainActivity.this, MainActivity.class);
+			startActivity(intent);
+			finish();
+			
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
+public void ShareApp(){
+	
+	Intent sendIntent = new Intent();
+	sendIntent.setAction(Intent.ACTION_SEND);
+	sendIntent.putExtra(Intent.EXTRA_TEXT,
+	    "Hey check out SeatUnity app at: https://play.google.com/store/apps/details?id=tagmap.me&hl=en");
+	sendIntent.setType("text/plain");
+	startActivity(sendIntent);
+	
+	
+//	Intent share = new Intent(android.content.Intent.ACTION_SEND);
+////    share.setType("image/jpeg");
+////
+////    // gets the list of intents that can be loaded.
+//    List<ResolveInfo> resInfo = MainActivity.this.getPackageManager().queryIntentActivities(share, 0);
+////    if (!resInfo.isEmpty()){
+////        for (ResolveInfo info : resInfo) {
+////            if (info.activityInfo.packageName.toLowerCase().contains(type) || 
+////                    info.activityInfo.name.toLowerCase().contains(type) ) {
+//                share.putExtra(Intent.EXTRA_SUBJECT,  "SeatUnity");
+//                share.putExtra(Intent.EXTRA_TEXT,     "https://play.google.com/store/apps/details?id=tagmap.me&hl=en");
+//             //   share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(myPath)) ); // Optional, just if you wanna share an image.
+////                share.setPackage(info.activityInfo.packageName);
+////                found = true;
+////                break;
+////            }
+////        }
+////        if (!found)
+////            return;
+//
+//        startActivity(Intent.createChooser(share, "Select"));
+  
+}
 
 
 	@Override
@@ -248,7 +304,8 @@ public class MainActivity extends FragmentActivity {
 		Fragment fragment = null;
 		switch (position) {
 		case 0:
-			fragment = new HomeListFragment(0);
+			fragHome = new HomeListFragment(0);
+			fragment=fragHome;
 			break;
 		case 1:
 			fragment = new AccountListFragment();
@@ -256,17 +313,28 @@ public class MainActivity extends FragmentActivity {
 		case 2:
 			fragment = new PastBoardingPassListFragment();
 			break;
+		case 3:
+			fragHome = new HomeListFragment(3);
+			fragment=fragHome;
 		default:
 			break;
 		}
-
+		
 		if (fragment != null) {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack(""+position).commit();
 			prevselectedposition=position;
-			mDrawerList.setItemChecked(position, true);
-			mDrawerList.setSelection(position);
-			setTitle(navMenuTitles[position]);
+			if(position==3){
+				mDrawerList.setItemChecked(0, true);
+				mDrawerList.setSelection(0);
+				setTitle(getResources().getString(R.string.about));
+			}
+			else{
+				mDrawerList.setItemChecked(position, true);
+				mDrawerList.setSelection(position);
+				setTitle(navMenuTitles[position]);
+			}
+			
 			mDrawerLayout.closeDrawer(mDrawerList);
 		}
 	}

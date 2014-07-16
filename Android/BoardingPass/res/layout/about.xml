@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff" >
+
+    <ImageView
+        android:id="@+id/img_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/seatunity_logo" />
+
+    <TextView
+        android:id="@+id/tv_verion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:text="@string/version"
+        android:textColor="#777777"
+        android:textSize="19dp" />
+
+    <TextView
+        android:id="@+id/tv_verion_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_verion"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/circle_notfilled"
+        android:paddingBottom="5dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingTop="5dp"
+        android:text="C"
+        android:textColor="#777777"
+        android:textSize="19dp" />
+
+    <TextView
+        android:id="@+id/tv_send_feedback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_verion_code"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+         android:textColor="#0099cc"
+        android:text="@string/send_feedback" />
+
+    <TextView
+        android:id="@+id/tv_tell_us"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tv_send_feedback"
+        android:text="@string/tell_us"
+        android:textColor="#777777" />
+
+    <TextView
+        android:id="@+id/tv_report_prob"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_tell_us"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+         android:textColor="#0099cc"
+       android:text="@string/report_problem" />
+
+    <TextView
+        android:id="@+id/tv_let_know_bug"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_report_prob"
+        android:layout_centerHorizontal="true"
+        android:text="@string/let_know_bug"
+        android:textColor="#777777" />
+
+    <View
+        android:id="@+id/vw_gap"
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:layout_below="@+id/tv_let_know_bug"
+        android:layout_margin="9dp"
+        android:background="#777777" 
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:id="@+id/tv_stun_bring"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vw_gap"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+       android:text="@string/st_ubnity_bring"
+       android:textSize="19dp"
+        android:textColor="#777777"/>
+
+    <TextView
+        android:id="@+id/tv_rate_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_stun_bring"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:textColor="#0099cc"
+       android:text="@string/rate_app"  />
+    
+    <TextView
+        android:id="@+id/tv_trmsof_srvs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_rate_app"
+        android:layout_centerHorizontal="true"
+        android:textColor="#0099cc"
+        android:layout_marginTop="4dp"
+       android:text="@string/trms_of_servces"  />
+    
+    <TextView
+        android:id="@+id/tv_prvcy_pilcy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_trmsof_srvs"
+        android:layout_centerHorizontal="true"
+        android:textColor="#0099cc"
+        android:layout_marginTop="4dp"
+       android:text="@string/privcy_plcy"  />
+
+</RelativeLayout>

@@ -210,19 +210,16 @@ public class FragmentBoardingPasses extends Fragment{
 		String[] dateParts = date.split(":");
 		String month=dateParts[1];
 		String dateofmonth=dateParts[0];
-
 		tv_cdg.setText(bpass.getTravel_from());
 		tv_jfk.setText(bpass.getTravel_to());
 		tv_from.setText(bpass.getTravel_from_name());
 		tv_to.setText(bpass.getTravel_to_name());
 		tv_month_inside_icon.setText(month);
 		tv_date_inside_icon.setText(dateofmonth);
-
 		tv_seat_no.setText(context.getResources().getString(R.string.txt_seat_nno)+
 				"Seat "+bpass.getSeat());
 		tv_flight_no.setText(context.getResources().getString(R.string.txt_flight_no)+
 				" "+bpass.getFlight_no());
-
 		tv_start_time.setText(bpass.getDeparture());
 		tv_arrival_time.setText(bpass.getArrival());
 	}

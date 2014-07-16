@@ -65,7 +65,7 @@ public class HomeListFragment extends TabFragment{
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 		dbInstance.open();
 		ArrayList<BoardingPass> list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
-		
+
 		dbInstance.close();
 		String email=appInstance.getUserCred().getEmail();
 		if(from==0){
@@ -74,45 +74,45 @@ public class HomeListFragment extends TabFragment{
 				fragment.parent = this;
 				backEndStack.push(fragment);
 			}
-//			else if((!email.equals(""))&&(list.size()<1)){
-//				FragmentAddBoardingPassDuringLogin fragment = new FragmentAddBoardingPassDuringLogin();
-//				fragment.parent = this;
-//				backEndStack.push(fragment);
-//				
-//			}
+			//			else if((!email.equals(""))&&(list.size()<1)){
+			//				FragmentAddBoardingPassDuringLogin fragment = new FragmentAddBoardingPassDuringLogin();
+			//				fragment.parent = this;
+			//				backEndStack.push(fragment);
+			//				
+			//			}
 			else{
-				
+
 				FragmentBoardingPasses fragment = new FragmentBoardingPasses();
 				fragment.parent = this;
 				backEndStack.push(fragment);
 
 			}
 		}
-//		else{
-//			FragmentAddBoardingPass newFragment = new FragmentAddBoardingPass() ;
-//			newFragment.parent = this;
-//			backEndStack.push(newFragment);
-//		}
-		
-		
-		
-		
+		else{
+			FragmentAbout newFragment = new FragmentAbout() ;
+			newFragment.parent = this;
+			backEndStack.push(newFragment);
+		}
+
+
+
+
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		ViewParent parent = (ViewParent) container.getParent();
-//		if (parent instanceof View) {
-//			((TextView) ((View) parent).findViewById(R.id.welcome_title))
-//			.setText(this.getTag());
-//		}
+		//		if (parent instanceof View) {
+		//			((TextView) ((View) parent).findViewById(R.id.welcome_title))
+		//			.setText(this.getTag());
+		//		}
 		View v = inflater.inflate(R.layout.fragment_tab3, container, false);
 		return v;
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB) public void onStart( ) {
-	//	Constants.GOTABFROMWRITETOPIC=2;
-		
+		//	Constants.GOTABFROMWRITETOPIC=2;
+
 		((MainActivity)getActivity()).mDrawerList.setItemChecked(0, true);
 		((MainActivity)getActivity()).mDrawerList.setSelection(0);
 
@@ -127,6 +127,29 @@ public class HomeListFragment extends TabFragment{
 	public void startFragmentSingleSeatmet(SeatMate seatmate,BoardingPass bpass) {
 		Log.e("insideList", bpass.getTravel_from_name());
 		FragmentSingleSeatMet newFragment = new FragmentSingleSeatMet(seatmate,bpass) ;
+		newFragment.parent = this;
+		FragmentManager fragmentManager = getActivity().getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager
+				.beginTransaction();
+		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+		fragmentTransaction.addToBackStack(null);
+		backEndStack.push(newFragment);
+		fragmentTransaction.commitAllowingStateLoss();
+	}
+	public void startFragmentTermsAndCondition(String title,String details) {
+
+		FragmentTermsAndCondition newFragment = new FragmentTermsAndCondition( title, details) ;
+		newFragment.parent = this;
+		FragmentManager fragmentManager = getActivity().getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager
+				.beginTransaction();
+		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+		fragmentTransaction.addToBackStack(null);
+		backEndStack.push(newFragment);
+		fragmentTransaction.commitAllowingStateLoss();
+	}
+	public void startFragmentAbout() {
+		FragmentAbout newFragment = new FragmentAbout() ;
 		newFragment.parent = this;
 		FragmentManager fragmentManager = getActivity().getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager

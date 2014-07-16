@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+     <string name="version">Version</string>
+      <string name="send_feedback">Send feedback</string>
+       <string name="tell_us">Tell us what you think</string>
+        <string name="report_problem">Report a problem</string>
+       <string name="let_know_bug">Let us know about bug or problem</string>
+       <string name="st_ubnity_bring">SeatUnity bring you closer to those who flight with you.</string>
+       <string name="rate_app">Rate application</string>
+    
+    <string name="trms_of_servces">Terms of service</string>
+    <string name="privcy_plcy">Privacy Policy</string>
+    
+     <string name="app_not_found">Unable to find market app</string>
+    
     <string name="share">Share App</string>
     <string name="refresh">Refresh</string>
  	<string name="about">About</string>
@@ -114,7 +127,8 @@
     <string name="txt_seatting_pref">Seating preference</string>
     <string name="txt_register">Register</string>
     <string name="txt_register_msz">By registering, you acknowledge that you have read and agreed to the SeatUnit</string>
-    <string name="txt_term_and_condition">Terms of Conditions</string>
+    <string name="txt_term_off_condition">Terms of Conditions</string>
+     <string name="txt_term_and_condition">Terms and Conditions</string>
     <string name="txt_password">Password</string>
     <string name="txt_login">Login</string>
     <string name="txt_forgot_pass">Forgot Password?</string>
@@ -256,5 +270,14 @@
     <string name="wifi_changing_network">Requesting connection to network\u2026</string>
     <string name="wifi_ssid_label">Network Name</string>
     <string name="wifi_type_label">Type</string>
+     <string name="lorem_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tincidunt elit elit, quis interdum mauris vehicula ac. Vestibulum et felis volutpat, tincidunt elit et, vehicula nunc. Nullam cursus viverra nulla vel malesuada. Ut tortor risus, egestas at dolor sit amet, pharetra faucibus tortor. Morbi mauris dui, condimentum nec fringilla nec, congue vitae dolor. Quisque dictum libero ac velit pharetra venenatis. Etiam non massa aliquet, facilisis magna ut, convallis leo. Pellentesque eu iaculis nibh. Maecenas aliquet, elit at viverra sagittis, massa augue eleifend eros, eget tempus mauris nibh quis neque. Nulla et ligula hendrerit, pulvinar felis nec, pulvinar metus. Pellentesque venenatis neque eu sem aliquet posuere. Quisque in vehicula dui, vel ultrices massa.
+
+Proin nec tortor ac enim commodo gravida a a dolor. Praesent sed ipsum mi. Nam adipiscing eget turpis ut viverra. Cras ut auctor metus. Vivamus vehicula, ligula sed pharetra molestie, massa libero malesuada est, nec semper arcu nibh vel felis. Curabitur porta justo ac purus condimentum semper nec vel dolor. Suspendisse massa dui, lacinia nec aliquet a, eleifend vitae velit. Suspendisse pulvinar ante justo.
+
+Nullam volutpat elementum tellus, ac rutrum nulla ultrices sit amet. Etiam iaculis, nulla eu sollicitudin euismod, lorem sem tincidunt dolor, nec molestie eros ipsum eget leo. Phasellus varius ut tellus ac congue. Aliquam velit nunc, sagittis in nibh non, ultricies sagittis tellus. Nulla facilisi. Proin sed sem eu velit volutpat volutpat ut et massa. Integer nec dolor magna. Praesent vel congue erat. Ut accumsan nisi nec pulvinar euismod. Pellentesque fermentum orci id massa aliquet hendrerit. Pellentesque vehicula, ligula ut blandit euismod, odio urna vehicula nisi, sed fringilla ante elit nec tellus. Integer cursus tellus pulvinar turpis suscipit, et vulputate mi auctor. Maecenas eu erat pharetra, vestibulum sem sit amet, malesuada arcu. Nam sit amet condimentum mi. Sed volutpat nec justo sit amet mollis.
+
+Nullam vel adipiscing odio. Integer risus lectus, scelerisque eget varius et, accumsan eget est. Ut eget fringilla ipsum. Vivamus tempus odio ut elementum suscipit. Phasellus facilisis pellentesque mollis. Nunc convallis aliquam sagittis. Sed quis condimentum risus. Quisque gravida lectus orci, in pulvinar magna consectetur quis. Nunc nibh turpis, placerat quis mattis sit amet, convallis porta turpis. Suspendisse malesuada odio eu porttitor molestie. Aliquam ligula justo, varius id odio at, tincidunt malesuada felis. Suspendisse vulputate rutrum ullamcorper. Duis arcu mauris, fermentum a fringilla sed, vulputate id massa.
+
+Vivamus ultrices massa lacus, nec euismod ligula tempus cursus. Pellentesque tincidunt porta velit, in fermentum mi eleifend vel. Praesent sed erat eget dolor ultrices fringilla vel eu orci. Aenean cursus ipsum ut mi mollis, non viverra eros vestibulum. Donec eget tortor id felis tristique auctor. Pellentesque hendrerit vulputate sem, a lacinia nibh elementum id. Mauris varius ultricies nunc, quis ultricies ligula hendrerit id. Pellentesque sed eros at nisl dictum varius. Mauris lorem lorem, consectetur sit amet lobortis sit amet, hendrerit a tortor. Ut at leo venenatis, viverra turpis a, euismod justo. Integer eleifend libero non lectus interdum hendrerit. Aliquam pharetra malesuada lacus, non ornare tortor vehicula rhoncus. Aenean ligula sem, varius ut ipsum ac, consectetur aliquam nisi. Praesent pellentesque blandit egestas. Nunc hendrerit viverra magna hendrerit feugiat. Aliquam vitae sodales augue.</string>
 
 </resources>
