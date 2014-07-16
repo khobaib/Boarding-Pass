@@ -44,7 +44,9 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -72,6 +74,7 @@ public class FragmentSeatMet extends Fragment{
 	TextView tv_from,tv_to,tv_month_inside_icon,tv_date_inside_icon,tv_seat_no,tv_flight_no,
 	tv_start_time,tv_arrival_time,tv_jfk,tv_cdg,tv_message;
 	ListView lv_seat_met_list;
+	int selectedposition=0;
 	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +105,7 @@ public class FragmentSeatMet extends Fragment{
 		tv_jfk=(TextView) v.findViewById(R.id.tv_jfk);
 		lv_seat_met_list=(ListView) v.findViewById(R.id.lv_seat_met_list);
 		setListView(0);
+		selectedposition=0;
 		setDetailsBoaredingpass();
 		return v;
 	}
@@ -217,6 +221,7 @@ public class FragmentSeatMet extends Fragment{
 			@Override
 			public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 				setListView(itemPosition);
+				selectedposition=itemPosition;
 				return false;
 			}
 		};
@@ -239,11 +244,13 @@ public class FragmentSeatMet extends Fragment{
 
 	}
 
+
 	@Override
 	public void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
 		setActionBarNavigation(false);
+		((MainActivity)getActivity()).refreash_menu.setVisible(false);
 
 	}
 	@Override
@@ -251,6 +258,55 @@ public class FragmentSeatMet extends Fragment{
 		// TODO Auto-generated method stub
 		super.onResume();
 		setActionBarNavigation(true);
+		((MainActivity)getActivity()).refreash_menu.setVisible(true);
+		((MainActivity)getActivity()).refreash_menu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				// TODO Auto-generated method stub
+			//	deleteBoardingPass();
+				if((Constants.isOnline(getActivity()))&&(!appInstance.getUserCred().getEmail().equals(""))){
+					callSeatmet();
+				}
+				else{
+					sowAlertMessage();
+				}
+				return false;
+				
+			}
+		});
+	}
+	public void callSeatmet(){
+		AsyncaTaskApiCall getlist=new AsyncaTaskApiCall(FragmentSeatMet.this,getJsonObjet(),getActivity(),bpass);
+		getlist.execute();
+	}
+
+	public void callBackSeatmetList(SeatMetList list){
+		this.seatmet_listobj=list;
+		if(seatmet_listobj.getBoardingPassList().size()>0){
+			setListView(selectedposition);
+		}
+		else{
+			Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_getseatmate_failure),
+					Toast.LENGTH_SHORT).show();
+		}
+		
+	}
+	public void sowAlertMessage(){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				getActivity());
+		alertDialogBuilder
+		.setMessage(getResources().getString(R.string.txt_seatmet_message_only_online))
+		.setCancelable(false)
+		.setPositiveButton(getResources().getString(R.string.txt_ok),new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int id) {
+				
+				dialog.cancel();
+			}
+		});
+		
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
 	}
 	public String getJsonObjet(){
 

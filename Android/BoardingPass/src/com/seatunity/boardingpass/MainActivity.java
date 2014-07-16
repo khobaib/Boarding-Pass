@@ -87,7 +87,8 @@ public class MainActivity extends FragmentActivity {
 	private DrawerLayout mDrawerLayout;
 	public ListView mDrawerList;
 	public TabFragment activeFragment;
-	public MenuItem item;
+	public MenuItem delete_menu;
+	public MenuItem refreash_menu;
 	public ActionBarDrawerToggle mDrawerToggle;
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
@@ -203,8 +204,11 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
-		item = menu.findItem(R.id.delete);
-		item.setVisible(false);
+		delete_menu = menu.findItem(R.id.delete);
+		delete_menu.setVisible(false);
+		refreash_menu=menu.findItem(R.id.refresh);
+		refreash_menu.setVisible(false);
+
 		return true;
 	}
 	@Override
@@ -235,12 +239,7 @@ public class MainActivity extends FragmentActivity {
 			
 			}
 			return true;
-		case R.id.refresh:
-			Intent intent=new Intent(MainActivity.this, MainActivity.class);
-			startActivity(intent);
-			finish();
-			
-			return true;
+	
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -284,6 +283,7 @@ public void ShareApp(){
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
 		menu.findItem(R.id.action_settings).setVisible(false);
+		
 		//
 		return super.onPrepareOptionsMenu(menu);
 	}

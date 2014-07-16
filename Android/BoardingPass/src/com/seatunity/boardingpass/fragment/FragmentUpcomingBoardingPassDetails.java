@@ -149,8 +149,8 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		((MainActivity)getActivity()).item.setVisible(true);
-		((MainActivity)getActivity()).item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+		((MainActivity)getActivity()).delete_menu.setVisible(true);
+		((MainActivity)getActivity()).delete_menu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
@@ -165,7 +165,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 	public void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		((MainActivity)getActivity()).item.setVisible(false);
+		((MainActivity)getActivity()).delete_menu.setVisible(false);
 	}
 	public void generateBArcode(){
 		String barcode_data = bpass.getStringform();

@@ -62,6 +62,7 @@ import android.widget.Toast;
 	FragmentUpcomingBoardingPassDetails seatmetlisenar;
 	FragmentSeatMet sendmessgae;
 	String receiverid;
+	FragmentSeatMet seatmatelisenarfromseatmate;
 
 //	FragmentSeatMet singlebpasslisenar;
 //	public AsyncaTaskApiCall(FragmentSeatMet singlebpasslisenar,String body,Context context){
@@ -77,6 +78,15 @@ import android.widget.Toast;
 		this.body=body;
 		this.context=context;
 		this.receiverid=receiverid;
+		jsonParser=new JsonParser();
+		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
+				context.getResources().getString(R.string.txt_please_wait), true);
+	}
+	public AsyncaTaskApiCall(FragmentSeatMet seatmatelisenarfromseatmate,String body,Context context,BoardingPass bpass){
+		this.bpass=bpass;
+		this.seatmatelisenarfromseatmate=seatmatelisenarfromseatmate;
+		this.body=body;
+		this.context=context;
 		jsonParser=new JsonParser();
 		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
 				context.getResources().getString(R.string.txt_please_wait), true);
@@ -216,6 +226,13 @@ import android.widget.Toast;
 			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
 					body, null);
 		}
+		else if(seatmatelisenarfromseatmate!=null){
+			String url = Constants.baseurl+"seatmatelist/"+bpass.getCarrier()+"/"+bpass.getFlight_no()+"/"
+					+bpass.getJulian_date();
+			url=url.replace(" ", "");
+			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+					body, null);
+		}
 		else if(seatmetlisenar!=null){
 			String url = Constants.baseurl+"seatmatelist/"+bpass.getCarrier()+"/"+bpass.getFlight_no()+"/"
 					+bpass.getJulian_date();
@@ -322,6 +339,7 @@ import android.widget.Toast;
 				pd.cancel();
 			}
 		}
+		
 		if(signuplisenar!=null){
 			signuplisenar.callBackFromApicall(result);
 		}
@@ -473,8 +491,23 @@ import android.widget.Toast;
 			}
 
 		}
-		//seatmetlisenar
-		
+		else if(seatmatelisenarfromseatmate!=null){
+			JSONObject job=result.getjObj();
+		try {
+				if(job.getString("success").equals("true")){
+					SeatMetList  seatmet_listlist=SeatMetList.getSeatmetListObj(job);
+					seatmatelisenarfromseatmate.callBackSeatmetList(seatmet_listlist);
+				}
+				else{
+					Toast.makeText(context, context.getResources().getString(R.string.txt_getseatmate_failure),
+							Toast.LENGTH_SHORT).show();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
 		else if(seatmetlisenar!=null){
 			JSONObject job=result.getjObj();
 		try {
