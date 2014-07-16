@@ -13,10 +13,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.seatunity.boardingpass.AcountActivity;
+import com.seatunity.boardingpass.ForgotPassActivity;
 import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.adapter.NothingSelectedSpinnerAdapter;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
+import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.Member;
 import com.seatunity.model.ServerResponse;
@@ -61,7 +63,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
-public class FragmentSignUp extends Fragment{
+public class FragmentSignUp extends Fragment implements CallBackApiCall{
 	int selectedageposition=-1;
 	TextView tv_signup_message,tv_sign_message;
 	EditText et_email,et_password,et_confirm_password,et_first_name,et_last_name,et_livein,et_age,et_profession,et_seatting_pref;
@@ -259,13 +261,11 @@ public class FragmentSignUp extends Fragment{
 
 	public void callsignUp(){
 		if((!email.equals(""))&&(!password.equals(""))&&(!password.equals(""))){
-
-
 			String signupdata="";
 			signupdata=getJsonObjet();
-			AsyncaTaskApiCall apicalling=new AsyncaTaskApiCall(FragmentSignUp.this, signupdata, getActivity());
-			apicalling.execute();
-
+			AsyncaTaskApiCall sign_uplisenar =new AsyncaTaskApiCall(FragmentSignUp.this, signupdata, getActivity(),
+					"reg",Constants.REQUEST_TYPE_POST);
+			sign_uplisenar.execute();
 		}
 		else{
 			if(email.equals("")){
@@ -336,29 +336,29 @@ public class FragmentSignUp extends Fragment{
 		}
 		return "";
 	}
-	public void callBackFromApicall(ServerResponse serverResponse){
-		JSONObject jsonObject=serverResponse.getjObj();
-		//06-15 18:01:50.788: D/JsonParser(2615): sb = {"success":"true"}
-		String success;
-		try {
-			success = jsonObject.getString("success");
-			if(success.equals("true")){
-				((AcountActivity)getActivity()).indicator.setViewPager(((AcountActivity)getActivity()).pager, 0);
-				showCustomDialog();
-			}
-			else{
-				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_signup_failed), 
-						Toast.LENGTH_SHORT).show();
-			}
-
-
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-	
+//	public void callBackFromApicall(ServerResponse serverResponse){
+//		JSONObject jsonObject=serverResponse.getjObj();
+//		//06-15 18:01:50.788: D/JsonParser(2615): sb = {"success":"true"}
+//		String success;
+//		try {
+//			success = jsonObject.getString("success");
+//			if(success.equals("true")){
+//				((AcountActivity)getActivity()).indicator.setViewPager(((AcountActivity)getActivity()).pager, 0);
+//				showCustomDialog();
+//			}
+//			else{
+//				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_signup_failed), 
+//						Toast.LENGTH_SHORT).show();
+//			}
+//
+//
+//		} catch (JSONException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//	}
+//	
 	public void showDialogForSeatingPref(final CharSequence[] items,String title)
 	{
 		AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
@@ -382,6 +382,30 @@ public class FragmentSignUp extends Fragment{
 		});
 		builder.show();
 
+	}
+	@Override
+	public void responseOk(JSONObject job) {
+		// TODO Auto-generated method stub
+		((AcountActivity)getActivity()).indicator.setViewPager(((AcountActivity)getActivity()).pager, 0);
+		showCustomDialog();
+	}
+	@Override
+	public void responseFailure(JSONObject job) {
+		// TODO Auto-generated method stub
+		Log.e("A", "1");
+		Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_signup_failed1), 
+				Toast.LENGTH_SHORT).show();
+	}
+	@Override
+	public void saveLoginCred(JSONObject job) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void LoginFailed(JSONObject job) {
+		// TODO Auto-generated method stub
+//		Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_signup_failed1), 
+//				Toast.LENGTH_SHORT).show();
 	}
 }
 

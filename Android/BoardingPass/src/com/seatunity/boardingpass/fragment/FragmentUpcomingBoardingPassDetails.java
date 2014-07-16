@@ -35,34 +35,35 @@ import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
+import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
+import com.seatunity.model.BoardingPassList;
 import com.seatunity.model.SeatMetList;
 @SuppressLint("NewApi")
-public class FragmentUpcomingBoardingPassDetails extends Fragment {
+public class FragmentUpcomingBoardingPassDetails extends Fragment implements CallBackApiCall {
 	BoardingPass bpass;
-	//BoardingPassApplication appInstance;
-	public FragmentUpcomingBoardingPassDetails(BoardingPass bpass){
-		this.bpass=bpass;
-		Log.e("insideList5", bpass.getTravel_from_name());
-	}
 	SeatMetList list;
 	HomeListFragment parent;
 	ImageView img_barcode;
 	Button btn_seatmate;
 	BoardingPassApplication appInstance;
+	int callfrom=0;
 	BoardingPass boardingPass;
 	TextView tv_name_carrier,tv_month_inside_icon,tv_date_inside_icon,tv_from_air,tv_to_air,tv_start_time,tv_arrival_time,
 	tv_flight_var,tv_seat_var,tv_compartment_class_var,tv_passenger_name;
-	@Override
+
+	public FragmentUpcomingBoardingPassDetails(BoardingPass bpass){
+		this.bpass=bpass;
+		Log.e("insideList5", bpass.getTravel_from_name());
+	}@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
 		View rootView = inflater.inflate(R.layout.fragment_boarding_details, container, false);
 		btn_seatmate=(Button) rootView.findViewById(R.id.btn_seatmate);
-		
 		img_barcode=(ImageView) rootView.findViewById(R.id.img_barcode);
 		tv_name_carrier=(TextView) rootView.findViewById(R.id.tv_name_carrier);
 		tv_month_inside_icon=(TextView) rootView.findViewById(R.id.tv_month_inside_icon);
@@ -75,7 +76,6 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 		tv_seat_var=(TextView) rootView.findViewById(R.id.tv_seat_var);
 		tv_compartment_class_var=(TextView) rootView.findViewById(R.id.tv_compartment_class_var);
 		tv_passenger_name=(TextView) rootView.findViewById(R.id.tv_passenger_name);
-
 		tv_name_carrier.setText(bpass.getCarrier());
 		tv_from_air.setText(bpass.getTravel_from());
 		tv_to_air.setText(bpass.getTravel_to());
@@ -85,7 +85,6 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 		tv_seat_var.setText(bpass.getSeat());
 		tv_compartment_class_var.setText(bpass.getCompartment_code());
 		tv_passenger_name.setText(bpass.getFirstname());
-
 		tv_month_inside_icon.setText(bpass.getCarrier());
 		tv_date_inside_icon.setText(bpass.getCarrier());
 		String date=com.seatunity.boardingpass.utilty.Constants.getDayandYear(Integer.parseInt(bpass.getJulian_date()));
@@ -97,7 +96,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 
 		generateBArcode();
 		btn_seatmate.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
@@ -107,12 +106,12 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 				else{
 					sowAlertMessage();
 				}
-				
+
 			}
 		});
 		return rootView;
 	}
-	
+
 	public void sowAlertMessage(){
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 				getActivity());
@@ -121,29 +120,24 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 		.setCancelable(false)
 		.setPositiveButton(getResources().getString(R.string.txt_ok),new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int id) {
-				
+
 				dialog.cancel();
 			}
 		});
-		
+
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
 	}
 	public void callSeatmet(){
-		AsyncaTaskApiCall getlist=new AsyncaTaskApiCall(FragmentUpcomingBoardingPassDetails.this,getJsonObjet(),getActivity(),bpass);
-		getlist.execute();
+		callfrom=2;
+		String extendedurl="seatmatelist/"+bpass.getCarrier()+"/"+bpass.getFlight_no()+"/"
+				+bpass.getJulian_date();
+		extendedurl=extendedurl.replace(" ", "");
+		AsyncaTaskApiCall get_list =new AsyncaTaskApiCall(this, getJsonObjet(), getActivity(),
+				extendedurl,Constants.REQUEST_TYPE_POST);
+		get_list.execute();
 	}
-	public void callBackSeatmetList(SeatMetList list){
-		this.list=list;
-		if(list.getBoardingPassList().size()>0){
-			parent.startSeatmetList(list,bpass);
-		}
-		else{
-			Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_getseatmate_failure),
-					Toast.LENGTH_SHORT).show();
-		}
-		
-	}
+	
 
 	@Override
 	public void onResume() {
@@ -157,7 +151,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 				// TODO Auto-generated method stub
 				deleteBoardingPass();
 				return false;
-				
+
 			}
 		});
 	}
@@ -260,8 +254,10 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 						}
 						else{
 							String url="bpdelete/"+bpass.getId();
-							AsyncaTaskApiCall callserver=new AsyncaTaskApiCall(FragmentUpcomingBoardingPassDetails.this, getJsonObjet(), getActivity(), url);
-							callserver.execute();
+							callfrom=1;
+							AsyncaTaskApiCall get_list =new AsyncaTaskApiCall(FragmentUpcomingBoardingPassDetails.this, getJsonObjet(), getActivity(),
+									url,Constants.REQUEST_TYPE_POST);
+							get_list.execute();
 						}
 					}
 				}
@@ -296,7 +292,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 		dbInstance.open();
 		if(state==0){
-		 	bpass.setDeletestate(true);
+			bpass.setDeletestate(true);
 			dbInstance.insertOrUpdateBoardingPass(bpass);
 		}
 		else{
@@ -317,6 +313,61 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment {
 			e.printStackTrace();
 		}
 		return "";
+	}
+	@Override
+	public void responseOk(JSONObject job) {
+		// TODO Auto-generated method stub
+		//this.flag
+		try {
+			if(job.getString("success").equals("true")){
+				//boarding_passes
+				if(callfrom==1){
+					updateDatabaseWithoutServernotification(1);
+				}
+				else if(callfrom==2){
+					SeatMetList  seatmet_listlist=SeatMetList.getSeatmetListObj(job);
+					this.list=seatmet_listlist;
+					if(list.getBoardingPassList().size()>0){
+						parent.startSeatmetList(list,bpass);
+					}
+
+				}
+
+			}
+
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	@Override
+	public void responseFailure(JSONObject job) {
+		// TODO Auto-generated method stub
+		try {
+			if(callfrom==1){
+				Toast.makeText(getActivity(), job.getString("message"),
+						Toast.LENGTH_SHORT).show();
+			}
+			else if(callfrom==2){
+				Toast.makeText(getActivity(), job.getString("message"),
+					Toast.LENGTH_SHORT).show();
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	@Override
+	public void saveLoginCred(JSONObject job) {
+		// TODO Auto-generated method stub
+
+	}
+	@Override
+	public void LoginFailed(JSONObject job) {
+		// TODO Auto-generated method stub
+
 	}
 
 

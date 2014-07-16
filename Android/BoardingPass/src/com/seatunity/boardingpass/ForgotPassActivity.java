@@ -7,6 +7,7 @@ import com.bugsense.trace.BugSenseHandler;
 import com.google.zxing.oned.rss.FinderPattern;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.fragment.FragmentMyAccount;
+import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.UserCred;
@@ -41,7 +42,7 @@ import android.widget.Toast;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
-public class ForgotPassActivity extends Activity {
+public class ForgotPassActivity extends Activity implements CallBackApiCall {
 	EditText et_email;
 	Button btn_send;
 	String email;
@@ -118,16 +119,50 @@ public class ForgotPassActivity extends Activity {
 			loginObj.put("forgotpass", "true");
 			loginObj.put("email", email);
 			String forgotobject=loginObj.toString();
-
-			AsyncaTaskApiCall logoutcall=new AsyncaTaskApiCall(forlisenar, forgotobject, ForgotPassActivity.this);
-			logoutcall.execute();
+			String url = "passreset/en";
+			AsyncaTaskApiCall forgot_pass =new AsyncaTaskApiCall(ForgotPassActivity.this, loginObj.toString(), ForgotPassActivity.this,
+					url,Constants.REQUEST_TYPE_POST);
+			forgot_pass.execute();
+			
+//			AsyncaTaskApiCall logoutcall=new AsyncaTaskApiCall(forlisenar, forgotobject, ForgotPassActivity.this);
+//			logoutcall.execute();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void SuccessGetNewPass(){
-		finish();
+	@Override
+	public void responseOk(JSONObject job) {
+		// TODO Auto-generated method stub
+		try {
+			if(job.getString("success").equals("true")){
+				Toast.makeText(ForgotPassActivity.this,getResources().getString(R.string.txt_emailsen_success),
+						Toast.LENGTH_SHORT).show();
+				finish();
+			}
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
+	@Override
+	public void responseFailure(JSONObject job) {
+		// TODO Auto-generated method stub
+		Toast.makeText(ForgotPassActivity.this,getResources().getString(R.string.txt_emailsen_failure),
+				Toast.LENGTH_SHORT).show();
+	}
+	@Override
+	public void saveLoginCred(JSONObject job) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void LoginFailed(JSONObject job) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

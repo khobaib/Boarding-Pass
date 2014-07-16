@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import com.bugsense.trace.BugSenseHandler;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.fragment.FragmentMyAccount;
+import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.UserCred;
@@ -38,7 +39,7 @@ import android.widget.Toast;
  
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
-public class PasswordChangeActivity extends Activity {
+public class PasswordChangeActivity extends Activity implements CallBackApiCall{
 	EditText et_enter_old_pass,et_enter_new_pass,et_confirm_new_pass;
 	String oldPassword,newPassword,confirmPassword;
 	BoardingPassApplication appInstance;
@@ -172,18 +173,58 @@ public class PasswordChangeActivity extends Activity {
 			loginObj.put("image_name", "");
 			loginObj.put("image_type", "");
 			loginObj.put("image_content", "");
-			AsyncaTaskApiCall logoutcall=new AsyncaTaskApiCall(appInstance,PasswordChangeActivity.this, loginObj.toString(),
-					PasswordChangeActivity.this, "reg");
-			logoutcall.execute();
+			AsyncaTaskApiCall change_pass =new AsyncaTaskApiCall(PasswordChangeActivity.this, loginObj.toString(), PasswordChangeActivity.this,
+					"reg",Constants.REQUEST_TYPE_PUT);
+			change_pass.execute();
+//			AsyncaTaskApiCall logoutcall=new AsyncaTaskApiCall(appInstance,PasswordChangeActivity.this, loginObj.toString(),
+//					PasswordChangeActivity.this, "reg");
+//			logoutcall.execute();
     	} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
     
-    public void SuccessUpdateProfile(){
-    	userCred.setPassword(newPassword);
-    	appInstance.setUserCred(userCred);
-    	finish();
-    }
+//    public void SuccessUpdateProfile(){
+//    	userCred.setPassword(newPassword);
+//    	appInstance.setUserCred(userCred);
+//    	finish();
+//    }
+	@Override
+	public void responseOk(JSONObject job) {
+		// TODO Auto-generated method stub
+		try {
+			if(job.getString("success").equals("true")){
+				Toast.makeText(PasswordChangeActivity.this,getResources().getString(R.string.txt_update_success),
+						Toast.LENGTH_SHORT).show();
+				userCred.setPassword(newPassword);
+		    	appInstance.setUserCred(userCred);
+		    	finish();
+				
+			}
+			else{
+
+
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void responseFailure(JSONObject job) {
+		// TODO Auto-generated method stub
+		Toast.makeText(PasswordChangeActivity.this, getResources().getString(R.string.txt_update_failed),
+				Toast.LENGTH_SHORT).show();
+	}
+	@Override
+	public void saveLoginCred(JSONObject job) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void LoginFailed(JSONObject job) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -16,6 +16,7 @@ import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
+import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.ServerResponse;
@@ -26,6 +27,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -39,6 +41,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Choreographer.FrameCallback;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -54,7 +57,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
-public class FragmentLogin extends Fragment{
+public class FragmentLogin extends Fragment implements CallBackApiCall{
 	EditText et_email,et_password;
 	TextView tv_errorshow,tv_forgot_pass;
 	Button bt_login;
@@ -165,8 +168,13 @@ public class FragmentLogin extends Fragment{
 			loginObj.put("email", email);
 			loginObj.put("password", password);
 			String loginData = loginObj.toString();
-			AsyncaTaskApiCall logincall=new AsyncaTaskApiCall(FragmentLogin.this, loginData, getActivity());
-			logincall.execute();
+			
+			AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentLogin.this, loginData, getActivity(),
+					"login",Constants.REQUEST_TYPE_POST);
+			log_in_lisenar.execute();
+//			
+//			AsyncaTaskApiCall logincall=new AsyncaTaskApiCall(FragmentLogin.this, loginData, getActivity());
+//			logincall.execute();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -202,6 +210,54 @@ public class FragmentLogin extends Fragment{
 			}
 		} catch (Exception e) {
 		}
+	}
+
+	@Override
+	public void responseOk(JSONObject job) {
+		// TODO Auto-generated method stub
+		try {
+			UserCred usercred=new UserCred();
+			String status=job.getString("success");
+			if(status.equals("true")){
+				usercred=usercred.parseUserCred(job);
+				usercred.setEmail(email);
+				usercred.setPassword(password);
+				appInstance.setUserCred(usercred);
+				appInstance.setRememberMe(true);
+				Intent intent=new Intent(getActivity(), MainActivity.class);
+				intent.putExtra("select", 1);
+				startActivity(intent);
+				getActivity().finish();		
+				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_login_success), Toast.LENGTH_SHORT).show();
+				
+			}
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void responseFailure(JSONObject job) {
+		// TODO Auto-generated method stub
+		tv_errorshow.setVisibility(View.VISIBLE);
+		Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_login_failed), Toast.LENGTH_SHORT).show();
+	
+	}
+
+	@Override
+	public void saveLoginCred(JSONObject job) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void LoginFailed(JSONObject job) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

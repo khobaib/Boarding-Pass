@@ -16,9 +16,11 @@ import com.seatunity.boardingpass.adapter.AdapterBaseMaps;
 import com.seatunity.boardingpass.adapter.AdapterForBoardingPass;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
+import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
+import com.seatunity.model.BoardingPassList;
 import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 import android.annotation.SuppressLint;
@@ -61,11 +63,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
-public class FragmentBoardingPasses extends Fragment{
+public class FragmentBoardingPasses extends Fragment implements CallBackApiCall{
 	HomeListFragment parent;
 	EditText et_email,et_password;
 	TextView tv_errorshow;
 	Button bt_login;
+	AsyncaTaskApiCall retreive;
 	ArrayList<BoardingPass>list;
 	ArrayList<BoardingPass>list_greaterthan;
 	Button btn_boarding_pass;
@@ -122,7 +125,8 @@ public class FragmentBoardingPasses extends Fragment{
 				dbInstance.close();
 			}
 			else{
-				AsyncaTaskApiCall retreive =new AsyncaTaskApiCall(FragmentBoardingPasses.this, getJsonObjet(), getActivity());
+				//CallBackApiCall CaBLisenar,String body,Context context,String addedurl,int requestType
+			 retreive =new AsyncaTaskApiCall(this, getJsonObjet(), getActivity(),"bplist",Constants.REQUEST_TYPE_POST);
 				retreive.execute();
 			}
 		}
@@ -139,25 +143,26 @@ public class FragmentBoardingPasses extends Fragment{
 
 		return v;
 	}
-	public void lodedLodaedfromServer(ArrayList<BoardingPass> listfromserver){
-		this.list=listfromserver;
-		setlist();
-		Log.e("Tag", " k");
-		SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
-		dbInstance.open();
-		for(int i=0;i<list.size();i++){
-			Log.e("testing", ""+i+"  "+list.get(i).getTravel_from_name());
-			dbInstance.insertOrUpdateBoardingPass(list.get(i));
-		}
-
-		list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
-		dbInstance.close();
-		setlist();
-		if(list.size()<1){
-			parent.startAddBoardingPassDuringLogin();
-		}
-
-	}
+//	public void lodedLodaedfromServer(ArrayList<BoardingPass> listfromserver){
+//		this.list=listfromserver;
+//		setlist();
+//		Log.e("Tag", " k");
+//		SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
+//		dbInstance.open();
+//		for(int i=0;i<list.size();i++){
+//			Log.e("testing", ""+i+"  "+list.get(i).getTravel_from_name());
+//			dbInstance.insertOrUpdateBoardingPass(list.get(i));
+//		}
+//
+//		list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+//		dbInstance.close();
+//		setlist();
+//		if(list.size()<1){
+//			parent.startAddBoardingPassDuringLogin();
+//		}
+//		
+//
+//	}
 	public void  setlist(){
 		Calendar c = Calendar.getInstance(); 
 		int dayofyear = c.get(Calendar.DAY_OF_YEAR);
@@ -222,6 +227,66 @@ public class FragmentBoardingPasses extends Fragment{
 				" "+bpass.getFlight_no());
 		tv_start_time.setText(bpass.getDeparture());
 		tv_arrival_time.setText(bpass.getArrival());
+	}
+
+	@Override
+	public void responseOk(JSONObject job) {
+		// TODO Auto-generated method stub
+		try {
+			if(job.getString("success").equals("true")){
+				this.list=BoardingPassList.getBoardingPassListObject(job).getBoardingPassList();
+				//this.list=listfromserver;
+				setlist();
+				Log.e("Tag", " k");
+				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
+				dbInstance.open();
+				for(int i=0;i<list.size();i++){
+					Log.e("testing", ""+i+"  "+list.get(i).getTravel_from_name());
+					dbInstance.insertOrUpdateBoardingPass(list.get(i));
+				}
+		
+				list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+				dbInstance.close();
+				setlist();
+				if(list.size()<1){
+					parent.startAddBoardingPassDuringLogin();
+				}
+			}
+			else{
+				
+				Toast.makeText(context, job.getString("message"),
+						Toast.LENGTH_SHORT).show();
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+	}
+
+	@Override
+	public void responseFailure(JSONObject job) {
+		// TODO Auto-generated method stub
+		try {
+			Toast.makeText(context, job.getString("message"),
+					Toast.LENGTH_SHORT).show();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void saveLoginCred(JSONObject job) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void LoginFailed(JSONObject job) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

@@ -50,15 +50,7 @@ public class AdapterForSeatmet extends BaseAdapter {
 		this.context = context;
 		this.token=token;
 		this.list=item;
-		//        Collections.sort(list, new Comparator<BoardingPass>(){
-		//            public int compare(BoardingPass o1, BoardingPass o2){
-		//                if(o1.getJulian_date() == o2.getJulian_date())
-		//                    return 0;
-		//                return Integer.parseInt(o1.getJulian_date()) < Integer.parseInt(o2.getJulian_date()) ? -1 : 1;
-		//            }
-		//       });
-
-
+		
 	}
 
 	@Override
@@ -163,8 +155,11 @@ public class AdapterForSeatmet extends BaseAdapter {
 								JSONObject loginObj = new JSONObject();
 								loginObj.put("token", token);
 								loginObj.put("message", value);
-								AsyncaTaskApiCall sendmessage=new AsyncaTaskApiCall(lisenar, loginObj.toString(), context, list.get(position).getId());
+								lisenar.callfrom=1;
+								AsyncaTaskApiCall sendmessage =new AsyncaTaskApiCall(lisenar, loginObj.toString(), context,
+										"messagemate/"+list.get(position).getId(),Constants.REQUEST_TYPE_POST);
 								sendmessage.execute();
+								
 							} catch (JSONException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
