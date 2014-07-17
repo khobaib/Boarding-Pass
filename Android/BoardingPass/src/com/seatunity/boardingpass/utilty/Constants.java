@@ -15,65 +15,87 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 
 public class Constants {
-	
+
+	public static boolean LIVE_IN_FLAG=false;
+	public static boolean AGE_FLAG=false;
+	public static boolean GENDER_FLAG=false;
+	public static boolean POFESSION_FLAG=false;
+	public static boolean SEATING_PREF_FLAG=false;
+	public static boolean SOME_ABOUT_FLAG=false;
+	public static boolean CHANGE_PHOTO_FLAG=false;
+
+
+	public static void setAllFlagFalse(){
+		LIVE_IN_FLAG=false;
+		AGE_FLAG=false;
+		GENDER_FLAG=false;
+		POFESSION_FLAG=false;
+		SEATING_PREF_FLAG=false;
+		SOME_ABOUT_FLAG=false;
+		CHANGE_PHOTO_FLAG=false;
+	}
+
+
 
 	public static String DOMAIN_NAME="http://seatunity.net";
 	public static Bitmap photo=null;
 	public static int SELECTEDPOSITION=0;
 	public static String getDayandYear(int dayOfYear){
-		    Calendar calendar = Calendar.getInstance();
-		    calendar.set(Calendar.DAY_OF_YEAR, dayOfYear);
-//		    int year = 2004;
-//		    calendar.set(Calendar.YEAR, year);
-		    int i=calendar.get(Calendar.MONTH);
-		    return calendar.get(Calendar.DAY_OF_MONTH)+":" +getMonth(i);
-		    
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.DAY_OF_YEAR, dayOfYear);
+		//		    int year = 2004;
+		//		    calendar.set(Calendar.YEAR, year);
+		int i=calendar.get(Calendar.MONTH);
+		return calendar.get(Calendar.DAY_OF_MONTH)+":" +getMonth(i);
+
 	}
-	
+
+
+
 	public static String getMonth(int month) {
-	    String mon= new DateFormatSymbols().getMonths()[month];
-	    mon=mon.substring(0,3);
-	    mon=mon.toUpperCase();
-	    return mon;
+		String mon= new DateFormatSymbols().getMonths()[month];
+		mon=mon.substring(0,3);
+		mon=mon.toUpperCase();
+		return mon;
 	}
 	public static boolean isLeapYear(int year) {
-		
-		  if (year % 4 != 0) {
-		    return false;
-		  } else if (year % 400 == 0) {
-		    return true;
-		  } else if (year % 100 == 0) {
-		    return false;
-		  } else {
-		    return true;
-		  }
+
+		if (year % 4 != 0) {
+			return false;
+		} else if (year % 400 == 0) {
+			return true;
+		} else if (year % 100 == 0) {
+			return false;
+		} else {
+			return true;
 		}
-	
+	}
+
 	public static String REMEMBER_ME="remember_me";
 	public static boolean pushnotificationcalllive=false;
-	
+
 	public static String type;
-	
+
 	public static boolean topicwritesuccess=false;
 	public static boolean IMAGEPAGECALLED=false; 
 	public static boolean STATECALLPDFORMENU=false;
 	public static int GOTABFROMWRITETOPIC;
 	public static boolean GOARTCLEPAGEFROMMEMBER=false; 
-	
+
 	public static boolean GOARTCLEPAGE=false; 
 	public static int from;
-	
+
 	public static String INTER_ARTICLE_ID;
 	public static String INTER_MEMBER_ID;
-	
+
 	public static boolean GOMEMBERSTATEFROMINTERACTION=false; 
 	public static boolean GOMEMBERSTATEFROMSETTING=false; 
-	
+
 	public static boolean MESSAGESETTINGSTATE=false;
 	public static boolean catgeory=false;
 	public static String caturl="-1";
 	public static String caname=""; 
-	
+
 	public static boolean writetopicsuccess=false;
 	public static String drectory;
 	public static String photofromcamera;
@@ -111,8 +133,8 @@ public class Constants {
 	public static final int REQUEST_TYPE_POST = 2;
 	public static final int REQUEST_TYPE_PUT = 3;
 	public static final int REQUEST_TYPE_DELETE = 4;
-	
-	
+
+
 	public static final String TOKEN = "token";
 	public static final String LANGUAGE = "language";
 	public static final String FIRSTNAME = "firstname";
@@ -127,9 +149,9 @@ public class Constants {
 	public static final String PASSWORD = "password";
 	public static final String SOME_THING_ABOUT_YOU = "something_about_you";
 	public static final String STATUS = "status";
-	
-	
-public static final int ESSENTIAL_EDUCATION_INDEX = 0;
+
+
+	public static final int ESSENTIAL_EDUCATION_INDEX = 0;
 	public static final int ESSENTIAL_ETHNICITY_INDEX = 1;
 	public static final int ESSENTIAL_DIET_INDEX = 2;
 	public static final int ESSENTIAL_DRINKS_INDEX = 3;

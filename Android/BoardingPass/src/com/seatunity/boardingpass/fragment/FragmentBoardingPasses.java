@@ -143,26 +143,7 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall{
 
 		return v;
 	}
-//	public void lodedLodaedfromServer(ArrayList<BoardingPass> listfromserver){
-//		this.list=listfromserver;
-//		setlist();
-//		Log.e("Tag", " k");
-//		SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
-//		dbInstance.open();
-//		for(int i=0;i<list.size();i++){
-//			Log.e("testing", ""+i+"  "+list.get(i).getTravel_from_name());
-//			dbInstance.insertOrUpdateBoardingPass(list.get(i));
-//		}
-//
-//		list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
-//		dbInstance.close();
-//		setlist();
-//		if(list.size()<1){
-//			parent.startAddBoardingPassDuringLogin();
-//		}
-//		
-//
-//	}
+
 	public void  setlist(){
 		Calendar c = Calendar.getInstance(); 
 		int dayofyear = c.get(Calendar.DAY_OF_YEAR);

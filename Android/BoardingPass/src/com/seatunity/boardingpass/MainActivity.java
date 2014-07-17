@@ -35,6 +35,7 @@ import com.seatunity.boardingpass.fragment.HomeFragment;
 import com.seatunity.boardingpass.fragment.HomeListFragment;
 import com.seatunity.boardingpass.fragment.PastBoardingPassListFragment;
 import com.seatunity.boardingpass.fragment.TabFragment;
+import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.boardingpass.utilty.GetResources;
@@ -83,7 +84,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 	private DrawerLayout mDrawerLayout;
 	public ListView mDrawerList;
 	public TabFragment activeFragment;
@@ -112,7 +113,7 @@ public class MainActivity extends FragmentActivity {
 			ViewConfiguration config = ViewConfiguration.get(this);
 			Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
 			if(menuKeyField != null) {
-			
+
 				menuKeyField.setAccessible(true);
 				menuKeyField.setBoolean(config, false);
 			}
@@ -182,12 +183,6 @@ public class MainActivity extends FragmentActivity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		lisenar=this;
-		//Log.e("main", "onResume");
-
-		//		if (savedInstanceState == null) {
-		//			displayView(0);
-		//		}
-
 		displayView(Constants.SELECTEDPOSITION);
 	}
 
@@ -236,54 +231,31 @@ public class MainActivity extends FragmentActivity {
 			}
 			else{
 				displayView(3);
-			
+
 			}
 			return true;
-	
+
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-public void ShareApp(){
-	
-	Intent sendIntent = new Intent();
-	sendIntent.setAction(Intent.ACTION_SEND);
-	sendIntent.putExtra(Intent.EXTRA_TEXT,
-	    "Hey check out SeatUnity app at: https://play.google.com/store/apps/details?id=tagmap.me&hl=en");
-	sendIntent.setType("text/plain");
-	startActivity(sendIntent);
-	
-	
-//	Intent share = new Intent(android.content.Intent.ACTION_SEND);
-////    share.setType("image/jpeg");
-////
-////    // gets the list of intents that can be loaded.
-//    List<ResolveInfo> resInfo = MainActivity.this.getPackageManager().queryIntentActivities(share, 0);
-////    if (!resInfo.isEmpty()){
-////        for (ResolveInfo info : resInfo) {
-////            if (info.activityInfo.packageName.toLowerCase().contains(type) || 
-////                    info.activityInfo.name.toLowerCase().contains(type) ) {
-//                share.putExtra(Intent.EXTRA_SUBJECT,  "SeatUnity");
-//                share.putExtra(Intent.EXTRA_TEXT,     "https://play.google.com/store/apps/details?id=tagmap.me&hl=en");
-//             //   share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(myPath)) ); // Optional, just if you wanna share an image.
-////                share.setPackage(info.activityInfo.packageName);
-////                found = true;
-////                break;
-////            }
-////        }
-////        if (!found)
-////            return;
-//
-//        startActivity(Intent.createChooser(share, "Select"));
-  
-}
+	public void ShareApp(){
+
+		Intent sendIntent = new Intent();
+		sendIntent.setAction(Intent.ACTION_SEND);
+		sendIntent.putExtra(Intent.EXTRA_TEXT,
+				"Hey check out SeatUnity app at: https://play.google.com/store/apps/details?id=tagmap.me&hl=en");
+		sendIntent.setType("text/plain");
+		startActivity(sendIntent);
+
+	}
 
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
 		menu.findItem(R.id.action_settings).setVisible(false);
-		
+
 		//
 		return super.onPrepareOptionsMenu(menu);
 	}
@@ -319,7 +291,7 @@ public void ShareApp(){
 		default:
 			break;
 		}
-		
+
 		if (fragment != null) {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack(""+position).commit();
@@ -334,7 +306,7 @@ public void ShareApp(){
 				mDrawerList.setSelection(position);
 				setTitle(navMenuTitles[position]);
 			}
-			
+
 			mDrawerLayout.closeDrawer(mDrawerList);
 		}
 	}
@@ -359,92 +331,13 @@ public void ShareApp(){
 		//	Log.e("main", "onConfigurationChanged");
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
-	//	@Override
-	//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	//		super.onActivityResult(requestCode, resultCode, data);
-	//		if (requestCode == 0) {
-	//			if (resultCode == RESULT_OK) {
-	//				String contents = data.getStringExtra("SCAN_RESULT");
-	//			} else if (resultCode == RESULT_CANCELED) {
-	//			}
-	//		}
-	//		else if (requestCode == 12) {
-	//			if (resultCode == RESULT_OK) {
-	//				String path=data.getStringExtra("bitmap_file_path");
-	//				holder.getResultFromActivity(requestCode, resultCode, path);
-	//			} 
-	//			else if (resultCode == RESULT_CANCELED) {
-	//			}
-	//
-	//		}
-	//	}
 	public void close() {
 		finisssh();
 
 	}
 
-	//	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-	//
-	//		Toast.makeText(getActivity(), "Calling"+requestCode, 2000).show();
-	//		tv_add_boardingpasswith_camera.setText("gefcefckhgdfc");
-	//		if (requestCode == 0) {
-	//			if (resultCode == getActivity().RESULT_OK) {
-	//				String contents = intent.getStringExtra("SCAN_RESULT");
-	//				String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-	//				saveScannedBoardingPasstodatabes(contents,format);
-	//			} else if (resultCode == getActivity().RESULT_CANCELED) {
-	//			}
-	//		}
-	//
-	//		else if (requestCode == 10) {
-	//			if (resultCode == getActivity().RESULT_OK) {
-	//				int format=intent.getIntExtra(FilePickerActivity.FILE_FORMAT_KEY, 0);
-	//				String filepath=intent.getStringExtra(FilePickerActivity.FILE_PATH);
-	//				if(format==FilePickerActivity.PDF_FILE){
-	//					GetBoardingPassFromPDF(filepath);
-	//				}
-	//				else if(format==FilePickerActivity.PASSBOOK_FILE){
-	//					try {
-	//						String boardingpass=PkpassReader.getPassbookBarcodeString(filepath);
-	//						Log.e("json Object", boardingpass);
-	//					} catch (JSONException e) {
-	//						// TODO Auto-generated catch block
-	//						e.printStackTrace();
-	//					}
-	//				}
-	//				else if(format==FilePickerActivity.IMAGE_FILE){
-	//					Bitmap bitmap = BitmapFactory.decodeFile(filepath);
-	//					scanBarcodeFromImage(bitmap);
-	//				}
-	//
-	//			} else if (resultCode == getActivity().RESULT_CANCELED) {
-	//				Log.i("App","Scan unsuccessful");
-	//
-	//			}
-	//		}
-	//		else if (requestCode == 12) {
-	//			if (resultCode == getActivity().RESULT_OK) {
-	//				
-	//				File f = new File(intent.getStringExtra("bitmap_file_path"));
-	//				   Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
-	//				  
-	//				
-	//				if (bmp != null){
-	//					Log.e("tag", "4");
-	//					scanBarcodeFromImage(bmp);
-	//				}
-	//				 if (f.exists())
-	//					    f.delete();
-	//			} else if (resultCode == getActivity().RESULT_CANCELED) {
-	//			}
-	//		}
-	//	}
-	//
 
 	public void openDialogToAddBoardingPass(){
-		//		ImageView img_from_camera,img_from_sdcard;
-		//		TextView tv_add_boardingpasswith_camera,tv_add_fromsdcard;
-		//		RelativeLayout vw_bottom;
 		final Dialog dialog = new Dialog(MainActivity.this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.add_boarding_passs);
@@ -457,7 +350,6 @@ public void ShareApp(){
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				dialog.cancel();
 			}
 		});
@@ -465,8 +357,6 @@ public void ShareApp(){
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
 				onclicksdcard();
 				dialog.cancel();
 			}
@@ -475,7 +365,6 @@ public void ShareApp(){
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				onclicksdcard();
 				dialog.cancel();
 			}
@@ -485,7 +374,6 @@ public void ShareApp(){
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				onclickacamera();
 				dialog.cancel();
 			}
@@ -494,7 +382,6 @@ public void ShareApp(){
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				onclickacamera();
 				dialog.cancel();
 			}
@@ -621,8 +508,12 @@ public void ShareApp(){
 	public void SaveboardingPasstoServer(BoardingPass bpass){
 		String bpassdata="";
 		bpassdata=getJsonObjet(bpass);
-		AsyncaTaskApiCall apicalling=new AsyncaTaskApiCall(lisenar, bpassdata,MainActivity.this);
-		apicalling.execute();
+//		AsyncaTaskApiCall apicalling=new AsyncaTaskApiCall(lisenar, bpassdata,MainActivity.this);
+//		apicalling.execute();
+		AsyncaTaskApiCall change_pass =new AsyncaTaskApiCall(MainActivity.this, bpassdata, MainActivity.this,
+				
+				"newbp",Constants.REQUEST_TYPE_POST);
+		change_pass.execute();
 	}
 
 	public String getJsonObjet(BoardingPass bpass){
@@ -652,46 +543,7 @@ public void ShareApp(){
 		}
 		return "";
 	}
-	public void addBoardingPassonBackendSuccess(JSONObject result){
-		Log.e("result", result.toString());
-		try {
-			String success=result.getString("success");
-			if(success.equals("true")){
-				String id=result.getString("id");
-				boardingPass.setId(id);
-				Context context;
 
-				if(MainActivity.this==null){
-
-				}
-				else{
-					Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_boarding_pass_added_successfully),
-							Toast.LENGTH_SHORT).show();
-				}
-				setBoardingpassInLocalDB();
-
-			}
-			else{
-				try {
-					if(MainActivity.this==null){
-
-					}
-					else{
-						Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_invalid_borading_pass),
-								Toast.LENGTH_SHORT).show();
-					}
-
-				} catch (android.content.res.Resources.NotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
 	public void setBoardingpassInLocalDB(){
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(MainActivity.this);
 		dbInstance.open();
@@ -758,5 +610,60 @@ public void ShareApp(){
 	@Override
 	public void onBackPressed() {
 		activeFragment.onBackPressed();
+	}
+	@Override
+	public void responseOk(JSONObject job) {
+		// TODO Auto-generated method stub
+		//addBoardingPassonBackendSuccess(job);
+		String success;
+		try {
+			success = job.getString("success");
+			if(success.equals("true")){
+				String id=job.getString("id");
+				boardingPass.setId(id);
+				Context context;
+
+				if(MainActivity.this==null){
+
+				}
+				else{
+					Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_boarding_pass_added_successfully),
+							Toast.LENGTH_SHORT).show();
+				}
+				setBoardingpassInLocalDB();
+
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void responseFailure(JSONObject job) {
+		// TODO Auto-generated method stub
+		try {
+			if(MainActivity.this==null){
+
+			}
+			else{
+				Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_invalid_borading_pass),
+						Toast.LENGTH_SHORT).show();
+			}
+
+		} catch (android.content.res.Resources.NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	@Override
+	public void saveLoginCred(JSONObject job) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void LoginFailed(JSONObject job) {
+		// TODO Auto-generated method stub
+		
 	}
 }

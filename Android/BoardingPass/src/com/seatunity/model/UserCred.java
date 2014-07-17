@@ -17,6 +17,7 @@ public class UserCred {
 	private String image_url;
 	private String some_about_you="";
 	private String status="";
+	
 	public static UserCred parseUserCred(JSONObject userObj){
 		UserCred userCred = new UserCred();
 
@@ -30,6 +31,9 @@ public class UserCred {
 			}
 		}
 		return userCred;
+	}
+	public UserCred(UserCred cred){
+
 	}
 	public UserCred(){
 

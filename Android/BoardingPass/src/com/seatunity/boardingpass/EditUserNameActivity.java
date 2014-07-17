@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.bugsense.trace.BugSenseHandler;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
+import com.seatunity.boardingpass.fragment.FragmentLogin;
 import com.seatunity.boardingpass.fragment.FragmentSeatMet;
 import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
@@ -20,6 +21,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources.NotFoundException;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -47,6 +49,7 @@ public class EditUserNameActivity extends Activity implements CallBackApiCall{
 	BoardingPassApplication appInstance;
 	UserCred userCred;
 	Drawable back;
+	JSONObject contentbodyremeber;
 	EditUserNameActivity lisenar;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -185,8 +188,8 @@ public class EditUserNameActivity extends Activity implements CallBackApiCall{
 			loginObj.put("image_name", "");
 			loginObj.put("image_type", "");
 			loginObj.put("image_content", "");
-
-			AsyncaTaskApiCall edit_uname =new AsyncaTaskApiCall(EditUserNameActivity.this, loginObj.toString(), EditUserNameActivity.this,
+			
+			AsyncaTaskApiCall edit_uname =new AsyncaTaskApiCall(EditUserNameActivity.this,loginObj.toString() , EditUserNameActivity.this,
 					"reg",Constants.REQUEST_TYPE_PUT);
 			edit_uname.execute();
 		} catch (JSONException e) {
@@ -219,20 +222,99 @@ public class EditUserNameActivity extends Activity implements CallBackApiCall{
 	}
 	@Override
 	public void responseFailure(JSONObject job) {
-		// TODO Auto-generated method stub
-		Toast.makeText(EditUserNameActivity.this, getResources().getString(R.string.txt_update_failed),
-				Toast.LENGTH_SHORT).show();
+		
+		try {
+			JSONObject joberror=new JSONObject(job.getString("error"));
+			String code =joberror.getString("code");
+			if(code.equals("x05")){
+//				String message=joberror.getString("message");
+//				Toast.makeText(EditUserNameActivity.this, message,Toast.LENGTH_SHORT).show();
+				JSONObject loginObj = new JSONObject();
+				loginObj.put("email", appInstance.getUserCred().getEmail());
+				loginObj.put("password", appInstance.getUserCred().getPassword());
+				String loginData = loginObj.toString();
+				AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(EditUserNameActivity.this, loginData, 
+						EditUserNameActivity.this,"login",Constants.REQUEST_TYPE_POST,true);
+				log_in_lisenar.execute();
+
+			}
+			else{
+				String message=joberror.getString("message");
+				Toast.makeText(EditUserNameActivity.this, getResources().getString(R.string.txt_update_failed),
+						Toast.LENGTH_SHORT).show();
+			}
+			
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 	@Override
 	public void saveLoginCred(JSONObject job) {
 		// TODO Auto-generated method stub
+		try {
+			String status=job.getString("success");
+			if(status.equals("true")){
+				userCred=userCred.parseUserCred(job);
+				userCred.setEmail(appInstance.getUserCred().getEmail());
+				userCred.setPassword(appInstance.getUserCred().getPassword());
+				Log.e("tagged before",  appInstance.getUserCred().getToken());
+				appInstance.setUserCred(userCred);
+				Log.e("tagged after",  appInstance.getUserCred().getToken());
+				Log.e("tagged actuual", userCred.getToken());
+				appInstance.setRememberMe(true);
+				JSONObject loginObj = new JSONObject();
+				loginObj.put("token", appInstance.getUserCred().getToken());
+				loginObj.put("password",  appInstance.getUserCred().getPassword());
+				loginObj.put("language", appInstance.getUserCred().getLanguage());
+				loginObj.put("firstname", username);
+				loginObj.put("lastname", appInstance.getUserCred().getLastname());
+				loginObj.put("gender", appInstance.getUserCred().getGender());
+				loginObj.put("live_in", appInstance.getUserCred().getLive_in());
+				loginObj.put("age", appInstance.getUserCred().getAge());
+				loginObj.put("profession", appInstance.getUserCred().getProfession());
+				loginObj.put("seating_pref", appInstance.getUserCred().getSeating_pref());
+				loginObj.put("some_about_you", appInstance.getUserCred().getSomethinAbout());
+				loginObj.put("status", status);
+				loginObj.put("image_name", "");
+				loginObj.put("image_type", "");
+				loginObj.put("image_content", "");
+				AsyncaTaskApiCall edit_uname =new AsyncaTaskApiCall(EditUserNameActivity.this,loginObj.toString() , 
+						EditUserNameActivity.this,	"reg",Constants.REQUEST_TYPE_PUT);
+				edit_uname.execute();
+			}
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 
 	}
 	@Override
 	public void LoginFailed(JSONObject job) {
 		// TODO Auto-generated method stub
+		try {
+			JSONObject joberror=new JSONObject(job.getString("error"));
+			String code =joberror.getString("code");
 
+				String message=joberror.getString("message");
+				Toast.makeText(EditUserNameActivity.this, message,
+						Toast.LENGTH_SHORT).show();
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -172,9 +172,7 @@ public class FragmentLogin extends Fragment implements CallBackApiCall{
 			AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentLogin.this, loginData, getActivity(),
 					"login",Constants.REQUEST_TYPE_POST);
 			log_in_lisenar.execute();
-//			
-//			AsyncaTaskApiCall logincall=new AsyncaTaskApiCall(FragmentLogin.this, loginData, getActivity());
-//			logincall.execute();
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
