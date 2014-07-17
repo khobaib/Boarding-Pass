@@ -12,6 +12,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,7 @@ import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.BoardingPassList;
 import com.seatunity.model.SeatMetList;
+import com.seatunity.model.UserCred;
 @SuppressLint("NewApi")
 public class FragmentUpcomingBoardingPassDetails extends Fragment implements CallBackApiCall {
 	BoardingPass bpass;
@@ -50,6 +52,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	Button btn_seatmate;
 	BoardingPassApplication appInstance;
 	int callfrom=0;
+	Context context;
 	BoardingPass boardingPass;
 	TextView tv_name_carrier,tv_month_inside_icon,tv_date_inside_icon,tv_from_air,tv_to_air,tv_start_time,tv_arrival_time,
 	tv_flight_var,tv_seat_var,tv_compartment_class_var,tv_passenger_name;
@@ -57,7 +60,9 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	public FragmentUpcomingBoardingPassDetails(BoardingPass bpass){
 		this.bpass=bpass;
 		Log.e("insideList5", bpass.getTravel_from_name());
-	}@Override
+	}
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
@@ -183,6 +188,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
+		context=getActivity();
 
 	}
 
@@ -327,7 +333,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 				else if(callfrom==2){
 					SeatMetList  seatmet_listlist=SeatMetList.getSeatmetListObj(job);
 					this.list=seatmet_listlist;
-					if(list.getBoardingPassList().size()>0){
+					if(list.getAllSeatmateList().size()>0){
 						parent.startSeatmetList(list,bpass);
 					}
 
@@ -343,16 +349,65 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	}
 	@Override
 	public void responseFailure(JSONObject job) {
+		
+		try {
+			JSONObject joberror=new JSONObject(job.getString("error"));
+			String code =joberror.getString("code");
+			if(code.equals("x05")){
+				//				String message=joberror.getString("message");
+				//				Toast.makeText(EditUserNameActivity.this, message,Toast.LENGTH_SHORT).show();
+				JSONObject loginObj = new JSONObject();
+				loginObj.put("email", appInstance.getUserCred().getEmail());
+				loginObj.put("password", appInstance.getUserCred().getPassword());
+				String loginData = loginObj.toString();
+				AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentUpcomingBoardingPassDetails.this, loginData, 
+						context,"login",Constants.REQUEST_TYPE_POST,true);
+				log_in_lisenar.execute();
+
+			}
+			else{
+					Toast.makeText(context, job.getString("message"),
+							Toast.LENGTH_SHORT).show();
+			} 
+		}
+		catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void saveLoginCred(JSONObject job) {
 		// TODO Auto-generated method stub
 		try {
-			if(callfrom==1){
-				Toast.makeText(getActivity(), job.getString("message"),
-						Toast.LENGTH_SHORT).show();
+			UserCred userCred;
+			String status=job.getString("success");
+			if(status.equals("true")){
+				userCred=UserCred.parseUserCred(job);
+				userCred.setEmail(appInstance.getUserCred().getEmail());
+				userCred.setPassword(appInstance.getUserCred().getPassword());
+				appInstance.setUserCred(userCred);
+				appInstance.setRememberMe(true);
+				if(callfrom==1){
+					String url="bpdelete/"+bpass.getId();
+					callfrom=1;
+					AsyncaTaskApiCall get_list =new AsyncaTaskApiCall(FragmentUpcomingBoardingPassDetails.this, getJsonObjet(),context,
+							url,Constants.REQUEST_TYPE_POST);
+					get_list.execute();
+				}
+				else if(callfrom==2){
+					callfrom=2;
+					String extendedurl="seatmatelist/"+bpass.getCarrier()+"/"+bpass.getFlight_no()+"/"
+							+bpass.getJulian_date();
+					extendedurl=extendedurl.replace(" ", "");
+					AsyncaTaskApiCall get_list =new AsyncaTaskApiCall(FragmentUpcomingBoardingPassDetails.this, getJsonObjet(), context,
+							extendedurl,Constants.REQUEST_TYPE_POST);
+					get_list.execute();
+				}
+				
 			}
-			else if(callfrom==2){
-				Toast.makeText(getActivity(), job.getString("message"),
-					Toast.LENGTH_SHORT).show();
-			}
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -360,14 +415,22 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 
 	}
 	@Override
-	public void saveLoginCred(JSONObject job) {
-		// TODO Auto-generated method stub
-
-	}
-	@Override
 	public void LoginFailed(JSONObject job) {
 		// TODO Auto-generated method stub
-
+		try {
+			JSONObject joberror=new JSONObject(job.getString("error"));
+			String code =joberror.getString("code");
+			Constants.setAllFlagFalse();
+			String message=joberror.getString("message");
+			Toast.makeText(context, message,
+					Toast.LENGTH_SHORT).show();
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 

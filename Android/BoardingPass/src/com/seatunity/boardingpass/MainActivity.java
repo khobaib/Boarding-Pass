@@ -31,6 +31,7 @@ import com.seatunity.boardingpass.fragment.FragmentAddBoardingPassDuringLogin;
 import com.seatunity.boardingpass.fragment.FragmentMyAccount;
 import com.seatunity.boardingpass.fragment.FragmentBoardingPasses;
 import com.seatunity.boardingpass.fragment.FragmentReminder;
+import com.seatunity.boardingpass.fragment.FragmentSeatMet;
 import com.seatunity.boardingpass.fragment.HomeFragment;
 import com.seatunity.boardingpass.fragment.HomeListFragment;
 import com.seatunity.boardingpass.fragment.PastBoardingPassListFragment;
@@ -42,6 +43,7 @@ import com.seatunity.boardingpass.utilty.GetResources;
 import com.seatunity.boardingpass.utilty.PkpassReader;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.BoardingPassParser;
+import com.seatunity.model.UserCred;
 import com.touhiDroid.filepicker.FilePickerActivity;
 
 import android.annotation.SuppressLint;
@@ -100,13 +102,14 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 	BoardingPassApplication appInstance;
 	private FragmentManager fragmentManager;
 	int lastselectedposition=-1;
-	BoardingPass boardingPass;
+	BoardingPass boardingPass,needtoReusedBoardingPass;
 	HomeListFragment fragHome;
 	int prevselectedposition=-2;
 	ImageView img_from_camera,img_from_sdcard;
 	TextView tv_add_boardingpasswith_camera,tv_add_fromsdcard;
 	RelativeLayout vw_bottom;
 	MainActivity lisenar;
+	
 	private void getOverflowMenu() {
 
 		try {
@@ -506,12 +509,11 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 
 	}
 	public void SaveboardingPasstoServer(BoardingPass bpass){
+		needtoReusedBoardingPass=bpass;
 		String bpassdata="";
 		bpassdata=getJsonObjet(bpass);
-//		AsyncaTaskApiCall apicalling=new AsyncaTaskApiCall(lisenar, bpassdata,MainActivity.this);
-//		apicalling.execute();
 		AsyncaTaskApiCall change_pass =new AsyncaTaskApiCall(MainActivity.this, bpassdata, MainActivity.this,
-				
+
 				"newbp",Constants.REQUEST_TYPE_POST);
 		change_pass.execute();
 	}
@@ -640,30 +642,67 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 	}
 	@Override
 	public void responseFailure(JSONObject job) {
-		// TODO Auto-generated method stub
 		try {
-			if(MainActivity.this==null){
-
+			JSONObject joberror=new JSONObject(job.getString("error"));
+			String code =joberror.getString("code");
+			if(code.equals("x05")){
+				JSONObject loginObj = new JSONObject();
+				loginObj.put("email", appInstance.getUserCred().getEmail());
+				loginObj.put("password", appInstance.getUserCred().getPassword());
+				String loginData = loginObj.toString();
+				AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(MainActivity.this, loginData, 
+						MainActivity.this,"login",Constants.REQUEST_TYPE_POST,true);
+				log_in_lisenar.execute();
 			}
 			else{
-				Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_invalid_borading_pass),
+				Toast.makeText(MainActivity.this, job.getString("message"),
 						Toast.LENGTH_SHORT).show();
-			}
-
-		} catch (android.content.res.Resources.NotFoundException e) {
+			} 
+		}
+		catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 	@Override
 	public void saveLoginCred(JSONObject job) {
-		// TODO Auto-generated method stub
-		
+
+		try {
+			UserCred userCred;
+			String status=job.getString("success");
+			if(status.equals("true")){
+				userCred=UserCred.parseUserCred(job);
+				userCred.setEmail(appInstance.getUserCred().getEmail());
+				userCred.setPassword(appInstance.getUserCred().getPassword());
+				appInstance.setUserCred(userCred);
+				appInstance.setRememberMe(true);
+				String bpassdata="";
+				bpassdata=getJsonObjet(needtoReusedBoardingPass);
+				AsyncaTaskApiCall change_pass =new AsyncaTaskApiCall(MainActivity.this, bpassdata, MainActivity.this,
+
+						"newbp",Constants.REQUEST_TYPE_POST);
+				change_pass.execute();
+				
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	@Override
 	public void LoginFailed(JSONObject job) {
-		// TODO Auto-generated method stub
-		
+		try {
+			JSONObject joberror=new JSONObject(job.getString("error"));
+			String code =joberror.getString("code");
+			Constants.setAllFlagFalse();
+			String message=joberror.getString("message");
+			Toast.makeText(MainActivity.this, message,
+					Toast.LENGTH_SHORT).show();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
 	}
 }

@@ -64,6 +64,7 @@ import android.widget.Toast;
 		this.requestType=requestType;
 		jsonParser=new JsonParser();
 		this.redundantLoginState=redundantLoginState;
+		
 		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
 				context.getResources().getString(R.string.txt_please_wait), true);
 

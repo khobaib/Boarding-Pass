@@ -156,6 +156,8 @@ public class AdapterForSeatmet extends BaseAdapter {
 								loginObj.put("token", token);
 								loginObj.put("message", value);
 								lisenar.callfrom=1;
+								lisenar.savedMessage=value;
+								lisenar.Savedurl="messagemate/"+list.get(position).getId();
 								AsyncaTaskApiCall sendmessage =new AsyncaTaskApiCall(lisenar, loginObj.toString(), context,
 										"messagemate/"+list.get(position).getId(),Constants.REQUEST_TYPE_POST);
 								sendmessage.execute();

@@ -35,6 +35,7 @@ import android.app.ActionBar.OnNavigationListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -71,17 +72,21 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 	BoardingPassApplication appInstance;
 	SeatMetList seatmet_listobj;
 	BoardingPass bpass;
+	public String savedMessage;
+	public String Savedurl;
 	ArrayList<String> itemList;
 	TextView tv_from,tv_to,tv_month_inside_icon,tv_date_inside_icon,tv_seat_no,tv_flight_no,
 	tv_start_time,tv_arrival_time,tv_jfk,tv_cdg,tv_message;
 	ListView lv_seat_met_list;
 	int selectedposition=0;
+	Context context;
 	public int callfrom=0;
 	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
+		context=getActivity();
 	}
 	public FragmentSeatMet(SeatMetList seatmet_listobj,BoardingPass bpass){
 		Log.e("insideList4", bpass.getTravel_from_name());
@@ -115,11 +120,11 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 		AdapterForSeatmet adapter;
 		
 		if(i==0){
-			ArrayList<SeatMate> seatmatelist_all=new ArrayList<SeatMate>(seatmet_listobj.getBoardingPassList());
+			ArrayList<SeatMate> seatmatelist_all=new ArrayList<SeatMate>(seatmet_listobj.getAllSeatmateList());
 			if(seatmatelist_all.size()>0){
 				lv_seat_met_list.setVisibility(View.VISIBLE);
 				tv_message.setVisibility(View.GONE);
-				adapter=new AdapterForSeatmet(appInstance.getUserCred().getToken(),FragmentSeatMet.this,getActivity(), seatmet_listobj.getBoardingPassList());
+				adapter=new AdapterForSeatmet(appInstance.getUserCred().getToken(),FragmentSeatMet.this,getActivity(), seatmet_listobj.getAllSeatmateList());
 				lv_seat_met_list.setAdapter(adapter);
 			}
 			else{
@@ -132,9 +137,9 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 		}
 		else if(i==1){
 			ArrayList<SeatMate> seatmatelist_firstclass=new ArrayList<SeatMate>();
-			for(int k=0;k<seatmet_listobj.getBoardingPassList().size();k++){
-				if(seatmet_listobj.getBoardingPassList().get(k).getTravel_class().equals("First Class")){
-					seatmatelist_firstclass.add(seatmet_listobj.getBoardingPassList().get(k));
+			for(int k=0;k<seatmet_listobj.getAllSeatmateList().size();k++){
+				if(seatmet_listobj.getAllSeatmateList().get(k).getTravel_class().equals("First Class")){
+					seatmatelist_firstclass.add(seatmet_listobj.getAllSeatmateList().get(k));
 				}
 			}
 			if(seatmatelist_firstclass.size()>0){
@@ -154,9 +159,9 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 		else if(i==2){
 
 			ArrayList<SeatMate> seatmatelist_business_class=new ArrayList<SeatMate>();
-			for(int k=0;k<seatmet_listobj.getBoardingPassList().size();k++){
-				if(seatmet_listobj.getBoardingPassList().get(k).getTravel_class().equals("Business Class")){
-					seatmatelist_business_class.add(seatmet_listobj.getBoardingPassList().get(k));
+			for(int k=0;k<seatmet_listobj.getAllSeatmateList().size();k++){
+				if(seatmet_listobj.getAllSeatmateList().get(k).getTravel_class().equals("Business Class")){
+					seatmatelist_business_class.add(seatmet_listobj.getAllSeatmateList().get(k));
 				}
 			}
 			if(seatmatelist_business_class.size()>0){
@@ -175,10 +180,10 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 		}
 		else if(i==3){
 			ArrayList<SeatMate> seatmatelist_economy_calss=new ArrayList<SeatMate>();
-			for(int k=0;k<seatmet_listobj.getBoardingPassList().size();k++){
-				if((seatmet_listobj.getBoardingPassList().get(k).getTravel_class().equals("Economy Class"))||
-						(seatmet_listobj.getBoardingPassList().get(k).getTravel_class().equals("Premium Economy"))){
-					seatmatelist_economy_calss.add(seatmet_listobj.getBoardingPassList().get(k));
+			for(int k=0;k<seatmet_listobj.getAllSeatmateList().size();k++){
+				if((seatmet_listobj.getAllSeatmateList().get(k).getTravel_class().equals("Economy Class"))||
+						(seatmet_listobj.getAllSeatmateList().get(k).getTravel_class().equals("Premium Economy"))){
+					seatmatelist_economy_calss.add(seatmet_listobj.getAllSeatmateList().get(k));
 				}
 			}
 			if(seatmatelist_economy_calss.size()>0){
@@ -201,10 +206,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
-				// TODO Auto-generated method stub
-
-				parent.startFragmentSingleSeatmet(seatmet_listobj.getBoardingPassList().get(position), bpass);
-
+				parent.startFragmentSingleSeatmet(seatmet_listobj.getAllSeatmateList().get(position), bpass);
 			}
 		});
 	}
@@ -255,7 +257,6 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 		setActionBarNavigation(true);
 		((MainActivity)getActivity()).refreash_menu.setVisible(true);
 		((MainActivity)getActivity()).refreash_menu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				// TODO Auto-generated method stub
@@ -281,23 +282,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 				extendedurl,Constants.REQUEST_TYPE_POST);
 		get_list.execute();
 	}
-	
-//	public void callSeatmet(){
-//		AsyncaTaskApiCall getlist=new AsyncaTaskApiCall(FragmentSeatMet.this,getJsonObjet(),getActivity(),bpass);
-//		getlist.execute();
-//	}
 
-//	public void callBackSeatmetList(SeatMetList list){
-//		this.seatmet_listobj=list;
-//		if(seatmet_listobj.getBoardingPassList().size()>0){
-//			setListView(selectedposition);
-//		}
-//		else{
-//			Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_getseatmate_failure),
-//					Toast.LENGTH_SHORT).show();
-//		}
-//		
-//	}
 	public void sowAlertMessage(){
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 				getActivity());
@@ -353,18 +338,18 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 			if(job.getString("success").equals("true")){
 				//boarding_passes
 				if(callfrom==1){
-					Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_emailsent_success),
+					Toast.makeText(context, context.getResources().getString(R.string.txt_emailsent_success),
 							Toast.LENGTH_SHORT).show();
 					
 				}
 				else if(callfrom==2){
 					SeatMetList  seatmet_listlist=SeatMetList.getSeatmetListObj(job);
 					this.seatmet_listobj=seatmet_listlist;
-					if(seatmet_listobj.getBoardingPassList().size()>0){
+					if(seatmet_listobj.getAllSeatmateList().size()>0){
 						setListView(selectedposition);
 					}
 					else{
-						Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_getseatmate_failure),
+						Toast.makeText(context, context.getResources().getString(R.string.txt_getseatmate_failure),
 								Toast.LENGTH_SHORT).show();
 					}
 				}
@@ -381,30 +366,85 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 	@Override
 	public void responseFailure(JSONObject job) {
 		try {
-			if(callfrom==1){
-				Toast.makeText(getActivity(), job.getString("message"),
-						Toast.LENGTH_SHORT).show();
+			JSONObject joberror=new JSONObject(job.getString("error"));
+			String code =joberror.getString("code");
+			if(code.equals("x05")){
+				JSONObject loginObj = new JSONObject();
+				loginObj.put("email", appInstance.getUserCred().getEmail());
+				loginObj.put("password", appInstance.getUserCred().getPassword());
+				String loginData = loginObj.toString();
+				AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentSeatMet.this, loginData, 
+						context,"login",Constants.REQUEST_TYPE_POST,true);
+				log_in_lisenar.execute();
+
 			}
-			else if(callfrom==2){
-				Toast.makeText(getActivity(), job.getString("message"),
-					Toast.LENGTH_SHORT).show();
-			}
-		} catch (JSONException e) {
+			else{
+					Toast.makeText(context, job.getString("message"),
+							Toast.LENGTH_SHORT).show();
+			} 
+		}
+		catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		
 	}
 	@Override
 	public void saveLoginCred(JSONObject job) {
 		// TODO Auto-generated method stub
+		try {
+			UserCred userCred;
+			String status=job.getString("success");
+			if(status.equals("true")){
+				userCred=UserCred.parseUserCred(job);
+				userCred.setEmail(appInstance.getUserCred().getEmail());
+				userCred.setPassword(appInstance.getUserCred().getPassword());
+				appInstance.setUserCred(userCred);
+				appInstance.setRememberMe(true);
+				if(callfrom==1){
+					JSONObject loginObj = new JSONObject();
+					loginObj.put("token", appInstance.getUserCred().getToken());
+					loginObj.put("message", savedMessage);
+					callfrom=1;
+					AsyncaTaskApiCall sendmessage =new AsyncaTaskApiCall(FragmentSeatMet.this, loginObj.toString(),context,
+							Savedurl,Constants.REQUEST_TYPE_POST);
+					sendmessage.execute();
+				}
+				else if(callfrom==2){
+					callfrom=2;
+					String extendedurl="seatmatelist/"+bpass.getCarrier()+"/"+bpass.getFlight_no()+"/"
+							+bpass.getJulian_date();
+					extendedurl=extendedurl.replace(" ", "");
+					AsyncaTaskApiCall get_list =new AsyncaTaskApiCall(FragmentSeatMet.this, getJsonObjet(),context,
+							extendedurl,Constants.REQUEST_TYPE_POST);
+					get_list.execute();
+				}
+				
+			}
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	@Override
 	public void LoginFailed(JSONObject job) {
-		// TODO Auto-generated method stub
-		
+		try {
+			JSONObject joberror=new JSONObject(job.getString("error"));
+			String code =joberror.getString("code");
+			Constants.setAllFlagFalse();
+			String message=joberror.getString("message");
+			Toast.makeText(context, message,
+					Toast.LENGTH_SHORT).show();
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 

@@ -20,7 +20,7 @@ public class SeatMetList {
 		SeatMetList object = gson.fromJson(res, SeatMetList.class);
 		return object;
 	}
-	public ArrayList<SeatMate> getBoardingPassList(){
+	public ArrayList<SeatMate> getAllSeatmateList(){
 		return this.seatmatelist;
 	}
 	public String getSuccess(){

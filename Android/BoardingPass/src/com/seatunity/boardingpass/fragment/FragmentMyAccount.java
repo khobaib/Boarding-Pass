@@ -782,10 +782,6 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 
 				}
 				userCred=ucredcopy;
-				
-				
-				
-				
 				if(callfrom==1){
 					JSONObject loginObj2 = new JSONObject();
 					loginObj2.put("token", appInstance.getUserCred().getToken());
@@ -793,10 +789,8 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 					AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj2.toString(), getActivity(),
 							"logout",Constants.REQUEST_TYPE_POST);
 					log_in_lisenar.execute();
-
 				}
 				else if(callfrom==2){
-
 					callfrom=2;
 					AsyncaTaskApiCall update_prof_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObjnew.toString(), getActivity(),
 							"reg",Constants.REQUEST_TYPE_PUT);
