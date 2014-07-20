@@ -64,13 +64,16 @@ import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class FragmentSignUp extends Fragment implements CallBackApiCall{
-	int selectedageposition=-1;
+	//int selectedageposition=-1;
 	TextView tv_signup_message,tv_sign_message;
-	EditText et_email,et_password,et_confirm_password,et_first_name,et_last_name,et_livein,et_age,et_profession,et_seatting_pref;
+	EditText et_email,et_password,et_confirm_password,et_first_name,et_last_name,et_livein,et_profession,et_seatting_pref,et_age;
 	Button bt_register;
 	String email="",gender,password="",confirmpassword="",firstname="",lastname="",livein="",age="",profession="",seating="";
-	Spinner s_age;
+	//Spinner s_age;
 	RadioGroup rdgrp_gender;
+	int SEATING_PREF=0;
+	int AGE=1;
+	int LIVE_IN=2;
 
 	ArrayList<String> agelist=new ArrayList<String>();
 	String[] NoCore_Array = new String [5];
@@ -127,8 +130,8 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 		initview(v);
 		return v;
 	}
+	
 	public void initview(ViewGroup v){
-		s_age=(Spinner) v.findViewById(R.id.s_age);
 		bt_register=(Button) v.findViewById(R.id.bt_register);
 		tv_signup_message=(TextView) v.findViewById(R.id.tv_signup_message);
 		tv_sign_message=(TextView) v.findViewById(R.id.tv_sign_message);
@@ -148,7 +151,18 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 				// TODO Auto-generated method stub
 				String[] seating_pref_list = getActivity().getResources().getStringArray(R.array.seating_pref); 
 				String title=getActivity().getResources().getString(R.string.txt_seatting_pref_cap);
-				showDialogForSeatingPref(seating_pref_list,title);
+				showDialogForSeatingPref(seating_pref_list,title,SEATING_PREF);
+			}
+		});
+		et_age.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				showDialogForSeatingPref(agelist.toArray(new CharSequence[agelist.size()])
+						,getActivity().getResources().getString(R.string.txt_age),AGE);
+				
 			}
 		});
 		String text = "<font color=#000000>By registering, you acknowledge that you have read and agreed to the SeatUnit</font>" +
@@ -233,31 +247,31 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 
 			}
 		});
-		setcity();
+	//	setcity();
 
 
 	}
-	private void setcity(){
+//	private void setcity(){
 
-		ArrayAdapter  adapter2 = new ArrayAdapter<String>(getActivity(),
-				R.drawable.contact_spinner_row_nothing_selected_age, agelist);
-		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		s_age.setAdapter( new  NothingSelectedSpinnerAdapter(
-				adapter2, R.drawable.contact_spinner_row_nothing_selected_age, getActivity()));
-		s_age.setOnItemSelectedListener(new OnItemSelectedListener(){
-
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, 
-					long arg3){
-				selectedageposition=position-1;
-
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				selectedageposition=-1;
-			}
-		}); 
-	}
+//		ArrayAdapter  adapter2 = new ArrayAdapter<String>(getActivity(),
+//				R.drawable.contact_spinner_row_nothing_selected_age, agelist);
+//		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		s_age.setAdapter( new  NothingSelectedSpinnerAdapter(
+//				adapter2, R.drawable.contact_spinner_row_nothing_selected_age, getActivity()));
+//		s_age.setOnItemSelectedListener(new OnItemSelectedListener(){
+//
+//			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, 
+//					long arg3){
+//				selectedageposition=position-1;
+//
+//			}
+//
+//			@Override
+//			public void onNothingSelected(AdapterView<?> arg0) {
+//				selectedageposition=-1;
+//			}
+//		}); 
+//	}
 
 	public void callsignUp(){
 		if((!email.equals(""))&&(!password.equals(""))&&(!password.equals(""))){
@@ -321,8 +335,9 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 				gender=getActivity().getResources().getString(R.string.txt_gender_rather_not_say);
 			}
 			loginObj.put("gender",gender);
-			if(selectedageposition!=-1){
-				loginObj.put("age",agelist.get(selectedageposition));
+			String age=et_age.getText().toString();
+			if((!age.equals(""))&&(!age.equals(getActivity().getResources().getString(R.string.txt_age)))){
+				loginObj.put("age",age);
 			}
 			else{
 				loginObj.put("age","");
@@ -336,33 +351,14 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 		}
 		return "";
 	}
-//	public void callBackFromApicall(ServerResponse serverResponse){
-//		JSONObject jsonObject=serverResponse.getjObj();
-//		//06-15 18:01:50.788: D/JsonParser(2615): sb = {"success":"true"}
-//		String success;
-//		try {
-//			success = jsonObject.getString("success");
-//			if(success.equals("true")){
-//				((AcountActivity)getActivity()).indicator.setViewPager(((AcountActivity)getActivity()).pager, 0);
-//				showCustomDialog();
-//			}
-//			else{
-//				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_signup_failed), 
-//						Toast.LENGTH_SHORT).show();
-//			}
-//
-//
-//		} catch (JSONException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//	}
-//	
-	public void showDialogForSeatingPref(final CharSequence[] items,String title)
+	public void showDialogForSeatingPref(final CharSequence[] items,String title,final int type)
 	{
 		AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-		builder.setTitle(title);
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+		TextView tv_title=(TextView) customTitleView.findViewById(R.id.tv_title);
+		tv_title.setText(title);
+		builder.setCustomTitle(customTitleView);
 		builder.setPositiveButton(getActivity().getResources().getString(R.string.txt_cancel), new DialogInterface.OnClickListener() {
 
 			@Override
@@ -375,8 +371,13 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				 seating=items[which].toString();
-				 et_seatting_pref.setText(seating);
+				if(type==SEATING_PREF){
+					 seating=items[which].toString();
+					 et_seatting_pref.setText(seating);
+				}
+				else if(type==AGE){
+					et_age.setText(items[which].toString());
+				}
 				dialog.cancel();
 			}
 		});

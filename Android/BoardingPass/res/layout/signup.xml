@@ -186,6 +186,21 @@
             android:textSize="14dp"
             android:hint="@string/txt_livein" >
         </EditText>
+        
+        <EditText
+             android:id="@+id/et_age"
+            android:layout_width="0dp"
+            android:textSize="14dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:editable="false"
+            android:gravity="center"
+            android:text="@string/txt_age"
+            android:textColor="#777777"
+              android:paddingLeft="42dp"
+            android:singleLine="true" >
+        </EditText>
 
         <Spinner
             android:id="@+id/s_age"
@@ -195,18 +210,10 @@
             android:gravity="center"
              android:layout_weight="1"
             android:paddingLeft="42dp"
+            android:visibility="gone"
              />
 
-        <EditText
-            android:id="@+id/et_age"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/txt_age"
-            android:inputType="number"
-            android:visibility="gone" >
-        </EditText>
+     
     </LinearLayout>
 
     <LinearLayout

@@ -128,11 +128,14 @@ public class AdapterForSeatmet extends BaseAdapter {
 		  input = new EditText(context);
 		 d = new AlertDialog.Builder(context)
 		.setView(input)
-		.setTitle(context.getResources().getString(R.string.txt_send_email))
 		.setPositiveButton(context.getResources().getString(R.string.txt_ok), null) //Set to null. We override the onclick
 		.setNegativeButton(context.getResources().getString(R.string.txt_cancel), null)
 		.create();
-
+		 LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+			View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+			TextView title=(TextView) customTitleView.findViewById(R.id.tv_title);
+			title.setText(context.getResources().getString(R.string.txt_send_email));
+			d.setCustomTitle(customTitleView);
 		d.setOnShowListener(new DialogInterface.OnShowListener() {
 
 			@Override

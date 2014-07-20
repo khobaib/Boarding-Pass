@@ -1,8 +1,10 @@
 package com.seatunity.boardingpass.adapter;
 import java.util.ArrayList;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.seatunity.boardingpass.NavDrawerItem;
 import com.seatunity.boardingpass.R;
+import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,9 +20,10 @@ public class NavDrawerListAdapter extends BaseAdapter {
      
     private Context context;
     private ArrayList<String> item;
-     
-    public NavDrawerListAdapter(Context context){
+    BoardingPassApplication appInstance;
+    public NavDrawerListAdapter(Context context,BoardingPassApplication appInstance){
         this.context = context;
+        this.appInstance=appInstance;
         item=new ArrayList<String>();
         item.add("1");
         item.add("2");
@@ -63,8 +66,13 @@ public class NavDrawerListAdapter extends BaseAdapter {
         	item.setVisibility(View.GONE);
         	imgIcon.setVisibility(View.VISIBLE);
         	le_unameandemail_holder.setVisibility(View.VISIBLE);
-        	 
-            imgIcon.setImageResource(R.drawable.ic_contact_picture);    
+        	 if(appInstance.getUserCred().getImage_url().equals("")){
+                 imgIcon.setImageResource(R.drawable.ic_contact_picture);    
+
+        	 }
+        	 else{
+        		 ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url(), imgIcon);
+        	 }
         	user_name.setText(context.getResources().getText(R.string.txt_user_name));
         	email.setText(context.getResources().getText(R.string.txt_email_addess));
         }

@@ -60,6 +60,9 @@ public class PasswordChangeActivity extends Activity implements CallBackApiCall{
         back=et_confirm_new_pass.getBackground();
         editTextControl();
     }
+    public void canCel(View view){
+		finish();
+	}
     @Override
     protected void onStop() {
         super.onStop();

@@ -165,9 +165,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
 		userCred=appInstance.getUserCred();
 		if(Constants.photo!=null){
-
 			uploadProfileImage(Constants.photo);
-			//Constants.photo=null;
 		}
 		else{
 			ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url()
@@ -223,9 +221,6 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 
 				String[] photochooser = getActivity().getResources().getStringArray(R.array.upload_photo_from); 
 				showDialogTochosePhoto(photochooser,getActivity().getResources().getString(R.string.txt_select_country));
-
-
-
 			}
 		});
 		setlistView();
@@ -279,8 +274,12 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 	}
 	public void ShowStatus(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(getActivity().getResources().getString(R.string.txt_status))
-		.setMessage(appInstance.getUserCred().getStatus())
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+		TextView title=(TextView) customTitleView.findViewById(R.id.tv_title);
+		title.setText(getActivity().getResources().getString(R.string.txt_status));
+		builder.setCustomTitle(customTitleView);
+		builder.setMessage(appInstance.getUserCred().getStatus())
 		.setCancelable(false)
 		.setPositiveButton(getActivity().getResources().getString(R.string.txt_ok), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
@@ -295,6 +294,11 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 	}
 	public void Signout(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+		TextView tvtitle=(TextView) customTitleView.findViewById(R.id.tv_title);
+		tvtitle.setText(getActivity().getResources().getString(R.string.acc_sign_out));
+		builder.setCustomTitle(customTitleView);
 		builder.setMessage(getActivity().getResources().getString(R.string.txt_sign_out_msz))
 		.setCancelable(false)
 		.setPositiveButton(getActivity().getResources().getString(R.string.txt_confirm), new DialogInterface.OnClickListener() {
@@ -327,7 +331,12 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 	public void showDialogTochosePhoto(final CharSequence[] items,String title)
 	{
 		AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-		builder.setTitle(title);
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+		TextView tvtitle=(TextView) customTitleView.findViewById(R.id.tv_title);
+		tvtitle.setText(title);
+		builder.setCustomTitle(customTitleView);
+		
 		builder.setPositiveButton(getActivity().getResources().getString(R.string.txt_cancel), new DialogInterface.OnClickListener() {
 
 			@Override
@@ -374,18 +383,19 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 	public void showDialogForGender(final CharSequence[] items,String title,final int postion)
 	{
 		AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-		builder.setTitle(title);
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+		TextView tvtitle=(TextView) customTitleView.findViewById(R.id.tv_title);
+		tvtitle.setText(title);
+		builder.setCustomTitle(customTitleView);
 		builder.setPositiveButton(getActivity().getResources().getString(R.string.txt_cancel), new DialogInterface.OnClickListener() {
-
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 				Constants.setAllFlagFalse();
 			}
 		});
-
 		builder.setSingleChoiceItems(items,-1, new DialogInterface.OnClickListener() {
-
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
@@ -452,11 +462,15 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 		input.setHint(hint);
 		final AlertDialog d = new AlertDialog.Builder(getActivity())
 		.setView(input)
-		.setTitle(title)
+		
 		.setPositiveButton(getActivity().getResources().getString(R.string.txt_ok), null) //Set to null. We override the onclick
 		.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel), null)
 		.create();
-
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+		TextView tvtitle=(TextView) customTitleView.findViewById(R.id.tv_title);
+		tvtitle.setText(title);
+		d.setCustomTitle(customTitleView);
 		d.setOnShowListener(new DialogInterface.OnShowListener() {
 
 			@Override
@@ -465,7 +479,6 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 				Button ok = d.getButton(AlertDialog.BUTTON_POSITIVE);
 				Button cancel = d.getButton(AlertDialog.BUTTON_NEGATIVE);
 				cancel.setOnClickListener(new OnClickListener() {
-
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub

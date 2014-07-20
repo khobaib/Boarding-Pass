@@ -245,11 +245,11 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall{
 		tv_month_inside_icon.setText(month);
 		tv_date_inside_icon.setText(dateofmonth);
 		tv_seat_no.setText(context.getResources().getString(R.string.txt_seat_nno)+
-				"Seat "+bpass.getSeat());
+				" "+bpass.getSeat());
 		tv_flight_no.setText(context.getResources().getString(R.string.txt_flight_no)+
 				" "+bpass.getFlight_no());
-		tv_start_time.setText(bpass.getDeparture());
-		tv_arrival_time.setText(bpass.getArrival());
+//		tv_start_time.setText(bpass.getDeparture());
+//		tv_arrival_time.setText(bpass.getArrival());
 	}
 
 	@Override
@@ -295,25 +295,25 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall{
 	@Override
 	public void responseFailure(JSONObject job) {
 		try {
-			JSONObject joberror=new JSONObject(job.getString("error"));
-			String code =joberror.getString("code");
-			if(code.equals("x05")){
-				//				String message=joberror.getString("message");
-				//				Toast.makeText(EditUserNameActivity.this, message,Toast.LENGTH_SHORT).show();
-				JSONObject loginObj = new JSONObject();
-				loginObj.put("email", appInstance.getUserCred().getEmail());
-				loginObj.put("password", appInstance.getUserCred().getPassword());
-				String loginData = loginObj.toString();
-				Log.e("tagged ", "msg  "+getActivity());
-				AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentBoardingPasses.this, loginData, 
-						context,"login",Constants.REQUEST_TYPE_POST,true);
-				log_in_lisenar.execute();
-
-			}
-			else{
+//			JSONObject joberror=new JSONObject(job.getString("error"));
+//			String code =joberror.getString("code");
+//			if(code.equals("x05")){
+//				//				String message=joberror.getString("message");
+//				//				Toast.makeText(EditUserNameActivity.this, message,Toast.LENGTH_SHORT).show();
+//				JSONObject loginObj = new JSONObject();
+//				loginObj.put("email", appInstance.getUserCred().getEmail());
+//				loginObj.put("password", appInstance.getUserCred().getPassword());
+//				String loginData = loginObj.toString();
+//				Log.e("tagged ", "msg  "+getActivity());
+//				AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentBoardingPasses.this, loginData, 
+//						context,"login",Constants.REQUEST_TYPE_POST,true);
+//				log_in_lisenar.execute();
+//
+//			}
+//			else{
 					Toast.makeText(getActivity(), job.getString("message"),
 							Toast.LENGTH_SHORT).show();
-			} 
+	//		} 
 		}
 		catch (JSONException e) {
 			// TODO Auto-generated catch block

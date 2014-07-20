@@ -78,9 +78,9 @@ public class FragmentSingleSeatMet extends Fragment{
 	ListView lv_seat_met_list;
 	Button btn_seatmate;
 	String hint;
-	 EditText input ;
-	 AlertDialog d ;
-	
+	EditText input ;
+	AlertDialog d ;
+
 	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -133,7 +133,7 @@ public class FragmentSingleSeatMet extends Fragment{
 			}
 		});
 		btn_seatmate.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
@@ -143,7 +143,7 @@ public class FragmentSingleSeatMet extends Fragment{
 		SetView();
 		return v;
 	}
-	
+
 	public void SetView(){
 		tv_uname.setText(seatmate.getName());
 		tv_profession.setText(seatmate.getProfession());
@@ -173,15 +173,17 @@ public class FragmentSingleSeatMet extends Fragment{
 		String loginData;
 		public AsyncSharedFlight(String loginData){
 			this.loginData=loginData;
-			pd=ProgressDialog.show(getActivity(),  getActivity().getResources().getString(R.string.app_name),
-					getActivity().getResources().getString(R.string.txt_please_wait), true);
+			pd=new ProgressDialog(getActivity());
+			pd.show();
+			pd.setCancelable(true);
+			pd.setContentView(R.layout.progress_content);
 		}
 		@Override
 		protected ServerResponse doInBackground(Void... params) {
-				String url = Constants.baseurl+"sharedflight/"+seatmate.getId();
-				ServerResponse response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
-						loginData, null);
-				return response;
+			String url = Constants.baseurl+"sharedflight/"+seatmate.getId();
+			ServerResponse response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+					loginData, null);
+			return response;
 		}
 
 		@Override
@@ -206,28 +208,30 @@ public class FragmentSingleSeatMet extends Fragment{
 				else{
 					Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_failed_to_get_seatmet),
 							Toast.LENGTH_SHORT).show();
-					
+
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	private class AsyncTaskSendMessage extends AsyncTask<Void, Void, ServerResponse> {
 		ProgressDialog pd;
 		String loginData;
 		public AsyncTaskSendMessage(String loginData){
 			this.loginData=loginData;
-			pd=ProgressDialog.show(getActivity(),  getActivity().getResources().getString(R.string.app_name),
-					getActivity().getResources().getString(R.string.txt_please_wait), true);
+			pd=new ProgressDialog(getActivity());
+			pd.show();
+			pd.setCancelable(true);
+			pd.setContentView(R.layout.progress_content);
 		}
 		@Override
 		protected ServerResponse doInBackground(Void... params) {
-				String url = Constants.baseurl+"messagemate/"+seatmate.getId();
-				ServerResponse response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
-						loginData, null);
-				return response;
+			String url = Constants.baseurl+"messagemate/"+seatmate.getId();
+			ServerResponse response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
+					loginData, null);
+			return response;
 		}
 
 		@Override
@@ -239,31 +243,35 @@ public class FragmentSingleSeatMet extends Fragment{
 			}
 			JSONObject job=result.getjObj();
 			try {
-					if(job.getString("success").equals("true")){
-						Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_emailsent_success),
-								Toast.LENGTH_SHORT).show();
-					}
-					else{
-						Toast.makeText(getActivity(), job.getString("message"),
-								Toast.LENGTH_SHORT).show();
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
+				if(job.getString("success").equals("true")){
+					Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_emailsent_success),
+							Toast.LENGTH_SHORT).show();
 				}
+				else{
+					Toast.makeText(getActivity(), job.getString("message"),
+							Toast.LENGTH_SHORT).show();
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	public void Successmessagesent(){
 	}
-	
+
 	public void showAlertDilog( ){
-		 hint=getActivity().getResources().getString(R.string.txt_message);
-		  input = new EditText(getActivity());
-		 d = new AlertDialog.Builder(getActivity())
+		hint=getActivity().getResources().getString(R.string.txt_message);
+		input = new EditText(getActivity());
+		d = new AlertDialog.Builder(getActivity())
 		.setView(input)
-		.setTitle(getActivity().getResources().getString(R.string.txt_send_email))
 		.setPositiveButton(getActivity().getResources().getString(R.string.txt_ok), null) //Set to null. We override the onclick
 		.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel), null)
 		.create();
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+		TextView title=(TextView) customTitleView.findViewById(R.id.tv_title);
+		title.setText(getActivity().getResources().getString(R.string.txt_send_email));
+		d.setCustomTitle(customTitleView);
 
 		d.setOnShowListener(new DialogInterface.OnShowListener() {
 
@@ -294,9 +302,9 @@ public class FragmentSingleSeatMet extends Fragment{
 									Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.
 											txt_check_internet), Toast.LENGTH_SHORT).show();
 								}
-								
-//								AsyncaTaskApiCall sendmessage=new AsyncaTaskApiCall(lisenar, loginObj.toString(), context, list.get(position).getId());
-//								sendmessage.execute();
+
+								//								AsyncaTaskApiCall sendmessage=new AsyncaTaskApiCall(lisenar, loginObj.toString(), context, list.get(position).getId());
+								//								sendmessage.execute();
 							} catch (JSONException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -311,73 +319,76 @@ public class FragmentSingleSeatMet extends Fragment{
 	}
 
 	public void showAlertDilogToshowSharedFlight(ArrayList<BoardingPass> item){
-//		 hint=getActivity().getResources().getString(R.string.txt_message);
-//		 AdapterForBoardingPass adapter=new AdapterForBoardingPass(getActivity(), item);
-//		 lv_sharedflight = new ListView(getActivity());
-//		 lv_sharedflight.setAdapter(adapter);
-//		
-//		 d = new AlertDialog.Builder(getActivity())
-//		.setView(input)
-//		.setTitle(getActivity().getResources().getString(R.string.txt_send_email))
-//		.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel), null)
-//		.create();
-//		 lv_sharedflight.setOnItemClickListener(new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-//					long arg3) {
-//				// TODO Auto-generated method stub
-//				d.cancel();
-//				
-//			}
-//		});
-//		d.setOnShowListener(new DialogInterface.OnShowListener() {
-//
-//			@Override
-//			public void onShow(DialogInterface dialog) {
-//
-//				Button b = d.getButton(AlertDialog.BUTTON_NEGATIVE);
-//				b.setOnClickListener(new View.OnClickListener() {
-//
-//					@Override
-//					public void onClick(View view) {
-//							d.cancel();
-//					}
-//				});
-//			}
-//		});
-//		d.show();
-		
+		//		 hint=getActivity().getResources().getString(R.string.txt_message);
+		//		 AdapterForBoardingPass adapter=new AdapterForBoardingPass(getActivity(), item);
+		//		 lv_sharedflight = new ListView(getActivity());
+		//		 lv_sharedflight.setAdapter(adapter);
+		//		
+		//		 d = new AlertDialog.Builder(getActivity())
+		//		.setView(input)
+		//		.setTitle(getActivity().getResources().getString(R.string.txt_send_email))
+		//		.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel), null)
+		//		.create();
+		//		 lv_sharedflight.setOnItemClickListener(new OnItemClickListener() {
+		//
+		//			@Override
+		//			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+		//					long arg3) {
+		//				// TODO Auto-generated method stub
+		//				d.cancel();
+		//				
+		//			}
+		//		});
+		//		d.setOnShowListener(new DialogInterface.OnShowListener() {
+		//
+		//			@Override
+		//			public void onShow(DialogInterface dialog) {
+		//
+		//				Button b = d.getButton(AlertDialog.BUTTON_NEGATIVE);
+		//				b.setOnClickListener(new View.OnClickListener() {
+		//
+		//					@Override
+		//					public void onClick(View view) {
+		//							d.cancel();
+		//					}
+		//				});
+		//			}
+		//		});
+		//		d.show();
+
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(
-                getActivity());
-         builderSingle.setTitle(getActivity().getResources().getString(R.string.txt_shared_flight_title));
-         
-        final  AdapterForBoardingPassFromAlert arrayAdapter=new AdapterForBoardingPassFromAlert(getActivity(), item);
-       
-        builderSingle.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel),
-                new DialogInterface.OnClickListener() {
+				getActivity());
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+		TextView title=(TextView) customTitleView.findViewById(R.id.tv_title);
+		title.setText(getActivity().getResources().getString(R.string.txt_shared_flight_title));
+		builderSingle.setCustomTitle(customTitleView);
+		final  AdapterForBoardingPassFromAlert arrayAdapter=new AdapterForBoardingPassFromAlert(getActivity(), item);
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+		builderSingle.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel),
+				new DialogInterface.OnClickListener() {
 
-        builderSingle.setAdapter(arrayAdapter,
-                new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    	dialog.dismiss();
-                    }
-                });
-        builderSingle.show();
-        
-//        LisAlertDialog dialog=new LisAlertDialog(getActivity(), item);
-//        dialog.show_alert();
+		builderSingle.setAdapter(arrayAdapter,
+				new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		builderSingle.show();
+
+		//        LisAlertDialog dialog=new LisAlertDialog(getActivity(), item);
+		//        dialog.show_alert();
 	}
 
 
-	
+
 }
 

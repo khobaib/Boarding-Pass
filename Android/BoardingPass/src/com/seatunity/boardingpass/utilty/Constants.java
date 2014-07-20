@@ -15,7 +15,7 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 
 public class Constants {
-
+	public static String[] okFileExtensions =  new String[] {"jpg", "png", "gif","jpeg"};
 	public static boolean LIVE_IN_FLAG=false;
 	public static boolean AGE_FLAG=false;
 	public static boolean GENDER_FLAG=false;
@@ -35,7 +35,38 @@ public class Constants {
 		CHANGE_PHOTO_FLAG=false;
 	}
 
+	public static boolean isImage(String file){
+		for (String extension : okFileExtensions)
+		{
+			if (file.toLowerCase().endsWith(extension))
+			{ 
+				return true;
+			}
+		}
+		return false;       
+	}
+	public static boolean isPdf(String file){
 
+		if (file.toLowerCase().endsWith(".pdf"))
+		{ 
+			return true;
+		}
+		else{
+			return false;
+		}
+
+	}
+	public static boolean isPkPass(String file){
+
+		if (file.toLowerCase().endsWith(".pkpass"))
+		{ 
+			return true;
+		}
+		else{
+			return false;
+		}
+
+	}
 
 	public static String DOMAIN_NAME="http://seatunity.net";
 	public static Bitmap photo=null;

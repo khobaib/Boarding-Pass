@@ -68,6 +68,9 @@ public class EditUserNameActivity extends Activity implements CallBackApiCall{
 		editTextControl();
 		setView();
 	}
+	public void canCel(View view){
+		finish();
+	}
 	public void editTextControl(){
 		et_uname.addTextChangedListener(new TextWatcher() {          
 			@Override

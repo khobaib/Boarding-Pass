@@ -80,6 +80,11 @@
             android:label="@string/app_name" >
         </activity>
         <activity
+            android:name="com.seatunity.boardingpass.ActingAsHookActivity"
+            android:label="@string/app_name"
+            android:theme="@style/HomeActivityTheme" >
+        </activity>
+        <activity
             android:name="com.seatunity.boardingpass.SplasActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
@@ -102,10 +107,16 @@
         <activity
             android:name="com.seatunity.boardingpass.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/HomeActivityTheme"
-             >
+            android:theme="@style/HomeActivityTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="*/*" />
+            </intent-filter>
+            
+            
         </activity>
-            <activity
+        <activity
             android:name="com.seatunity.boardingpass.ForgotPassActivity"
             android:screenOrientation="portrait"
             android:theme="@style/HomeActivityTheme" >
@@ -158,60 +169,6 @@
             android:name="com.artifex.mupdfdemo.MuPDFActivity"
             android:label="@string/app_name"
             android:theme="@style/AppBaseTheme" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="application/vnd.ms-xpsdocument" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="application/pdf" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="application/x-cbz" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="file" />
-                <data android:mimeType="*/*" />
-                <data android:pathPattern=".*\\.xps" />
-                <data android:host="*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="file" />
-                <data android:mimeType="*/*" />
-                <data android:pathPattern=".*\\.pdf" />
-                <data android:host="*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="file" />
-                <data android:mimeType="*/*" />
-                <data android:pathPattern=".*\\.cbz" />
-                <data android:host="*" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.artifex.mupdfdemo.OutlineActivity"

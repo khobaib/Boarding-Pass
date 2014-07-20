@@ -79,6 +79,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -109,7 +110,10 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 	TextView tv_add_boardingpasswith_camera,tv_add_fromsdcard;
 	RelativeLayout vw_bottom;
 	MainActivity lisenar;
-	
+	int BARCODESCANFROMDIRECT=0;
+	int SCANBOARDINGPASSFROMSDCARD=10;
+	int SCANBARCODEFROMPDF=12;
+
 	private void getOverflowMenu() {
 
 		try {
@@ -129,12 +133,19 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		super.onCreate(savedInstanceState);
 		BugSenseHandler.initAndStartSession(MainActivity.this, "2b60c090");
 		setContentView(R.layout.activity_main);
-		getOverflowMenu() ;
 		try {
-			Constants.SELECTEDPOSITION=getIntent().getExtras().getInt("select");
+			Intent intent = getIntent();
+			String filepath=intent.getData().toString();
+			filepath=filepath.replace("file://", "");
+			if((filepath!=null)&&(!filepath.equals(""))){
+				showalert(filepath);
+			}
+
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		getOverflowMenu() ;
 		fragmentManager = getFragmentManager();
 		appInstance =(BoardingPassApplication)getApplication();
 		mTitle = mDrawerTitle = getTitle();
@@ -149,7 +160,7 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
 		navMenuIcons.recycle();
 		mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
-		adapter = new NavDrawerListAdapter(getApplicationContext());
+		adapter = new NavDrawerListAdapter(getApplicationContext(),appInstance);
 		mDrawerList.setAdapter(adapter);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
@@ -206,7 +217,7 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		delete_menu.setVisible(false);
 		refreash_menu=menu.findItem(R.id.refresh);
 		refreash_menu.setVisible(false);
-
+		
 		return true;
 	}
 	@Override
@@ -394,7 +405,7 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 	}
 	public void onclicksdcard(){
 		Intent intent = new Intent(MainActivity.this, FilePickerActivity.class);
-		startActivityForResult(intent, 10);
+		startActivityForResult(intent, SCANBOARDINGPASSFROMSDCARD);
 
 	}
 	public void onclickacamera(){
@@ -404,64 +415,82 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 				+ "," + Intents.Scan.QR_CODE_MODE
 				+ "," + Intents.Scan.DATA_MATRIX_MODE
 				);
-		startActivityForResult(intent, 0);
+		startActivityForResult(intent, BARCODESCANFROMDIRECT);
+	}
+	public void showalert(final String filename){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				MainActivity.this);
+		alertDialogBuilder.setTitle(getResources().getString(R.string.app_name));
+		alertDialogBuilder
+		.setMessage(getResources().getString(R.string.txt_startscan_forboardingpass))
+		.setCancelable(false)
+		.setPositiveButton(getResources().getString(R.string.txt_ok),new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int id) {
+				dialog.cancel();
+				if(Constants.isImage(filename)){
+					Bitmap bitmap = BitmapFactory.decodeFile(filename);
+					scanBarcodeFromImage(bitmap);
+					//Toast.makeText(MainActivity.this, "ab "+bitmap.getHeight(), 2000).show();
+				}
+				else if(Constants.isPdf(filename)){
+					GetBoardingPassFromPDF(filename);
+				}
+				else if(Constants.isPkPass(filename)){
+					try {
+						
+						String boardingpass=PkpassReader.getPassbookBarcodeString(filename);
+						JSONObject job=new JSONObject(boardingpass);
+						saveScannedBoardingPasstodatabes(job.getString("message"),job.getString("format"));
+					} catch (JSONException e) {
+						Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_invalid_borading_pass),
+								Toast.LENGTH_SHORT).show();
+					}
+				}
+				
+			}
+		})
+		.setNegativeButton(getResources().getString(R.string.txt_cancel),new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int id) {
+				MainActivity.this.finish();
+			}
+		});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
 	}
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		if (requestCode == 0) {
+		if (requestCode == BARCODESCANFROMDIRECT) {
 			if (resultCode == RESULT_OK) {
-				Log.e("tag", "3");
-
 				String contents = intent.getStringExtra("SCAN_RESULT");
 				String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 				saveScannedBoardingPasstodatabes(contents,format);
 			} else if (resultCode == RESULT_CANCELED) {
-				Log.e("tag", "4");
-
 			}
 		}
 
-		else if (requestCode == 10) {
-			Log.e("tag", "5");
-
+		else if (requestCode == SCANBOARDINGPASSFROMSDCARD) {
 			if (resultCode == RESULT_OK) {
-				Log.e("tag", "16");
-
 				int format=intent.getIntExtra(FilePickerActivity.FILE_FORMAT_KEY, 0);
 				String filepath=intent.getStringExtra(FilePickerActivity.FILE_PATH);
 				if(format==FilePickerActivity.PDF_FILE){
 					GetBoardingPassFromPDF(filepath);
-					Log.e("tag", "7");
-
 				}
 				else if(format==FilePickerActivity.PASSBOOK_FILE){
 					try {
-						Log.e("tag", "8");
-
 						String boardingpass=PkpassReader.getPassbookBarcodeString(filepath);
-						//07-08 20:58:22.389: E/json Object(3012): {"message":"M1Towhi\/UWEMR         EYWX9ZS DHABARLH 2074 185M037A0016 355>2180KO3075BOS 022052227001 262202331497901  LH                     *30601001205","messageEncoding":"iso-8859-1","format":"PKBarcodeFormatQR"}
 						JSONObject job=new JSONObject(boardingpass);
 						saveScannedBoardingPasstodatabes(job.getString("message"),job.getString("format"));
-						Log.e("json Object", boardingpass);
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						Log.e("tag", "19");
-
-						e.printStackTrace();
 					}
 				}
 				else if(format==FilePickerActivity.IMAGE_FILE){
-					Log.e("tag", "10");
-
 					Bitmap bitmap = BitmapFactory.decodeFile(filepath);
 					scanBarcodeFromImage(bitmap);
 				}
 
 			} else if (resultCode == RESULT_CANCELED) {
-				Log.i("App","Scan unsuccessful");
-
 			}
 		}
-		else if (requestCode == 12) {
+		else if (requestCode == SCANBARCODEFROMPDF) {
 			if (resultCode == RESULT_OK) {
 				String path=intent.getStringExtra("bitmap_file_path");
 				getResultFromActivity(requestCode, resultCode, path);
@@ -477,7 +506,7 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		Intent intent = new Intent(MainActivity.this, MuPDFActivity.class);
 		intent.setAction("com.touhiDroid.PDF.GET_BITMAP");
 		intent.setData(Uri.parse(filepath));
-		startActivityForResult(intent, 12);
+		startActivityForResult(intent, SCANBARCODEFROMPDF);
 	}
 	public void saveScannedBoardingPasstodatabes(String contents,String format){
 
@@ -498,8 +527,6 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 					SaveboardingPasstoServer( boardingPass);
 				}
 				else{
-					Log.e("tag", "4");
-
 					setBoardingpassInLocalDB();
 				}
 			}
@@ -682,7 +709,7 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 
 						"newbp",Constants.REQUEST_TYPE_POST);
 				change_pass.execute();
-				
+
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

@@ -37,6 +37,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB) public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	String body;
@@ -64,9 +67,11 @@ import android.widget.Toast;
 		this.requestType=requestType;
 		jsonParser=new JsonParser();
 		this.redundantLoginState=redundantLoginState;
-		
-		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
-				context.getResources().getString(R.string.txt_please_wait), true);
+
+		pd=new ProgressDialog(context);
+		pd.show();
+		pd.setCancelable(true);
+		pd.setContentView(R.layout.progress_content);
 
 	}
 	public AsyncaTaskApiCall(NetworkStateReceiver deletelisenarfromnetstate,String body,Context context, 
@@ -78,8 +83,8 @@ import android.widget.Toast;
 		this.myaccounturl=myaccounturl;
 		this.context=context;
 		jsonParser=new JsonParser();
-		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
-				context.getResources().getString(R.string.txt_please_wait), true);
+
+
 
 	}
 
@@ -92,9 +97,9 @@ import android.widget.Toast;
 		this.CaBLisenar=CaBLisenar;
 		this.requestType=requestType;
 		jsonParser=new JsonParser();
-		pd=ProgressDialog.show(context,  context.getResources().getString(R.string.app_name),
-				context.getResources().getString(R.string.txt_please_wait), true);
-
+		pd=new ProgressDialog(context);
+		pd.show();
+		pd.setContentView(R.layout.progress_content);
 	}
 	public AsyncaTaskApiCall(NetworkStateReceiver netstatelisenaer,BoardingPass bpass,String body,Context context){
 		this.netstatelisenaer=netstatelisenaer;
@@ -108,14 +113,14 @@ import android.widget.Toast;
 	protected ServerResponse doInBackground(Void... params) {
 		ServerResponse response=null;
 
-		 if(netstatelisenaer!=null){
-			
+		if(netstatelisenaer!=null){
+
 			String url = Constants.baseurl+"newbp";
 			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
 					body, null);
 		}
 		else if(netstatelisenaer!=null){
-			
+
 			String url = Constants.baseurl+"newbp";
 			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
 					body, null);
@@ -124,16 +129,16 @@ import android.widget.Toast;
 
 			String url = Constants.baseurl+myaccounturl;
 			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
-						body, null);
+					body, null);
 		}
-		
-		
+
+
 		else if(CaBLisenar!=null){
 
 			String url = Constants.baseurl+addedurl;
-			
-				response =jsonParser.retrieveServerData(requestType, url, null,
-						body, null);
+
+			response =jsonParser.retrieveServerData(requestType, url, null,
+					body, null);
 		}
 		return response;
 
@@ -142,52 +147,51 @@ import android.widget.Toast;
 	@Override
 	protected void onPostExecute(ServerResponse result) {
 		super.onPostExecute(result);
-		
+
 		if( pd!=null){ 
 			if(pd.isShowing()){
 				pd.cancel();
 			}
 		}
-		
-		 if(netstatelisenaer!=null){
+
+		if(netstatelisenaer!=null){
 			netstatelisenaer.addBoardingPassonBackendSuccess(result.getjObj(),bpass);
 		}
-		 else if(CaBLisenar!=null){
-			 if(redundantLoginState){
-				 JSONObject job=result.getjObj();
-					try {
-						if(job.getString("success").equals("true")){
-							CaBLisenar.saveLoginCred(job);
-							
-						}
-						else{
-							
-							CaBLisenar.LoginFailed(job);
-						}
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						
-						e.printStackTrace();
-					} 
-			 }
-			 else{
-				 JSONObject job=result.getjObj();
-					try {
-						if(job.getString("success").equals("true")){
-								CaBLisenar.responseOk(job);
-							
-						}
-						else{
-							
-							CaBLisenar.responseFailure(job);
-						}
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						
-						e.printStackTrace();
-					} 
-			 }
-			
+		else if(CaBLisenar!=null){
+			if(redundantLoginState){
+				JSONObject job=result.getjObj();
+				try {
+					if(job.getString("success").equals("true")){
+						CaBLisenar.saveLoginCred(job);
+
+					}
+					else{
+
+						CaBLisenar.LoginFailed(job);
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+
+					e.printStackTrace();
+				} 
+			}
+			else{
+				JSONObject job=result.getjObj();
+				try {
+					if(job.getString("success").equals("true")){
+						CaBLisenar.responseOk(job);
+					}
+					else{
+
+						CaBLisenar.responseFailure(job);
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+
+					e.printStackTrace();
+				} 
+			}
+
 
 		}
 		else if(deletelisenarfromnetstate!=null){
