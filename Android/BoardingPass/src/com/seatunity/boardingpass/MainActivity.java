@@ -113,7 +113,6 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 	int BARCODESCANFROMDIRECT=0;
 	int SCANBOARDINGPASSFROMSDCARD=10;
 	int SCANBARCODEFROMPDF=12;
-
 	private void getOverflowMenu() {
 
 		try {
@@ -133,6 +132,8 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		super.onCreate(savedInstanceState);
 		BugSenseHandler.initAndStartSession(MainActivity.this, "2b60c090");
 		setContentView(R.layout.activity_main);
+		
+		// This porsion will come from hook
 		try {
 			Intent intent = getIntent();
 			String filepath=intent.getData().toString();
@@ -145,6 +146,9 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
+		// end here
 		getOverflowMenu() ;
 		fragmentManager = getFragmentManager();
 		appInstance =(BoardingPassApplication)getApplication();

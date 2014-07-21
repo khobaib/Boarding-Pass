@@ -43,14 +43,14 @@ public class AdapterForSeatmet extends BaseAdapter {
 	BoardingPassApplication appInstance;
 	String token;
 	String hint;
-	 EditText input ;
-	 AlertDialog d ;
+	EditText input ;
+	AlertDialog d ;
 	public AdapterForSeatmet(String token,FragmentSeatMet lisenar,Context context,ArrayList<SeatMate> item){
 		this.lisenar=lisenar;
 		this.context = context;
 		this.token=token;
 		this.list=item;
-		
+
 	}
 
 	@Override
@@ -76,7 +76,6 @@ public class AdapterForSeatmet extends BaseAdapter {
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		LayoutInflater mInflater;
-
 		ViewHolder holder = new ViewHolder();
 		if (convertView == null) {
 			mInflater = (LayoutInflater)
@@ -97,7 +96,6 @@ public class AdapterForSeatmet extends BaseAdapter {
 		if(list.get(position).getName()!=null){
 			holder.txt_name.setText(list.get(position).getName());
 		}
-
 		if((list.get(position).getClass()!=null)&&(list.get(position).getSeat()!=null)){
 			holder.tv_seat_pref.setText("Business,"+list.get(position).getSeat());
 		}
@@ -105,13 +103,13 @@ public class AdapterForSeatmet extends BaseAdapter {
 			holder.txt_name.setText(list.get(position).getName());
 		}
 		if(list.get(position).getImage_url()==null){
-			
+
 		}
 		else{
 			ImageLoader.getInstance().displayImage(list.get(position).getImage_url(), holder.img_profile);
 		}
 		holder.img_send_msz.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -122,20 +120,20 @@ public class AdapterForSeatmet extends BaseAdapter {
 		return convertView;
 	}
 
-	
+
 	public void showAlertDilog( final int position){
-		 hint=context.getResources().getString(R.string.txt_message);
-		  input = new EditText(context);
-		 d = new AlertDialog.Builder(context)
+		hint=context.getResources().getString(R.string.txt_message);
+		input = new EditText(context);
+		d = new AlertDialog.Builder(context)
 		.setView(input)
 		.setPositiveButton(context.getResources().getString(R.string.txt_ok), null) //Set to null. We override the onclick
 		.setNegativeButton(context.getResources().getString(R.string.txt_cancel), null)
 		.create();
-		 LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-			View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
-			TextView title=(TextView) customTitleView.findViewById(R.id.tv_title);
-			title.setText(context.getResources().getString(R.string.txt_send_email));
-			d.setCustomTitle(customTitleView);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+		TextView title=(TextView) customTitleView.findViewById(R.id.tv_title);
+		title.setText(context.getResources().getString(R.string.txt_send_email));
+		d.setCustomTitle(customTitleView);
 		d.setOnShowListener(new DialogInterface.OnShowListener() {
 
 			@Override
@@ -164,7 +162,7 @@ public class AdapterForSeatmet extends BaseAdapter {
 								AsyncaTaskApiCall sendmessage =new AsyncaTaskApiCall(lisenar, loginObj.toString(), context,
 										"messagemate/"+list.get(position).getId(),Constants.REQUEST_TYPE_POST);
 								sendmessage.execute();
-								
+
 							} catch (JSONException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();

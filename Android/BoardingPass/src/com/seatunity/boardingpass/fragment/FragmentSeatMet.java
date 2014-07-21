@@ -212,9 +212,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 	}
 	public void setActionBarNavigation(boolean show){
 		final ActionBar actionBar = getActivity().getActionBar();
-
 		OnNavigationListener imll=new OnNavigationListener() {
-
 			@Override
 			public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 				setListView(itemPosition);
@@ -224,10 +222,8 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 		};
 		String[] class_list = getActivity().getResources().getStringArray(R.array.seat_class); 
 		 itemList =new ArrayList<String>(Arrays.asList(class_list));
-
-		AdapterBaseMaps adapter=new AdapterBaseMaps(getActivity(), itemList);
+		 AdapterBaseMaps adapter=new AdapterBaseMaps(getActivity(), itemList);
 		ArrayAdapter<String> aAdpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, itemList);
-
 		if(show){
 			actionBar.setDisplayShowTitleEnabled(false);
 			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -259,8 +255,6 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 		((MainActivity)getActivity()).refreash_menu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-				// TODO Auto-generated method stub
-			//	deleteBoardingPass();
 				if((Constants.isOnline(getActivity()))&&(!appInstance.getUserCred().getEmail().equals(""))){
 					
 					callSeatmet();
@@ -291,7 +285,6 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 		.setCancelable(false)
 		.setPositiveButton(getResources().getString(R.string.txt_ok),new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int id) {
-				
 				dialog.cancel();
 			}
 		});

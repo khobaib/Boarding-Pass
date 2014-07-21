@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="12dp"
-                        android:textColor="#777777" />
+                       android:textColor="#7C7C7C"/>
 
                     <ImageView
                         android:id="@+id/img_icon_inner"
@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/img_icon_inner"
                         android:layout_centerHorizontal="true"
-                        android:textColor="#777777" />
+                        android:textColor="#7C7C7C" />
                 </RelativeLayout>
 
                 <TextView
@@ -75,7 +75,7 @@
                     android:layout_below="@+id/img_icon"
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="5dp"
-                    android:textColor="#777777"
+                   android:textColor="#7C7C7C"
                     android:textSize="12dp" />
 
                 <TextView
@@ -86,7 +86,7 @@
                     android:layout_below="@+id/tv_seat_no"
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="2dp"
-                    android:textColor="#777777"
+                   android:textColor="#7C7C7C"
                     android:textSize="12dp" />
 
                 <LinearLayout
@@ -111,7 +111,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="12dp"
                             android:gravity="center"
-                            android:textColor="#777777"
+                            android:textColor="#7C7C7C"
                             android:textSize="17dp" />
 
                         <TextView
@@ -121,7 +121,7 @@
                             android:layout_below="@+id/tv_cdg"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="7dp"
-                            android:textColor="#777777"
+                           android:textColor="#7C7C7C"
                             android:textSize="17dp" />
 
                         <TextView
@@ -161,7 +161,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="12dp"
                             android:gravity="center"
-                            android:textColor="#777777"
+                           android:textColor="#7C7C7C"
                             android:textSize="17dp" />
 
                         <TextView
@@ -181,7 +181,7 @@
                             android:layout_below="@+id/tv_jfk"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="7dp"
-                            android:textColor="#777777"
+                          android:textColor="#7C7C7C"
                             android:textSize="17dp" />
                     </RelativeLayout>
                 </LinearLayout>

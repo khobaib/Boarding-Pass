@@ -20,6 +20,7 @@ import com.seatunity.boardingpass.adapter.AdapterForBoardingPassFromAlert;
 import com.seatunity.boardingpass.adapter.AdapterForSeatmet;
 import com.seatunity.boardingpass.alert.LisAlertDialog;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
+import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
@@ -39,6 +40,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -66,7 +68,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
-public class FragmentSingleSeatMet extends Fragment{
+public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall{
 	HomeListFragment parent;
 	ImageView img_prof_pic;
 	BoardingPassApplication appInstance;
@@ -80,6 +82,9 @@ public class FragmentSingleSeatMet extends Fragment{
 	String hint;
 	EditText input ;
 	AlertDialog d ;
+	Context context;
+	String savedMessage;
+	private int callfrom=0;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -87,6 +92,7 @@ public class FragmentSingleSeatMet extends Fragment{
 		super.onCreate(savedInstanceState);
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
 		jsonParser=new JsonParser();
+		context=getActivity();
 	}
 	public FragmentSingleSeatMet(SeatMate seatmate,BoardingPass bpass){
 		Log.e("insideList4", bpass.getTravel_from_name());
@@ -120,14 +126,16 @@ public class FragmentSingleSeatMet extends Fragment{
 					JSONObject loginObj = new JSONObject();
 					loginObj.put("token", appInstance.getUserCred().getToken());
 					if(Constants.isOnline(getActivity())){
-						new AsyncSharedFlight(loginObj.toString()).execute();
+						callfrom=2;
+						AsyncaTaskApiCall getSharedFlight =new AsyncaTaskApiCall(FragmentSingleSeatMet.this, loginObj.toString(), context,
+								"sharedflight/"+seatmate.getId(),Constants.REQUEST_TYPE_POST);
+						getSharedFlight.execute();
 					}
 					else{
 						Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.
 								txt_check_internet), Toast.LENGTH_SHORT).show();
 					}
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -136,7 +144,6 @@ public class FragmentSingleSeatMet extends Fragment{
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				showAlertDilog();
 			}
 		});
@@ -150,7 +157,7 @@ public class FragmentSingleSeatMet extends Fragment{
 		tv_seat.setText(seatmate.getTravel_class()+", "+seatmate.getSeat());
 		tv_status.setText(seatmate.getStatus());
 		tv_live_in.setText(getActivity().getResources().getString(R.string.txt_live_in)+seatmate.getLive_in());
-		tv_age.setText(getActivity().getResources().getString(R.string.txt_age)+seatmate.getName());
+		tv_age.setText(getActivity().getResources().getString(R.string.txt_age)+" "+seatmate.getAge());
 		tv_class.setText(getActivity().getResources().getString(R.string.txt_prefer_to)+seatmate.getSeating_pref());
 		tv_sothn_about.setText(seatmate.getSome_about_you());
 		if((seatmate.getImage_url()!=null)&&(!seatmate.getImage_url().equals(""))){
@@ -167,96 +174,6 @@ public class FragmentSingleSeatMet extends Fragment{
 			e.printStackTrace();
 		}
 		return "";
-	}
-	private class AsyncSharedFlight extends AsyncTask<Void, Void, ServerResponse> {
-		ProgressDialog pd;
-		String loginData;
-		public AsyncSharedFlight(String loginData){
-			this.loginData=loginData;
-			pd=new ProgressDialog(getActivity());
-			pd.show();
-			pd.setCancelable(true);
-			pd.setContentView(R.layout.progress_content);
-		}
-		@Override
-		protected ServerResponse doInBackground(Void... params) {
-			String url = Constants.baseurl+"sharedflight/"+seatmate.getId();
-			ServerResponse response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
-					loginData, null);
-			return response;
-		}
-
-		@Override
-		protected void onPostExecute(ServerResponse result) {
-			super.onPostExecute(result);
-			Log.e("Sending", result.getjObj().toString());
-			if(pd.isShowing()&&(pd!=null)){
-				pd.dismiss();
-			}
-			JSONObject job=result.getjObj();
-			try {
-				if(job.getString("success").equals("true")){
-					BoardingPassListForSharedFlight  list=BoardingPassListForSharedFlight.getBoardingPassListObject(job);
-					if(list.getBoardingPassList().size()>0){
-						showAlertDilogToshowSharedFlight(list.getBoardingPassList());
-					}
-					else{
-						Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_no_shared_flight),
-								Toast.LENGTH_SHORT).show();
-					}
-				}
-				else{
-					Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_failed_to_get_seatmet),
-							Toast.LENGTH_SHORT).show();
-
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private class AsyncTaskSendMessage extends AsyncTask<Void, Void, ServerResponse> {
-		ProgressDialog pd;
-		String loginData;
-		public AsyncTaskSendMessage(String loginData){
-			this.loginData=loginData;
-			pd=new ProgressDialog(getActivity());
-			pd.show();
-			pd.setCancelable(true);
-			pd.setContentView(R.layout.progress_content);
-		}
-		@Override
-		protected ServerResponse doInBackground(Void... params) {
-			String url = Constants.baseurl+"messagemate/"+seatmate.getId();
-			ServerResponse response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
-					loginData, null);
-			return response;
-		}
-
-		@Override
-		protected void onPostExecute(ServerResponse result) {
-			super.onPostExecute(result);
-			Log.e("Sending", result.getjObj().toString());
-			if(pd.isShowing()&&(pd!=null)){
-				pd.dismiss();
-			}
-			JSONObject job=result.getjObj();
-			try {
-				if(job.getString("success").equals("true")){
-					Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_emailsent_success),
-							Toast.LENGTH_SHORT).show();
-				}
-				else{
-					Toast.makeText(getActivity(), job.getString("message"),
-							Toast.LENGTH_SHORT).show();
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	public void Successmessagesent(){
 	}
 
 	public void showAlertDilog( ){
@@ -295,18 +212,18 @@ public class FragmentSingleSeatMet extends Fragment{
 								JSONObject loginObj = new JSONObject();
 								loginObj.put("token", appInstance.getUserCred().getToken());
 								loginObj.put("message", value);
+								savedMessage=value;
 								if(Constants.isOnline(getActivity())){
-									new AsyncTaskSendMessage(loginObj.toString()).execute();
+									callfrom=1;
+									AsyncaTaskApiCall sendmessage =new AsyncaTaskApiCall(FragmentSingleSeatMet.this, loginObj.toString(), getActivity(),
+											"messagemate/"+seatmate.getId(),Constants.REQUEST_TYPE_POST);
+									sendmessage.execute();
 								}
 								else{
 									Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.
 											txt_check_internet), Toast.LENGTH_SHORT).show();
 								}
-
-								//								AsyncaTaskApiCall sendmessage=new AsyncaTaskApiCall(lisenar, loginObj.toString(), context, list.get(position).getId());
-								//								sendmessage.execute();
 							} catch (JSONException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						}
@@ -319,43 +236,6 @@ public class FragmentSingleSeatMet extends Fragment{
 	}
 
 	public void showAlertDilogToshowSharedFlight(ArrayList<BoardingPass> item){
-		//		 hint=getActivity().getResources().getString(R.string.txt_message);
-		//		 AdapterForBoardingPass adapter=new AdapterForBoardingPass(getActivity(), item);
-		//		 lv_sharedflight = new ListView(getActivity());
-		//		 lv_sharedflight.setAdapter(adapter);
-		//		
-		//		 d = new AlertDialog.Builder(getActivity())
-		//		.setView(input)
-		//		.setTitle(getActivity().getResources().getString(R.string.txt_send_email))
-		//		.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel), null)
-		//		.create();
-		//		 lv_sharedflight.setOnItemClickListener(new OnItemClickListener() {
-		//
-		//			@Override
-		//			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-		//					long arg3) {
-		//				// TODO Auto-generated method stub
-		//				d.cancel();
-		//				
-		//			}
-		//		});
-		//		d.setOnShowListener(new DialogInterface.OnShowListener() {
-		//
-		//			@Override
-		//			public void onShow(DialogInterface dialog) {
-		//
-		//				Button b = d.getButton(AlertDialog.BUTTON_NEGATIVE);
-		//				b.setOnClickListener(new View.OnClickListener() {
-		//
-		//					@Override
-		//					public void onClick(View view) {
-		//							d.cancel();
-		//					}
-		//				});
-		//			}
-		//		});
-		//		d.show();
-
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(
 				getActivity());
 		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
@@ -383,9 +263,116 @@ public class FragmentSingleSeatMet extends Fragment{
 			}
 		});
 		builderSingle.show();
+	}
+	@Override
+	public void responseOk(JSONObject job) {
+		// TODO Auto-generated method stub
+		try {
+			if(job.getString("success").equals("true")){
+				if(callfrom==1){
+					Toast.makeText(context, context.getResources().getString(R.string.txt_emailsent_success),
+							Toast.LENGTH_SHORT).show();
+					
+				}
+				else if(callfrom==2){
+					BoardingPassListForSharedFlight  list=BoardingPassListForSharedFlight.getBoardingPassListObject(job);
+					if(list.getBoardingPassList().size()>0){
+						showAlertDilogToshowSharedFlight(list.getBoardingPassList());
+					}
+					else{
+						Toast.makeText(context, context.getResources().getString(R.string.txt_no_shared_flight),
+								Toast.LENGTH_SHORT).show();
+					}
+				}
 
-		//        LisAlertDialog dialog=new LisAlertDialog(getActivity(), item);
-		//        dialog.show_alert();
+			}
+
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+	}
+	@Override
+	public void responseFailure(JSONObject job) {
+		// TODO Auto-generated method stub
+		try {
+			JSONObject joberror=new JSONObject(job.getString("error"));
+			String code =joberror.getString("code");
+			if(code.equals("x05")){
+				JSONObject loginObj = new JSONObject();
+				loginObj.put("email", appInstance.getUserCred().getEmail());
+				loginObj.put("password", appInstance.getUserCred().getPassword());
+				String loginData = loginObj.toString();
+				AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentSingleSeatMet.this, loginData, 
+						context,"login",Constants.REQUEST_TYPE_POST,true);
+				log_in_lisenar.execute();
+
+			}
+			else{
+					Toast.makeText(context, job.getString("message"),
+							Toast.LENGTH_SHORT).show();
+			} 
+		}
+		catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void saveLoginCred(JSONObject job) {
+		// TODO Auto-generated method stub
+		try {
+			UserCred userCred;
+			String status=job.getString("success");
+			if(status.equals("true")){
+				userCred=UserCred.parseUserCred(job);
+				userCred.setEmail(appInstance.getUserCred().getEmail());
+				userCred.setPassword(appInstance.getUserCred().getPassword());
+				appInstance.setUserCred(userCred);
+				appInstance.setRememberMe(true);
+				if(callfrom==1){
+					JSONObject loginObj = new JSONObject();
+					loginObj.put("token", appInstance.getUserCred().getToken());
+					loginObj.put("message", savedMessage);
+					callfrom=1;
+					AsyncaTaskApiCall sendmessage =new AsyncaTaskApiCall(FragmentSingleSeatMet.this, loginObj.toString(), getActivity(),
+							"messagemate/"+seatmate.getId(),Constants.REQUEST_TYPE_POST);
+					sendmessage.execute();
+				}
+				else if(callfrom==2){
+					callfrom=2;
+					JSONObject loginObj = new JSONObject();
+					loginObj.put("token", appInstance.getUserCred().getToken());
+					AsyncaTaskApiCall getSharedFlight =new AsyncaTaskApiCall(FragmentSingleSeatMet.this, loginObj.toString(), context,
+							"sharedflight/"+seatmate.getId(),Constants.REQUEST_TYPE_POST);
+					getSharedFlight.execute();
+				}
+				
+			}
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	@Override
+	public void LoginFailed(JSONObject job) {
+		try {
+			JSONObject joberror=new JSONObject(job.getString("error"));
+			String code =joberror.getString("code");
+			Constants.setAllFlagFalse();
+			String message=joberror.getString("message");
+			Toast.makeText(context, message,
+					Toast.LENGTH_SHORT).show();
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 

@@ -42,50 +42,27 @@ public class HomeListFragment extends TabFragment{
 	public HomeListFragment(){
 		this.from=from;
 	}
-	public String getJsonObjet(){
-
-		try {
-			JSONObject loginObj = new JSONObject();
-			loginObj.put("token",appInstance.getUserCred().getToken());
-			loginObj.put("boarding_pass","all");
-
-			return loginObj.toString();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "";
-	}
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//Log.e("testting", "HomeListFragment");
 		appInstance =(BoardingPassApplication)getActivity().getApplication();
 		backEndStack = new Stack<Fragment>();
+		
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 		dbInstance.open();
 		ArrayList<BoardingPass> list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
-
 		dbInstance.close();
 		String email=appInstance.getUserCred().getEmail();
 		if(from==0){
-			if((email.equals(""))&&(list.size()<1)){
+			if((!appInstance.isRememberMe())&&(list.size()<1)){
 				HomeFragment fragment = new HomeFragment();
 				fragment.parent = this;
 				backEndStack.push(fragment);
 			}
-			//			else if((!email.equals(""))&&(list.size()<1)){
-			//				FragmentAddBoardingPassDuringLogin fragment = new FragmentAddBoardingPassDuringLogin();
-			//				fragment.parent = this;
-			//				backEndStack.push(fragment);
-			//				
-			//			}
 			else{
-
 				FragmentBoardingPasses fragment = new FragmentBoardingPasses();
 				fragment.parent = this;
 				backEndStack.push(fragment);
-
 			}
 		}
 		else{
@@ -102,20 +79,13 @@ public class HomeListFragment extends TabFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		ViewParent parent = (ViewParent) container.getParent();
-		//		if (parent instanceof View) {
-		//			((TextView) ((View) parent).findViewById(R.id.welcome_title))
-		//			.setText(this.getTag());
-		//		}
 		View v = inflater.inflate(R.layout.fragment_tab3, container, false);
 		return v;
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB) public void onStart( ) {
-		//	Constants.GOTABFROMWRITETOPIC=2;
-
 		((MainActivity)getActivity()).mDrawerList.setItemChecked(0, true);
 		((MainActivity)getActivity()).mDrawerList.setSelection(0);
-
 		Fragment fragment = backEndStack.peek();
 		FragmentManager fragmentManager = getActivity().getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
@@ -137,7 +107,6 @@ public class HomeListFragment extends TabFragment{
 		fragmentTransaction.commitAllowingStateLoss();
 	}
 	public void startFragmentTermsAndCondition(String title,String details) {
-
 		FragmentTermsAndCondition newFragment = new FragmentTermsAndCondition( title, details) ;
 		newFragment.parent = this;
 		FragmentManager fragmentManager = getActivity().getFragmentManager();
@@ -200,7 +169,6 @@ public class HomeListFragment extends TabFragment{
 	}
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB) @SuppressLint("NewApi") @Override
 	public void onBackPressed() {
-		//((HomeActivity) getActivity()).mTabHost.setCurrentTab(Constants.GOTABFROMWRITETOPIC);
 		if (backEndStack.size()==1) {
 			((MainActivity) getActivity()).close();
 		}
