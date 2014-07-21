@@ -110,7 +110,6 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 
 			return loginObj.toString();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "";
@@ -118,7 +117,6 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 
 	@Override
 	public void responseOk(JSONObject job) {
-		// TODO Auto-generated method stub
 		try {
 			if(job.getString("success").equals("true")){
 
@@ -129,7 +127,6 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 					Log.e("testing", ""+i+"  "+list.get(i).getTravel_from_name());
 					dbInstance.insertOrUpdateBoardingPass(list.get(i));
 				}
-
 				list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
 				dbInstance.close();
 				if(list.size()<1){
