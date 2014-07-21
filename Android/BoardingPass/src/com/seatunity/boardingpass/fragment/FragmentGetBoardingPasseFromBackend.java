@@ -135,6 +135,9 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 				if(list.size()<1){
 					parent.startAddBoardingPassDuringLogin();
 				}
+				else{
+					
+				}
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -150,8 +153,6 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 			JSONObject joberror=new JSONObject(job.getString("error"));
 			String code =joberror.getString("code");
 			if(code.equals("x05")){
-				//				String message=joberror.getString("message");
-				//				Toast.makeText(EditUserNameActivity.this, message,Toast.LENGTH_SHORT).show();
 				JSONObject loginObj = new JSONObject();
 				loginObj.put("email", appInstance.getUserCred().getEmail());
 				loginObj.put("password", appInstance.getUserCred().getPassword());

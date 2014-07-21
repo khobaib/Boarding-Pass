@@ -114,7 +114,6 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 	int SCANBOARDINGPASSFROMSDCARD=10;
 	int SCANBARCODEFROMPDF=12;
 	private void getOverflowMenu() {
-
 		try {
 			ViewConfiguration config = ViewConfiguration.get(this);
 			Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
@@ -287,7 +286,6 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(MainActivity.this);
 		dbInstance.open();
 		ArrayList<BoardingPass> list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
-
 		dbInstance.close();
 		String email=appInstance.getUserCred().getEmail();
 
