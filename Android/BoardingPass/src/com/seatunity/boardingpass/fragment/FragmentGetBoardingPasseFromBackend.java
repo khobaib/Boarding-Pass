@@ -63,7 +63,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 @SuppressLint("NewApi")
 public class FragmentGetBoardingPasseFromBackend extends Fragment implements CallBackApiCall{
 	HomeListFragment parent;
@@ -79,7 +78,6 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 	BoardingPass highlitedboardingpass;
 	BoardingPassApplication appInstance;
 	ListView lv_boarding_pass;
-
 	TextView tv_from,tv_to,tv_month_inside_icon,tv_date_inside_icon,tv_seat_no,tv_flight_no,
 	tv_start_time,tv_arrival_time,tv_cdg,tv_jfk;
 	int callfrom=0;
@@ -88,26 +86,96 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
-		context=getActivity();
+		if(Constants.isOnline(getActivity())){
+			if(!appInstance.isRememberMe()){
+				SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
+				dbInstance.open();
+				list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+				dbInstance.close();
+				Calendar c = Calendar.getInstance(); 
+				int dayofyear = c.get(Calendar.DAY_OF_YEAR);
+				list_greaterthan=new ArrayList<BoardingPass>();
+				for (int i=0;i<list.size();i++){
+					Log.e("test", "t "+list.get(i).getTravel_from_name());
+					int ju_date=Integer.parseInt(list.get(i).getJulian_date());
+					if((ju_date>=dayofyear)&&(!list.get(i).getDeletestate())){
+						list_greaterthan.add(list.get(i));
 
+					}
+					
+				}
+				if(list_greaterthan.size()<1){
+					parent.startHomeFragment();
+				}
+				else{
+					parent.startFragmentBoardingPasses(list_greaterthan);
+				}
+			}
+			else{
+				//CallBackApiCall CaBLisenar,String body,Context context,String addedurl,int requestType
+				callfrom=1;
+				retreive =new AsyncaTaskApiCall(this, getJsonObjet(), getActivity(),"bplist",Constants.REQUEST_TYPE_POST);
+				retreive.execute();
+			}
+		}
+		else{
+			SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
+			dbInstance.open();
+			list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+			dbInstance.close();
+			Calendar c = Calendar.getInstance(); 
+			int dayofyear = c.get(Calendar.DAY_OF_YEAR);
+			list_greaterthan=new ArrayList<BoardingPass>();
+			for (int i=0;i<list.size();i++){
+				Log.e("test", "t "+list.get(i).getTravel_from_name());
+				int ju_date=Integer.parseInt(list.get(i).getJulian_date());
+				if((ju_date>=dayofyear)&&(!list.get(i).getDeletestate())){
+					list_greaterthan.add(list.get(i));
+
+				}
+				
+			}
+			
+			if(!appInstance.isRememberMe()){
+				if(list_greaterthan.size()<1){
+					parent.startAddBoardingPassDuringLogin();
+				}
+				else{
+					parent.startFragmentBoardingPasses(list_greaterthan);
+				}
+				
+			}
+			else{
+				if(list_greaterthan.size()<1){
+					parent.startHomeFragment();
+				}
+				else{
+					parent.startFragmentBoardingPasses(list_greaterthan);
+				}
+			}
+			
+			
+		}
+		
 	}
-
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		context=getActivity();
+	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_get_bpass_from_backend,
 				container, false);
-
 		return v;
 	}
-
 	public String getJsonObjet(){
-
 		try {
 			JSONObject loginObj = new JSONObject();
 			loginObj.put("token",appInstance.getUserCred().getToken());
 			loginObj.put("boarding_pass","all");
-
 			return loginObj.toString();
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -129,11 +197,23 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 				}
 				list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
 				dbInstance.close();
-				if(list.size()<1){
+				Calendar c = Calendar.getInstance(); 
+				int dayofyear = c.get(Calendar.DAY_OF_YEAR);
+				list_greaterthan=new ArrayList<BoardingPass>();
+				for (int i=0;i<list.size();i++){
+					Log.e("test", "t "+list.get(i).getTravel_from_name());
+					int ju_date=Integer.parseInt(list.get(i).getJulian_date());
+					if((ju_date>=dayofyear)&&(!list.get(i).getDeletestate())){
+						list_greaterthan.add(list.get(i));
+
+					}
+					
+				}
+				if(list_greaterthan.size()<1){
 					parent.startAddBoardingPassDuringLogin();
 				}
 				else{
-					
+					parent.startFragmentBoardingPasses(list_greaterthan);
 				}
 			}
 		} catch (JSONException e) {
@@ -158,7 +238,6 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 				AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentGetBoardingPasseFromBackend.this, loginData, 
 						context,"login",Constants.REQUEST_TYPE_POST,true);
 				log_in_lisenar.execute();
-
 			}
 			else{
 				Toast.makeText(getActivity(), job.getString("message"),
@@ -187,10 +266,8 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 					retreive.execute();
 			}
 		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -198,7 +275,6 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 
 	@Override
 	public void LoginFailed(JSONObject job) {
-		// TODO Auto-generated method stub
 		try {
 			JSONObject joberror=new JSONObject(job.getString("error"));
 			String code =joberror.getString("code");
@@ -207,10 +283,8 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 			Toast.makeText(context, message,
 					Toast.LENGTH_SHORT).show();
 		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

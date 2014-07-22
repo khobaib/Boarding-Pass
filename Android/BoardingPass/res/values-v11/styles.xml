@@ -47,6 +47,7 @@
 
     <style name="PopupMenu.Example" parent="@android:style/Widget.Holo.Light.ListPopupWindow">
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_example</item>	
+       
     </style>
 
     <style name="DropDownListView.Example" parent="@android:style/Widget.Holo.Light.ListView.DropDown">

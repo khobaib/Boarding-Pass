@@ -35,6 +35,7 @@ import android.app.ActionBar.OnNavigationListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -114,6 +115,18 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall{
 		setListView(0);
 		selectedposition=0;
 		setDetailsBoaredingpass();
+		
+		
+		int upId = Resources.getSystem().getIdentifier("up", "id", "android");
+		if (upId > 0) {
+			Toast.makeText(getActivity(), "Working", 2000).show();
+		    ImageView up = (ImageView) getActivity().findViewById(upId);
+		    up.setImageResource(R.drawable.ic_action_previous_item);
+		}
+		else{
+			Toast.makeText(getActivity(), " Not Working", 2000).show();
+		}
+
 		return v;
 	}
 	public void setListView(int i){

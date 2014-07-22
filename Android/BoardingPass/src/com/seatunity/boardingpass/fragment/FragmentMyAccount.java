@@ -652,6 +652,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 					UserCred ucrCred=new UserCred("", "", "", "", "", "", "", "", "", "", "", "", "", "");
 					getActivity().finish();
 					appInstance.setUserCred(ucrCred);
+					appInstance.setRememberMe(false);
 					SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 					dbInstance.open();
 					dbInstance.droptableBoardingPassDbManager();

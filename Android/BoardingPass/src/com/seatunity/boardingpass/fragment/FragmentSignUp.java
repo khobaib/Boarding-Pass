@@ -64,12 +64,10 @@ import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class FragmentSignUp extends Fragment implements CallBackApiCall{
-	//int selectedageposition=-1;
 	TextView tv_signup_message,tv_sign_message;
 	EditText et_email,et_password,et_confirm_password,et_first_name,et_last_name,et_livein,et_profession,et_seatting_pref,et_age;
 	Button bt_register;
 	String email="",gender,password="",confirmpassword="",firstname="",lastname="",livein="",age="",profession="",seating="";
-	//Spinner s_age;
 	RadioGroup rdgrp_gender;
 	int SEATING_PREF=0;
 	int AGE=1;
@@ -113,7 +111,8 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 			@Override
 			public void onClick(View v) {
 
-				dialog.dismiss();
+
+				dialog.cancel();
 
 			}
 		});
@@ -251,27 +250,8 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 
 
 	}
-//	private void setcity(){
 
-//		ArrayAdapter  adapter2 = new ArrayAdapter<String>(getActivity(),
-//				R.drawable.contact_spinner_row_nothing_selected_age, agelist);
-//		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//		s_age.setAdapter( new  NothingSelectedSpinnerAdapter(
-//				adapter2, R.drawable.contact_spinner_row_nothing_selected_age, getActivity()));
-//		s_age.setOnItemSelectedListener(new OnItemSelectedListener(){
-//
-//			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, 
-//					long arg3){
-//				selectedageposition=position-1;
-//
-//			}
-//
-//			@Override
-//			public void onNothingSelected(AdapterView<?> arg0) {
-//				selectedageposition=-1;
-//			}
-//		}); 
-//	}
+
 
 	public void callsignUp(){
 		if((!email.equals(""))&&(!password.equals(""))&&(!password.equals(""))){

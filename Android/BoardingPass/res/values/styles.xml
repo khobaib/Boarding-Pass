@@ -2,9 +2,9 @@
    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light" tools:ignore="NewApi"></style>
 
     <style name="HomeActivityTheme" parent="@android:style/Theme.Holo.Light" tools:targetApi="honeycomb">
-        
+       
          <item name="android:popupMenuStyle">@style/PopupMenu.Example</item>
-        <item name="actionBarStyle">@style/MyActionBar</item>
+      
         <item name="android:actionBarStyle">@style/MyActionBar</item>
        <item name="android:textColor">#FFFFFF</item>
         
@@ -32,6 +32,13 @@
         <item name="android:spinnerItemStyle">@style/SpinnerItemAppTheme</item>
         <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
         <item name="android:activatedBackgroundIndicator">@drawable/listitem_background</item>
+        
+         <item name="displayOptions">showHome|useLogo</item>
+ 			 <item name="homeAsUpIndicator">@null</item>
+ 			 <item name="android:homeAsUpIndicator">@null</item>
+          
+         
+         
     </style>
 		<style name="CustomTabPageIndicator" parent="Widget.TabPageIndicator">
         <item name="android:background">@drawable/tab_indicator_holo</item>
@@ -52,6 +59,7 @@
     <style name="MyActionBar" parent="Widget.Sherlock.ActionBar">
         <item name="background">@drawable/home_abs_back</item>
         <item name="android:background">@drawable/home_abs_back</item>
+        
         <item name="android:titleTextStyle" tools:targetApi="honeycomb">@style/MyActionBarTextStyle</item>
        
         <item name="titleTextStyle">@style/MyActionBarTextStyle</item>

@@ -54,16 +54,10 @@ public class HomeListFragment extends TabFragment{
 		dbInstance.close();
 		String email=appInstance.getUserCred().getEmail();
 		if(from==0){
-			if((!appInstance.isRememberMe())&&(list.size()<1)){
-				HomeFragment fragment = new HomeFragment();
+			
+			FragmentGetBoardingPasseFromBackend fragment = new FragmentGetBoardingPasseFromBackend();
 				fragment.parent = this;
 				backEndStack.push(fragment);
-			}
-			else{
-				FragmentBoardingPasses fragment = new FragmentBoardingPasses();
-				fragment.parent = this;
-				backEndStack.push(fragment);
-			}
 		}
 		else{
 			FragmentAbout newFragment = new FragmentAbout() ;
@@ -86,13 +80,31 @@ public class HomeListFragment extends TabFragment{
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB) public void onStart( ) {
 		((MainActivity)getActivity()).mDrawerList.setItemChecked(0, true);
 		((MainActivity)getActivity()).mDrawerList.setSelection(0);
-		Fragment fragment = backEndStack.peek();
+		Fragment fragment;
+		if(from==0){
+			 fragment = backEndStack.pop();
+		}
+		else{
+			 fragment = backEndStack.peek();
+		}
+		
 		FragmentManager fragmentManager = getActivity().getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
 		fragmentTransaction.replace(R.id.tab3Content, fragment);
 		fragmentTransaction.commitAllowingStateLoss();
 		super.onStart();
+	}
+	public void startHomeFragment() {
+		HomeFragment newFragment = new HomeFragment() ;
+		newFragment.parent = this;
+		FragmentManager fragmentManager = getActivity().getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager
+				.beginTransaction();
+		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+		fragmentTransaction.addToBackStack(null);
+		backEndStack.push(newFragment);
+		fragmentTransaction.commitAllowingStateLoss();
 	}
 	public void startFragmentSingleSeatmet(SeatMate seatmate,BoardingPass bpass) {
 		Log.e("insideList", bpass.getTravel_from_name());
@@ -108,6 +120,18 @@ public class HomeListFragment extends TabFragment{
 	}
 	public void startFragmentTermsAndCondition(String title,String details) {
 		FragmentTermsAndCondition newFragment = new FragmentTermsAndCondition( title, details) ;
+		newFragment.parent = this;
+		FragmentManager fragmentManager = getActivity().getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager
+				.beginTransaction();
+		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+		fragmentTransaction.addToBackStack(null);
+		backEndStack.push(newFragment);
+		fragmentTransaction.commitAllowingStateLoss();
+	}
+	
+	public void startFragmentBoardingPasses(ArrayList<BoardingPass>list_greaterthan) {
+		FragmentBoardingPasses newFragment = new FragmentBoardingPasses(list_greaterthan) ;
 		newFragment.parent = this;
 		FragmentManager fragmentManager = getActivity().getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager

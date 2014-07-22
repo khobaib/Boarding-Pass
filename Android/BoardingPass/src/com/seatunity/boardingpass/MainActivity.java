@@ -59,6 +59,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -80,6 +81,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -148,7 +150,13 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		
 		
 		// end here
+		//
 		getOverflowMenu() ;
+//		ImageView icon = (ImageView) findViewById(android.R.id.home);
+//		FrameLayout.LayoutParams iconLp = (FrameLayout.LayoutParams) icon.getLayoutParams();
+//		iconLp.leftMargin = iconLp.rightMargin = 20;
+//		icon.setLayoutParams(iconLp);
+		
 		fragmentManager = getFragmentManager();
 		appInstance =(BoardingPassApplication)getApplication();
 		mTitle = mDrawerTitle = getTitle();
@@ -165,21 +173,23 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 		adapter = new NavDrawerListAdapter(getApplicationContext(),appInstance);
 		mDrawerList.setAdapter(adapter);
+		//getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
-
+		//getActionBar().setHomeButtonEnabled(true);
+		
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-				R.drawable.ic_navigation_drawer_closed, 
+				0, 
 				R.string.app_name, 
 				R.string.app_name 
 				) {
 			public void onDrawerClosed(View view) {
+				
 				getActionBar().setTitle(mTitle);
-				getActionBar().setIcon(R.drawable.ic_navigation_drawer_closed);
 				invalidateOptionsMenu();
 			}
+		
 			public void onDrawerOpened(View drawerView) {
-				getActionBar().setIcon(R.drawable.ic_navigation_drawer_open);
+				//getActionBar().setIcon(R.drawable.ic_navigation_drawer_closed);
 				getActionBar().setTitle(mDrawerTitle);
 				invalidateOptionsMenu();
 			}
@@ -188,7 +198,8 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		//if (savedInstanceState == null) {
 		displayView(0);
 		//		}
-
+		
+		
 	}
 	@Override
 	protected void onStop() {

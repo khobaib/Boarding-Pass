@@ -17,7 +17,7 @@
         android:layout_marginTop="20dp"
         android:paddingLeft="10dp"
         android:text="@string/txt_email_senttomail"
-        android:textColor="#777777"
+        android:textColor="#000000"
         android:textSize="17dp" />
 
     <TextView
@@ -29,13 +29,14 @@
         android:layout_marginTop="50dp"
         android:text="@string/txt_confirmtaion"
         android:textColor="#F74A3E"
+        android:visibility="gone"
         android:textSize="14dp" />
 
     <LinearLayout
         android:id="@+id/le_ok"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_below="@+id/tv_confirm_mail"
+        android:layout_below="@+id/tv_success"
         android:layout_marginTop="20dp"
         android:background="@android:color/darker_gray"
         tools:ignore="Orientation" >
@@ -45,6 +46,7 @@
         android:id="@+id/re_ok"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:layout_below="@+id/le_ok"
          >
 
