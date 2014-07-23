@@ -208,6 +208,7 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall{
 		tv_to.setText(bpass.getTravel_to_name());
 		tv_month_inside_icon.setText(month);
 		tv_date_inside_icon.setText(dateofmonth);
+		
 		tv_seat_no.setText(context.getResources().getString(R.string.txt_seat_nno)+
 				" "+bpass.getSeat());
 		tv_flight_no.setText(context.getResources().getString(R.string.txt_flight_no)+

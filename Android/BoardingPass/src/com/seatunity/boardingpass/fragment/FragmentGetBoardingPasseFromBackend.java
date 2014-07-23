@@ -105,6 +105,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 					
 				}
 				if(list_greaterthan.size()<1){
+					Log.e("tagg", "as "+parent);
 					parent.startHomeFragment();
 				}
 				else{
@@ -197,6 +198,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 				}
 				list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
 				dbInstance.close();
+				
 				Calendar c = Calendar.getInstance(); 
 				int dayofyear = c.get(Calendar.DAY_OF_YEAR);
 				list_greaterthan=new ArrayList<BoardingPass>();

@@ -65,7 +65,6 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
 		View rootView = inflater.inflate(R.layout.fragment_boarding_details, container, false);
 		btn_seatmate=(Button) rootView.findViewById(R.id.btn_seatmate);
@@ -81,7 +80,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		tv_seat_var=(TextView) rootView.findViewById(R.id.tv_seat_var);
 		tv_compartment_class_var=(TextView) rootView.findViewById(R.id.tv_compartment_class_var);
 		tv_passenger_name=(TextView) rootView.findViewById(R.id.tv_passenger_name);
-		tv_name_carrier.setText(bpass.getCarrier());
+		tv_name_carrier.setText(bpass.getCarrier_name());
 		tv_from_air.setText(bpass.getTravel_from());
 		tv_to_air.setText(bpass.getTravel_to());
 		tv_start_time.setText(bpass.getDeparture());
@@ -90,8 +89,6 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		tv_seat_var.setText(bpass.getSeat());
 		tv_compartment_class_var.setText(bpass.getCompartment_code());
 		tv_passenger_name.setText(bpass.getFirstname());
-		tv_month_inside_icon.setText(bpass.getCarrier());
-		tv_date_inside_icon.setText(bpass.getCarrier());
 		String date=com.seatunity.boardingpass.utilty.Constants.getDayandYear(Integer.parseInt(bpass.getJulian_date()));
 		String[] dateParts = date.split(":");
 		String month=dateParts[1];
@@ -156,7 +153,6 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 				// TODO Auto-generated method stub
 				deleteBoardingPass();
 				return false;
-
 			}
 		});
 	}
@@ -171,11 +167,28 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 
 		// barcode image
 		Bitmap bitmap = null;
-
-
 		try {
-
-			bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.AZTEC, 600, 600);
+			BarcodeFormat barcodeFormat;
+			Log.e("codetype", "ab "+bpass.getCodetype());
+			if(bpass.getCodetype()==null){
+				barcodeFormat=BarcodeFormat.QR_CODE;
+			}
+			else{
+				if(bpass.getCodetype().equals("AZTEC")){
+					barcodeFormat=BarcodeFormat.AZTEC;
+				}
+				else if(bpass.getCodetype().equals("QR_CODE")){
+					barcodeFormat=BarcodeFormat.QR_CODE;
+				}
+				else if(bpass.getCodetype().equals("PDF_417")){
+					barcodeFormat=BarcodeFormat.PDF_417;
+				}
+				else {
+					barcodeFormat=BarcodeFormat.QR_CODE;
+				}
+			}
+			
+			bitmap = encodeAsBitmap(barcode_data, barcodeFormat, 600, 600);
 			img_barcode.setImageBitmap(bitmap);
 
 		} catch (WriterException e) {
@@ -354,8 +367,6 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 			JSONObject joberror=new JSONObject(job.getString("error"));
 			String code =joberror.getString("code");
 			if(code.equals("x05")){
-				//				String message=joberror.getString("message");
-				//				Toast.makeText(EditUserNameActivity.this, message,Toast.LENGTH_SHORT).show();
 				JSONObject loginObj = new JSONObject();
 				loginObj.put("email", appInstance.getUserCred().getEmail());
 				loginObj.put("password", appInstance.getUserCred().getPassword());

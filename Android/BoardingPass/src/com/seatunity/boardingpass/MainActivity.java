@@ -2,6 +2,7 @@ package com.seatunity.boardingpass;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Stack;
@@ -133,8 +134,6 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		super.onCreate(savedInstanceState);
 		BugSenseHandler.initAndStartSession(MainActivity.this, "2b60c090");
 		setContentView(R.layout.activity_main);
-		
-		// This porsion will come from hook
 		try {
 			Intent intent = getIntent();
 			String filepath=intent.getData().toString();
@@ -147,15 +146,11 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		// end here
-		//
 		getOverflowMenu() ;
-//		ImageView icon = (ImageView) findViewById(android.R.id.home);
-//		FrameLayout.LayoutParams iconLp = (FrameLayout.LayoutParams) icon.getLayoutParams();
-//		iconLp.leftMargin = iconLp.rightMargin = 20;
-//		icon.setLayoutParams(iconLp);
+		ImageView icon = (ImageView) findViewById(android.R.id.home);
+		FrameLayout.LayoutParams iconLp = (FrameLayout.LayoutParams) icon.getLayoutParams();
+		iconLp.leftMargin = iconLp.rightMargin = 20;
+		icon.setLayoutParams(iconLp);
 		
 		fragmentManager = getFragmentManager();
 		appInstance =(BoardingPassApplication)getApplication();
@@ -173,12 +168,9 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 		adapter = new NavDrawerListAdapter(getApplicationContext(),appInstance);
 		mDrawerList.setAdapter(adapter);
-		//getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		//getActionBar().setHomeButtonEnabled(true);
-		
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-				0, 
+				R.drawable.ic_navigation_drawer_closed, 
 				R.string.app_name, 
 				R.string.app_name 
 				) {
@@ -211,7 +203,7 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		// TODO Auto-generated method stub
 		super.onResume();
 		lisenar=this;
-		displayView(Constants.SELECTEDPOSITION);
+		//displayView(Constants.SELECTEDPOSITION);
 	}
 
 	private class SlideMenuClickListener implements
@@ -362,8 +354,6 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		finisssh();
 
 	}
-
-
 	public void openDialogToAddBoardingPass(){
 		final Dialog dialog = new Dialog(MainActivity.this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -522,24 +512,28 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		startActivityForResult(intent, SCANBARCODEFROMPDF);
 	}
 	public void saveScannedBoardingPasstodatabes(String contents,String format){
-
+		//
+		
 		if(contents.length()<100){
-			Log.e("size", contents.length()+"");
+			Log.e("noboar", contents);
 			Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_invalid_borading_pass),
 					Toast.LENGTH_SHORT).show();
 		}
 		else{
-			Log.e("size", contents.length()+"");
 			BoardingPassParser boardingpassparser=new BoardingPassParser(contents, format);
 			boardingPass=boardingpassparser.getBoardingpass();
-			if(appInstance.getUserCred().getEmail().equals("")){
+			
+			if(!appInstance.isRememberMe()){
+				Log.e("notlogin", contents);
 				setBoardingpassInLocalDB();	
 			}
 			else{
 				if(com.seatunity.boardingpass.utilty.Constants.isOnline(MainActivity.this)){
 					SaveboardingPasstoServer( boardingPass);
+					
 				}
 				else{
+					Log.e("nonetlogin", contents);
 					setBoardingpassInLocalDB();
 				}
 			}
@@ -592,6 +586,16 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		dbInstance.insertOrUpdateBoardingPass(boardingPass);
 		ArrayList<BoardingPass>list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
 		dbInstance.close();	
+		Calendar c = Calendar.getInstance(); 
+		int dayofyear = c.get(Calendar.DAY_OF_YEAR);
+		int ju_date=Integer.parseInt(boardingPass.getJulian_date());
+		if((ju_date<dayofyear)){
+			displayView(2);
+			
+		}
+		else{
+			displayView(0);
+		}
 	}
 
 

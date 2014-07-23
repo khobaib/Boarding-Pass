@@ -95,7 +95,7 @@ public class AdapterForBoardingPass extends BaseAdapter {
 		}
         holder.tv_flight_to_from.setText(list.get(position).getTravel_from_name()+" - "+
         		list.get(position).getTravel_to_name());
-        holder.tv_flight_date.setText(month+day);
+        holder.tv_flight_date.setText(month+day+", "+list.get(position).getFlight_no());
 //        holder.tv_start_time.setText(list.get(position).getDeparture());
         holder.tv_cdg.setText(list.get(position).getTravel_from());
         holder.tv_jfk.setText(list.get(position).getTravel_to());

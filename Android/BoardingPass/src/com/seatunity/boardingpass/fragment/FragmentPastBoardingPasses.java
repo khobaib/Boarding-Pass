@@ -83,15 +83,7 @@ public class FragmentPastBoardingPasses extends Fragment{
 		int dayofyear = c.get(Calendar.DAY_OF_YEAR);
 		Log.e("dayofyear", ""+dayofyear);
 		lv_boarding_past_pass=(ListView) v.findViewById(R.id.lv_boarding_past_pass);
-//		tv_from=(TextView) v.findViewById(R.id.tv_from);
-//		tv_to=(TextView) v.findViewById(R.id.tv_to);
-//		tv_month_inside_icon=(TextView) v.findViewById(R.id.tv_month_inside_icon);
-//		tv_date_inside_icon=(TextView) v.findViewById(R.id.tv_date_inside_icon);
-//		tv_seat_no=(TextView) v.findViewById(R.id.tv_seat_no);
-//		tv_flight_no=(TextView) v.findViewById(R.id.tv_flight_no);
-//		tv_start_time=(TextView) v.findViewById(R.id.tv_start_time);
-//		tv_arrival_time=(TextView) v.findViewById(R.id.tv_arrival_time);
-		
+
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 		dbInstance.open();
 		list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();

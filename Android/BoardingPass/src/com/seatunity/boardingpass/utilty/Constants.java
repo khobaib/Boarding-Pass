@@ -15,6 +15,8 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 
 public class Constants {
+	
+	public static int SELECTEDBOARDINGPASSPOSITION=0;
 	public static String[] okFileExtensions =  new String[] {"jpg", "png", "gif","jpeg"};
 	public static boolean LIVE_IN_FLAG=false;
 	public static boolean AGE_FLAG=false;

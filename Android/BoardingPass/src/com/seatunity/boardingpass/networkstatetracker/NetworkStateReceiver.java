@@ -31,7 +31,6 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 			appInstance =(BoardingPassApplication) context.getApplicationContext();
 			
 			if(ni!=null && ni.getState()==NetworkInfo.State.CONNECTED) {
-				Toast.makeText(context, "Connectes", 2000).show();
 				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
 				dbInstance.open();
 				ArrayList<BoardingPass> list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();

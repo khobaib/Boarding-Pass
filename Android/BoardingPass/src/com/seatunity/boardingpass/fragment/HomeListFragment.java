@@ -82,7 +82,7 @@ public class HomeListFragment extends TabFragment{
 		((MainActivity)getActivity()).mDrawerList.setSelection(0);
 		Fragment fragment;
 		if(from==0){
-			 fragment = backEndStack.pop();
+			 fragment = backEndStack.peek();
 		}
 		else{
 			 fragment = backEndStack.peek();

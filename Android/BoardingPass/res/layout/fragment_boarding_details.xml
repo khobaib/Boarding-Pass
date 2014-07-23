@@ -29,20 +29,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
-                <RelativeLayout
+                <LinearLayout
                     android:id="@+id/re_holder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="9dp" 
                     android:gravity="center_vertical"
-                    android:padding="9dp" >
-
-                    <RelativeLayout
+                    android:weightSum="4">
+                    <TextView
+                        android:id="@+id/tv_name_carrier"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:text="Lunthasa"
+                        android:gravity="center"
+                        android:textColor="#2D3E50"
+                        android:textSize="25dp"
+                        android:layout_weight="1.5"
+                        android:textStyle="bold" />
+                    <RelativeLayout 
+                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                         android:layout_weight="2.5"
+                         android:layout_gravity="right"
+                        >
+                         <RelativeLayout
                         android:id="@+id/img_icon"
+                        android:layout_alignParentRight="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginRight="12dp"
                         android:background="@drawable/icon_bodaing_details" >
 
                         <TextView
@@ -52,7 +68,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="12dp"
                             android:text="APR"
-                            android:textColor="#777777" />
+                            android:textColor="#7C7C7C" />
 
                         <ImageView
                             android:id="@+id/img_icon_inner"
@@ -69,20 +85,14 @@
                             android:layout_below="@+id/img_icon_inner"
                             android:layout_centerHorizontal="true"
                             android:text="22"
-                            android:textColor="#777777" />
+                            android:textColor="#7C7C7C" />
+                    </RelativeLayout>
+                        
                     </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/tv_name_carrier"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:text="Lunthasa"
-                        android:textColor="#2D3E50"
-                        android:textSize="32dp"
-                        android:textStyle="bold" />
-                </RelativeLayout>
+                   
+                    
+                </LinearLayout>
 
                 <View
                     android:id="@+id/vw_gap"
@@ -91,7 +101,7 @@
                     android:layout_below="@+id/re_holder"
                     android:layout_marginLeft="9dp"
                     android:layout_marginRight="9dp"
-                    android:background="@android:color/darker_gray" >
+                    android:background="#CCCCCC" >
                 </View>
 
                 <LinearLayout
@@ -106,19 +116,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="3" >
+                        android:weightSum="4" >
 
                         <TextView
                             android:id="@+id/tv_from"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
-                            android:layout_weight="1"
+                            android:layout_weight="1.5"
                             android:gravity="center"
                             android:paddingRight="5dp"
                             android:text="Munic"
-                            android:textColor="#777777"
-                            android:textSize="17dp" />
+                                  android:textColor="#7C7C7C"
+                            android:textSize="15dp" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -135,31 +145,31 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tv_cdg"
                             android:layout_centerHorizontal="true"
-                            android:layout_weight="1"
-                            android:gravity="center"
+                            android:layout_weight="1.5"
+                            android:gravity="right"
                             android:paddingLeft="5dp"
                             android:text="Mancester"
                             android:textColor="#777777"
-                            android:textSize="17dp" />
+                            android:textSize="15dp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="3" >
+                        android:weightSum="4" >
 
                         <TextView
                             android:id="@+id/tv_from_air"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
-                            android:layout_weight="1"
+                            android:layout_weight="1.5"
                             android:gravity="center"
                             android:paddingRight="5dp"
                             android:text="MUC"
                             android:textColor="#EE2653"
-                            android:textSize="32dp"
+                            android:textSize="38dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -177,12 +187,12 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tv_cdg"
                             android:layout_centerHorizontal="true"
-                            android:layout_weight="1"
-                            android:gravity="center"
+                            android:layout_weight="1.5"
+                            android:gravity="right"
                             android:paddingLeft="5dp"
                             android:text="MAN"
                             android:textColor="#EE2653"
-                            android:textSize="32dp"
+                            android:textSize="38dp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -201,12 +211,13 @@
                             android:gravity="center"
                             android:paddingRight="5dp"
                             android:text="10"
-                            android:textColor="#777777"
+                            android:visibility="gone"
+                                  android:textColor="#7C7C7C"
                             android:textSize="17dp" />
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
                             android:gravity="center"
@@ -223,7 +234,8 @@
                             android:gravity="center"
                             android:paddingLeft="5dp"
                             android:text="12"
-                            android:textColor="#777777"
+                             android:visibility="gone"
+                                  android:textColor="#7C7C7C"
                             android:textSize="17dp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -235,7 +247,7 @@
                     android:layout_below="@+id/re_holder_mid"
                     android:layout_marginLeft="9dp"
                     android:layout_marginRight="9dp"
-                    android:background="@android:color/darker_gray" >
+                    android:background="#CCCCCC" >
                 </View>
 
                 <LinearLayout
@@ -252,18 +264,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="3" >
+                        android:weightSum="4" >
 
                         <TextView
                             android:id="@+id/tv_flight_no"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="1.5"
                             android:gravity="center"
                             android:paddingRight="5dp"
                             android:text="@string/txt_flight_no"
-                            android:textColor="#777777"
-                            android:textSize="17dp" />
+                                android:textColor="#7C7C7C"
+                            android:textSize="15dp" />
 
                         <TextView
                             android:id="@+id/tv_seat_no"
@@ -274,8 +286,8 @@
                             android:gravity="center"
                             android:paddingRight="5dp"
                             android:text="@string/txt_seat_nno"
-                            android:textColor="#777777"
-                            android:textSize="17dp" />
+                                  android:textColor="#7C7C7C"
+                            android:textSize="15dp" />
 
                         <TextView
                             android:id="@+id/tv_compartment_class"
@@ -283,12 +295,12 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tv_cdg"
                             android:layout_centerHorizontal="true"
-                            android:layout_weight="1"
+                            android:layout_weight="1.5"
                             android:gravity="center"
                             android:paddingLeft="5dp"
                             android:text="@string/txt_class"
-                            android:textColor="#777777"
-                            android:textSize="17dp" />
+                                 android:textColor="#7C7C7C"
+                            android:textSize="15dp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -296,13 +308,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:orientation="horizontal"
-                        android:weightSum="3" >
+                        android:weightSum="4" >
 
                         <TextView
                             android:id="@+id/tv_flight_var"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="1.5"
                             android:gravity="center"
                             android:paddingRight="5dp"
                             android:text="Lg2540"
@@ -327,7 +339,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tv_cdg"
                             android:layout_centerHorizontal="true"
-                            android:layout_weight="1"
+                            android:layout_weight="1.5"
                             android:gravity="center"
                             android:paddingLeft="5dp"
                             android:text="First"
@@ -344,9 +356,10 @@
                     android:layout_below="@+id/linearLayout1"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="14dp"
+                    android:gravity="left"
                     android:text="@string/txt_psnger"
-                    android:textColor="#777777"
-                    android:textSize="17dp" />
+                         android:textColor="#7C7C7C"
+                    android:textSize="15dp" />
 
                 <TextView
                     android:id="@+id/tv_passenger_name"
@@ -355,6 +368,7 @@
                     android:layout_alignLeft="@+id/tv_passengar"
                     android:layout_below="@+id/tv_passengar"
                     android:text="Linel Messi"
+                    android:gravity="left"
                     android:textColor="#2D3E50"
                     android:textSize="19dp" />
             </RelativeLayout>
