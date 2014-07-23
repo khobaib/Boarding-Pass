@@ -97,8 +97,8 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 	public MenuItem delete_menu;
 	public MenuItem refreash_menu;
 	public ActionBarDrawerToggle mDrawerToggle;
-	private CharSequence mDrawerTitle;
-	private CharSequence mTitle;
+	public CharSequence mDrawerTitle;
+	public CharSequence mTitle;
 	private String[] navMenuTitles;
 	private TypedArray navMenuIcons;
 	private ArrayList<NavDrawerItem> navDrawerItems;
@@ -175,7 +175,6 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 				R.string.app_name 
 				) {
 			public void onDrawerClosed(View view) {
-				
 				getActionBar().setTitle(mTitle);
 				invalidateOptionsMenu();
 			}

@@ -82,6 +82,7 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall{
 	String hint;
 	EditText input ;
 	AlertDialog d ;
+	MainActivity landingActivity;
 	Context context;
 	String savedMessage;
 	private int callfrom=0;
@@ -102,6 +103,21 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall{
 	@Override
 	public void onResume() {
 		super.onResume();
+		if(getActivity()!=null){
+			landingActivity=(MainActivity)getActivity();
+		}
+		landingActivity.mTitle=seatmate.getName();
+		landingActivity.getActionBar().setTitle(landingActivity.mTitle);
+		
+	}
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		if(getActivity()!=null){
+			landingActivity=(MainActivity)getActivity();
+		}
+		
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -272,7 +288,7 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall{
 				if(callfrom==1){
 					Toast.makeText(context, context.getResources().getString(R.string.txt_emailsent_success),
 							Toast.LENGTH_SHORT).show();
-					
+
 				}
 				else if(callfrom==2){
 					BoardingPassListForSharedFlight  list=BoardingPassListForSharedFlight.getBoardingPassListObject(job);
@@ -292,7 +308,7 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall{
 			e.printStackTrace();
 		}
 
-		
+
 	}
 	@Override
 	public void responseFailure(JSONObject job) {
@@ -311,8 +327,8 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall{
 
 			}
 			else{
-					Toast.makeText(context, job.getString("message"),
-							Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, job.getString("message"),
+						Toast.LENGTH_SHORT).show();
 			} 
 		}
 		catch (JSONException e) {
@@ -349,15 +365,15 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall{
 							"sharedflight/"+seatmate.getId(),Constants.REQUEST_TYPE_POST);
 					getSharedFlight.execute();
 				}
-				
+
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
-		
+
+
 	}
 	@Override
 	public void LoginFailed(JSONObject job) {

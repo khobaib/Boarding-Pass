@@ -53,6 +53,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	BoardingPassApplication appInstance;
 	int callfrom=0;
 	Context context;
+	MainActivity landingActivity;
 	BoardingPass boardingPass;
 	TextView tv_name_carrier,tv_month_inside_icon,tv_date_inside_icon,tv_from_air,tv_to_air,tv_start_time,tv_arrival_time,
 	tv_flight_var,tv_seat_var,tv_compartment_class_var,tv_passenger_name;
@@ -60,6 +61,18 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	public FragmentUpcomingBoardingPassDetails(BoardingPass bpass){
 		this.bpass=bpass;
 		Log.e("insideList5", bpass.getTravel_from_name());
+		
+		
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		if(getActivity()!=null){
+			landingActivity=(MainActivity)getActivity();
+		}
+		
 	}
 	
 	@Override
@@ -155,6 +168,11 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 				return false;
 			}
 		});
+		if(getActivity()!=null){
+			landingActivity=(MainActivity)getActivity();
+		}
+		landingActivity.mTitle=context.getResources().getString(R.string.txt_boarding_pass);
+		landingActivity.getActionBar().setTitle(landingActivity.mTitle);
 	}
 	@Override
 	public void onPause() {
