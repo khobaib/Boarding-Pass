@@ -85,7 +85,12 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		context=getActivity();
+		Log.e("again", "onCreate");
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
+		if(parent==null){
+			parent=Constants.parent;
+		}
 		if(Constants.isOnline(getActivity())){
 			if(!appInstance.isRememberMe()){
 				SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
@@ -98,6 +103,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 				for (int i=0;i<list.size();i++){
 					Log.e("test", "t "+list.get(i).getTravel_from_name());
 					int ju_date=Integer.parseInt(list.get(i).getJulian_date());
+				
 					if((ju_date>=dayofyear)&&(!list.get(i).getDeletestate())){
 						list_greaterthan.add(list.get(i));
 
@@ -163,7 +169,10 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-		context=getActivity();
+		if(getActivity()!=null){
+			context=getActivity();
+		}
+		
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -191,6 +200,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 
 				this.list=BoardingPassList.getBoardingPassListObject(job).getBoardingPassList();
 				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
+				Log.e("db", dbInstance+" ab");
 				dbInstance.open();
 				for(int i=0;i<list.size();i++){
 					Log.e("testing", ""+i+"  "+list.get(i).getTravel_from_name());

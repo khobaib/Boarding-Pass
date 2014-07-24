@@ -10,6 +10,7 @@ import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
+import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.SeatMate;
 import com.seatunity.model.SeatMetList;
@@ -45,6 +46,7 @@ public class HomeListFragment extends TabFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.e("again", "onCreate");
 		appInstance =(BoardingPassApplication)getActivity().getApplication();
 		backEndStack = new Stack<Fragment>();
 		
@@ -57,6 +59,7 @@ public class HomeListFragment extends TabFragment{
 			
 			FragmentGetBoardingPasseFromBackend fragment = new FragmentGetBoardingPasseFromBackend();
 				fragment.parent = this;
+				Constants.parent=this;
 				backEndStack.push(fragment);
 		}
 		else{
@@ -64,14 +67,12 @@ public class HomeListFragment extends TabFragment{
 			newFragment.parent = this;
 			backEndStack.push(newFragment);
 		}
-
-
-
-
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		Log.e("again", "onCreate");
+
 		ViewParent parent = (ViewParent) container.getParent();
 		View v = inflater.inflate(R.layout.fragment_tab3, container, false);
 		return v;
@@ -82,7 +83,7 @@ public class HomeListFragment extends TabFragment{
 		((MainActivity)getActivity()).mDrawerList.setSelection(0);
 		Fragment fragment;
 		if(from==0){
-			 fragment = backEndStack.pop();
+			 fragment = backEndStack.peek();
 		}
 		else{
 			 fragment = backEndStack.peek();

@@ -2,13 +2,14 @@ package com.seatunity.model;
 
 public class BoardingPass {
 	String stringform,firstname,lastname,PNR,travel_from,travel_to,carrier,flight_no,julian_date,compartment_code,
-	seat,departure,arrival,codetype,travel_from_name,travel_to_name,carrier_name;
+	seat,departure,arrival,codetype,travel_from_name,travel_to_name,carrier_name,travel_class="";
 	String id="-1";
 	boolean deletestate=false;
-	public BoardingPass(String stringform,String firstname,String lastname,String PNR,String travel_from,
+	public BoardingPass(String travel_class, String stringform,String firstname,String lastname,String PNR,String travel_from,
 			String travel_to,String carrier,String flight_no,String julian_date,String compartment_code,
 			String seat,String departure,String arrival,String codetype,String id,String travel_from_name,
 			String travel_to_name,String carrier_name,boolean deletestate ){
+		this.travel_class=travel_class;
 		this.deletestate=deletestate;
 		this.carrier_name=carrier_name;
 		this.travel_from_name=travel_from_name;
@@ -30,6 +31,17 @@ public class BoardingPass {
 		this.id=id;
 		
 	}
+	
+	public String getTravel_class(){
+		return this.travel_class;
+	}
+	public void setTravel_class(String travel_class){
+		this.travel_class=travel_class;
+	}
+	
+	
+	
+	
 	public void setDeletestate(boolean deletestate){
 		this.deletestate=deletestate;
 	}

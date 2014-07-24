@@ -85,6 +85,9 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall{
 	public FragmentBoardingPasses(ArrayList<BoardingPass>list_greaterthan){
 		this.list_greaterthan=list_greaterthan;
 	}
+	public FragmentBoardingPasses(){
+		
+	}
 	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

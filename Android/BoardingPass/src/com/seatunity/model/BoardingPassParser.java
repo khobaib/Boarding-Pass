@@ -8,7 +8,7 @@ public class BoardingPassParser {
 	String boarding_key;
 	BoardingPass boardingPass;
 	String stringform="",firstname="",lastname="",PNR="",travel_from="",travel_to="",carrier="",flight_no="",julian_date="",compartment_code="",
-	seat="",departure="3 ",arrival="9 ",travel_from_name="",travel_to_name="",carrier_name="";
+	seat="",departure="3 ",arrival="9 ",travel_from_name="",travel_to_name="",carrier_name="",travel_class="";
 	boolean deletestate=false;
 	public BoardingPassParser(String boarding_key,String codetype){
 		boarding_key=boarding_key.trim();
@@ -32,7 +32,7 @@ public class BoardingPassParser {
 		julian_date=boarding_key.substring(44,47);
 		compartment_code=boarding_key.substring(47,48);
 		seat=boarding_key.substring(48,52);
-		this.boardingPass=new BoardingPass(stringform, firstname, lastname,PNR ,travel_from, travel_to, carrier, 
+		this.boardingPass=new BoardingPass(travel_class,stringform, firstname, lastname,PNR ,travel_from, travel_to, carrier, 
 				flight_no, julian_date, compartment_code, seat,
 				departure, arrival,codetype,"-1",travel_from_name,travel_to_name,carrier_name,deletestate);
 	}

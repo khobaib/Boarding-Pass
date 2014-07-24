@@ -12,7 +12,7 @@
     <string name="privcy_plcy">Privacy Policy</string>
     
      <string name="app_not_found">Unable to find market app</string>
-    
+     <string name="share_via">Share Via</string>
     <string name="share">Share App</string>
     <string name="refresh">Refresh</string>
  	<string name="about">About</string>
@@ -60,6 +60,7 @@
     <string name="app_name">Seat Unity</string>
      <string name="txt_startscan_forboardingpass">Start scan for boarding pass</string>
     <string name="txt_select_country">Select country</string>
+    <string name="txt_select_photo">Change profile image</string>
     <string name="txt_select_age">Select age</string>
     <string name="txt_gender">Gender</string>
     <string name="txt_gender_female">Female</string>

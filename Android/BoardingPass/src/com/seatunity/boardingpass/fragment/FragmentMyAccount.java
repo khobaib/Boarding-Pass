@@ -91,10 +91,11 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 	AccountListFragment parent;
 	TextView tv_uname,tv_email,tv_stataus,tv_statau;
 	UserCred userCred;
-	int ACTION_REQUEST_CAMERA=0;
-	int ACTION_REQUEST_GALLERY=1;
+	int ACTION_REQUEST_CAMERA=20;
+	int ACTION_REQUEST_GALLERY=21;
 	String drectory;
 	String photofromcamera;
+
 	String contentbodyremeber="";
 	ViewGroup v ;
 	Bitmap photo;
@@ -164,13 +165,19 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
 		userCred=appInstance.getUserCred();
-		if(Constants.photo!=null){
-			uploadProfileImage(Constants.photo);
-		}
-		else{
-			ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url()
-					, img_prof_pic);
-		}
+//		if(Constants.photo!=null){
+//			uploadProfileImage(Constants.photo);
+//		}
+	//	else{
+			if((appInstance.getUserCred().getImage_url().equals(""))||(appInstance.getUserCred().getImage_url()==null)){
+				
+			}
+			else{
+				ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url()
+						, img_prof_pic);
+			}
+			
+	//	}
 
 		setView();
 
@@ -220,7 +227,8 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 			public void onClick(View v) {
 
 				String[] photochooser = getActivity().getResources().getStringArray(R.array.upload_photo_from); 
-				showDialogTochosePhoto(photochooser,getActivity().getResources().getString(R.string.txt_select_country));
+				showDialogTochosePhoto(photochooser,getActivity().getResources().getString(R.string.txt_select_photo));
+				
 			}
 		});
 		setlistView();
@@ -245,7 +253,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 				}
 				else if(position==2){
 					String[] gender_list = getActivity().getResources().getStringArray(R.array.gender); 
-					showDialogForGender(gender_list,getActivity().getResources().getString(R.string.txt_select_age),position);
+					showDialogForGender(gender_list,getActivity().getResources().getString(R.string.txt_gender),position);
 				}
 				else if(position==3){
 					Constants.POFESSION_FLAG=true;
@@ -296,8 +304,11 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+		ImageView im_icon=(ImageView) customTitleView.findViewById(R.id.im_icon);
 		TextView tvtitle=(TextView) customTitleView.findViewById(R.id.tv_title);
 		tvtitle.setText(getActivity().getResources().getString(R.string.acc_sign_out));
+		im_icon.setVisibility(View.VISIBLE);
+		im_icon.setImageResource(R.drawable.ic_sing_out);
 		builder.setCustomTitle(customTitleView);
 		builder.setMessage(getActivity().getResources().getString(R.string.txt_sign_out_msz))
 		.setCancelable(false)
@@ -360,6 +371,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 					Log.e("pos", drectory+photofromcamera+" " +f.exists());
 					intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 					startActivityForResult(intent, ACTION_REQUEST_CAMERA);
+					Constants.SELECTEDBOARDINGPASSPOSITION=1;
 				}
 				else if(which==1){
 					Intent intent = new Intent(
@@ -373,6 +385,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 					startActivityForResult(
 							chooser,
 							ACTION_REQUEST_GALLERY);
+					Constants.SELECTEDBOARDINGPASSPOSITION=1;
 				}
 			}
 		});
@@ -550,25 +563,35 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.e("inside", "onActivityResult");
+		
 		if (requestCode == ACTION_REQUEST_GALLERY) {
-
+			Log.e("inside", "onActivityResultGallery");
 			try {
 				Uri selectedImageUri = data.getData();
 				String tempPath =getPath(selectedImageUri,getActivity());
 				File file=new File(tempPath);
 				ImageScale scaleimage=new ImageScale();
-				Bitmap photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
+				photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
 				file.delete();
 				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 				photo.compress(Bitmap.CompressFormat.PNG, 80, bytes);
 				photo=scaleimage.getResizedBitmap(photo, 120, 120);
-				Constants.photo=photo;
+				//Constants.photo=photo;
 				File f = new File(tempPath);
 				f.createNewFile();
 				FileOutputStream fo = new FileOutputStream(f);
 				fo.write(bytes.toByteArray());
 				fo.close();
+				img_prof_pic.post(new Runnable() {
+			        @Override
+			        public void run()
+			        {
+			          
+			        	img_prof_pic.setImageBitmap(photo);
+			            
+			        }
+			    });
+				//uploadProfileImage(photo);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -580,6 +603,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 		else if (requestCode ==ACTION_REQUEST_CAMERA) {
 			try
 			{
+				Log.e("inside", "onActivityResultCamera");
 
 				String filepath = drectory+"/"+photofromcamera;
 
@@ -587,7 +611,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 
 				if(file.exists()){
 					ImageScale scaleimage=new ImageScale();
-					Bitmap photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
+					 photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
 					file.delete();
 					ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 					photo=scaleimage.getResizedBitmap(photo, 120, 120);
@@ -597,6 +621,17 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 					FileOutputStream fo = new FileOutputStream(f);
 					fo.write(bytes.toByteArray());
 					fo.close();
+					//img_prof_pic.setImageBitmap(photo);
+					img_prof_pic.post(new Runnable() {
+				        @Override
+				        public void run()
+				        {
+				          
+				        	img_prof_pic.setImageBitmap(photo);
+				            
+				        }
+				    });
+					//uploadProfileImage(photo);
 				}
 
 			}

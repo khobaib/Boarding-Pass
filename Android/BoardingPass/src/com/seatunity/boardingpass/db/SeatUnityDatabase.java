@@ -16,7 +16,7 @@ public class SeatUnityDatabase {
 	private SQLiteDatabase db;
 	private Context mContext;
 	private static final String DATABASE_NAME = "lipberry_db2";
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 4;
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		DatabaseHelper(Context ctx) {
 			super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,6 +37,7 @@ public class SeatUnityDatabase {
 	}
 	public SeatUnityDatabase open() throws SQLException {
 		dbHelper = new DatabaseHelper(mContext);
+		Log.e("context", "ab "+ mContext+ "  "+dbHelper);
 		db = dbHelper.getWritableDatabase();
 		return this;
 	}

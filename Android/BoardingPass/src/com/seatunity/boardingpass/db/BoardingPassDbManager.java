@@ -13,6 +13,7 @@ public class BoardingPassDbManager {
 	private static final String TAG = BoardingPassDbManager.class.getSimpleName();
 	private static String TABLE_BOARDING_PASS_LIST = "boardingpass";
 	public static final String TABLE_PRIMARY_KEY = "_id";
+	private static String travel_class="travel_class";
 	private static String stringform = "stringform";
 	private static String firstname = "firstname";
 	private static String lastname = "lastname";
@@ -35,6 +36,7 @@ public class BoardingPassDbManager {
 	
 	private static final String CREATE_TABLE_EDUCATION_LIST = "create table " + TABLE_BOARDING_PASS_LIST + " ( "
 			+ TABLE_PRIMARY_KEY + " integer primary key autoincrement, "
+			+ travel_class + " text, " 
 			+ stringform + " text, " 
 			+ firstname + " text, " 
 			+ lastname + " text, "
@@ -56,6 +58,7 @@ public class BoardingPassDbManager {
 			+ id + " text);";
 	public static long insert(SQLiteDatabase db, BoardingPass boardingPass) throws SQLException {
 		ContentValues cv = new ContentValues();
+		cv.put(travel_class , boardingPass.getTravel_class());
 		cv.put(stringform , boardingPass.getStringform());
 		cv.put(firstname , boardingPass.getFirstname());
 		cv.put(lastname , boardingPass.getLastname());
@@ -90,6 +93,7 @@ public class BoardingPassDbManager {
 		if(c != null && c.getCount() >= 0){
 			c.moveToFirst();
 			while(!c.isAfterLast()){
+				String travel_class_local = c.getString(c.getColumnIndex(travel_class));
 				String stringform_local = c.getString(c.getColumnIndex(stringform));
 				String firstname_local = c.getString(c.getColumnIndex(firstname));
 				String  lastname_local = c.getString(c.getColumnIndex( lastname));
@@ -109,7 +113,7 @@ public class BoardingPassDbManager {
 				String carrier_name_local =c.getString(c.getColumnIndex(carrier_name));
 				boolean deletestate_local =Boolean.parseBoolean(c.getString(c.getColumnIndex(deletestate)));
 				String id_local =c.getString(c.getColumnIndex(id));
-				BoardingPass bpass=new BoardingPass(stringform_local,firstname_local,lastname_local,PNR_local,travel_from_local,
+				BoardingPass bpass=new BoardingPass(travel_class_local,stringform_local,firstname_local,lastname_local,PNR_local,travel_from_local,
 						travel_to_local,carrier_local,flight_no_local,julian_date_local,compartment_code_local,
 						seat_local,departure_local,arrival_local,codetype_local,id_local,travel_from_name_local
 						,travel_to_name_local,carrier_name_local,deletestate_local);
@@ -122,6 +126,7 @@ public class BoardingPassDbManager {
 	}
 	public static long update(SQLiteDatabase db,BoardingPass boardingPass) throws SQLException {
 		ContentValues cv = new ContentValues();
+		cv.put(travel_class , boardingPass.getTravel_class());
 		cv.put(stringform , boardingPass.getStringform());
 		cv.put(firstname , boardingPass.getFirstname());
 		cv.put(lastname , boardingPass.getLastname());

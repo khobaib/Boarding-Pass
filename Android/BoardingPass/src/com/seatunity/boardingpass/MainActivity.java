@@ -202,6 +202,10 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		// TODO Auto-generated method stub
 		super.onResume();
 		lisenar=this;
+		if(Constants.SELECTEDBOARDINGPASSPOSITION==1){
+			displayView(1);
+			Constants.SELECTEDBOARDINGPASSPOSITION=0;
+		}
 		//displayView(Constants.SELECTEDPOSITION);
 	}
 
@@ -263,9 +267,9 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		Intent sendIntent = new Intent();
 		sendIntent.setAction(Intent.ACTION_SEND);
 		sendIntent.putExtra(Intent.EXTRA_TEXT,
-				"Hey check out SeatUnity app at: https://play.google.com/store/apps/details?id=tagmap.me&hl=en");
+				"Hey I am using SeatUnity. This is a nice app to store boarding pass and to communicate with seatmates.");
 		sendIntent.setType("text/plain");
-		startActivity(sendIntent);
+		startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.share_via)));
 
 	}
 
@@ -464,6 +468,7 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 			if (resultCode == RESULT_OK) {
 				String contents = intent.getStringExtra("SCAN_RESULT");
 				String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+				Log.d("result", contents+ " "+format);
 				saveScannedBoardingPasstodatabes(contents,format);
 			} else if (resultCode == RESULT_CANCELED) {
 			}

@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.seatunity.boardingpass.fragment.HomeListFragment;
+
 
 import android.R.array;
 import android.content.Context;
@@ -15,7 +17,7 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 
 public class Constants {
-	
+	public static HomeListFragment parent;
 	public static int SELECTEDBOARDINGPASSPOSITION=0;
 	public static String[] okFileExtensions =  new String[] {"jpg", "png", "gif","jpeg"};
 	public static boolean LIVE_IN_FLAG=false;

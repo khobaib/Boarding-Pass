@@ -102,7 +102,7 @@ public class AdapterForSeatmet extends BaseAdapter {
 		if(list.get(position).getProfession()!=null){
 			holder.txt_name.setText(list.get(position).getName());
 		}
-		if(list.get(position).getImage_url()==null){
+		if((list.get(position).getImage_url()==null)||(list.get(position).getImage_url().equals(""))){
 
 		}
 		else{

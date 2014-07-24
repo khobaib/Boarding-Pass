@@ -24,7 +24,7 @@ public class ImageScale
 	         o.inJustDecodeBounds = true;
 
 	         BitmapFactory.decodeStream(new FileInputStream(file),null,o);
-	         final int REQUIRED_SIZE=500;
+	         final int REQUIRED_SIZE=300;
 	         int width_tmp=o.outWidth, height_tmp=o.outHeight;
 
 	         int scale=1;

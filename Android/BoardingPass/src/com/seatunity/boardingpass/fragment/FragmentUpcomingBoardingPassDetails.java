@@ -56,13 +56,11 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	MainActivity landingActivity;
 	BoardingPass boardingPass;
 	TextView tv_name_carrier,tv_month_inside_icon,tv_date_inside_icon,tv_from_air,tv_to_air,tv_start_time,tv_arrival_time,
-	tv_flight_var,tv_seat_var,tv_compartment_class_var,tv_passenger_name;
+	tv_flight_var,tv_seat_var,tv_compartment_class_var,tv_passenger_name,tv_from,tv_to;
 
 	public FragmentUpcomingBoardingPassDetails(BoardingPass bpass){
 		this.bpass=bpass;
 		Log.e("insideList5", bpass.getTravel_from_name());
-		
-		
 	}
 	
 	@Override
@@ -93,6 +91,14 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		tv_seat_var=(TextView) rootView.findViewById(R.id.tv_seat_var);
 		tv_compartment_class_var=(TextView) rootView.findViewById(R.id.tv_compartment_class_var);
 		tv_passenger_name=(TextView) rootView.findViewById(R.id.tv_passenger_name);
+		tv_from=(TextView) rootView.findViewById(R.id.tv_from);
+		tv_to=(TextView) rootView.findViewById(R.id.tv_to);
+		
+		tv_from.setText(bpass.getTravel_from_name());
+
+		tv_to.setText(bpass.getTravel_to_name());
+
+		
 		tv_name_carrier.setText(bpass.getCarrier_name());
 		tv_from_air.setText(bpass.getTravel_from());
 		tv_to_air.setText(bpass.getTravel_to());
@@ -100,7 +106,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		tv_arrival_time.setText(bpass.getArrival());
 		tv_flight_var.setText(bpass.getFlight_no());
 		tv_seat_var.setText(bpass.getSeat());
-		tv_compartment_class_var.setText(bpass.getCompartment_code());
+		tv_compartment_class_var.setText(bpass.getTravel_class());
 		tv_passenger_name.setText(bpass.getFirstname());
 		String date=com.seatunity.boardingpass.utilty.Constants.getDayandYear(Integer.parseInt(bpass.getJulian_date()));
 		String[] dateParts = date.split(":");
@@ -274,7 +280,11 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 
 	public void deleteBoardingPass(){
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-		alertDialogBuilder.setTitle(R.string.txt_delete_boarding_pass);
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+		TextView title=(TextView) customTitleView.findViewById(R.id.tv_title);
+		title.setText(R.string.txt_delete_boarding_pass);
+		alertDialogBuilder.setCustomTitle(customTitleView);
 		alertDialogBuilder.setMessage(R.string.txt_delete_boarding_pass_text);
 		alertDialogBuilder.setPositiveButton(R.string.txt_confirm, 
 				new DialogInterface.OnClickListener() {

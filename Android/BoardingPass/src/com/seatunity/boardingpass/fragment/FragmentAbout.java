@@ -70,10 +70,10 @@ public class FragmentAbout extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if(v.getId() == R.id.tv_send_feedback){
-			tv_let_know_bug.setText("tv_send_feedback");
+		
 		}
 		else if(v.getId() == R.id.tv_report_prob){
-			tv_let_know_bug.setText("tv_report_prob");
+		
 
 		}
 		else if(v.getId() == R.id.tv_rate_app){
