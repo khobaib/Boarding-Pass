@@ -93,7 +93,9 @@ public class PastBoardingPassListFragment extends TabFragment{
 	public void onBackPressed() {
 		//((HomeActivity) getActivity()).mTabHost.setCurrentTab(Constants.GOTABFROMWRITETOPIC);
 		if (backEndStack.size()==1) {
-			((MainActivity) getActivity()).close();
+			//((MainActivity) getActivity()).close();
+			((MainActivity)getActivity()).displayView(0);
+			((MainActivity)getActivity()).mDrawerList.setSelection(0);
 		}
 		else {
 			if (backEndStack.size()==1) {

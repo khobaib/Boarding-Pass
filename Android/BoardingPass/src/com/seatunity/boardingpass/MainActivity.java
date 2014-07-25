@@ -151,7 +151,6 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		FrameLayout.LayoutParams iconLp = (FrameLayout.LayoutParams) icon.getLayoutParams();
 		iconLp.leftMargin = iconLp.rightMargin = 20;
 		icon.setLayoutParams(iconLp);
-		
 		fragmentManager = getFragmentManager();
 		appInstance =(BoardingPassApplication)getApplication();
 		mTitle = mDrawerTitle = getTitle();
@@ -263,14 +262,12 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		}
 	}
 	public void ShareApp(){
-
 		Intent sendIntent = new Intent();
 		sendIntent.setAction(Intent.ACTION_SEND);
 		sendIntent.putExtra(Intent.EXTRA_TEXT,
 				"Hey I am using SeatUnity. This is a nice app to store boarding pass and to communicate with seatmates.");
 		sendIntent.setType("text/plain");
 		startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.share_via)));
-
 	}
 
 

@@ -193,7 +193,7 @@ public class EditUserNameActivity extends Activity implements CallBackApiCall{
 			loginObj.put("image_content", "");
 			
 			AsyncaTaskApiCall edit_uname =new AsyncaTaskApiCall(EditUserNameActivity.this,loginObj.toString() , EditUserNameActivity.this,
-					"reg",Constants.REQUEST_TYPE_PUT);
+					"reg_update",Constants.REQUEST_TYPE_POST);
 			edit_uname.execute();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -287,7 +287,7 @@ public class EditUserNameActivity extends Activity implements CallBackApiCall{
 				loginObj.put("image_type", "");
 				loginObj.put("image_content", "");
 				AsyncaTaskApiCall edit_uname =new AsyncaTaskApiCall(EditUserNameActivity.this,loginObj.toString() , 
-						EditUserNameActivity.this,	"reg",Constants.REQUEST_TYPE_PUT);
+						EditUserNameActivity.this,	"reg_update",Constants.REQUEST_TYPE_POST);
 				edit_uname.execute();
 			}
 		} catch (NotFoundException e) {
@@ -297,9 +297,6 @@ public class EditUserNameActivity extends Activity implements CallBackApiCall{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-
 	}
 	@Override
 	public void LoginFailed(JSONObject job) {

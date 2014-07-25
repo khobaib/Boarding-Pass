@@ -31,12 +31,8 @@ public class AccountListFragment extends TabFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		//Log.e("testting", "AccountListFragment");
 		appInstance =(BoardingPassApplication)getActivity().getApplication();
-
 		backEndStack = new Stack<Fragment>();
-
 		String email=appInstance.getUserCred().getEmail();
 		//	Fragment fragment=new FragmentMyAccount();
 		//	fragment.parent = this;
@@ -97,7 +93,9 @@ public class AccountListFragment extends TabFragment{
 	public void onBackPressed() {
 		//((HomeActivity) getActivity()).mTabHost.setCurrentTab(Constants.GOTABFROMWRITETOPIC);
 		if (backEndStack.size()==1) {
-			((MainActivity) getActivity()).close();
+			//((MainActivity) getActivity()).close();
+			((MainActivity)getActivity()).displayView(0);
+			((MainActivity)getActivity()).mDrawerList.setSelection(0);
 		}
 		else {
 			if (backEndStack.size()==1) {

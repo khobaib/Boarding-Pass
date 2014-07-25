@@ -7,7 +7,7 @@
        <string name="let_know_bug">Let us know about bug or problem</string>
        <string name="st_ubnity_bring">SeatUnity bring you closer to those who flight with you.</string>
        <string name="rate_app">Rate application</string>
-    
+      <string name="txt_exit_message">Do you want to exit?</string>
     <string name="trms_of_servces">Terms of service</string>
     <string name="privcy_plcy">Privacy Policy</string>
     
@@ -24,7 +24,7 @@
     <string name="txt_live_in">Live in</string>
      <string name="txt_prefer_to">Prefer to</string>
      <string name="txt_message">Message.</string>
-    <string name="txt_send_email">please type message to send email.</string>
+    <string name="txt_send_email">Please type message to send email</string>
      <string name="txt_seatmet_message_only_online">The seatmates list is only vailable in the online mode</string>
     <string name="txt_getseatmate_failure">Failed to get seatmates. Pleasze try again</string>
     <string name="txt_emailsen_failure">No account accociated with this email. Please try again.</string>

@@ -42,6 +42,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
@@ -89,13 +90,14 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 	ListView lv_setting;
 	Spinner spn_country;
 	AccountListFragment parent;
+	Activity activity;
 	TextView tv_uname,tv_email,tv_stataus,tv_statau;
 	UserCred userCred;
-	int ACTION_REQUEST_CAMERA=20;
+	int ACTION_REQUEST_CAMERA=31;
 	int ACTION_REQUEST_GALLERY=21;
 	String drectory;
 	String photofromcamera;
-
+    Context context;
 	String contentbodyremeber="";
 	ViewGroup v ;
 	Bitmap photo;
@@ -108,6 +110,10 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//	Log.e("inside", "onCreate");
+		if(getActivity()!=null){
+			context=getActivity();
+			activity=getActivity();
+		}
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
 		userCred=appInstance.getUserCred();
 		setting_criteria=new ArrayList<String>();
@@ -119,6 +125,15 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 		setting_criteria.add(getActivity().getResources().getString(R.string.acc_som_about_you));
 		setting_criteria.add(getActivity().getResources().getString(R.string.acc_change_pass));
 		setting_criteria.add(getActivity().getResources().getString(R.string.acc_sign_out));
+	}
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		if(getActivity()!=null){
+			context=getActivity();
+			activity=getActivity();
+		}
 	}
 	public void setView(){
 		tv_uname.setText(appInstance.getUserCred().getFirstname());
@@ -149,8 +164,8 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 			loginObj.put("image_content", base64Str);
 			callfrom=2;
 			Constants.CHANGE_PHOTO_FLAG=true;
-			AsyncaTaskApiCall update_prof_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj.toString(), getActivity(),
-					"reg",Constants.REQUEST_TYPE_PUT);
+			AsyncaTaskApiCall update_prof_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj.toString(),context,
+					"reg_update",Constants.REQUEST_TYPE_POST);
 			update_prof_lisenar.execute();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -217,7 +232,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent=new Intent(getActivity(), EditUserNameActivity.class);
+				Intent intent=new Intent(context, EditUserNameActivity.class);
 				startActivity(intent);
 			}
 		});
@@ -226,8 +241,8 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 			@Override
 			public void onClick(View v) {
 
-				String[] photochooser = getActivity().getResources().getStringArray(R.array.upload_photo_from); 
-				showDialogTochosePhoto(photochooser,getActivity().getResources().getString(R.string.txt_select_photo));
+				String[] photochooser = context.getResources().getStringArray(R.array.upload_photo_from); 
+				showDialogTochosePhoto(photochooser,context.getResources().getString(R.string.txt_select_photo));
 				
 			}
 		});
@@ -237,41 +252,41 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 	}
 	public void setlistView(){
 		userCred=appInstance.getUserCred();
-		adapter=new AdapterForSettings(getActivity(), setting_criteria,userCred);
+		adapter=new AdapterForSettings(context, setting_criteria,userCred);
 		lv_setting.setAdapter(adapter);
 		lv_setting.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
 				if(position==0){
-					String[] country_list = getActivity().getResources().getStringArray(R.array.countries_array); 
-					showDialogForGender(country_list,getActivity().getResources().getString(R.string.txt_select_country),position);
+					String[] country_list =context.getResources().getStringArray(R.array.countries_array); 
+					showDialogForGender(country_list,context.getResources().getString(R.string.txt_select_country),position);
 				}
 				if(position==1){
-					String[] age_list = getActivity().getResources().getStringArray(R.array.age_range_list); 
-					showDialogForGender(age_list,getActivity().getResources().getString(R.string.txt_select_age),position);
+					String[] age_list =context.getResources().getStringArray(R.array.age_range_list); 
+					showDialogForGender(age_list,context.getResources().getString(R.string.txt_select_age),position);
 				}
 				else if(position==2){
-					String[] gender_list = getActivity().getResources().getStringArray(R.array.gender); 
-					showDialogForGender(gender_list,getActivity().getResources().getString(R.string.txt_gender),position);
+					String[] gender_list = context.getResources().getStringArray(R.array.gender); 
+					showDialogForGender(gender_list,context.getResources().getString(R.string.txt_gender),position);
 				}
 				else if(position==3){
 					Constants.POFESSION_FLAG=true;
-					setSomethingAbou(getActivity().getResources().getString(R.string.txt_edit_profesion)
-							,getActivity().getResources().getString(R.string.acc_prof),position);
+					setSomethingAbou(context.getResources().getString(R.string.txt_edit_profesion)
+							,context.getResources().getString(R.string.acc_prof),position);
 				}
 				else if(position==4){
-					String[] seating_pref_list = getActivity().getResources().getStringArray(R.array.seating_pref); 
-					String title=getActivity().getResources().getString(R.string.txt_seatting_pref_cap);
+					String[] seating_pref_list =context.getResources().getStringArray(R.array.seating_pref); 
+					String title=context.getResources().getString(R.string.txt_seatting_pref_cap);
 					showDialogForGender(seating_pref_list,title,position);
 				}
 				else if(position==5){
 					Constants.SOME_ABOUT_FLAG=true;
-					setSomethingAbou(getActivity().getResources().getString(R.string.txt_sm_about)
-							,getActivity().getResources().getString(R.string.txt_say_sm_about),position);
+					setSomethingAbou(context.getResources().getString(R.string.txt_sm_about)
+							,context.getResources().getString(R.string.txt_say_sm_about),position);
 				}
 				else if(position==6){
-					Intent intent= new Intent(getActivity(), PasswordChangeActivity.class);
+					Intent intent= new Intent(context, PasswordChangeActivity.class);
 					startActivity(intent);
 				}
 				else if(position==7){
@@ -281,38 +296,38 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 		});
 	}
 	public void ShowStatus(){
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
 		TextView title=(TextView) customTitleView.findViewById(R.id.tv_title);
-		title.setText(getActivity().getResources().getString(R.string.txt_status));
+		title.setText(context.getResources().getString(R.string.txt_status));
 		builder.setCustomTitle(customTitleView);
 		builder.setMessage(appInstance.getUserCred().getStatus())
 		.setCancelable(false)
-		.setPositiveButton(getActivity().getResources().getString(R.string.txt_ok), new DialogInterface.OnClickListener() {
+		.setPositiveButton(context.getResources().getString(R.string.txt_ok), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.cancel();
 
 			}
 		})
-		.setTitle(getActivity().getResources().getString(R.string.acc_sign_out))
+		.setTitle(context.getResources().getString(R.string.acc_sign_out))
 		.setIcon(R.drawable.ic_sing_out);
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
 	public void Signout(){
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
 		ImageView im_icon=(ImageView) customTitleView.findViewById(R.id.im_icon);
 		TextView tvtitle=(TextView) customTitleView.findViewById(R.id.tv_title);
-		tvtitle.setText(getActivity().getResources().getString(R.string.acc_sign_out));
+		tvtitle.setText(context.getResources().getString(R.string.acc_sign_out));
 		im_icon.setVisibility(View.VISIBLE);
 		im_icon.setImageResource(R.drawable.ic_sing_out);
 		builder.setCustomTitle(customTitleView);
-		builder.setMessage(getActivity().getResources().getString(R.string.txt_sign_out_msz))
+		builder.setMessage(context.getResources().getString(R.string.txt_sign_out_msz))
 		.setCancelable(false)
-		.setPositiveButton(getActivity().getResources().getString(R.string.txt_confirm), new DialogInterface.OnClickListener() {
+		.setPositiveButton(context.getResources().getString(R.string.txt_confirm), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.cancel();
 				try {
@@ -320,7 +335,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 					loginObj = new JSONObject();
 					loginObj.put("token", appInstance.getUserCred().getToken());
 					callfrom=1;
-					AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj.toString(), getActivity(),
+					AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj.toString(), context,
 							"logout",Constants.REQUEST_TYPE_POST);
 					log_in_lisenar.execute();
 				} catch (JSONException e) {
@@ -329,26 +344,26 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 				}
 			}
 		})
-		.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel), new DialogInterface.OnClickListener() {
+		.setNegativeButton(context.getResources().getString(R.string.txt_cancel), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.cancel();
 			}
 		})
-		.setTitle(getActivity().getResources().getString(R.string.acc_sign_out))
+		.setTitle(context.getResources().getString(R.string.acc_sign_out))
 		.setIcon(R.drawable.ic_sing_out);
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
 	public void showDialogTochosePhoto(final CharSequence[] items,String title)
 	{
-		AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		AlertDialog.Builder builder=new AlertDialog.Builder(context);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
 		TextView tvtitle=(TextView) customTitleView.findViewById(R.id.tv_title);
 		tvtitle.setText(title);
 		builder.setCustomTitle(customTitleView);
 		
-		builder.setPositiveButton(getActivity().getResources().getString(R.string.txt_cancel), new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(context.getResources().getString(R.string.txt_cancel), new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -395,13 +410,13 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 
 	public void showDialogForGender(final CharSequence[] items,String title,final int postion)
 	{
-		AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		AlertDialog.Builder builder=new AlertDialog.Builder(context);
+		LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
 		TextView tvtitle=(TextView) customTitleView.findViewById(R.id.tv_title);
 		tvtitle.setText(title);
 		builder.setCustomTitle(customTitleView);
-		builder.setPositiveButton(getActivity().getResources().getString(R.string.txt_cancel), new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(context.getResources().getString(R.string.txt_cancel), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
@@ -457,8 +472,8 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 
 					}
 					callfrom=2;
-					AsyncaTaskApiCall update_prof_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj.toString(), getActivity(),
-							"reg",Constants.REQUEST_TYPE_PUT);
+					AsyncaTaskApiCall update_prof_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj.toString(),context,
+							"reg_update",Constants.REQUEST_TYPE_POST);
 					update_prof_lisenar.execute();
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -470,16 +485,14 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 
 	}
 	public void setSomethingAbou(String title,final String hint,final int position){
-
-		final EditText input = new EditText(getActivity());
+		final EditText input = new EditText(context);
 		input.setHint(hint);
-		final AlertDialog d = new AlertDialog.Builder(getActivity())
+		final AlertDialog d = new AlertDialog.Builder(context)
 		.setView(input)
-		
-		.setPositiveButton(getActivity().getResources().getString(R.string.txt_ok), null) //Set to null. We override the onclick
-		.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel), null)
+		.setPositiveButton(context.getResources().getString(R.string.txt_ok), null) //Set to null. We override the onclick
+		.setNegativeButton(context.getResources().getString(R.string.txt_cancel), null)
 		.create();
-		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
 		TextView tvtitle=(TextView) customTitleView.findViewById(R.id.tv_title);
 		tvtitle.setText(title);
@@ -506,7 +519,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 						String value = input.getText().toString();
 
 						if((value==null)||(value.equals(""))){
-							Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.
+							Toast.makeText(context,context.getResources().getString(R.string.
 									txt_please_enter)+" "+hint, Toast.LENGTH_SHORT).show();
 						}
 						else{
@@ -539,8 +552,8 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 
 								}
 								callfrom=2;
-								AsyncaTaskApiCall update_prof_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj.toString(), getActivity(),
-										"reg",Constants.REQUEST_TYPE_PUT);
+								AsyncaTaskApiCall update_prof_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj.toString(), context,
+										"reg_update",Constants.REQUEST_TYPE_POST);
 								update_prof_lisenar.execute();
 							} catch (JSONException e) {
 								// TODO Auto-generated catch block
@@ -556,7 +569,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 	}
 
 	public void showCustomDialogForPasswordChange(){
-		final Dialog dialog = new Dialog(getActivity());
+		final Dialog dialog = new Dialog(context);
 		dialog.setContentView(R.layout.edit_user_name);
 		dialog.show();
 	}
@@ -568,7 +581,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 			Log.e("inside", "onActivityResultGallery");
 			try {
 				Uri selectedImageUri = data.getData();
-				String tempPath =getPath(selectedImageUri,getActivity());
+				String tempPath =getPath(selectedImageUri,activity);
 				File file=new File(tempPath);
 				ImageScale scaleimage=new ImageScale();
 				photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
@@ -591,7 +604,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 			            
 			        }
 			    });
-				//uploadProfileImage(photo);
+				uploadProfileImage(photo);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -631,7 +644,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 				            
 				        }
 				    });
-					//uploadProfileImage(photo);
+					uploadProfileImage(photo);
 				}
 
 			}
@@ -639,8 +652,6 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 			{
 				Log.e("Could not save", e.toString());
 			}
-			//07-07 19:41:40.050: E/Uri(25119): content://media/external/images/media/766
-
 		}
 	}
 
@@ -685,21 +696,21 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 				Constants.setAllFlagFalse();
 				if(callfrom==1){
 					UserCred ucrCred=new UserCred("", "", "", "", "", "", "", "", "", "", "", "", "", "");
-					getActivity().finish();
+					activity.finish();
 					appInstance.setUserCred(ucrCred);
 					appInstance.setRememberMe(false);
-					SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
+					SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
 					dbInstance.open();
 					dbInstance.droptableBoardingPassDbManager();
 					dbInstance.createtableBoardingPassDbManager();
 					dbInstance.close();
-					Toast.makeText(getActivity(), getResources().getString(R.string.txt_logout_success),
+					Toast.makeText(context, getResources().getString(R.string.txt_logout_success),
 							Toast.LENGTH_SHORT).show();
 				}
 				else if(callfrom==2){
 					String imageurl=job.getString("image_url");
 
-					Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_update_success),
+					Toast.makeText(context,context.getResources().getString(R.string.txt_update_success),
 							Toast.LENGTH_SHORT).show();
 					if(!imageurl.equals("")){
 						userCred.setImage_url(imageurl);
@@ -726,25 +737,23 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 			JSONObject joberror=new JSONObject(job.getString("error"));
 			String code =joberror.getString("code");
 			if(code.equals("x05")){
-				//				String message=joberror.getString("message");
-				//				Toast.makeText(EditUserNameActivity.this, message,Toast.LENGTH_SHORT).show();
 				JSONObject loginObj = new JSONObject();
 				loginObj.put("email", appInstance.getUserCred().getEmail());
 				loginObj.put("password", appInstance.getUserCred().getPassword());
 				String loginData = loginObj.toString();
 				AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginData, 
-						getActivity(),"login",Constants.REQUEST_TYPE_POST,true);
+						context,"login",Constants.REQUEST_TYPE_POST,true);
 				log_in_lisenar.execute();
 
 			}
 			else{
 				if(callfrom==1){
 
-					Toast.makeText(getActivity(), getResources().getString(R.string.txt_logout_failed),
+					Toast.makeText(context, getResources().getString(R.string.txt_logout_failed),
 							Toast.LENGTH_SHORT).show();
 				}
 				else if(callfrom==2){
-					Toast.makeText(getActivity(), getResources().getString(R.string.txt_update_failed),
+					Toast.makeText(context, getResources().getString(R.string.txt_update_failed),
 							Toast.LENGTH_SHORT).show();
 
 				}
@@ -757,9 +766,6 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
-
 	}
 	@Override
 	public void saveLoginCred(JSONObject job) {
@@ -835,14 +841,14 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 					JSONObject loginObj2 = new JSONObject();
 					loginObj2.put("token", appInstance.getUserCred().getToken());
 					callfrom=1;
-					AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj2.toString(), getActivity(),
+					AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj2.toString(), context,
 							"logout",Constants.REQUEST_TYPE_POST);
 					log_in_lisenar.execute();
 				}
 				else if(callfrom==2){
 					callfrom=2;
-					AsyncaTaskApiCall update_prof_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObjnew.toString(), getActivity(),
-							"reg",Constants.REQUEST_TYPE_PUT);
+					AsyncaTaskApiCall update_prof_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObjnew.toString(),context,
+							"reg_update",Constants.REQUEST_TYPE_POST);
 					update_prof_lisenar.execute();
 				}
 
@@ -867,7 +873,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 			String code =joberror.getString("code");
 			Constants.setAllFlagFalse();
 			String message=joberror.getString("message");
-			Toast.makeText(getActivity(), message,
+			Toast.makeText(context, message,
 					Toast.LENGTH_SHORT).show();
 		} catch (NotFoundException e) {
 			// TODO Auto-generated catch block

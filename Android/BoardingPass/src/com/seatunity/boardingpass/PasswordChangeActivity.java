@@ -178,7 +178,7 @@ public class PasswordChangeActivity extends Activity implements CallBackApiCall{
 			loginObj.put("image_type", "");
 			loginObj.put("image_content", "");
 			AsyncaTaskApiCall change_pass =new AsyncaTaskApiCall(PasswordChangeActivity.this, loginObj.toString(), PasswordChangeActivity.this,
-					"reg",Constants.REQUEST_TYPE_PUT);
+					"reg_update",Constants.REQUEST_TYPE_POST);
 			change_pass.execute();
 	} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -271,7 +271,7 @@ public class PasswordChangeActivity extends Activity implements CallBackApiCall{
 				loginObj.put("image_type", "");
 				loginObj.put("image_content", "");
 				AsyncaTaskApiCall edit_uname =new AsyncaTaskApiCall(PasswordChangeActivity.this,loginObj.toString() , 
-						PasswordChangeActivity.this,	"reg",Constants.REQUEST_TYPE_PUT);
+						PasswordChangeActivity.this,"reg_update",Constants.REQUEST_TYPE_POST);
 				edit_uname.execute();
 			}
 		} catch (NotFoundException e) {

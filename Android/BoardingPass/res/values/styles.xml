@@ -10,6 +10,7 @@
         
         <item name="android:actionMenuTextColor">#FFFFFF</item>
           <item name="android:windowContentOverlay">@null</item>
+          
         <item name="actionBarItemBackground">@drawable/ad_selectable_background</item>
         <item name="android:actionBarItemBackground" tools:targetApi="ice_cream_sandwich">@drawable/ad_selectable_background</item>
         <item name="android:editTextStyle">@style/EditTextAppTheme</item>
@@ -42,7 +43,7 @@
     </style>
 		<style name="CustomTabPageIndicator" parent="Widget.TabPageIndicator">
         <item name="android:background">@drawable/tab_indicator_holo</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textColor">@drawable/statecolor</item>
         <item name="android:textStyle">bold</item>
         <item name="android:divider">@drawable/custom_tab_indicator_divider</item>
@@ -64,6 +65,8 @@
        
         <item name="titleTextStyle">@style/MyActionBarTextStyle</item>
     </style>
+    
+    
 
     <style name="MyActionBarTextStyle" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
         <item name="android:textColor">@color/white</item>
