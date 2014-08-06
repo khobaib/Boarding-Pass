@@ -54,6 +54,7 @@ import android.graphics.Typeface;
 import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -95,14 +96,16 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 	UserCred userCred;
 	int ACTION_REQUEST_CAMERA=31;
 	int ACTION_REQUEST_GALLERY=21;
+	int ACTION_REQUEST_GALLERY_KITKAT=22;
 	String drectory;
 	String photofromcamera;
-    Context context;
+	Context context;
 	String contentbodyremeber="";
 	ViewGroup v ;
 	Bitmap photo;
 	int callfrom=0;
 	JSONObject loginObj ;
+	private Bundle savedState = null;
 	public FragmentMyAccount(){
 	}
 	@SuppressLint("NewApi")
@@ -174,27 +177,10 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 	}
 	@Override
 	public void onResume() {
+
 		// TODO Auto-generated method stub
 		super.onResume();
-		Log.e("inside", "onResume");
 
-		appInstance =(BoardingPassApplication) getActivity().getApplication();
-		userCred=appInstance.getUserCred();
-//		if(Constants.photo!=null){
-//			uploadProfileImage(Constants.photo);
-//		}
-	//	else{
-			if((appInstance.getUserCred().getImage_url().equals(""))||(appInstance.getUserCred().getImage_url()==null)){
-				
-			}
-			else{
-				ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url()
-						, img_prof_pic);
-			}
-			
-	//	}
-
-		setView();
 
 	}
 	@Override
@@ -221,7 +207,6 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				ShowStatus();
 			}
 		});
@@ -243,13 +228,33 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 
 				String[] photochooser = context.getResources().getStringArray(R.array.upload_photo_from); 
 				showDialogTochosePhoto(photochooser,context.getResources().getString(R.string.txt_select_photo));
-				
+
 			}
 		});
 		setlistView();
+		Log.e("onResume", "onResume test ");
+		Log.e("Image Url", "" +this.img_prof_pic);
+
+		appInstance =(BoardingPassApplication) getActivity().getApplication();
+		userCred=appInstance.getUserCred();
+
+		if((appInstance.getUserCred().getImage_url().equals(""))||(appInstance.getUserCred().getImage_url()==null)){
+
+		}
+		else{
+			ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url()
+					, img_prof_pic);
+		}
+		Constants.IMG_PROF_PIC=img_prof_pic;
+		setView();
+
+
 
 		return v;
 	}
+
+
+
 	public void setlistView(){
 		userCred=appInstance.getUserCred();
 		adapter=new AdapterForSettings(context, setting_criteria,userCred);
@@ -331,7 +336,6 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.cancel();
 				try {
-
 					loginObj = new JSONObject();
 					loginObj.put("token", appInstance.getUserCred().getToken());
 					callfrom=1;
@@ -362,7 +366,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 		TextView tvtitle=(TextView) customTitleView.findViewById(R.id.tv_title);
 		tvtitle.setText(title);
 		builder.setCustomTitle(customTitleView);
-		
+
 		builder.setPositiveButton(context.getResources().getString(R.string.txt_cancel), new DialogInterface.OnClickListener() {
 
 			@Override
@@ -389,17 +393,26 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 					Constants.SELECTEDBOARDINGPASSPOSITION=1;
 				}
 				else if(which==1){
-					Intent intent = new Intent(
-							Intent.ACTION_GET_CONTENT);
-					intent.setType("image/*");
 
-					Intent chooser = Intent
-							.createChooser(
-									intent,
-									"Choose a Picture");
-					startActivityForResult(
-							chooser,
-							ACTION_REQUEST_GALLERY);
+					if (Build.VERSION.SDK_INT <19){
+						Intent intent = new Intent(
+								Intent.ACTION_GET_CONTENT);
+						intent.setType("image/*");
+
+						Intent chooser = Intent
+								.createChooser(
+										intent,
+										"Choose a Picture");
+						startActivityForResult(
+								chooser,
+								ACTION_REQUEST_GALLERY);
+					} else {
+						
+						Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+						intent.addCategory(Intent.CATEGORY_OPENABLE);
+						intent.setType("image/jpeg");
+						startActivityForResult(intent, ACTION_REQUEST_GALLERY_KITKAT);
+					}
 					Constants.SELECTEDBOARDINGPASSPOSITION=1;
 				}
 			}
@@ -573,316 +586,295 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall{
 		dialog.setContentView(R.layout.edit_user_name);
 		dialog.show();
 	}
-
+	//08-03 12:38:52.628: E/context(3956): ab com.seatunity.boardingpass.MainActivity@418f8ce0  com.seatunity.boardingpass.db.SeatUnityDatabase$DatabaseHelper@418498e0
+	@SuppressLint("NewApi")
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
-		if (requestCode == ACTION_REQUEST_GALLERY) {
-			Log.e("inside", "onActivityResultGallery");
-			try {
-				Uri selectedImageUri = data.getData();
-				String tempPath =getPath(selectedImageUri,activity);
-				File file=new File(tempPath);
-				ImageScale scaleimage=new ImageScale();
-				photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
-				file.delete();
-				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				photo.compress(Bitmap.CompressFormat.PNG, 80, bytes);
-				photo=scaleimage.getResizedBitmap(photo, 120, 120);
-				//Constants.photo=photo;
-				File f = new File(tempPath);
-				f.createNewFile();
-				FileOutputStream fo = new FileOutputStream(f);
-				fo.write(bytes.toByteArray());
-				fo.close();
-				img_prof_pic.post(new Runnable() {
-			        @Override
-			        public void run()
-			        {
-			          
-			        	img_prof_pic.setImageBitmap(photo);
-			            
-			        }
-			    });
-				uploadProfileImage(photo);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} 
-		else if (requestCode ==ACTION_REQUEST_CAMERA) {
-			try
-			{
-				Log.e("inside", "onActivityResultCamera");
 
-				String filepath = drectory+"/"+photofromcamera;
+		if ((requestCode == ACTION_REQUEST_GALLERY)||(requestCode==ACTION_REQUEST_GALLERY_KITKAT)) {
+			Uri selectedImageUri ;
+			ImageScale scaleimage=new ImageScale();
+			String tempPath ="";
+			if(requestCode==ACTION_REQUEST_GALLERY_KITKAT){
+				selectedImageUri = data.getData();
+//				final int takeFlags = data.getFlags()
+//						& (Intent.FLAG_GRANT_READ_URI_PERMISSION
+//								| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+//				getActivity().getContentResolver().takePersistableUriPermission(selectedImageUri, takeFlags);
+//				
+//				Log.e("KITKAT", "msg "+selectedImageUri.toString());
+				tempPath =Constants.getPath(activity, selectedImageUri);
 
-				File file=new File(filepath);
-
-				if(file.exists()){
-					ImageScale scaleimage=new ImageScale();
-					 photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
-					file.delete();
-					ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-					photo=scaleimage.getResizedBitmap(photo, 120, 120);
-					Constants.photo=photo;
-					File f = new File(filepath);
-					f.createNewFile();
-					FileOutputStream fo = new FileOutputStream(f);
-					fo.write(bytes.toByteArray());
-					fo.close();
-					//img_prof_pic.setImageBitmap(photo);
-					img_prof_pic.post(new Runnable() {
-				        @Override
-				        public void run()
-				        {
-				          
-				        	img_prof_pic.setImageBitmap(photo);
-				            
-				        }
-				    });
-					uploadProfileImage(photo);
-				}
-
-			}
-			catch(Exception e)
-			{
-				Log.e("Could not save", e.toString());
-			}
-		}
-	}
-
-	public String getPath(Uri uri, Activity activity) {
-		String[] projection = { MediaColumns.DATA };
-		Cursor cursor = activity
-				.managedQuery(uri, projection, null, null, null);
-		int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
-		cursor.moveToFirst();
-		return cursor.getString(column_index);
-	}
-	public void createfolder(){
-		String newFolder = "/Lipberryfinal";
-		String thumb="/Lipberrythumb";
-		String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
-		drectory= extStorageDirectory + newFolder;
-		File myNewFolder = new File(drectory);
-		myNewFolder.mkdir();
-	}
-	public static boolean deleteDirectory(File path) {
-		if( path.exists() ) {
-			File[] files = path.listFiles();
-			if (files == null) {
-				return true;
-			}
-			for(int i=0; i<files.length; i++) {
-				if(files[i].isDirectory()) {
-					deleteDirectory(files[i]);
-				}
-				else {
-					files[i].delete();
-				}
-			}
-		}
-		return( path.delete() );
-	}
-	@Override
-	public void responseOk(JSONObject job) {
-		// TODO Auto-generated method stub
-		try {
-			if(job.get("success").equals("true")){
-				Constants.setAllFlagFalse();
-				if(callfrom==1){
-					UserCred ucrCred=new UserCred("", "", "", "", "", "", "", "", "", "", "", "", "", "");
-					activity.finish();
-					appInstance.setUserCred(ucrCred);
-					appInstance.setRememberMe(false);
-					SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
-					dbInstance.open();
-					dbInstance.droptableBoardingPassDbManager();
-					dbInstance.createtableBoardingPassDbManager();
-					dbInstance.close();
-					Toast.makeText(context, getResources().getString(R.string.txt_logout_success),
-							Toast.LENGTH_SHORT).show();
-				}
-				else if(callfrom==2){
-					String imageurl=job.getString("image_url");
-
-					Toast.makeText(context,context.getResources().getString(R.string.txt_update_success),
-							Toast.LENGTH_SHORT).show();
-					if(!imageurl.equals("")){
-						userCred.setImage_url(imageurl);
-						appInstance.setUserCred(userCred);
-						ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url(), img_prof_pic);
-					}
-					appInstance.setUserCred(userCred);
-					setlistView();
-					Constants.photo=null;
-				}
-
-			}
-
-		} catch (JSONException e) {
-
-			e.printStackTrace();
-		}
-
-	}
-	@Override
-	public void responseFailure(JSONObject job) {
-		// TODO Auto-generated method stub
-		try {
-			JSONObject joberror=new JSONObject(job.getString("error"));
-			String code =joberror.getString("code");
-			if(code.equals("x05")){
-				JSONObject loginObj = new JSONObject();
-				loginObj.put("email", appInstance.getUserCred().getEmail());
-				loginObj.put("password", appInstance.getUserCred().getPassword());
-				String loginData = loginObj.toString();
-				AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginData, 
-						context,"login",Constants.REQUEST_TYPE_POST,true);
-				log_in_lisenar.execute();
 
 			}
 			else{
-				if(callfrom==1){
-
-					Toast.makeText(context, getResources().getString(R.string.txt_logout_failed),
-							Toast.LENGTH_SHORT).show();
-				}
-				else if(callfrom==2){
-					Toast.makeText(context, getResources().getString(R.string.txt_update_failed),
-							Toast.LENGTH_SHORT).show();
-
-				}
-			}
-
-		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	@Override
-	public void saveLoginCred(JSONObject job) {
-		// TODO Auto-generated method stub
-		try {
-			UserCred ucredFromServer;
-			
-			String status=job.getString("success");
-			
-			if(status.equals("true")){
-				ucredFromServer=UserCred.parseUserCred(job);
-				ucredFromServer.setEmail(appInstance.getUserCred().getEmail());
-				ucredFromServer.setPassword(appInstance.getUserCred().getPassword());
-				appInstance.setUserCred(ucredFromServer);
-				appInstance.setRememberMe(true);
-				Log.e("tagged email", "abc "+appInstance.getUserCred().getEmail());
-				JSONObject loginObjnew = new JSONObject();
-				loginObjnew.put("token", appInstance.getUserCred().getToken());
-				loginObjnew.put("password", appInstance.getUserCred().getPassword());
-				loginObjnew.put("language", appInstance.getUserCred().getLanguage());
-				loginObjnew.put("firstname", appInstance.getUserCred().getFirstname());
-				loginObjnew.put("lastname", appInstance.getUserCred().getLastname());
-				loginObjnew.put("gender", appInstance.getUserCred().getGender());
-				loginObjnew.put("live_in", appInstance.getUserCred().getLive_in());
-				loginObjnew.put("age", appInstance.getUserCred().getAge());
-				loginObjnew.put("profession", appInstance.getUserCred().getProfession());
-				loginObjnew.put("seating_pref", appInstance.getUserCred().getSeating_pref());
-				loginObjnew.put("some_about_you", appInstance.getUserCred().getSomethinAbout());
-				loginObjnew.put("status", appInstance.getUserCred().getStatus());
-				loginObjnew.put("image_name", "");
-				loginObjnew.put("image_type", "");
-				loginObjnew.put("image_content", "");
-				UserCred ucredcopy=ucredFromServer;
-				if(Constants.LIVE_IN_FLAG){
-					ucredcopy.setLive_in(userCred.getLive_in());
-					loginObjnew.put("live_in", userCred.getLive_in());
-				}
-				else if(Constants.AGE_FLAG){
-					ucredcopy.setAge(userCred.getAge());
-					loginObjnew.put("age", userCred.getAge());
-
-				}
-				else if(Constants.GENDER_FLAG){
-					ucredcopy.setGender(userCred.getGender());
-					loginObjnew.put("gender", userCred.getGender());
-
-				}
-				else if(Constants.POFESSION_FLAG){
-					ucredcopy.setProfession(userCred.getProfession());
-					loginObjnew.put("profession", userCred.getProfession());
-
-				}
-				else if(Constants.SEATING_PREF_FLAG){
-					ucredcopy.setSeating_pref(userCred.getSeating_pref());
-					loginObjnew.put("seating_pref", userCred.getSeating_pref());
-
-				}
-				else if(Constants.SOME_ABOUT_FLAG){
-					ucredcopy.setSomethinAbout(userCred.getSomethinAbout());
-					loginObjnew.put("some_about_you", userCred.getSomethinAbout());
-
-
-				}
-				else if(Constants.CHANGE_PHOTO_FLAG){
-					//ucredcopy.setLive_in(userCred.getLive_in());
-					loginObjnew.put("image_name", loginObj.get("image_name"));
-					loginObjnew.put("image_type", loginObj.get("image_type"));
-					loginObjnew.put("image_content",loginObj.get("image_content"));
-
-				}
-				userCred=ucredcopy;
-				if(callfrom==1){
-					JSONObject loginObj2 = new JSONObject();
-					loginObj2.put("token", appInstance.getUserCred().getToken());
-					callfrom=1;
-					AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj2.toString(), context,
-							"logout",Constants.REQUEST_TYPE_POST);
-					log_in_lisenar.execute();
-				}
-				else if(callfrom==2){
-					callfrom=2;
-					AsyncaTaskApiCall update_prof_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObjnew.toString(),context,
-							"reg_update",Constants.REQUEST_TYPE_POST);
-					update_prof_lisenar.execute();
-				}
-
+				selectedImageUri = data.getData();
+				tempPath =getPath(selectedImageUri,activity);
+				Log.e("external", "msg "+selectedImageUri.toString());
 
 			}
-		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		File file=new File(tempPath);
+		photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
+		file.delete();
+		uploadProfileImage(photo);
+	} 
+	else if (requestCode ==ACTION_REQUEST_CAMERA) {
+		try
+		{
+			Log.e("inside", "onActivityResultCamera");
+
+			String filepath = drectory+"/"+photofromcamera;
+
+			File file=new File(filepath);
+
+			if(file.exists()){
+				ImageScale scaleimage=new ImageScale();
+				photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
+				file.delete();
+
+				uploadProfileImage(photo);
+			}
+
 		}
-
-
-
+		catch(Exception e)
+		{
+			Log.e("Could not save", e.toString());
+		}
 	}
-	@Override
-	public void LoginFailed(JSONObject job) {
-		// TODO Auto-generated method stub
-		try {
-			JSONObject joberror=new JSONObject(job.getString("error"));
-			String code =joberror.getString("code");
+}
+
+public String getPath(Uri uri, Activity activity) {
+	String[] projection = { MediaColumns.DATA };
+	Cursor cursor = activity
+			.managedQuery(uri, projection, null, null, null);
+	int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
+	cursor.moveToFirst();
+	return cursor.getString(column_index);
+}
+public void createfolder(){
+	String newFolder = "/Lipberryfinal";
+	String thumb="/Lipberrythumb";
+	String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+	drectory= extStorageDirectory + newFolder;
+	File myNewFolder = new File(drectory);
+	myNewFolder.mkdir();
+}
+public static boolean deleteDirectory(File path) {
+	if( path.exists() ) {
+		File[] files = path.listFiles();
+		if (files == null) {
+			return true;
+		}
+		for(int i=0; i<files.length; i++) {
+			if(files[i].isDirectory()) {
+				deleteDirectory(files[i]);
+			}
+			else {
+				files[i].delete();
+			}
+		}
+	}
+	return( path.delete() );
+}
+@Override
+public void responseOk(JSONObject job) {
+	// TODO Auto-generated method stub
+	Log.e("afImageUrl", "" +Constants.IMG_PROF_PIC);
+	try {
+		if(job.get("success").equals("true")){
 			Constants.setAllFlagFalse();
-			String message=joberror.getString("message");
-			Toast.makeText(context, message,
-					Toast.LENGTH_SHORT).show();
-		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if(callfrom==1){
+				UserCred ucrCred=new UserCred("", "", "", "", "", "", "", "", "", "", "", "", "", "");
+				activity.finish();
+				appInstance.setUserCred(ucrCred);
+				appInstance.setRememberMe(false);
+				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
+				dbInstance.open();
+				dbInstance.droptableBoardingPassDbManager();
+				dbInstance.createtableBoardingPassDbManager();
+				dbInstance.close();
+				Toast.makeText(context, getResources().getString(R.string.txt_logout_success),
+						Toast.LENGTH_SHORT).show();
+			}
+			else if(callfrom==2){
+				String imageurl=job.getString("image_url");
+
+				Toast.makeText(context,context.getResources().getString(R.string.txt_update_success),
+						Toast.LENGTH_SHORT).show();
+				if(!imageurl.equals("")){
+					userCred.setImage_url(imageurl);
+					appInstance.setUserCred(userCred);
+					ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url(), img_prof_pic);
+				}
+				appInstance.setUserCred(userCred);
+				setlistView();
+				Constants.photo=null;
+			}
+			//this.img_prof_pic.setImageBitmap(photo);
+			ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url(), Constants.IMG_PROF_PIC);
+
 		}
+
+	} catch (JSONException e) {
+
+		e.printStackTrace();
 	}
+
+}
+@Override
+public void responseFailure(JSONObject job) {
+	// TODO Auto-generated method stub
+	try {
+		JSONObject joberror=new JSONObject(job.getString("error"));
+		String code =joberror.getString("code");
+		if(code.equals("x05")){
+			JSONObject loginObj = new JSONObject();
+			loginObj.put("email", appInstance.getUserCred().getEmail());
+			loginObj.put("password", appInstance.getUserCred().getPassword());
+			String loginData = loginObj.toString();
+			AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginData, 
+					context,"login",Constants.REQUEST_TYPE_POST,true);
+			log_in_lisenar.execute();
+
+		}
+		else{
+			if(callfrom==1){
+
+				Toast.makeText(context, getResources().getString(R.string.txt_logout_failed),
+						Toast.LENGTH_SHORT).show();
+			}
+			else if(callfrom==2){
+				Toast.makeText(context, getResources().getString(R.string.txt_update_failed),
+						Toast.LENGTH_SHORT).show();
+
+			}
+		}
+
+	} catch (NotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (JSONException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+}
+@Override
+public void saveLoginCred(JSONObject job) {
+	// TODO Auto-generated method stub
+	try {
+		UserCred ucredFromServer;
+
+		String status=job.getString("success");
+
+		if(status.equals("true")){
+			ucredFromServer=UserCred.parseUserCred(job);
+			ucredFromServer.setEmail(appInstance.getUserCred().getEmail());
+			ucredFromServer.setPassword(appInstance.getUserCred().getPassword());
+			appInstance.setUserCred(ucredFromServer);
+			appInstance.setRememberMe(true);
+			Log.e("tagged email", "abc "+appInstance.getUserCred().getEmail());
+			JSONObject loginObjnew = new JSONObject();
+			loginObjnew.put("token", appInstance.getUserCred().getToken());
+			loginObjnew.put("password", appInstance.getUserCred().getPassword());
+			loginObjnew.put("language", appInstance.getUserCred().getLanguage());
+			loginObjnew.put("firstname", appInstance.getUserCred().getFirstname());
+			loginObjnew.put("lastname", appInstance.getUserCred().getLastname());
+			loginObjnew.put("gender", appInstance.getUserCred().getGender());
+			loginObjnew.put("live_in", appInstance.getUserCred().getLive_in());
+			loginObjnew.put("age", appInstance.getUserCred().getAge());
+			loginObjnew.put("profession", appInstance.getUserCred().getProfession());
+			loginObjnew.put("seating_pref", appInstance.getUserCred().getSeating_pref());
+			loginObjnew.put("some_about_you", appInstance.getUserCred().getSomethinAbout());
+			loginObjnew.put("status", appInstance.getUserCred().getStatus());
+			loginObjnew.put("image_name", "");
+			loginObjnew.put("image_type", "");
+			loginObjnew.put("image_content", "");
+			UserCred ucredcopy=ucredFromServer;
+			if(Constants.LIVE_IN_FLAG){
+				ucredcopy.setLive_in(userCred.getLive_in());
+				loginObjnew.put("live_in", userCred.getLive_in());
+			}
+			else if(Constants.AGE_FLAG){
+				ucredcopy.setAge(userCred.getAge());
+				loginObjnew.put("age", userCred.getAge());
+
+			}
+			else if(Constants.GENDER_FLAG){
+				ucredcopy.setGender(userCred.getGender());
+				loginObjnew.put("gender", userCred.getGender());
+
+			}
+			else if(Constants.POFESSION_FLAG){
+				ucredcopy.setProfession(userCred.getProfession());
+				loginObjnew.put("profession", userCred.getProfession());
+
+			}
+			else if(Constants.SEATING_PREF_FLAG){
+				ucredcopy.setSeating_pref(userCred.getSeating_pref());
+				loginObjnew.put("seating_pref", userCred.getSeating_pref());
+
+			}
+			else if(Constants.SOME_ABOUT_FLAG){
+				ucredcopy.setSomethinAbout(userCred.getSomethinAbout());
+				loginObjnew.put("some_about_you", userCred.getSomethinAbout());
+
+
+			}
+			else if(Constants.CHANGE_PHOTO_FLAG){
+				//ucredcopy.setLive_in(userCred.getLive_in());
+				loginObjnew.put("image_name", loginObj.get("image_name"));
+				loginObjnew.put("image_type", loginObj.get("image_type"));
+				loginObjnew.put("image_content",loginObj.get("image_content"));
+
+			}
+			userCred=ucredcopy;
+			if(callfrom==1){
+				JSONObject loginObj2 = new JSONObject();
+				loginObj2.put("token", appInstance.getUserCred().getToken());
+				callfrom=1;
+				AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj2.toString(), context,
+						"logout",Constants.REQUEST_TYPE_POST);
+				log_in_lisenar.execute();
+			}
+			else if(callfrom==2){
+				callfrom=2;
+				AsyncaTaskApiCall update_prof_lisenar =new AsyncaTaskApiCall(FragmentMyAccount.this, loginObjnew.toString(),context,
+						"reg_update",Constants.REQUEST_TYPE_POST);
+				update_prof_lisenar.execute();
+			}
+
+
+		}
+	} catch (NotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (JSONException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+
+
+}
+@Override
+public void LoginFailed(JSONObject job) {
+	// TODO Auto-generated method stub
+	try {
+		JSONObject joberror=new JSONObject(job.getString("error"));
+		String code =joberror.getString("code");
+		Constants.setAllFlagFalse();
+		String message=joberror.getString("message");
+		Toast.makeText(context, message,
+				Toast.LENGTH_SHORT).show();
+	} catch (NotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (JSONException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+}
 
 }
 

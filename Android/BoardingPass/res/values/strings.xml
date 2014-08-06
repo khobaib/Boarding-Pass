@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+             <string name="txt_failedto_add_boardingpasses">Please scan valid boarding passes</string>
+    
      <string name="version">Version</string>
       <string name="send_feedback">Send feedback</string>
        <string name="tell_us">Tell us what you think</string>

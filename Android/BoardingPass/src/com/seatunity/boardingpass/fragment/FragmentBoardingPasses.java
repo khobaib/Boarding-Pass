@@ -168,13 +168,15 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall{
 		alertDialog.show();
 	}
 	public void  setlist(){
-		
-		if(list_greaterthan.size()>0){
-			AdapterForBoardingPass adapter=new AdapterForBoardingPass(getActivity(), list_greaterthan);
-			lv_boarding_pass.setAdapter(adapter);
-			setDetailsBoaredingpass(list_greaterthan.get(0));
-			highlitedboardingpass=list_greaterthan.get(0);
+		if(list_greaterthan!=null){
+			if(list_greaterthan.size()>0){
+				AdapterForBoardingPass adapter=new AdapterForBoardingPass(getActivity(), list_greaterthan);
+				lv_boarding_pass.setAdapter(adapter);
+				setDetailsBoaredingpass(list_greaterthan.get(0));
+				highlitedboardingpass=list_greaterthan.get(0);
+			}
 		}
+		
 		lv_boarding_pass.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

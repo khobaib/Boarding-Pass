@@ -515,31 +515,11 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 	public void saveScannedBoardingPasstodatabes(String contents,String format){
 		//
 		
-		if(contents.length()<100){
-			Log.e("noboar", contents);
+		if((contents.length()>60)&&(contents.charAt(0)=='M')){
 			Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_invalid_borading_pass),
 					Toast.LENGTH_SHORT).show();
 		}
 		else{
-			BoardingPassParser boardingpassparser=new BoardingPassParser(contents, format);
-			boardingPass=boardingpassparser.getBoardingpass();
-			
-			if(!appInstance.isRememberMe()){
-				Log.e("notlogin", contents);
-				setBoardingpassInLocalDB();	
-			}
-			else{
-				if(com.seatunity.boardingpass.utilty.Constants.isOnline(MainActivity.this)){
-					SaveboardingPasstoServer( boardingPass);
-					
-				}
-				else{
-					Log.e("nonetlogin", contents);
-					setBoardingpassInLocalDB();
-				}
-			}
-
-
 		}
 
 	}
@@ -648,6 +628,10 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		if (bmp != null){
 			scanBarcodeFromImage(bmp);
 		}
+//		else{
+//			Toast.makeText(MainActivity.this,"Not working",
+//					Toast.LENGTH_SHORT).show();
+//		}
 		if (f.exists())
 			f.delete();
 	}
@@ -698,6 +682,11 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 				AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(MainActivity.this, loginData, 
 						MainActivity.this,"login",Constants.REQUEST_TYPE_POST,true);
 				log_in_lisenar.execute();
+			}
+			else if(code.equals("x01")){
+				Toast.makeText(MainActivity.this,getResources().getString(R.string.txt_failedto_add_boardingpasses),
+						Toast.LENGTH_SHORT).show();
+				setBoardingpassInLocalDB();
 			}
 			else{
 				Toast.makeText(MainActivity.this, job.getString("message"),
