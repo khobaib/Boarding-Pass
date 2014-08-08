@@ -65,6 +65,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -115,6 +116,11 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 	MainActivity lisenar;
 	int BARCODESCANFROMDIRECT=0;
 	int SCANBOARDINGPASSFROMSDCARD=10;
+	int SCANBOARDINGPASSFROMSDCAdIMAGE_FIRST_ROATAION=101;
+	int SCANBOARDINGPASSFROMSDCAdIMAGE_SECOND_ROATAION=102;
+	int SCANBOARDINGPASSFROMSDCAdIMAGE_THIIRD_ROATAION=10;
+	
+	
 	int SCANBARCODEFROMPDF=12;
 	private void getOverflowMenu() {
 		try {
@@ -488,7 +494,55 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 				}
 				else if(format==FilePickerActivity.IMAGE_FILE){
 					Bitmap bitmap = BitmapFactory.decodeFile(filepath);
-					scanBarcodeFromImage(bitmap);
+					
+					Matrix matrix_NINTY = new Matrix();
+					matrix_NINTY.postRotate(90);
+					
+					Matrix matrix_ONE80 = new Matrix();
+					matrix_ONE80.postRotate(180);
+					
+					Matrix matrix_TWO70 = new Matrix();
+					matrix_TWO70.postRotate(270);
+					
+//					rotated = Bitmap.createBitmap(original, 0, 0, 
+//					                              original.getWidth(), original.getHeight(), 
+//					                              matrix, true);
+					
+					
+					boolean scanstatus=scanBarcodeFromImage(bitmap);
+					if(scanstatus){
+//						Toast.makeText(MainActivity.this, "scanstatus",
+//								Toast.LENGTH_SHORT).show();
+					}
+					else if(scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, 
+							bitmap.getWidth(), bitmap.getHeight(), 
+							matrix_NINTY, true))){
+//						Toast.makeText(MainActivity.this, "matrix_NINTY",
+//								Toast.LENGTH_SHORT).show();
+
+					}
+					else if(scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, 
+							bitmap.getWidth(), bitmap.getHeight(), 
+							matrix_ONE80, true))){
+//						Log.e("matrix_NINTY", "matrix_ONE80");
+//						Toast.makeText(MainActivity.this, "matrix_ONE80",
+//								Toast.LENGTH_SHORT).show();
+
+					}
+					else if(scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, 
+							bitmap.getWidth(), bitmap.getHeight(), 
+							matrix_TWO70, true))){
+//						Log.e("matrix_TWO70", "matrix_TWO70");
+//						Toast.makeText(MainActivity.this, "matrix_TWO70",
+//								Toast.LENGTH_SHORT).show();
+
+						
+					}
+					else{
+						Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_failed_to_scan),
+								Toast.LENGTH_SHORT).show();
+					}
+					
 				}
 
 			} else if (resultCode == RESULT_CANCELED) {
@@ -504,6 +558,54 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 
 		}
 	}
+	public boolean scanBarcodeFromImage(Bitmap bmap){
+		boolean scansuccess=false;
+		Bitmap bMap = bmap;
+
+		try {
+			int[] intArray = new int[bMap.getWidth() * bMap.getHeight()];
+			bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(),
+					bMap.getHeight());
+			LuminanceSource source = new RGBLuminanceSource(bMap.getWidth(),
+					bMap.getHeight(), intArray);
+			BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+			Reader reader = new MultiFormatReader();// use this otherwise
+			try {
+				Hashtable<DecodeHintType, Object> decodeHints = new Hashtable<DecodeHintType, Object>();
+				decodeHints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+				decodeHints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
+				Result result = reader.decode(bitmap, decodeHints);
+				Log.e("text", result.getText())  ;
+				Log.e("format", result.getBarcodeFormat().toString())  ;
+				
+				saveScannedBoardingPasstodatabes(result.getText(),result.getBarcodeFormat().toString());
+				scansuccess=true;
+
+			} catch (NotFoundException e) {
+				scansuccess=false;
+				
+				
+				e.printStackTrace();
+			} catch (ChecksumException e) {
+				scansuccess=false;
+				
+				e.printStackTrace();
+			} catch (FormatException e) {
+				e.printStackTrace();
+				scansuccess=false;
+				
+			} catch (NullPointerException e) {
+				scansuccess=false;
+				e.printStackTrace();
+				
+			}
+		} catch (Exception e) {
+			scansuccess=false;
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return scansuccess;
+	}
 
 
 	public void GetBoardingPassFromPDF(String filepath){
@@ -516,10 +618,27 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 		//
 		
 		if((contents.length()>60)&&(contents.charAt(0)=='M')){
-			Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_invalid_borading_pass),
-					Toast.LENGTH_SHORT).show();
+			BoardingPassParser boardingpassparser=new BoardingPassParser(contents, format);
+			boardingPass=boardingpassparser.getBoardingpass();
+
+			if(!appInstance.isRememberMe()){
+				Log.e("notlogin", contents);
+				setBoardingpassInLocalDB();	
+			}
+			else{
+				if(Constants.isOnline(MainActivity.this)){
+					SaveboardingPasstoServer( boardingPass);
+
+				}
+				else{
+					Log.e("nonetlogin", contents);
+					setBoardingpassInLocalDB();
+				}
+			}
 		}
 		else{
+			Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_invalid_borading_pass),
+					Toast.LENGTH_SHORT).show();
 		}
 
 	}
@@ -580,53 +699,59 @@ public class MainActivity extends FragmentActivity  implements CallBackApiCall{
 	}
 
 
-	public void scanBarcodeFromImage(Bitmap bmap){
-		Bitmap bMap = bmap;
-
-		try {
-			int[] intArray = new int[bMap.getWidth() * bMap.getHeight()];
-			bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(),
-					bMap.getHeight());
-			LuminanceSource source = new RGBLuminanceSource(bMap.getWidth(),
-					bMap.getHeight(), intArray);
-			BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-			Reader reader = new MultiFormatReader();// use this otherwise
-			try {
-				Hashtable<DecodeHintType, Object> decodeHints = new Hashtable<DecodeHintType, Object>();
-				decodeHints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-				decodeHints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
-				Result result = reader.decode(bitmap, decodeHints);
-				Log.e("text", result.getText())  ;
-				Log.e("format", result.getBarcodeFormat().toString())  ;
-				saveScannedBoardingPasstodatabes(result.getText(),result.getBarcodeFormat().toString());
-
-			} catch (NotFoundException e) {
-				Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_failed_to_scan),
-						Toast.LENGTH_SHORT).show();
-				e.printStackTrace();
-			} catch (ChecksumException e) {
-				Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_failed_to_scan),
-						Toast.LENGTH_SHORT).show();
-				e.printStackTrace();
-			} catch (FormatException e) {
-				e.printStackTrace();
-				Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_failed_to_scan),
-						Toast.LENGTH_SHORT).show();
-			} catch (NullPointerException e) {
-				e.printStackTrace();
-				Toast.makeText(MainActivity.this,getResources().getString(R.string.txt_failed_to_scan),
-						Toast.LENGTH_SHORT).show();
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
 	public  void getResultFromActivity(int requestCode, int resultCode, String  path){
 		File f = new File(path);
-		Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
-		if (bmp != null){
-			scanBarcodeFromImage(bmp);
+		Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+		if (bitmap != null){
+			Matrix matrix_NINTY = new Matrix();
+			matrix_NINTY.postRotate(90);
+			
+			Matrix matrix_ONE80 = new Matrix();
+			matrix_ONE80.postRotate(180);
+			
+			Matrix matrix_TWO70 = new Matrix();
+			matrix_TWO70.postRotate(270);
+			
+//			rotated = Bitmap.createBitmap(original, 0, 0, 
+//			                              original.getWidth(), original.getHeight(), 
+//			                              matrix, true);
+			
+			
+			boolean scanstatus=scanBarcodeFromImage(bitmap);
+			if(scanstatus){
+//				Toast.makeText(MainActivity.this, "scanstatus",
+//						Toast.LENGTH_SHORT).show();
+			}
+			else if(scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, 
+					bitmap.getWidth(), bitmap.getHeight(), 
+					matrix_NINTY, true))){
+//				Toast.makeText(MainActivity.this, "matrix_NINTY",
+//						Toast.LENGTH_SHORT).show();
+
+			}
+			else if(scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, 
+					bitmap.getWidth(), bitmap.getHeight(), 
+					matrix_ONE80, true))){
+//				Log.e("matrix_NINTY", "matrix_ONE80");
+//				Toast.makeText(MainActivity.this, "matrix_ONE80",
+//						Toast.LENGTH_SHORT).show();
+
+			}
+			else if(scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, 
+					bitmap.getWidth(), bitmap.getHeight(), 
+					matrix_TWO70, true))){
+//				Log.e("matrix_TWO70", "matrix_TWO70");
+//				Toast.makeText(MainActivity.this, "matrix_TWO70",
+//						Toast.LENGTH_SHORT).show();
+
+				
+			}
+			else{
+				Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_failed_to_scan),
+						Toast.LENGTH_SHORT).show();
+			}
+			
 		}
 //		else{
 //			Toast.makeText(MainActivity.this,"Not working",

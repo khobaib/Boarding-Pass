@@ -63,9 +63,7 @@ public class FragmentPastBoardingPasses extends Fragment{
 	String email,password;
 	BoardingPassApplication appInstance;
 	ListView lv_boarding_past_pass;
-//	TextView tv_from,tv_to,tv_month_inside_icon,tv_date_inside_icon,tv_seat_no,tv_flight_no,
-//			tv_start_time,tv_arrival_time;
-	
+	RelativeLayout re_errorshow,re_list_holder;
 	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,12 +76,13 @@ public class FragmentPastBoardingPasses extends Fragment{
 			Bundle savedInstanceState) {
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_past_boarding_pases,
 				container, false);
-		
+		re_errorshow=(RelativeLayout) v.findViewById(R.id.re_errorshow);
+		re_list_holder=(RelativeLayout) v.findViewById(R.id.re_list_holder);
 		Calendar c = Calendar.getInstance(); 
 		int dayofyear = c.get(Calendar.DAY_OF_YEAR);
 		Log.e("dayofyear", ""+dayofyear);
 		lv_boarding_past_pass=(ListView) v.findViewById(R.id.lv_boarding_past_pass);
-
+		tv_errorshow=(TextView) v.findViewById(R.id.tv_errorshow);
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 		dbInstance.open();
 		list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
@@ -97,40 +96,22 @@ public class FragmentPastBoardingPasses extends Fragment{
 			}
 			
 		}
-		if(list.size()>0){
-			
-		//	setDetailsBoaredingpass(list.get(0));
+		if(list_smaller.size()>0){
+			re_errorshow.setVisibility(View.GONE);
+			re_list_holder.setVisibility(View.VISIBLE);
 			AdapterForPastBoardingPass adapter=new AdapterForPastBoardingPass(getActivity(), list_smaller);
 			lv_boarding_past_pass.setAdapter(adapter);
 		}
 		
-//		lv_boarding_pass.setOnItemClickListener(new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-//					long arg3) {
-//				// TODO Auto-generated method stub
-//				//setDetailsBoaredingpass(list.get(position));
-//			}
-//		});
+		else{
+			re_errorshow.setVisibility(View.VISIBLE);
+			re_list_holder.setVisibility(View.GONE);
+
+		}
+		
+
 		return v;
 	}
 
-//	public void setDetailsBoaredingpass(BoardingPass bpass){
-//		String date=Constants.getDayandYear(Integer.parseInt(bpass.getJulian_date()));
-//    	String[] dateParts = date.split(":");
-//		String month=dateParts[1];
-//		String dateofmonth=dateParts[0];
-//		tv_from.setText(bpass.getTravel_from());
-//		tv_to.setText(bpass.getTravel_to());
-//		tv_month_inside_icon.setText(month);
-//		tv_date_inside_icon.setText(dateofmonth);
-//		tv_seat_no.setText(getActivity().getResources().getString(R.string.txt_seat_nno)+
-//        		" "+bpass.getSeat());
-//		tv_flight_no.setText(getActivity().getResources().getString(R.string.txt_flight_no)+
-//        		" "+bpass.getFlight_no());
-//		tv_start_time.setText(bpass.getDeparture());
-//		tv_arrival_time.setText(bpass.getArrival());
-//	}
 }
 

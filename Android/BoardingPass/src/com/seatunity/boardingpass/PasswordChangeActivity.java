@@ -134,29 +134,36 @@ public class PasswordChangeActivity extends Activity implements CallBackApiCall{
     	oldPassword=et_enter_old_pass.getText().toString();
     	newPassword=et_enter_new_pass.getText().toString();
     	confirmPassword=et_confirm_new_pass.getText().toString();
-    	if(appInstance.getUserCred().getPassword().equals(oldPassword)){
-    		if(!newPassword.equals("")){
-    			 if(newPassword.equals(confirmPassword)){
-    				 changePassword();
-    			 }
-    			 else{
-    				 et_confirm_new_pass.setBackgroundResource(R.drawable.rounded_text_nofield);
-    	        		Toast.makeText(PasswordChangeActivity.this, getResources().getString(R.string.txt_confirm_new_pass),
-    	        				Toast.LENGTH_SHORT).show();
-    			 }
-    		}
-    		else{
-    			et_enter_new_pass.setBackgroundResource(R.drawable.rounded_text_nofield);
-        		Toast.makeText(PasswordChangeActivity.this, getResources().getString(R.string.txt_enter_new_pass),
+    	if(Constants.isOnline(PasswordChangeActivity.this)){
+    		if(appInstance.getUserCred().getPassword().equals(oldPassword)){
+        		if(!newPassword.equals("")){
+        			 if(newPassword.equals(confirmPassword)){
+        				 changePassword();
+        			 }
+        			 else{
+        				 et_confirm_new_pass.setBackgroundResource(R.drawable.rounded_text_nofield);
+        	        		Toast.makeText(PasswordChangeActivity.this, getResources().getString(R.string.txt_confirm_new_pass),
+        	        				Toast.LENGTH_SHORT).show();
+        			 }
+        		}
+        		else{
+        			et_enter_new_pass.setBackgroundResource(R.drawable.rounded_text_nofield);
+            		Toast.makeText(PasswordChangeActivity.this, getResources().getString(R.string.txt_enter_new_pass),
+            				Toast.LENGTH_SHORT).show();
+        		}
+        	}
+        	else{
+        		et_enter_old_pass.setBackgroundResource(R.drawable.rounded_text_nofield);
+        		Toast.makeText(PasswordChangeActivity.this, getResources().getString(R.string.txt_enter_old_pass),
         				Toast.LENGTH_SHORT).show();
-    		}
-    	}
-    	else{
-    		et_enter_old_pass.setBackgroundResource(R.drawable.rounded_text_nofield);
-    		Toast.makeText(PasswordChangeActivity.this, getResources().getString(R.string.txt_enter_old_pass),
-    				Toast.LENGTH_SHORT).show();
-    				
-    	}
+        				
+        	}
+		}
+		else{
+			Toast.makeText(PasswordChangeActivity.this,getResources().getString(R.string.txt_please_check_internet),
+					Toast.LENGTH_SHORT).show();
+		}
+    	
     }
     
     public void changePassword(){

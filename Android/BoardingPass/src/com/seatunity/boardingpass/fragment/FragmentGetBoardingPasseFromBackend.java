@@ -112,6 +112,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 				}
 				if(list_greaterthan.size()<1){
 					Log.e("tagg", "as "+parent);
+					
 					parent.startHomeFragment();
 				}
 				else{

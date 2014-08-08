@@ -9,6 +9,7 @@ import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.fragment.FragmentUpcomingBoardingPassDetails;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
+import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
 
 import android.content.BroadcastReceiver;
@@ -19,48 +20,47 @@ import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
 
-public class NetworkStateReceiver extends BroadcastReceiver {
+public class SyncLocalDbtoBackend {
 	BoardingPassApplication appInstance;
 	BoardingPass boardingPass;
 	Context context;
-	public void onReceive(Context context, Intent intent) {
-		if(intent.getExtras()!=null) {
+	public void SendBoardingPasstoDB(Context context) {
 			this.context=context;
-			NetworkInfo ni=(NetworkInfo) intent.getExtras().get(ConnectivityManager.EXTRA_NETWORK_INFO);
 			appInstance =(BoardingPassApplication) context.getApplicationContext();
-			if(ni!=null && ni.getState()==NetworkInfo.State.CONNECTED) {
+			if(Constants.isOnline(context)) {
 				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
 				dbInstance.open();
 				ArrayList<BoardingPass> list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
 				dbInstance.close();
 				if(!appInstance.getUserCred().getEmail().equals("")){
+				//	Log.e("", msg)
 					for(int i=0;i<list.size();i++){
-						if(list.get(i).getDeletestate()){
-							String url="bpdelete/"+list.get(i).getId();
-							AsyncaTaskApiCall callserver=new AsyncaTaskApiCall(NetworkStateReceiver.this, getJsonObjet(), context, url,list.get(i));
-							callserver.execute();
-						}
-						else if(list.get(i).getId().equals("-1")){
+//						if(list.get(i).getDeletestate()){
+//							String url="bpdelete/"+list.get(i).getId();
+//							AsyncaTaskApiCall callserver=new AsyncaTaskApiCall(NetworkStateReceiver.this, getJsonObjet(), context, url,list.get(i));
+//							callserver.execute();
+//						}
+				 if(list.get(i).getId().equals("-1")){
 							boardingPass=list.get(i);
 							String bpassdata="";
 							bpassdata=getJsonObjet(list.get(i));
-							AsyncaTaskApiCall apicalling=new AsyncaTaskApiCall(NetworkStateReceiver.this,boardingPass, bpassdata,context);
+							AsyncaTaskApiCall apicalling=new AsyncaTaskApiCall(SyncLocalDbtoBackend.this,boardingPass, bpassdata,context);
 							apicalling.execute();
 						}
 					}
 					
 				}
-				
-			} else if(intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY,Boolean.FALSE)) {
-				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
-				dbInstance.open();
-				
-				ArrayList<BoardingPass> list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
-				dbInstance.close();
-				for(int i=0;i<list.size();i++){
-					Log.e("i", list.get(i).getId());
-				}
-			}
+			
+//			else if(intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY,Boolean.FALSE)) {
+//				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
+//				dbInstance.open();
+//				
+//				ArrayList<BoardingPass> list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+//				dbInstance.close();
+//				for(int i=0;i<list.size();i++){
+//					Log.e("i", list.get(i).getId());
+//				}
+//			}
 		}
 	}
 	public String getJsonObjet(){

@@ -314,11 +314,12 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 					}
 					else{
 						updateDatabaseWithoutServernotification(0);
+						
 					}
 					//updateDatabaseWithoutServernotification(0);
 				}
 				dialog.cancel();
-				parent.onBackPressed();
+				
 			}
 		});
 		alertDialogBuilder.setNegativeButton(R.string.txt_cancel, 
@@ -347,6 +348,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		}
 
 		dbInstance.close();
+		parent.onBackPressed();
 	}
 
 	public String getJsonObjet(){

@@ -16,10 +16,12 @@ import com.seatunity.boardingpass.AcountActivity;
 import com.seatunity.boardingpass.ForgotPassActivity;
 import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.R;
+import com.seatunity.boardingpass.TermAndConditionActivity;
 import com.seatunity.boardingpass.adapter.NothingSelectedSpinnerAdapter;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.Constants;
+import com.seatunity.boardingpass.utilty.MyCustomSpannable;
 import com.seatunity.model.Member;
 import com.seatunity.model.ServerResponse;
 import android.R.anim;
@@ -30,14 +32,19 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.CalendarContract.Colors;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -57,9 +64,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TextView.BufferType;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
@@ -72,7 +81,8 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 	int SEATING_PREF=0;
 	int AGE=1;
 	int LIVE_IN=2;
-
+	 MyCustomSpannable customSpannable;
+	RadioButton radio_male,radio_female,radio_not_say;
 	ArrayList<String> agelist=new ArrayList<String>();
 	String[] NoCore_Array = new String [5];
 	{ 
@@ -129,7 +139,7 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 		initview(v);
 		return v;
 	}
-	
+
 	public void initview(ViewGroup v){
 		bt_register=(Button) v.findViewById(R.id.bt_register);
 		tv_signup_message=(TextView) v.findViewById(R.id.tv_signup_message);
@@ -143,8 +153,14 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 		et_age=(EditText) v.findViewById(R.id.et_age);
 		et_profession=(EditText) v.findViewById(R.id.et_profession);
 		et_seatting_pref=(EditText) v.findViewById(R.id.et_seatting_pref);
+		radio_male=(RadioButton) v.findViewById(R.id.radio_male);
+		radio_female=(RadioButton) v.findViewById(R.id.radio_female);
+		radio_not_say=(RadioButton) v.findViewById(R.id.radio_not_say);
+		radio_female.setTextColor(Color.parseColor("#FFFFFF"));
+		radio_male.setTextColor(Color.parseColor("#000000"));
+		radio_not_say.setTextColor(Color.parseColor("#000000"));
 		et_seatting_pref.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
@@ -154,19 +170,43 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 			}
 		});
 		et_age.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+
 				showDialogForSeatingPref(agelist.toArray(new CharSequence[agelist.size()])
 						,getActivity().getResources().getString(R.string.txt_age),AGE);
-				
+
 			}
 		});
+		String text1="By registering, you acknowledge that you have read and agreed to the SeatUnity Terms of Conditions";
+		int i=text1.indexOf("Terms of Conditions");
+		Log.e("size", i+"  "+text1.length());
 		String text = "<font color=#000000>By registering, you acknowledge that you have read and agreed to the SeatUnit</font>" +
 				" <font color=#0099cc>Terms of Conditions</font>";
-		tv_sign_message.setText(Html.fromHtml(text));
+		//tv_sign_message.setText(Html.fromHtml(text));
+		Log.e("size", i+"  "+text1.length());
+		SpannableStringBuilder stringBuilder = new SpannableStringBuilder(Html.fromHtml(text));
+		
+		 customSpannable = new MyCustomSpannable(
+		                                               "http://www.google.co.in/"){
+
+		            @Override
+		            public void onClick(View widget) {
+		                Intent intent=new Intent(getActivity(), TermAndConditionActivity.class);
+		                startActivity(intent);
+		               
+		            }
+		        };
+		        stringBuilder.setSpan(customSpannable, i, text1.length()-1,
+		                                         Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+		        tv_sign_message.setText( stringBuilder, BufferType.SPANNABLE );
+		      tv_sign_message.setMovementMethod(LinkMovementMethod.getInstance());
+		
+		
+		
+		
 		bt_register.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -246,7 +286,32 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 
 			}
 		});
-	//	setcity();
+		//	setcity();
+		rdgrp_gender.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				// TODO Auto-generated method stub
+				switch(checkedId){
+				case R.id.radio_female :
+					radio_female.setTextColor(Color.parseColor("#FFFFFF"));
+					radio_male.setTextColor(Color.parseColor("#000000"));
+					radio_not_say.setTextColor(Color.parseColor("#000000"));
+					break;
+				case R.id.radio_male :
+					radio_male.setTextColor(Color.parseColor("#FFFFFF"));
+					radio_female.setTextColor(Color.parseColor("#000000"));
+					radio_not_say.setTextColor(Color.parseColor("#000000"));
+					break;
+				case R.id.radio_not_say :
+					radio_not_say.setTextColor(Color.parseColor("#FFFFFF"));
+					radio_male.setTextColor(Color.parseColor("#000000"));
+					radio_female.setTextColor(Color.parseColor("#000000"));
+					break;
+				}
+
+			}
+		});
 
 
 	}
@@ -352,8 +417,8 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				if(type==SEATING_PREF){
-					 seating=items[which].toString();
-					 et_seatting_pref.setText(seating);
+					seating=items[which].toString();
+					et_seatting_pref.setText(seating);
 				}
 				else if(type==AGE){
 					et_age.setText(items[which].toString());
@@ -380,13 +445,13 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall{
 	@Override
 	public void saveLoginCred(JSONObject job) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void LoginFailed(JSONObject job) {
 		// TODO Auto-generated method stub
-//		Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_signup_failed1), 
-//				Toast.LENGTH_SHORT).show();
+		//		Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_signup_failed1), 
+		//				Toast.LENGTH_SHORT).show();
 	}
 }
 

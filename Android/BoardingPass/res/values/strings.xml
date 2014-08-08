@@ -99,6 +99,7 @@
     <string name="txt_email_senttomail">Email is successfully send to your address. You will get a confirmation mail soon. Please confirm the account.</string>
     <string name="txt_confirmtaion">You will get a confirmation mail soon. Please confirm the account....</string>
     <string name="txt_wrong_email">Wrong email or password. Please try again</string>
+     <string name="txt_no_pastbpass">No past boarding passes.</string>
     <string name="txt_email_sent">Email is sent to your email account. Please activite your account from there</string>
     <string name="txt_signup_failed1">Sign up is failed. Please try again</string>
     <string name="txt_login_failed">Log-in failed. Please try again</string>

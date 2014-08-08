@@ -17,6 +17,7 @@ import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.interfaces.CallBackApiCall;
+import com.seatunity.boardingpass.networkstatetracker.SyncLocalDbtoBackend;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.ServerResponse;
@@ -63,6 +64,7 @@ public class FragmentLogin extends Fragment implements CallBackApiCall{
 	Button bt_login;
 	String email,password;
 	BoardingPassApplication appInstance;
+	
 	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -168,7 +170,6 @@ public class FragmentLogin extends Fragment implements CallBackApiCall{
 			loginObj.put("email", email);
 			loginObj.put("password", password);
 			String loginData = loginObj.toString();
-			
 			AsyncaTaskApiCall log_in_lisenar =new AsyncaTaskApiCall(FragmentLogin.this, loginData, getActivity(),
 					"login",Constants.REQUEST_TYPE_POST);
 			log_in_lisenar.execute();
@@ -195,12 +196,15 @@ public class FragmentLogin extends Fragment implements CallBackApiCall{
 				usercred.setPassword(password);
 				appInstance.setUserCred(usercred);
 				appInstance.setRememberMe(true);
+				
+				
+				
 				Intent intent=new Intent(getActivity(), MainActivity.class);
 				intent.putExtra("select", 1);
 		    	startActivity(intent);
 		    	getActivity().finish();		
 				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_login_success), Toast.LENGTH_SHORT).show();
-				
+			
 			}
 			else{
 				tv_errorshow.setVisibility(View.VISIBLE);
@@ -222,6 +226,8 @@ public class FragmentLogin extends Fragment implements CallBackApiCall{
 				usercred.setPassword(password);
 				appInstance.setUserCred(usercred);
 				appInstance.setRememberMe(true);
+				SyncLocalDbtoBackend synlocaldat=new SyncLocalDbtoBackend();
+				synlocaldat.SendBoardingPasstoDB(getActivity());
 				Intent intent=new Intent(getActivity(), MainActivity.class);
 				intent.putExtra("select", 1);
 				startActivity(intent);

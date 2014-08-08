@@ -21,7 +21,6 @@ import com.seatunity.boardingpass.fragment.FragmentSignUp;
 import com.seatunity.boardingpass.fragment.FragmentUpcomingBoardingPassDetails;
 import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.networkstatetracker.NetworkStateReceiver;
-import com.seatunity.boardingpass.networkstatetracker.SyncLocalDbtoBackend;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
@@ -42,7 +41,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-@TargetApi(Build.VERSION_CODES.HONEYCOMB) public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
+ public class AsyncaTaskApiCallAfterLoginToBackEndSync extends AsyncTask<Void, Void, ServerResponse> {
 	String body;
 	BoardingPassApplication appInstance;
 	String myaccounturl;
@@ -55,84 +54,30 @@ import android.widget.Toast;
 	int requestType;
 	boolean redundantLoginState=false;
 	CallBackApiCall CaBLisenar;
-	SyncLocalDbtoBackend loginsuccesslisenar;
-	NetworkStateReceiver deletelisenarfromnetstate;
-	
 	NetworkStateReceiver netstatelisenaer;
-	public AsyncaTaskApiCall(CallBackApiCall CaBLisenar,String body,Context context,String addedurl,int requestType,
-			boolean redundantLoginState){
-		this.body=body;
-		this.appInstance=appInstance;
-		this.myaccounturl=myaccounturl;
-		this.context=context;
-		this.addedurl=addedurl;
-		this.CaBLisenar=CaBLisenar;
-		this.requestType=requestType;
-		jsonParser=new JsonParser();
-		this.redundantLoginState=redundantLoginState;
-		pd=new ProgressDialog(context);
-		pd.show();
-		pd.setCancelable(true);
-		pd.setContentView(R.layout.progress_content);
-
-	}
-	public AsyncaTaskApiCall(NetworkStateReceiver deletelisenarfromnetstate,String body,Context context, 
-			String myaccounturl,BoardingPass bpass){
-		this.bpass=bpass;
-		this.deletelisenarfromnetstate=deletelisenarfromnetstate;
-		this.body=body;
-		this.appInstance=appInstance;
-		this.myaccounturl=myaccounturl;
-		this.context=context;
-		jsonParser=new JsonParser();
-
-
-
-	}
-
-	public AsyncaTaskApiCall(CallBackApiCall CaBLisenar,String body,Context context,String addedurl,int requestType){
-		this.body=body;
-		this.appInstance=appInstance;
-		this.myaccounturl=myaccounturl;
-		this.context=context;
-		this.addedurl=addedurl;
-		this.CaBLisenar=CaBLisenar;
-		this.requestType=requestType;
-		jsonParser=new JsonParser();
-		pd=new ProgressDialog(context);
-		pd.show();
-		pd.setContentView(R.layout.progress_content);
-	}
-	public AsyncaTaskApiCall(NetworkStateReceiver netstatelisenaer,BoardingPass bpass,String body,Context context){
-		this.netstatelisenaer=netstatelisenaer;
-		this.body=body;
-		this.context=context;
-		jsonParser=new JsonParser();
-		this.bpass=bpass;
-
-	}
-	public AsyncaTaskApiCall(SyncLocalDbtoBackend loginsuccesslisenar,BoardingPass bpass,String body,Context context){
-		this.loginsuccesslisenar=loginsuccesslisenar;
-		this.body=body;
-		this.context=context;
-		jsonParser=new JsonParser();
-		this.bpass=bpass;
-
-	}
+	NetworkStateReceiver deletelisenarfromnetstate;
+	int count=0;
+	ArrayList<BoardingPass> listnotsynced;
 	
-	
+	public AsyncaTaskApiCallAfterLoginToBackEndSync(Context context){
+		this.context=context;
+		SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
+		dbInstance.open();
+		ArrayList<BoardingPass> list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+		dbInstance.close();
+		listnotsynced=new ArrayList<BoardingPass>();
+		 for (BoardingPass Bpass : list) {
+			  if(Bpass.getId().equals("-1")){
+				  listnotsynced.add(Bpass);
+			  }
+		     }
+		
+	}
 	@Override
 	protected ServerResponse doInBackground(Void... params) {
 		ServerResponse response=null;
-		
-		if(netstatelisenaer!=null){
 
-			String url = Constants.baseurl+"newbp";
-			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
-					body, null);
-		}
-		
-		else if(loginsuccesslisenar!=null){
+		if(netstatelisenaer!=null){
 
 			String url = Constants.baseurl+"newbp";
 			response =jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null,
@@ -175,9 +120,6 @@ import android.widget.Toast;
 
 		if(netstatelisenaer!=null){
 			netstatelisenaer.addBoardingPassonBackendSuccess(result.getjObj(),bpass);
-		}
-		else if(loginsuccesslisenar!=null){
-			loginsuccesslisenar.addBoardingPassonBackendSuccess(result.getjObj(),bpass);
 		}
 		else if(CaBLisenar!=null){
 			if(redundantLoginState){

@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.seatunity.boardingpass.HomeActivity;
+import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.PasswordChangeActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.adapter.AdapterBaseMaps;
@@ -81,7 +82,6 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall{
 	
 	TextView tv_from,tv_to,tv_month_inside_icon,tv_date_inside_icon,tv_seat_no,tv_flight_no,
 	tv_start_time,tv_arrival_time,tv_cdg,tv_jfk;
-	//int callfrom=0;
 	public FragmentBoardingPasses(ArrayList<BoardingPass>list_greaterthan){
 		this.list_greaterthan=list_greaterthan;
 	}
@@ -116,7 +116,6 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall{
 		btn_boarding_pass=(Button) v.findViewById(R.id.btn_boarding_pass);
 		btn_seatmate=(Button) v.findViewById(R.id.btn_seatmate);
 		btn_seatmate.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				if((Constants.isOnline(getActivity()))&&(!appInstance.getUserCred().getEmail().equals(""))){
@@ -139,11 +138,37 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall{
 			}
 		});
 	
-		setlist();
+		
+		
 		return v;
 	}
-	public void callSeatmet(){
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
+		dbInstance.open();
+		ArrayList<BoardingPass> list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+		dbInstance.close();
+		Calendar c = Calendar.getInstance(); 
+		int dayofyear = c.get(Calendar.DAY_OF_YEAR);
+		list_greaterthan=new ArrayList<BoardingPass>();
+		list_greaterthan.clear();
 		
+		for (int i=0;i<list.size();i++){
+			Log.e("test", "t "+list.get(i).getTravel_from_name());
+			int ju_date=Integer.parseInt(list.get(i).getJulian_date());
+		
+			if((ju_date>=dayofyear)&&(!list.get(i).getDeletestate())){
+				list_greaterthan.add(list.get(i));
+
+			}
+			
+		}
+		setlist();
+	}
+	
+	public void callSeatmet(){
 		String extendedurl="seatmatelist/"+highlitedboardingpass.getCarrier()+"/"+highlitedboardingpass.getFlight_no()+"/"
 				+highlitedboardingpass.getJulian_date();
 		extendedurl=extendedurl.replace(" ", "");
@@ -174,6 +199,16 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall{
 				lv_boarding_pass.setAdapter(adapter);
 				setDetailsBoaredingpass(list_greaterthan.get(0));
 				highlitedboardingpass=list_greaterthan.get(0);
+			}
+			else{
+				if(appInstance.isRememberMe()){
+					parent.backEndStack.pop();
+					parent.startAddBoardingPassDuringLogin();
+				}
+				else{
+					parent.backEndStack.pop();
+					parent.startHomeFragment();
+				}
 			}
 		}
 		
@@ -266,8 +301,7 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall{
 				userCred.setPassword(appInstance.getUserCred().getPassword());
 				appInstance.setUserCred(userCred);
 				appInstance.setRememberMe(true);
-				
-					String extendedurl="seatmatelist/"+highlitedboardingpass.getCarrier()+"/"+highlitedboardingpass.getFlight_no()+"/"
+				String extendedurl="seatmatelist/"+highlitedboardingpass.getCarrier()+"/"+highlitedboardingpass.getFlight_no()+"/"
 							+highlitedboardingpass.getJulian_date();
 					extendedurl=extendedurl.replace(" ", "");
 					AsyncaTaskApiCall get_list =new AsyncaTaskApiCall(FragmentBoardingPasses.this, getJsonObjet(),context,

@@ -62,7 +62,8 @@
         android:layout_marginRight="25dp"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:hint="@string/txt_signup_message" >
+         android:textColor="#2D3E50"
+        android:text="@string/txt_signup_message" >
     </TextView>
 
     <LinearLayout

@@ -148,29 +148,36 @@ public class EditUserNameActivity extends Activity implements CallBackApiCall{
 		username=et_uname.getText().toString();
 		email=et_email.getText().toString();
 		status=et_status.getText().toString();
-		if(!status.equals("")){
-			if(Constants.isValidEmail(email)){
-				if(!username.equals("")){
-					changeStatus();
+		if(Constants.isOnline(EditUserNameActivity.this)){
+			if(!status.equals("")){
+				if(Constants.isValidEmail(email)){
+					if(!username.equals("")){
+						changeStatus();
+					}
+					else{
+						et_uname.setBackgroundResource(R.drawable.rounded_text_nofield);
+						Toast.makeText(EditUserNameActivity.this, getResources().getString(R.string.txt_please_enter_username),
+								Toast.LENGTH_SHORT).show();
+					}
 				}
 				else{
-					et_uname.setBackgroundResource(R.drawable.rounded_text_nofield);
-					Toast.makeText(EditUserNameActivity.this, getResources().getString(R.string.txt_please_enter_username),
+					et_email.setBackgroundResource(R.drawable.rounded_text_nofield);
+					Toast.makeText(EditUserNameActivity.this, getResources().getString(R.string.txt_enter_valid_email),
 							Toast.LENGTH_SHORT).show();
 				}
 			}
 			else{
-				et_email.setBackgroundResource(R.drawable.rounded_text_nofield);
-				Toast.makeText(EditUserNameActivity.this, getResources().getString(R.string.txt_enter_valid_email),
+				et_status.setBackgroundResource(R.drawable.rounded_text_nofield);
+				Toast.makeText(EditUserNameActivity.this, getResources().getString(R.string.txt_enter_status),
 						Toast.LENGTH_SHORT).show();
+
 			}
 		}
 		else{
-			et_status.setBackgroundResource(R.drawable.rounded_text_nofield);
-			Toast.makeText(EditUserNameActivity.this, getResources().getString(R.string.txt_enter_status),
+			Toast.makeText(EditUserNameActivity.this, getResources().getString(R.string.txt_please_check_internet),
 					Toast.LENGTH_SHORT).show();
-
 		}
+		
 	}
 
 	public void changeStatus(){

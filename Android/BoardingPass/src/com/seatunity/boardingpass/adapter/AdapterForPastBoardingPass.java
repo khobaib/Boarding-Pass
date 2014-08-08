@@ -107,12 +107,19 @@ public class AdapterForPastBoardingPass extends BaseAdapter {
 //        holder.tv_arrival_time.setText(""+list.get(position).getArrival());
         holder.tv_month_inside_icon.setText(month);
         holder.tv_date_inside_icon.setText(day);
-        holder.tv_cdg.setText(list.get(position).getTravel_from());
         holder.tv_jfk.setText(list.get(position).getTravel_to());
+        holder.tv_cdg.setText(list.get(position).getTravel_from());
+
         holder.tv_seat_no.setText(context.getResources().getString(R.string.txt_seat_nno)+
         		" "+list.get(position).getSeat());
-        holder.tv_to.setText(list.get(position).getTravel_to_name()); 
-        holder.tv_from.setText(list.get(position).getTravel_from_name());
+        if(list.get(position).getTravel_from_name()!=null){
+            holder.tv_from.setText(list.get(position).getTravel_from_name());
+        }
+        if(list.get(position).getTravel_to_name()!=null){
+        	 holder.tv_to.setText(list.get(position).getTravel_to_name());
+        }
+        
+        
         holder.tv_flight_no.setText(context.getResources().getString(R.string.txt_flight_no)+
         		" "+list.get(position).getFlight_no());
 
