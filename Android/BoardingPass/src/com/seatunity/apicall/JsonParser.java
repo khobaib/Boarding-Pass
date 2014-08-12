@@ -5,194 +5,208 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.util.Log;
 
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.ServerResponse;
 
-import android.util.Log;
-
-
 public class JsonParser {
-	static InputStream          is   = null;
-	static JSONObject           jObj = null;
-	static String               json = "";
-	private static final String TAG  = JsonParser.class.getSimpleName();
+	static InputStream is = null;
+	static JSONObject jObj = null;
+	static String json = "";
+	private static final String TAG = JsonParser.class.getSimpleName();
+
+	/**
+	 * Empty constructor doing nothing special
+	 */
 	public JsonParser() {
 
 	}
-	public ServerResponse retrieveServerData(int reqType, String url, List<NameValuePair> urlParams, String content, String appToken) {
+
+	/**
+	 * This master-method performs any HTTP request of type GET, POST, PUT or
+	 * DELETE along with its URL & contents. It sets the header of the request
+	 * with the app-token & sets accept-type & content-type as
+	 * {@link JSONObject} & then returns the server-response through a
+	 * {@link ServerResponse} object.
+	 * 
+	 * @param reqType
+	 *            it may be REQUEST_TYPE_GET, REQUEST_TYPE_POST,
+	 *            REQUEST_TYPE_PUT or REQUEST_TYPE_DELETE as declared in the
+	 *            {@link Constants} class.
+	 * @param url
+	 *            the URL of the desired server API
+	 * @param urlParams
+	 *            the list of the parameters to send with the URL
+	 * @param content
+	 *            A JSON-string to send as the content of the API call
+	 * @param appToken
+	 *            The session-token of the user, which was generated during the
+	 *            last log-in.
+	 * @return a {@link ServerResponse} object
+	 */
+	@SuppressWarnings("unused")
+	public ServerResponse retrieveServerData(int reqType, String url, List<NameValuePair> urlParams, String content,
+			String appToken) {
 		int status = 0;
 		StringBuilder sb = null;
 		if (urlParams != null) {
 			String paramString = URLEncodedUtils.format(urlParams, "utf-8");
-			url += "?" + paramString;     
-		
-			
+			url += "?" + paramString;
+
 		}
 		Log.d(TAG, "content body = " + content);
-		
-	try {
-		Log.d(TAG, "url after param added = " + url);
-				URL urltoconnect = new URL(url);
-				HttpURLConnection connection = (HttpURLConnection) urltoconnect
-			            .openConnection();
-				connection.setRequestProperty("Content-Type","application/json"); 
-				Log.e("test", "16");
-			    connection.setDoOutput(true);
-			    Log.e("test", "17");
+
+		try {
+			Log.d(TAG, "url after param added = " + url);
+			URL urltoconnect = new URL(url);
+			HttpURLConnection connection = (HttpURLConnection) urltoconnect.openConnection();
+			connection.setRequestProperty("Content-Type", "application/json");
+			Log.e("test", "16");
+			connection.setDoOutput(true);
+			Log.e("test", "17");
 			HttpResponse httpResponse = null;
-			if(reqType == Constants.REQUEST_TYPE_GET){
+			if (reqType == Constants.REQUEST_TYPE_GET) {
 				connection.setRequestMethod("GET");
-						connection.connect();
-						int statusCode = connection.getResponseCode();
-			} 
-			
-			else if(reqType == Constants.REQUEST_TYPE_POST){
+				connection.connect();
+				int statusCode = connection.getResponseCode();
+			}
+
+			else if (reqType == Constants.REQUEST_TYPE_POST) {
 				connection.setRequestMethod("POST");
-				String str =  content;
+				String str = content;
 				byte[] outputInBytes = str.getBytes("UTF-8");
 				OutputStream os = connection.getOutputStream();
-				os.write( outputInBytes );    
+				os.write(outputInBytes);
 				os.close();
 				connection.connect();
 				int statusCode = connection.getResponseCode();
-				
-				//07-09 17:23:44.360: E/AndroidRuntime(10182): android.database.sqlite.SQLiteException: unrecognized token: "[Ljava.lang.String;@4292bca8": , while compiling: UPDATE boardingpass SET departure=?,lastname=?,PNR=?,firstname=?,flight_no=?,julian_date=?,id=?,seat=?,compartment_code=?,arrival=?,carrier=?,stringform=?,codetype=?,travel_to=?,travel_from=? WHERE stringform= ?[Ljava.lang.String;@4292bca8
 
-			//	Ljava.lang.String;@4292bca8": , while compiling: UPDATE boardingpass SET departure=?,lastname=?,PNR=?,firstname=?
-//				HttpPost httpPost = new HttpPost(url);
-//				httpPost.setHeader("Content-Type", "application/json");
-//				httpPost.setHeader("Accept", "application/json");
-//				if (appToken != null){
-//					httpPost.setHeader("token", appToken);
-//				}
-//
-//				StringEntity se = new StringEntity(content);
-//				se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-//				httpPost.setEntity(se);
-//			
-//				httpResponse = httpClient.execute(httpPost);                
-			} else if(reqType == Constants.REQUEST_TYPE_PUT){
-				connection.setRequestProperty("Content-Type","application/json"); 
+				// 07-09 17:23:44.360: E/AndroidRuntime(10182):
+				// android.database.sqlite.SQLiteException: unrecognized token:
+				// "[Ljava.lang.String;@4292bca8": , while compiling: UPDATE
+				// boardingpass SET
+				// departure=?,lastname=?,PNR=?,firstname=?,flight_no=?,julian_date=?,id=?,seat=?,compartment_code=?,arrival=?,carrier=?,stringform=?,codetype=?,travel_to=?,travel_from=?
+				// WHERE stringform= ?[Ljava.lang.String;@4292bca8
+
+				// Ljava.lang.String;@4292bca8": , while compiling: UPDATE
+				// boardingpass SET departure=?,lastname=?,PNR=?,firstname=?
+				// HttpPost httpPost = new HttpPost(url);
+				// httpPost.setHeader("Content-Type", "application/json");
+				// httpPost.setHeader("Accept", "application/json");
+				// if (appToken != null){
+				// httpPost.setHeader("token", appToken);
+				// }
+				//
+				// StringEntity se = new StringEntity(content);
+				// se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE,
+				// "application/json"));
+				// httpPost.setEntity(se);
+				//
+				// httpResponse = httpClient.execute(httpPost);
+			} else if (reqType == Constants.REQUEST_TYPE_PUT) {
+				connection.setRequestProperty("Content-Type", "application/json");
 				connection.setRequestMethod("PUT");
-				String str =  content;
+				String str = content;
 				byte[] outputInBytes = str.getBytes("UTF-8");
 				OutputStream os = connection.getOutputStream();
-				os.write( outputInBytes );    
+				os.write(outputInBytes);
 				os.close();
 				connection.connect();
 				int statusCode = connection.getResponseCode();
 				// writer.write(message);
-//				connection.connect();
-//				int statusCode = connection.getResponseCode();
-//				HttpPut httpPut = new HttpPut(url);
-//				httpPut.setHeader("Content-Type", "application/json");
-//				httpPut.setHeader("Accept", "application/json");
-//				if (appToken != null){
-//					httpPut.setHeader("token", appToken);
-//				}
-//
-//				if(content != null){
-//					StringEntity se = new StringEntity(content);
-//					se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-//					httpPut.setEntity(se);
-//				}
-//
-//				httpResponse = httpClient.execute(httpPut);   
-				
-				
-				/*else if(reqType == Constants.REQUEST_TYPE_PUT){
-	                HttpPut httpPut = new HttpPut(url);
-	                httpPut.setHeader("Content-Type", "application/json");
-	                httpPut.setHeader("Accept", "application/json");
-	                if (appToken != null){
-	                    httpPut.setHeader("token", appToken);
-	                }
+				// connection.connect();
+				// int statusCode = connection.getResponseCode();
+				// HttpPut httpPut = new HttpPut(url);
+				// httpPut.setHeader("Content-Type", "application/json");
+				// httpPut.setHeader("Accept", "application/json");
+				// if (appToken != null){
+				// httpPut.setHeader("token", appToken);
+				// }
+				//
+				// if(content != null){
+				// StringEntity se = new StringEntity(content);
+				// se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE,
+				// "application/json"));
+				// httpPut.setEntity(se);
+				// }
+				//
+				// httpResponse = httpClient.execute(httpPut);
 
-	                if(content != null){
-	                    StringEntity se = new StringEntity(content);
-	                    se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, 
-	                    		"application/json"));
-	                    httpPut.setEntity(se);
-	                }
+				/*
+				 * else if(reqType == Constants.REQUEST_TYPE_PUT){ HttpPut
+				 * httpPut = new HttpPut(url); httpPut.setHeader("Content-Type",
+				 * "application/json"); httpPut.setHeader("Accept",
+				 * "application/json"); if (appToken != null){
+				 * httpPut.setHeader("token", appToken); }
+				 * 
+				 * if(content != null){ StringEntity se = new
+				 * StringEntity(content); se.setContentEncoding(new
+				 * BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+				 * httpPut.setEntity(se); }
+				 * 
+				 * httpResponse = httpClient.execute(httpPut); } else if(reqType
+				 * == Constants.REQUEST_TYPE_DELETE){ HttpDelete httpDelete =
+				 * new HttpDelete(url); httpDelete.setHeader("Content-Type",
+				 * "application/json"); httpDelete.setHeader("Accept",
+				 * "application/json"); if (appToken != null){
+				 * httpDelete.setHeader("token", appToken); }
+				 * 
+				 * if(content != null){ StringEntity se = new
+				 * StringEntity(content); se.setContentEncoding(new
+				 * BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+				 * ((HttpResponse) httpDelete).setEntity(se); }
+				 * 
+				 * httpResponse = httpClient.execute(httpDelete); }
+				 */
 
-	                httpResponse = httpClient.execute(httpPut);                
-	            } else if(reqType == Constants.REQUEST_TYPE_DELETE){
-	                HttpDelete httpDelete = new HttpDelete(url);
-	                httpDelete.setHeader("Content-Type", "application/json");
-	                httpDelete.setHeader("Accept", "application/json");
-	                if (appToken != null){
-	                    httpDelete.setHeader("token", appToken);
-	                }
-
-	                if(content != null){
-	                    StringEntity se = new StringEntity(content);
-	                    se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, 
-	                    		"application/json"));
-	                    ((HttpResponse) httpDelete).setEntity(se);
-	                }
-
-	                httpResponse = httpClient.execute(httpDelete);                
-	            }*/
-				
-				
-			} else if(reqType == Constants.REQUEST_TYPE_DELETE){
-				connection.setRequestProperty("Content-Type","application/json"); 
+			} else if (reqType == Constants.REQUEST_TYPE_DELETE) {
+				connection.setRequestProperty("Content-Type", "application/json");
 				connection.setRequestMethod("DELETE");
-//				String str =  content;
-//				byte[] outputInBytes = str.getBytes("UTF-8");
-//				OutputStream os = connection.getOutputStream();
-//				os.write( outputInBytes );    
-//				os.close();
+				// String str = content;
+				// byte[] outputInBytes = str.getBytes("UTF-8");
+				// OutputStream os = connection.getOutputStream();
+				// os.write( outputInBytes );
+				// os.close();
 				connection.connect();
 				int statusCode = connection.getResponseCode();
-//				connection.connect();
-//				int statusCode = connection.getResponseCode();
-//				HttpDelete httpDelete = new HttpDelete(url);
-//				httpDelete.setHeader("Content-Type", "application/json");
-//				httpDelete.setHeader("Accept", "application/json");
-//				if (appToken != null){
-//					httpDelete.setHeader("token", appToken);
-//				}
-//
-//				if(content != null){
-//					StringEntity se = new StringEntity(content);
-//					se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-//					((HttpResponse) httpDelete).setEntity(se);
-//				}
-//
-//				httpResponse = httpClient.execute(httpDelete);                
+				// connection.connect();
+				// int statusCode = connection.getResponseCode();
+				// HttpDelete httpDelete = new HttpDelete(url);
+				// httpDelete.setHeader("Content-Type", "application/json");
+				// httpDelete.setHeader("Accept", "application/json");
+				// if (appToken != null){
+				// httpDelete.setHeader("token", appToken);
+				// }
+				//
+				// if(content != null){
+				// StringEntity se = new StringEntity(content);
+				// se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE,
+				// "application/json"));
+				// ((HttpResponse) httpDelete).setEntity(se);
+				// }
+				//
+				// httpResponse = httpClient.execute(httpDelete);
 			}
 
 			status = connection.getResponseCode();
-			//connection.
+			// connection.
 			Log.d(TAG, "STAUS = " + status);
 			Log.e("test", "32");
 
-		//	HttpEntity httpEntity = httpResponse.getEntity();
+			// HttpEntity httpEntity = httpResponse.getEntity();
 			is = connection.getInputStream();
 		} catch (UnsupportedEncodingException e) {
 			Log.e("test", "33");
@@ -210,7 +224,7 @@ public class JsonParser {
 
 		try {
 			Log.d(TAG, "trying to read input stream.");
-//			new InputStreamReader			
+			// new InputStreamReader
 			Log.e("test", "36");
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);

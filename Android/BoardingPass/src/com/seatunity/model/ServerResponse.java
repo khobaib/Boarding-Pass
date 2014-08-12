@@ -4,9 +4,16 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+/**
+ * A typical model to hold any server-response with an integer status-code & a
+ * {@link JSONObject}
+ * 
+ * @author Sumon
+ * 
+ */
 public class ServerResponse {
 	JSONObject jObj;
-	int        status;
+	int status;
 
 	public ServerResponse() {
 	}

@@ -2,31 +2,57 @@ package com.seatunity.model;
 
 import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
+
+/**
+ * @author Sumon
+ *
+ */
 public class BoardingPassListForSharedFlight {
 	private String status;
-	private ArrayList<BoardingPass>boarding_passes=new ArrayList<BoardingPass>();
-	public BoardingPassListForSharedFlight (){
+	private ArrayList<BoardingPass> boarding_passes = new ArrayList<BoardingPass>();
+
+	/**
+	 * Empty constructor doing nothing special inside
+	 */
+	public BoardingPassListForSharedFlight() {
 
 	}
-	public BoardingPassListForSharedFlight (String status,ArrayList<BoardingPass>article_list){
-		this.boarding_passes=boarding_passes;
-		this.status=status;
+
+	/**
+	 * @param status
+	 * @param boarding_passes_list
+	 */
+	public BoardingPassListForSharedFlight(String status, ArrayList<BoardingPass> boarding_passes_list) {
+		this.boarding_passes = boarding_passes_list;
+		this.status = status;
 	}
-	public static  BoardingPassListForSharedFlight getBoardingPassListObject(JSONObject joObject){
-		String res=joObject.toString();
+
+	/**
+	 * @param joObject
+	 * @return
+	 */
+	public static BoardingPassListForSharedFlight getBoardingPassListObject(JSONObject joObject) {
+		String res = joObject.toString();
 		Gson gson = new Gson();
 		BoardingPassListForSharedFlight object = gson.fromJson(res, BoardingPassListForSharedFlight.class);
 		return object;
 	}
-	public ArrayList<BoardingPass> getBoardingPassList(){
+
+
+	/**
+	 * @return all the boarding pass as a list
+	 */
+	public ArrayList<BoardingPass> getBoardingPassList() {
 		return this.boarding_passes;
 	}
-	public String getStatus(){
+
+	/**
+	 * @return status string of the pass-list
+	 */
+	public String getStatus() {
 		return this.status;
 	}
 }

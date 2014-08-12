@@ -1,5 +1,10 @@
 package com.seatunity.model;
 
+/**
+ * SeatMate object holder model
+ * @author Sumon
+ *
+ */
 public class SeatMate {
 	String id,name,gender,age,profession,live_in,seating_pref,some_about_you,status,seat,travel_class,image_url,
 	shared_flight;

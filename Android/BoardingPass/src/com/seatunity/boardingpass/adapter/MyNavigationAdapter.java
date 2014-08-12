@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/**
+ * @deprecated Never used
+ * @author Sumon
+ *
+ */
 public class MyNavigationAdapter extends BaseAdapter {
 	Context mContext = null;
 	String[] mTitles;

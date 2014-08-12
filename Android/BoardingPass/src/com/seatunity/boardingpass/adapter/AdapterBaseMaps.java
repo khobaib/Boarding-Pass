@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.seatunity.boardingpass.R;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/**
+ * @deprecated Never used
+ *
+ */
+@SuppressLint({ "ViewHolder", "InflateParams" })
 public class AdapterBaseMaps extends BaseAdapter {
 
 	Context context;
@@ -18,6 +24,10 @@ public class AdapterBaseMaps extends BaseAdapter {
 	ArrayList<String> data;
 	LayoutInflater inflater;
 
+	/**
+	 * @param context
+	 * @param data
+	 */
 	public AdapterBaseMaps(Context context,
 			ArrayList<String> data) {
 		// super(a, textViewResourceId, data);
@@ -61,19 +71,16 @@ public class AdapterBaseMaps extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return data.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

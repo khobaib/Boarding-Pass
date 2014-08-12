@@ -5,6 +5,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,11 +16,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
  
+/**
+ * Adapter for the navigation-drawer
+ * 
+ * @author Sumon
+ *
+ */
 public class NavDrawerListAdapter extends BaseAdapter {
      
     private Context context;
     private ArrayList<String> item;
     BoardingPassApplication appInstance;
+    
+    
+    /**
+     * The only constructor
+     * @param context
+     * @param appInstance
+     */
     public NavDrawerListAdapter(Context context,BoardingPassApplication appInstance){
         this.context = context;
         this.appInstance=appInstance;
@@ -45,7 +59,8 @@ public class NavDrawerListAdapter extends BaseAdapter {
         return position;
     }
  
-    @Override
+    @SuppressLint("InflateParams")
+	@Override
     public View getView(int position, View convertView, ViewGroup parent) {
     	LayoutInflater mInflater;
         if (convertView == null) {
