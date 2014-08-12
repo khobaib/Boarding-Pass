@@ -44,6 +44,7 @@ import com.seatunity.boardingpass.utilty.GetResources;
 import com.seatunity.boardingpass.utilty.PkpassReader;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.BoardingPassParser;
+import com.seatunity.model.NavDrawerItem;
 import com.seatunity.model.UserCred;
 import com.touhiDroid.filepicker.FilePickerActivity;
 

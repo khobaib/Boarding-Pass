@@ -12,7 +12,6 @@ import org.json.JSONObject;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.seatunity.apicall.JsonParser;
-import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.adapter.AdapterForBoardingPass;

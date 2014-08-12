@@ -1,4 +1,4 @@
-package com.seatunity.boardingpass;
+package com.seatunity.model;
 
 public class NavDrawerItem {
     

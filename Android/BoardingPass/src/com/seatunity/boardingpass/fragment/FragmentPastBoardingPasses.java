@@ -10,7 +10,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.adapter.AdapterForBoardingPass;
 import com.seatunity.boardingpass.adapter.AdapterForPastBoardingPass;

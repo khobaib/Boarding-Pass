@@ -14,7 +14,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.seatunity.boardingpass.AcountActivity;
 import com.seatunity.boardingpass.ForgotPassActivity;
-import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.TermAndConditionActivity;
 import com.seatunity.boardingpass.adapter.NothingSelectedSpinnerAdapter;

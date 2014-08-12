@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.seatunity.boardingpass.AcountActivity;
-import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;

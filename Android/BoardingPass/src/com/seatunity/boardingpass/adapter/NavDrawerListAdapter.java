@@ -2,7 +2,6 @@ package com.seatunity.boardingpass.adapter;
 import java.util.ArrayList;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.seatunity.boardingpass.NavDrawerItem;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 

@@ -16,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.seatunity.boardingpass.EditUserNameActivity;
-import com.seatunity.boardingpass.HomeActivity;
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.PasswordChangeActivity;
 import com.seatunity.boardingpass.R;
