@@ -68,10 +68,7 @@ public class NavDrawerListAdapter extends BaseAdapter {
         	le_unameandemail_holder.setVisibility(View.VISIBLE);
         	 if(appInstance.getUserCred().getImage_url().equals("")){
                  imgIcon.setImageResource(R.drawable.ic_contact_picture);   
-                
-             	
-
-        	 }
+              }
         	 else{
         		 ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url(), imgIcon);
         		 
@@ -84,16 +81,14 @@ public class NavDrawerListAdapter extends BaseAdapter {
         		 email.setText(appInstance.getUserCred().getEmail()); 
         	 }
         	 if(appInstance.getUserCred().getFirstname().equals("")){
-        		 email.setText(context.getResources().getText(R.string.txt_email_addess)); 
-        		 user_name.setText(context.getResources().getText(R.string.txt_user_name));
+        		 user_name.setText(context.getResources().getText(R.string.txt_user_name)); 
+        		 email.setText("Status");
         	 }
         	 else{
-        		 email.setText(appInstance.getUserCred().getEmail()); 
-        		 user_name.setText(appInstance.getUserCred().getFirstname());
+        		 user_name.setText(appInstance.getUserCred().getFirstname()); 
+        		 email.setText(appInstance.getUserCred().getStatus());
         	 }
-        	
-        	
-        }
+       }
         else{
         	imgIcon.setVisibility(View.GONE);
         	le_unameandemail_holder.setVisibility(View.GONE);

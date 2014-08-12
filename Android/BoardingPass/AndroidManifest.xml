@@ -69,19 +69,19 @@
         android:allowBackup="true"
         android:configChanges="orientation"
         android:icon="@drawable/ic_home"
-        android:label="@string/app_name" >
+        android:label="@string/app_name_seatunity" >
         <activity
             android:name="com.touhiDroid.filepicker.FilePickerActivity"
-            android:label="@string/app_name" >
+             android:label="@string/app_name_seatunity" >
         </activity>
         <activity
             android:name="com.seatunity.boardingpass.ActingAsHookActivity"
-            android:label="@string/app_name"
+             android:label="@string/app_name_seatunity" 
             android:theme="@style/HomeActivityTheme" >
         </activity>
         <activity
             android:name="com.seatunity.boardingpass.SplasActivity"
-            android:label="@string/app_name"
+            android:label="@string/app_name_seatunity" 
             android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -172,7 +172,7 @@
         </activity>
         <activity
             android:name="com.artifex.mupdfdemo.MuPDFActivity"
-            android:label="@string/app_name"
+              android:label="@string/app_name_seatunity" 
             android:theme="@style/AppBaseTheme" >
         </activity>
         <activity

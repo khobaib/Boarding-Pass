@@ -86,13 +86,17 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context=getActivity();
-		Log.e("again", "onCreate");
+		//Log.e("again", "onCreate");
 		appInstance =(BoardingPassApplication) getActivity().getApplication();
 		if(parent==null){
 			parent=Constants.parent;
 		}
+		
 		if(Constants.isOnline(getActivity())){
+			//Log.e("Test", "")
+			Log.e("Test", ""+appInstance.isRememberMe());
 			if(!appInstance.isRememberMe()){
+				Log.e("Test", ""+appInstance.isRememberMe());
 				SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 				dbInstance.open();
 				list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
@@ -103,30 +107,31 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 				for (int i=0;i<list.size();i++){
 					Log.e("test", "t "+list.get(i).getTravel_from_name());
 					int ju_date=Integer.parseInt(list.get(i).getJulian_date());
-				
 					if((ju_date>=dayofyear)&&(!list.get(i).getDeletestate())){
 						list_greaterthan.add(list.get(i));
-
 					}
 					
 				}
 				if(list_greaterthan.size()<1){
 					Log.e("tagg", "as "+parent);
-					
+					Log.e("Test", "1");
 					parent.startHomeFragment();
 				}
 				else{
+					Log.e("Test", "2");
 					parent.startFragmentBoardingPasses(list_greaterthan);
 				}
 			}
 			else{
 				//CallBackApiCall CaBLisenar,String body,Context context,String addedurl,int requestType
+				Log.e("Test", "3");
 				callfrom=1;
 				retreive =new AsyncaTaskApiCall(this, getJsonObjet(), getActivity(),"bplist",Constants.REQUEST_TYPE_POST);
 				retreive.execute();
 			}
 		}
 		else{
+			Log.e("Test", "4");
 			SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 			dbInstance.open();
 			list=(ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
@@ -145,19 +150,25 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 			}
 			
 			if(!appInstance.isRememberMe()){
+				Log.e("Test", "5");
 				if(list_greaterthan.size()<1){
 					parent.startAddBoardingPassDuringLogin();
+					Log.e("Test", "6");
 				}
 				else{
+					Log.e("Test", "7");
 					parent.startFragmentBoardingPasses(list_greaterthan);
 				}
 				
 			}
 			else{
+				Log.e("Test", "8");
 				if(list_greaterthan.size()<1){
+					Log.e("Test", "9");
 					parent.startHomeFragment();
 				}
 				else{
+					Log.e("Test", "10");
 					parent.startFragmentBoardingPasses(list_greaterthan);
 				}
 			}
