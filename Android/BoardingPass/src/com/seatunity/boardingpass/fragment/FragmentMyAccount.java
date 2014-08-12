@@ -19,7 +19,6 @@ import com.seatunity.boardingpass.EditUserNameActivity;
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.PasswordChangeActivity;
 import com.seatunity.boardingpass.R;
-import com.seatunity.boardingpass.UploadPicActivity;
 import com.seatunity.boardingpass.adapter.AdapterForSettings;
 import com.seatunity.boardingpass.adapter.NothingSelectedSpinnerAdapter;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
