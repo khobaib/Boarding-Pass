@@ -1,23 +1,22 @@
 package com.seatunity.boardingpass.fragment;
-import com.seatunity.boardingpass.AcountActivity;
+import android.annotation.SuppressLint;
+import android.app.Fragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
 
-import android.annotation.SuppressLint;
-import android.app.Fragment;
 
-import android.content.Intent;
-import android.graphics.Paint;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-
+/**
+ * Shows static text on the "Terms & Condition" about using this application.
+ * 
+ * @author Sumon
+ * 
+ */
 @SuppressLint("NewApi")
 public class FragmentTermsAndCondition extends Fragment  {
 	HomeListFragment parent;

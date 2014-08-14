@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -44,6 +45,13 @@ import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.boardingpass.utilty.MyCustomSpannable;
 
+/**
+ * Fragment containing the UI & necessary API call to support a new user
+ * registration process.
+ * 
+ * @author Sumon
+ * 
+ */
 @SuppressLint("NewApi")
 public class FragmentSignUp extends Fragment implements CallBackApiCall {
 	TextView tv_signup_message, tv_sign_message;
@@ -88,6 +96,10 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 
 	}
 
+	/**
+	 * Shows a confirmation dialog saying that the registration email is
+	 * successfully sent
+	 */
 	public void showCustomDialog() {
 		final Dialog dialog = new Dialog(getActivity());
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -113,6 +125,12 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 		return v;
 	}
 
+	/**
+	 * Initializes all the views.
+	 * 
+	 * @param v
+	 *            The {@link ViewGroup} to which the view is to be formed.
+	 */
 	public void initview(ViewGroup v) {
 		bt_register = (Button) v.findViewById(R.id.bt_register);
 		tv_signup_message = (TextView) v.findViewById(R.id.tv_signup_message);
@@ -282,6 +300,10 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 
 	}
 
+	/**
+	 * Called on sign-up button action to validate the input values & procede on
+	 * with the sign-up.
+	 */
 	public void callsignUp() {
 		if ((!email.equals("")) && (!password.equals("")) && (!password.equals(""))) {
 			String signupdata = "";
@@ -321,6 +343,9 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 
 	}
 
+	/**
+	 * @return A JSON-formatted string to call the sign-up API
+	 */
 	@SuppressWarnings("unused")
 	public String getJsonObjet() {
 		try {
@@ -360,12 +385,17 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 		return "";
 	}
 
+	/**
+	 * Shows a custom dialog saying the response is OK.
+	 * 
+	 * @param items
+	 * @param title
+	 * @param type
+	 */
 	@SuppressLint("InflateParams")
-	@SuppressWarnings("static-access")
 	public void showDialogForSeatingPref(final CharSequence[] items, String title, final int type) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		LayoutInflater inflater = (LayoutInflater) getActivity()
-				.getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
 		TextView tv_title = (TextView) customTitleView.findViewById(R.id.tv_title);
 		tv_title.setText(title);
@@ -398,14 +428,12 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 
 	@Override
 	public void responseOk(JSONObject job) {
-		// TODO Auto-generated method stub
 		((AcountActivity) getActivity()).indicator.setViewPager(((AcountActivity) getActivity()).pager, 0);
 		showCustomDialog();
 	}
 
 	@Override
 	public void responseFailure(JSONObject job) {
-		// TODO Auto-generated method stub
 		Log.e("A", "1");
 		Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_signup_failed1),
 				Toast.LENGTH_SHORT).show();
@@ -413,13 +441,10 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 
 	@Override
 	public void saveLoginCred(JSONObject job) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void LoginFailed(JSONObject job) {
-		// TODO Auto-generated method stub
 		// Toast.makeText(getActivity(),
 		// getActivity().getResources().getString(R.string.txt_signup_failed1),
 		// Toast.LENGTH_SHORT).show();

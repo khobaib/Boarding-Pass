@@ -1,36 +1,22 @@
 package com.seatunity.boardingpass;
 
-import java.util.ArrayList;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.Menu;
+import android.view.Window;
 
 import com.bugsense.trace.BugSenseHandler;
 import com.seatunity.boardingpass.fragment.FragmentLogin;
 import com.seatunity.boardingpass.fragment.FragmentSignUp;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
-import com.seatunity.model.UserCred;
 import com.viewpagerindicator.TabPageIndicator;
-
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.res.Configuration;
-import android.content.res.TypedArray;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ListView;
  
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
@@ -74,6 +60,10 @@ public class AcountActivity extends FragmentActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+    /**
+     * @author Sumon
+     *
+     */
     class PostRetreiveAdapter extends FragmentPagerAdapter {
 		@Override
 		public Parcelable saveState() {
@@ -95,6 +85,7 @@ public class AcountActivity extends FragmentActivity {
 				return null;
 
 		}
+		@SuppressLint("DefaultLocale")
 		@Override
 		public CharSequence getPageTitle(int position) {
 			return CONTENT[position % CONTENT.length].toUpperCase();

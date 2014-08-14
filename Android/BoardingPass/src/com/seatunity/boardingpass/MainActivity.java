@@ -61,6 +61,7 @@ import com.seatunity.boardingpass.adapter.NavDrawerListAdapter;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.fragment.AccountListFragment;
+import com.seatunity.boardingpass.fragment.FragmentGetBoardingPasseFromBackend;
 import com.seatunity.boardingpass.fragment.HomeListFragment;
 import com.seatunity.boardingpass.fragment.PastBoardingPassListFragment;
 import com.seatunity.boardingpass.fragment.TabFragment;
@@ -108,6 +109,9 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 
 	int SCANBARCODEFROMPDF = 12;
 
+	/**
+	 * This method sets a custom-listview to the overflow-menu.
+	 */
 	private void getOverflowMenu() {
 		try {
 			ViewConfiguration config = ViewConfiguration.get(this);
@@ -196,6 +200,14 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		// displayView(Constants.SELECTEDPOSITION);
 	}
 
+	/**
+	 * Class to provide any instance for any drawer-item click. It only
+	 * overrides the {@code onItemClick() } method of
+	 * {@link ListView.OnItemClickListener }
+	 * 
+	 * @author Sumon
+	 * 
+	 */
 	private class SlideMenuClickListener implements ListView.OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -249,6 +261,11 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		}
 	}
 
+	/**
+	 * The method calls the intent to share the application with
+	 * {@link Intent.ACTION_SEND} flag & share-text as : <br>
+	 * {@code "Hey I am using SeatUnity. This is a nice app to store boarding pass and to communicate with seatmates." }
+	 */
 	public void shareApp() {
 		Intent sendIntent = new Intent();
 		sendIntent.setAction(Intent.ACTION_SEND);
@@ -268,6 +285,19 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		return super.onPrepareOptionsMenu(menu);
 	}
 
+	/**
+	 * Opens the selected fragment as position. The fragments according to
+	 * position are as below: <br>
+	 * 0 -> {@link HomeListFragment} (0 for the
+	 * {@link FragmentGetBoardingPasseFromBackend} )<br>
+	 * 1 -> {@link AccountListFragment}<br>
+	 * 2 -> {@link PastBoardingPassListFragment}<br>
+	 * 3 -> {@link HomeListFragment} (3 for the {@link FragmentAbout } ) <br>
+	 * 
+	 * @param position
+	 *            as in the drawer-list to choose the fragment as described
+	 *            above.
+	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@SuppressLint("NewApi")
 	public void displayView(int position) {
@@ -339,11 +369,17 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
+	/**
+	 * Calls the {@code finisssh() } method.
+	 */
 	public void close() {
 		finisssh();
-
 	}
 
+	/**
+	 * Opens the dialog to add new boarding-pass, when clicked on the "+" button
+	 * at the action-bar.
+	 */
 	public void openDialogToAddBoardingPass() {
 		final Dialog dialog = new Dialog(MainActivity.this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -397,12 +433,18 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		dialog.show();
 	}
 
+	/**
+	 * Calls the {@link FilePickerActivity} to pick any pdf, pass-book or image
+	 * file to scan for a boarding-pass.
+	 */
 	public void onclicksdcard() {
 		Intent intent = new Intent(MainActivity.this, FilePickerActivity.class);
 		startActivityForResult(intent, SCANBOARDINGPASSFROMSDCARD);
-
 	}
 
+	/**
+	 * Calls the MuPDF library's custom-intent to scan a barcode with camera.
+	 */
 	public void onclickacamera() {
 		Intent intent = new Intent("com.touhiDroid.android.SCAN");
 		intent.putExtra(Intents.Scan.FORMATS, Intents.Scan.AZTEC_MODE + "," + Intents.Scan.PDF417_MODE + ","
@@ -410,6 +452,15 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		startActivityForResult(intent, BARCODESCANFROMDIRECT);
 	}
 
+	/**
+	 * When user selects any file from any file-browser, the app can be chosen
+	 * from the chooser & this activity is opened with this method called, which
+	 * actually decides the file-type (image/pdf/pkpass) & prompts the user to
+	 * scan it for any boarding-pass.
+	 * 
+	 * @param filename
+	 *            The chosen file's absolute name.
+	 */
 	public void showalert(final String filename) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
 		alertDialogBuilder.setTitle(getResources().getString(R.string.app_name));
@@ -428,7 +479,6 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 							GetBoardingPassFromPDF(filename);
 						} else if (Constants.isPkPass(filename)) {
 							try {
-
 								String boardingpass = PkpassReader.getPassbookBarcodeString(filename);
 								JSONObject job = new JSONObject(boardingpass);
 								saveScannedBoardingPasstodatabes(job.getString("message"), job.getString("format"));
@@ -451,6 +501,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		alertDialog.show();
 	}
 
+	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		if (requestCode == BARCODESCANFROMDIRECT) {
 			if (resultCode == RESULT_OK) {
@@ -531,6 +582,13 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		}
 	}
 
+	/**
+	 * Scans the passed bitmap for any barcode consisting of any boarding-pass
+	 * object.
+	 * 
+	 * @param bmap
+	 * @return
+	 */
 	public boolean scanBarcodeFromImage(Bitmap bmap) {
 		boolean scansuccess = false;
 		Bitmap bMap = bmap;
@@ -558,7 +616,6 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 				e.printStackTrace();
 			} catch (ChecksumException e) {
 				scansuccess = false;
-
 				e.printStackTrace();
 			} catch (FormatException e) {
 				e.printStackTrace();
@@ -576,6 +633,12 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		return scansuccess;
 	}
 
+	/**
+	 * Calls {@link MuPDFActivity } with the passed file's path, which will
+	 * return the temporary image-file's path formed from the passed PDF file.
+	 * 
+	 * @param filepath
+	 */
 	public void GetBoardingPassFromPDF(String filepath) {
 		Intent intent = new Intent(MainActivity.this, MuPDFActivity.class);
 		intent.setAction("com.touhiDroid.PDF.GET_BITMAP");
@@ -583,6 +646,12 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		startActivityForResult(intent, SCANBARCODEFROMPDF);
 	}
 
+	/**
+	 * Saves the boarding-pass object to the database.
+	 * 
+	 * @param contents
+	 * @param format
+	 */
 	public void saveScannedBoardingPasstodatabes(String contents, String format) {
 		//
 
@@ -609,18 +678,28 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 
 	}
 
+	/**
+	 * Calls the API to save the passed boarding-pass object in server.
+	 * 
+	 * @param bpass
+	 */
 	public void SaveboardingPasstoServer(BoardingPass bpass) {
 		needtoReusedBoardingPass = bpass;
 		String bpassdata = "";
 		bpassdata = getJsonObjet(bpass);
-		AsyncaTaskApiCall change_pass = new AsyncaTaskApiCall(MainActivity.this, bpassdata, MainActivity.this,
-
-		"newbp", Constants.REQUEST_TYPE_POST);
+		AsyncaTaskApiCall change_pass = new AsyncaTaskApiCall(MainActivity.this, bpassdata, MainActivity.this, "newbp",
+				Constants.REQUEST_TYPE_POST);
 		change_pass.execute();
 	}
 
+	/**
+	 * Forms a JSON-string to send boarding-pass data to save at the server.
+	 * 
+	 * @param bpass
+	 *            The boarding-pass to save in the server.
+	 * @return
+	 */
 	public String getJsonObjet(BoardingPass bpass) {
-
 		try {
 			JSONObject loginObj = new JSONObject();
 			loginObj.put("token", appInstance.getUserCred().getToken());
@@ -646,6 +725,10 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		return "";
 	}
 
+	/**
+	 * Saves the boarding-pass data as in the global variable
+	 * {@code boardingPass} in the local DB.
+	 */
 	public void setBoardingpassInLocalDB() {
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(MainActivity.this);
 		dbInstance.open();
@@ -664,6 +747,20 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		}
 	}
 
+	/**
+	 * Method to save the read barcode image (from PDF) as a boarding-pass in
+	 * the local DB.<br>
+	 * This method rotates the read-image in 3 other orthogonal angels & tries
+	 * to read the barcode in all the 4 possible perspectives.
+	 * 
+	 * @param requestCode
+	 *            not used
+	 * @param resultCode
+	 *            not used
+	 * @param path
+	 *            The bitmap-image's file path. The file is deleted after
+	 *            processing.
+	 */
 	public void getResultFromActivity(int requestCode, int resultCode, String path) {
 		File f = new File(path);
 		Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
@@ -716,6 +813,9 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 			f.delete();
 	}
 
+	/**
+	 * Calls the {@code onBackPressed() } method of the super class.
+	 */
 	public void finisssh() {
 		super.onBackPressed();
 	}
@@ -791,8 +891,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 				String bpassdata = "";
 				bpassdata = getJsonObjet(needtoReusedBoardingPass);
 				AsyncaTaskApiCall change_pass = new AsyncaTaskApiCall(MainActivity.this, bpassdata, MainActivity.this,
-
-				"newbp", Constants.REQUEST_TYPE_POST);
+						"newbp", Constants.REQUEST_TYPE_POST);
 				change_pass.execute();
 
 			}

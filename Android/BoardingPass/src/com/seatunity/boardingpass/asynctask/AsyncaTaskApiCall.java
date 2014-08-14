@@ -202,8 +202,6 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 						CaBLisenar.LoginFailed(job);
 					}
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-
 					e.printStackTrace();
 				}
 			} else {
@@ -216,8 +214,6 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 						CaBLisenar.responseFailure(job);
 					}
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-
 					e.printStackTrace();
 				}
 			}
@@ -231,7 +227,6 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 				} else {
 				}
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
