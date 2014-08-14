@@ -1,0 +1,11 @@
+com.seatunity.apicall
+com.seatunity.boardingpass
+com.seatunity.boardingpass.adapter
+com.seatunity.boardingpass.alert
+com.seatunity.boardingpass.asynctask
+com.seatunity.boardingpass.db
+com.seatunity.boardingpass.fragment
+com.seatunity.boardingpass.interfaces
+com.seatunity.boardingpass.networkstatetracker
+com.seatunity.boardingpass.utilty
+com.seatunity.model
