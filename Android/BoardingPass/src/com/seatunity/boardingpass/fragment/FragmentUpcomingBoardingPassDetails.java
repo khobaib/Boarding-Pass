@@ -107,8 +107,8 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		tv_to_air.setText(bpass.getTravel_to());
 		tv_start_time.setText(bpass.getDeparture());
 		tv_arrival_time.setText(bpass.getArrival());
-		tv_flight_var.setText(bpass.getFlight_no());
-		tv_seat_var.setText(bpass.getSeat());
+		tv_flight_var.setText(bpass.getCarrier()+bpass.getFlight_no());
+		tv_seat_var.setText(Constants.removeingprecingZero(bpass.getSeat()));
 		tv_compartment_class_var.setText(bpass.getTravel_class());
 		tv_passenger_name.setText(bpass.getFirstname());
 		String date = com.seatunity.boardingpass.utilty.Constants

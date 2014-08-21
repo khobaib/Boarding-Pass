@@ -35,7 +35,7 @@
         android:layout_below="@+id/txt_name"
          android:textColor="#777777"
          android:layout_marginTop="4dp"
-        android:text="Fasion Designer" />
+         />
 
     <TextView
         android:id="@+id/tv_seat_pref"
@@ -45,7 +45,7 @@
         android:layout_alignLeft="@+id/tv_prof"
         android:layout_below="@+id/tv_prof"
          android:textColor="#777777"
-        android:text="TextView" />
+       />
 
     <ImageView
         android:id="@+id/img_send_msz"

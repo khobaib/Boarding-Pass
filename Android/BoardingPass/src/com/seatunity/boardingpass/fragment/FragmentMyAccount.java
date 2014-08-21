@@ -472,7 +472,16 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
 		TextView tvtitle = (TextView) customTitleView.findViewById(R.id.tv_title);
 		tvtitle.setText(title);
+		if (position == 3) {
+			input.setText(appInstance.getUserCred().getProfession());
+			
+		} else if (position == 5) {
+
+			input.setText(appInstance.getUserCred().getSomethinAbout());
+
+		}
 		d.setCustomTitle(customTitleView);
+		
 		d.setOnShowListener(new DialogInterface.OnShowListener() {
 
 			@Override
@@ -520,7 +529,6 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 									loginObj.put("profession", value);
 									userCred.setProfession(value);
 								} else if (position == 5) {
-
 									loginObj.put("some_about_you", value);
 									userCred.setSomethinAbout(value);
 
@@ -765,15 +773,19 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 					Toast.makeText(context, getResources().getString(R.string.txt_logout_success), Toast.LENGTH_SHORT)
 							.show();
 				} else if (callfrom == 2) {
-					String imageurl = job.getString("image_url");
+					if(job.has("image_url")){
+						String imageurl = job.getString("image_url");
+						if (!imageurl.equals("")) {
+							userCred.setImage_url(imageurl);
+							appInstance.setUserCred(userCred);
+							ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url(), img_prof_pic);
+						}
 
+					}
+				
 					Toast.makeText(context, context.getResources().getString(R.string.txt_update_success),
 							Toast.LENGTH_SHORT).show();
-					if (!imageurl.equals("")) {
-						userCred.setImage_url(imageurl);
-						appInstance.setUserCred(userCred);
-						ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url(), img_prof_pic);
-					}
+				
 					appInstance.setUserCred(userCred);
 					setlistView();
 					Constants.photo = null;

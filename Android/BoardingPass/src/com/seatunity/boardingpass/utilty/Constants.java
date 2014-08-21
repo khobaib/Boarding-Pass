@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.seatunity.boardingpass.fragment.HomeListFragment;
@@ -25,7 +26,19 @@ import com.seatunity.boardingpass.fragment.HomeListFragment;
 @TargetApi(Build.VERSION_CODES.KITKAT)
 @SuppressLint({ "NewApi", "DefaultLocale" })
 public class Constants {
-
+	
+	//StringBuilder sb = new StringBuilder(inputString);
+//	It has the method deleteCharAt(), along with many other mutator methods.
+//
+//	Just delete the characters that you need to delete and then get the result as follows:
+//
+//	String resultString = sb.toString();
+	
+	public static String removeingprecingZero(String seat_no){
+		String seatno=seat_no;
+		seatno=seatno.replaceFirst("^0+(?!$)", "");
+		return seatno;
+	}
 	/**
 	 * @param context
 	 * @param uri

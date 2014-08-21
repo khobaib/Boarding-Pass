@@ -153,7 +153,7 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 	public void SetView() {
 		tv_uname.setText(seatmate.getName());
 		tv_profession.setText(seatmate.getProfession());
-		tv_seat.setText(seatmate.getTravel_class() + ", " + seatmate.getSeat());
+		tv_seat.setText(seatmate.getTravel_class() + ", " + Constants.removeingprecingZero(seatmate.getSeat()));
 		tv_status.setText(seatmate.getStatus());
 		tv_live_in.setText(getActivity().getResources().getString(R.string.txt_live_in) + seatmate.getLive_in());
 		tv_age.setText(getActivity().getResources().getString(R.string.txt_age) + " " + seatmate.getAge());
@@ -187,12 +187,6 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 		input = new EditText(getActivity());
 		d = new AlertDialog.Builder(getActivity()).setView(input)
 				.setPositiveButton(getActivity().getResources().getString(R.string.txt_ok), null) // Set
-																									// to
-																									// null.
-																									// We
-																									// override
-																									// the
-																									// onclick
 				.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel), null).create();
 		LayoutInflater inflater = (LayoutInflater) getActivity()
 				.getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);

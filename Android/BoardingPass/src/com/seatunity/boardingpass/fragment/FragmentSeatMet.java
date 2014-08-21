@@ -107,16 +107,6 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 		selectedposition = 0;
 		setDetailsBoaredingpass();
 
-		// int upId = Resources.getSystem().getIdentifier("up", "id",
-		// "android");
-		// if (upId > 0) {
-		// Toast.makeText(getActivity(), "Working", 2000).show();
-		// ImageView up = (ImageView) getActivity().findViewById(upId);
-		// up.setImageResource(R.drawable.ic_action_previous_item);
-		// }
-		// else{
-		// Toast.makeText(getActivity(), " Not Working", 2000).show();
-		// }
 
 		return v;
 	}
@@ -335,9 +325,10 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 		tv_to.setText(bpass.getTravel_to_name());
 		tv_month_inside_icon.setText(month);
 		tv_date_inside_icon.setText(dateofmonth);
-		tv_seat_no.setText(getActivity().getResources().getString(R.string.txt_seat_nno) + "Seat " + bpass.getSeat());
+		tv_seat_no.setText(getActivity().getResources().getString(R.string.txt_seat_nno)+ " "+
+		Constants.removeingprecingZero( bpass.getSeat()));
 		tv_flight_no.setText(getActivity().getResources().getString(R.string.txt_flight_no) + " "
-				+ bpass.getFlight_no());
+				+bpass.getCarrier()+ bpass.getFlight_no());
 		tv_start_time.setText(bpass.getDeparture());
 		tv_arrival_time.setText(bpass.getArrival());
 		Log.e("test", "a " + bpass.getTravel_from_name());

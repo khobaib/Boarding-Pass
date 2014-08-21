@@ -305,7 +305,7 @@ public class HomeListFragment extends TabFragment {
 	public void ShowAlertToExit() {
 		final AlertDialog d = new AlertDialog.Builder(getActivity())
 				.setPositiveButton(getActivity().getResources().getString(R.string.txt_ok), null)
-				// Set to null. We override the onclick
+				
 				.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel), null)
 				.setMessage(getActivity().getString(R.string.txt_exit_message)).create();
 		LayoutInflater inflater = (LayoutInflater) getActivity()

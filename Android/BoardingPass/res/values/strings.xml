@@ -33,7 +33,7 @@
     <string name="txt_emailsent_success">Email is sent successfully</string>
 <string name="txt_emailsen_success">Password is sent to your email. Please check your email</string>
     <string name="txt_delete_boarding_pass">Delete Boarding Pass</string>
-    <string name="txt_send">Send</string>
+    <string name="txt_send">Send Message</string>
     <string name="txt_delete_boarding_pass_text">Are you sure you want to delete boarding pass</string>
     <string name="txt_enter_email_address">Enter the email address you used to register with SeatUnity</string>
     <string name="txt_failed_to_get_list">Failed to bring Please check your internet connecttion</string>

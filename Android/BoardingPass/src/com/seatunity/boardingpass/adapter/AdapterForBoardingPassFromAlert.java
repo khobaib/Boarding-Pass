@@ -125,7 +125,7 @@ public class AdapterForBoardingPassFromAlert extends BaseAdapter {
 		holder.tv_jfk.setText(list.get(position).getTravel_to());
 		// holder.tv_arrival_time.setText(""+list.get(position).getArrival());
 		holder.tv_seat_no.setText(context.getResources().getString(R.string.txt_seat_nno) + " "
-				+ list.get(position).getSeat());
+				+ Constants.removeingprecingZero(list.get(position).getSeat()));
 
 		return convertView;
 	}

@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -113,11 +114,12 @@ public class AdapterForSeatmet extends BaseAdapter {
 		if (list.get(position).getName() != null) {
 			holder.txt_name.setText(list.get(position).getName());
 		}
-		if ((list.get(position).getClass() != null) && (list.get(position).getSeat() != null)) {
-			holder.tv_seat_pref.setText("Business," + list.get(position).getSeat());
+		if ((list.get(position).getTravel_class() != null) && (list.get(position).getSeat() != null)) {
+			holder.tv_seat_pref.setText(list.get(position).getTravel_class()+", " + Constants.removeingprecingZero(list.get(position).getSeat()));
 		}
+		Log.e("Error", position+" "+list.get(position).getProfession());
 		if (list.get(position).getProfession() != null) {
-			holder.txt_name.setText(list.get(position).getName());
+			holder.tv_prof.setText(list.get(position).getProfession());
 		}
 		if ((list.get(position).getImage_url() == null) || (list.get(position).getImage_url().equals(""))) {
 

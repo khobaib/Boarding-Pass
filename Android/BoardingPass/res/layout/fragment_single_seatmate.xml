@@ -28,7 +28,6 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="2dp"
             android:layout_toRightOf="@+id/img_prof_pic"
-            android:text="Maja Mikes"
             android:textColor="#000000"
             android:textSize="20dp"
             android:textStyle="bold" />
@@ -40,7 +39,6 @@
             android:layout_alignLeft="@+id/tv_uname"
             android:layout_below="@+id/tv_uname"
             android:layout_marginTop="4dp"
-            android:text="gjkh"
             android:textColor="#777777" />
 
         <TextView
@@ -50,7 +48,6 @@
             android:layout_alignLeft="@+id/tv_profession"
             android:layout_below="@+id/tv_profession"
             android:layout_marginTop="4dp"
-            android:text="Seat"
             android:textColor="#777777" />
 
         <TextView
@@ -60,7 +57,6 @@
             android:layout_alignLeft="@+id/tv_seat"
             android:layout_below="@+id/tv_seat"
             android:layout_marginTop="4dp"
-            android:text="4 Shared flight"
             android:textColor="#218fcd" />
 
         <TextView
@@ -70,9 +66,7 @@
             android:layout_alignLeft="@+id/tv_shared_flight"
             android:layout_below="@+id/tv_shared_flight"
             android:maxLines="3"
-            android:text="Hi, we are on the same flight! I am very glad that we will die together when I hijack the plane an
-            d fly it into a building! Wow, we have soooo much in common"
-            android:textColor="#777777" />
+           android:textColor="#777777" />
 
         <TextView
             android:id="@+id/tv_live_in"
@@ -81,7 +75,6 @@
             android:layout_alignLeft="@+id/img_prof_pic"
             android:layout_below="@+id/img_prof_pic"
             android:layout_marginTop="4dp"
-            android:text="Live in Germany"
             android:textColor="#777777" />
 
         <TextView
@@ -90,7 +83,6 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tv_live_in"
             android:layout_below="@+id/tv_live_in"
-            android:text="Age 25"
             android:textColor="#777777" />
 
         <TextView
@@ -99,7 +91,6 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tv_age"
             android:layout_below="@+id/tv_age"
-            android:text="Prefered to business"
             android:textColor="#777777" />
 
         <TextView
@@ -119,8 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tv_dot"
             android:layout_below="@+id/tv_dot"
-            android:text="Hi, we are on the same flight! I am very glad that we will  fly it into a building! Wow, we have soooo much in common"
-            android:textColor="#777777" />
+             android:textColor="#777777" />
 
         <Button
             android:id="@+id/btn_seatmate"
