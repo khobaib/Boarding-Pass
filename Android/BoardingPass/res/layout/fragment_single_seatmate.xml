@@ -57,6 +57,7 @@
             android:layout_alignLeft="@+id/tv_seat"
             android:layout_below="@+id/tv_seat"
             android:layout_marginTop="4dp"
+            android:text="4 Shared Flights"
             android:textColor="#218fcd" />
 
         <TextView

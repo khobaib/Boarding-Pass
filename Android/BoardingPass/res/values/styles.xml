@@ -10,7 +10,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="actionBarItemBackground">@drawable/ad_selectable_background</item>
         <item name="android:actionBarItemBackground" tools:targetApi="ice_cream_sandwich">@drawable/ad_selectable_background</item>
-        <item name="android:editTextStyle">@style/EditTextAppTheme</item>
+         <item name="android:editTextStyle">@style/EditTextAppTheme</item>
         <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewAppTheme</item>
         <item name="android:checkboxStyle">@style/CheckBoxAppTheme</item>
         <item name="android:radioButtonStyle">@style/RadioButtonAppTheme</item>
@@ -55,11 +55,13 @@
         <item name="background">@drawable/home_abs_back</item>
         <item name="android:background">@drawable/home_abs_back</item>
         <item name="android:titleTextStyle" tools:targetApi="honeycomb">@style/MyActionBarTextStyle</item>
+     
         <item name="titleTextStyle">@style/MyActionBarTextStyle</item>
     </style>
 
     <style name="MyActionBarTextStyle" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
         <item name="android:textColor">@color/white</item>
+          
         <item name="android:textSize">17sp</item>
         <item name="android:textStyle">bold</item>
     </style>

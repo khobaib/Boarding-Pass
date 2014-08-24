@@ -125,7 +125,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 
 			}
 
-			if (!appInstance.isRememberMe()) {
+			if (appInstance.isRememberMe()) {
 				Log.e("Test", "5");
 				if (list_greaterthan.size() < 1) {
 					parent.startAddBoardingPassDuringLogin();

@@ -198,7 +198,6 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 				tv_message.setText(getActivity().getResources().getString(R.string.txt_noseatmate_isfound) + " "
 						+ itemList.get(i) + " " + getActivity().getResources().getString(R.string.txt_is_found));
 			}
-
 		}
 
 		lv_seat_met_list.setOnItemClickListener(new OnItemClickListener() {

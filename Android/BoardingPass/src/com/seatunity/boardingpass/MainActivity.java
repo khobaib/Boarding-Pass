@@ -136,7 +136,24 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 			String filepath = intent.getData().toString();
 			filepath = filepath.replace("file://", "");
 			if ((filepath != null) && (!filepath.equals(""))) {
-				showalert(filepath);
+				if (Constants.isImage(filepath)) {
+					Bitmap bitmap = BitmapFactory.decodeFile(filepath);
+					scanBarcodeFromImage(bitmap);
+					// Toast.makeText(MainActivity.this,
+					// "ab "+bitmap.getHeight(), 2000).show();
+				} else if (Constants.isPdf(filepath)) {
+					GetBoardingPassFromPDF(filepath);
+				} else if (Constants.isPkPass(filepath)) {
+					try {
+						String boardingpass = PkpassReader.getPassbookBarcodeString(filepath);
+						JSONObject job = new JSONObject(boardingpass);
+						saveScannedBoardingPasstodatabes(job.getString("message"), job.getString("format"));
+					} catch (JSONException e) {
+						Toast.makeText(MainActivity.this,
+								getResources().getString(R.string.txt_invalid_borading_pass),
+								Toast.LENGTH_SHORT).show();
+					}
+				}
 			}
 
 		} catch (Exception e) {
@@ -160,7 +177,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
 		navMenuIcons.recycle();
 		mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
-		adapter = new NavDrawerListAdapter(getApplicationContext(), appInstance);
+		adapter = new NavDrawerListAdapter(MainActivity.this,getApplicationContext(), appInstance);
 		mDrawerList.setAdapter(adapter);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_navigation_drawer_closed,
