@@ -20,12 +20,15 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,12 +64,13 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 	public String Savedurl;
 	ArrayList<String> itemList;
 	TextView tv_from, tv_to, tv_month_inside_icon, tv_date_inside_icon, tv_seat_no, tv_flight_no, tv_start_time,
-			tv_arrival_time, tv_jfk, tv_cdg, tv_message;
+	tv_arrival_time, tv_jfk, tv_cdg, tv_message;
 	ListView lv_seat_met_list;
 	int selectedposition = 0;
 	Context context;
 	public int callfrom = 0;
-
+	ListView lv_class_list;
+	ArrayAdapter<String> aAdpt;
 	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +107,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 		tv_cdg = (TextView) v.findViewById(R.id.tv_cdg);
 		tv_jfk = (TextView) v.findViewById(R.id.tv_jfk);
 		lv_seat_met_list = (ListView) v.findViewById(R.id.lv_seat_met_list);
+		lv_class_list=(ListView) v.findViewById(R.id.lv_class_list);
 		setListView(0);
 		selectedposition = 0;
 		setDetailsBoaredingpass();
@@ -208,10 +213,10 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 			}
 		});
 	}
-
+	ActionBar actionBar ;
 	@SuppressWarnings("unused")
 	public void setActionBarNavigation(boolean show) {
-		final ActionBar actionBar = getActivity().getActionBar();
+		actionBar = getActivity().getActionBar();
 		OnNavigationListener imll = new OnNavigationListener() {
 			@Override
 			public boolean onNavigationItemSelected(int itemPosition, long itemId) {
@@ -223,12 +228,44 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 		String[] class_list = getActivity().getResources().getStringArray(R.array.seat_class);
 		itemList = new ArrayList<String>(Arrays.asList(class_list));
 		AdapterBaseMaps adapter = new AdapterBaseMaps(getActivity(), itemList);
-		ArrayAdapter<String> aAdpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,
+		 aAdpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,
 				android.R.id.text1, itemList);
 		if (show) {
-			actionBar.setDisplayShowTitleEnabled(false);
-			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-			actionBar.setListNavigationCallbacks(adapter, imll);
+			//			actionBar.setDisplayShowTitleEnabled(false);
+			//			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+			//			actionBar.setListNavigationCallbacks(adapter, imll);
+			//			
+
+			actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+			actionBar.setCustomView(R.layout.action_bar_title);
+
+			View v = actionBar.getCustomView();
+			TextView titleTxtView = (TextView) v.findViewById(R.id.txt_title);
+			final TextView txt_seatmate=(TextView) v.findViewById(R.id.txt_seatmate);
+			titleTxtView.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					lv_class_list.setVisibility(View.VISIBLE);
+					lv_class_list.setAdapter(aAdpt);
+				}
+			});
+			lv_class_list.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int itemPosition, long arg3) {
+					// TODO Auto-generated method stub
+					setListView(itemPosition);
+					selectedposition = itemPosition;
+					lv_class_list.setVisibility(View.GONE);
+					txt_seatmate.setText(itemList.get(itemPosition));
+					
+				}
+			});
+			//   RatingBar RatingBar=v.findViewById(R.id.ratingBar1)
+			//   titleTxtView.setText("abcd");
 		} else {
 			actionBar.setDisplayShowTitleEnabled(true);
 			actionBar.setNavigationMode(ActionBar.DISPLAY_SHOW_TITLE);
@@ -242,6 +279,20 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 		super.onPause();
 		setActionBarNavigation(false);
 		((MainActivity) getActivity()).refreash_menu.setVisible(false);
+		actionBar.setDisplayShowCustomEnabled(false);
+		actionBar.setDisplayOptions(
+				ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE|ActionBar.DISPLAY_HOME_AS_UP);
+
+		//		actionBar.setDisplayShowHomeEnabled(true);
+		//
+		//		actionBar.setDisplayShowTitleEnabled(true);
+		//		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+		//		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME);
+		//		actionBar.setDisplayOptions(ActionBar.DISPLAY_USE_LOGO);
+		//		actionBar.setDisplayHomeAsUpEnabled(true);
+
+		//getActionBar().setDisplayHomeAsUpEnabled(true);
+
 
 	}
 
@@ -285,12 +336,12 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 	public void sowAlertMessage() {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
 		alertDialogBuilder.setMessage(getResources().getString(R.string.txt_seatmet_message_only_online))
-				.setCancelable(false)
-				.setPositiveButton(getResources().getString(R.string.txt_ok), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
-					}
-				});
+		.setCancelable(false)
+		.setPositiveButton(getResources().getString(R.string.txt_ok), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
 
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
@@ -325,7 +376,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 		tv_month_inside_icon.setText(month);
 		tv_date_inside_icon.setText(dateofmonth);
 		tv_seat_no.setText(getActivity().getResources().getString(R.string.txt_seat_nno)+ " "+
-		Constants.removeingprecingZero( bpass.getSeat()));
+				Constants.removeingprecingZero( bpass.getSeat()));
 		tv_flight_no.setText(getActivity().getResources().getString(R.string.txt_flight_no) + " "
 				+bpass.getCarrier()+ bpass.getFlight_no());
 		tv_start_time.setText(bpass.getDeparture());
