@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-     <string-array name="seat_class">
+
+    <string-array name="nav_item">
+        <item>Home</item>
+        <item>My Account</item>
+        <item>Past Flights</item>
+        <item>Seating Profile</item>
+        <item>Premium Account</item>
+    </string-array>
+    <string-array name="seat_class">
         <item>All Seatmates</item>
         <item>First Class</item>
         <item>Business Class</item>
@@ -14,7 +22,6 @@
         <item>SeatUnity</item>
         <item>My Account</item>
         <item>Past Boarding Passes</item>
-        
     </string-array>
     <string-array name="seating_pref">
         <item>Relax</item>

@@ -1,27 +1,114 @@
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
- 
+    android:layout_height="match_parent" >
+
     <!-- Framelayout to display Fragments -->
+
     <FrameLayout
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
-       
-      	android:layout_height="match_parent" />
- 
+        android:layout_height="match_parent" >
+    </FrameLayout>
+
     <!-- Listview to display slider menu -->
-   
-    <ListView
-        android:id="@+id/list_slidermenu"
+
+    <LinearLayout
+        android:id="@+id/re_slidermenu"
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"       
-        android:layout_weight="4"
-        android:listSelector="@drawable/list_selector"
-        android:background="@color/list_background"/>
+        android:orientation="vertical"
+        android:background="#FFFFFF" >
+
+        <RelativeLayout
+            android:id="@+id/re_top"
+            android:layout_width="match_parent"
+            android:layout_height="106dp"
+            android:background="#474854"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" >
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="07dp"
+                android:contentDescription="@string/desc_list_item_icon"
+                android:src="@drawable/ic_contact_picture" />
+
+            <LinearLayout
+                android:id="@+id/le_unameandemail_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/title"
+                android:layout_alignTop="@+id/icon"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/icon"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/icon"
+                    android:gravity="center_vertical"
+                    android:paddingRight="20dp"
+                    android:singleLine="true"
+                    android:text="Mahbub Sumon"
+                    android:textColor="#ffffff"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:singleLine="true"
+                    android:text="I would like to football"
+                   android:textColor="#ffffff"
+                    android:textSize="14dp" />
+                
+                  <ImageView
+        android:id="@+id/img_edit_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/status"
+        android:layout_gravity="right"
+        android:onClick="EditStatusFromNavigationDrawer"
+        android:layout_marginRight="6dp"
+        android:src="@drawable/ic_edit_my_profile" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:paddingRight="8dp"
+                android:text="sumoncse085@yahoo.com"
+                android:textColor="#ffffff"
+                android:textSize="23dp"
+                android:visibility="gone" />
+
+           
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/list_slidermenu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="0dp"
+            android:listSelector="@drawable/list_selector" />
+    </LinearLayout>
+
 </android.support.v4.widget.DrawerLayout>

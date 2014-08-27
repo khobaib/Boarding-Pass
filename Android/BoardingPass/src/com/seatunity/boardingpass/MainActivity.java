@@ -21,6 +21,7 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
@@ -38,6 +39,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -61,6 +63,7 @@ import com.seatunity.boardingpass.adapter.NavDrawerListAdapter;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.fragment.AccountListFragment;
+import com.seatunity.boardingpass.fragment.EditStatusHolder;
 import com.seatunity.boardingpass.fragment.FragmentGetBoardingPasseFromBackend;
 import com.seatunity.boardingpass.fragment.HomeListFragment;
 import com.seatunity.boardingpass.fragment.PastBoardingPassListFragment;
@@ -80,6 +83,7 @@ import com.touhiDroid.filepicker.FilePickerActivity;
 public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	private DrawerLayout mDrawerLayout;
 	public ListView mDrawerList;
+	LinearLayout re_slidermenu;
 	public TabFragment activeFragment;
 	public MenuItem delete_menu;
 	public MenuItem refreash_menu;
@@ -106,7 +110,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	int SCANBOARDINGPASSFROMSDCAdIMAGE_FIRST_ROATAION = 101;
 	int SCANBOARDINGPASSFROMSDCAdIMAGE_SECOND_ROATAION = 102;
 	int SCANBOARDINGPASSFROMSDCAdIMAGE_THIIRD_ROATAION = 10;
-
+	ImageView img_edit_profile;
 	int SCANBARCODEFROMPDF = 12;
 
 	/**
@@ -139,8 +143,6 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 				if (Constants.isImage(filepath)) {
 					Bitmap bitmap = BitmapFactory.decodeFile(filepath);
 					scanBarcodeFromImage(bitmap);
-					// Toast.makeText(MainActivity.this,
-					// "ab "+bitmap.getHeight(), 2000).show();
 				} else if (Constants.isPdf(filepath)) {
 					GetBoardingPassFromPDF(filepath);
 				} else if (Constants.isPkPass(filepath)) {
@@ -171,6 +173,8 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
+		re_slidermenu=(LinearLayout) findViewById(R.id.re_slidermenu);
+		img_edit_profile=(ImageView) findViewById(R.id.img_edit_profile);
 		navDrawerItems = new ArrayList<NavDrawerItem>();
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
@@ -198,7 +202,9 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		displayView(0);
 		// }
 
+		
 	}
+	
 
 	@Override
 	protected void onStop() {
@@ -230,6 +236,10 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Constants.SELECTEDPOSITION = position;
 			displayView(position);
+//			ImageView img_item_icon = (ImageView) view.findViewById(R.id.img_item_icon);
+//			TextView tv_item_name = (TextView) view.findViewById(R.id.tv_item_name);
+//			tv_item_name.setTextColor(Color.parseColor("#1C79BC"));
+			
 		}
 	}
 
@@ -277,7 +287,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
+	
 	/**
 	 * The method calls the intent to share the application with
 	 * {@link Intent.ACTION_SEND} flag & share-text as : <br>
@@ -361,8 +371,22 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 				setTitle(navMenuTitles[position]);
 			}
 
-			mDrawerLayout.closeDrawer(mDrawerList);
+			mDrawerLayout.closeDrawer(re_slidermenu);
 		}
+	}
+	
+	/**
+	 * The method will bring the screen to edit status 
+	*/
+	public void EditStatusFromNavigationDrawer(View view){
+		Fragment fragment=new EditStatusHolder();
+		if (fragment != null) {
+			FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack("" + "10")
+					.commit();
+			setTitle(getResources().getString(R.string.txt_status));
+		}
+		mDrawerLayout.closeDrawer(re_slidermenu);
 	}
 
 	@Override

@@ -1,83 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:background="@drawable/list_selector" >
+    android:layout_height="wrap_content"
+    android:background="#ffffff" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
-          <ImageView
-        android:id="@+id/icon"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="07dp"
-        android:contentDescription="@string/desc_list_item_icon"
-        android:src="@drawable/ic_contact_picture"
-        />
+        android:layout_height="60dp" >
 
-    <LinearLayout
-        android:id="@+id/le_unameandemail_holder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/title"
-        android:layout_alignTop="@+id/icon"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/icon"
-        android:orientation="vertical"
-         >
-
-        <TextView
-            android:id="@+id/user_name"
+        <ImageView
+            android:id="@+id/img_item_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/icon"
-            android:gravity="center_vertical"
-            android:textSize="23dp"
-            android:paddingRight="20dp"
-             android:singleLine="true"
-           android:text="Mahbub Sumon"
-            android:textStyle="bold"
-            android:textColor="#ffffff" />
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/home_icon1" />
 
         <TextView
-            android:id="@+id/email"
+            android:id="@+id/tv_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp"
-             android:textSize="12dp"
-             android:singleLine="true"
-              android:text="sumoncse085@yahoo.com"
-           android:textColor="#E9EBED" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="20dp"
-        android:gravity="center_vertical"
-        android:paddingRight="8dp"
-        android:textColor="#ffffff"
-          android:text="sumoncse085@yahoo.com"
-        android:textSize="23dp"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/img_edit_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/ic_edit_my_profile" />
-
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:layout_toRightOf="@+id/img_item_icon"
+            android:text="Home"
+            android:textColor="@drawable/listitem_textcolor_selector"
+            android:textSize="18dp" />
     </RelativeLayout>
 
 </RelativeLayout>

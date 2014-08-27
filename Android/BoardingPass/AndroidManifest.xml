@@ -79,6 +79,12 @@
              android:label="@string/app_name_seatunity" 
             android:theme="@style/HomeActivityTheme" >
         </activity>
+        
+            <activity
+            android:name="com.seatunity.boardingpass.LandingActivity"
+            android:label="@string/app_name_seatunity" 
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+             </activity>
         <activity
             android:name="com.seatunity.boardingpass.SplasActivity"
             android:label="@string/app_name_seatunity" 
@@ -87,7 +93,7 @@
                 <action android:name="android.intent.action.MAIN" />
 				 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+         </activity>
         <activity
             android:name="com.seatunity.boardingpass.UploadPicActivity"
             android:screenOrientation="portrait"

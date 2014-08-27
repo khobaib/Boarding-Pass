@@ -1,5 +1,6 @@
 package com.seatunity.boardingpass.adapter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.seatunity.boardingpass.EditUserNameActivity;
@@ -30,7 +31,7 @@ public class NavDrawerListAdapter extends BaseAdapter {
 	private Context context;
 	private ArrayList<String> item;
 	BoardingPassApplication appInstance;
-Activity activity;
+	Activity activity;
 
 	/**
 	 * The only constructor
@@ -40,10 +41,10 @@ Activity activity;
 	public NavDrawerListAdapter(Activity activity,Context context,BoardingPassApplication appInstance){
 		this.context = context;
 		this.appInstance=appInstance;
-		item=new ArrayList<String>();
-		item.add("1");
-		item.add("2");
-		item.add("3");
+
+		String[] class_list = context.getResources().getStringArray(R.array.nav_item);
+		item = new ArrayList<String>(Arrays.asList(class_list));
+
 		this.activity=activity;
 
 	}
@@ -73,68 +74,35 @@ Activity activity;
 			convertView = mInflater.inflate(R.layout.drawer_list_item, null);
 		}
 
-		ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);
-		TextView user_name = (TextView) convertView.findViewById(R.id.user_name);
-		TextView email = (TextView) convertView.findViewById(R.id.email);
-		LinearLayout le_unameandemail_holder=(LinearLayout) convertView.findViewById(R.id.le_unameandemail_holder);
-		TextView item = (TextView) convertView.findViewById(R.id.item);
-		ImageView img_edit_profile=(ImageView) convertView.findViewById(R.id.img_edit_profile);
+		ImageView img_item_icon = (ImageView) convertView.findViewById(R.id.img_item_icon);
+		TextView tv_item_name = (TextView) convertView.findViewById(R.id.tv_item_name);
+		tv_item_name.setText(item.get(position));
 
-		if(position==0){
-			item.setVisibility(View.GONE);
-			imgIcon.setVisibility(View.VISIBLE);
-			img_edit_profile.setVisibility(View.VISIBLE);
-			img_edit_profile.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Intent intent = new Intent(activity, EditUserNameActivity.class);
-					activity.startActivity(intent);
-				}
-			});
+		switch (position) {
+		case 0:
+			img_item_icon.setImageDrawable(context.getResources().getDrawable(R.drawable.home_pressed));
+			//img_item_icon.setBackgroundResource(R.drawable.home_presses);
+			break;
+		case 1:
+			img_item_icon.setImageDrawable(context.getResources().getDrawable(R.drawable.account_pressed));
 
-			le_unameandemail_holder.setVisibility(View.VISIBLE);
-			if(appInstance.getUserCred().getImage_url().equals("")){
-				imgIcon.setImageResource(R.drawable.ic_contact_picture);   
-			}
-			else{
-				ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url(), imgIcon);
+			break;
+		case 2:
+			img_item_icon.setImageDrawable(context.getResources().getDrawable(R.drawable.pastflight_pressed));
 
+			break;
+		case 3:
+			img_item_icon.setImageDrawable(context.getResources().getDrawable(R.drawable.seattingpref_pressed));
+			break;
+		case 4:
+			img_item_icon.setImageDrawable(context.getResources().getDrawable(R.drawable.premiar_pressed));
+			
 
-			}
-			if(appInstance.getUserCred().getEmail().equals("")){
-				email.setText(context.getResources().getText(R.string.txt_email_addess)); 
-			}
-			else{
-				email.setText(appInstance.getUserCred().getEmail()); 
-			}
-			if(appInstance.getUserCred().getFirstname().equals("")){
-				user_name.setText(context.getResources().getText(R.string.txt_user_name)); 
-				email.setText("Status");
-			}
-			else{
-				user_name.setText(appInstance.getUserCred().getFirstname()); 
-				email.setText(appInstance.getUserCred().getStatus());
-			}
+			break;
+
+		default:
+			break;
 		}
-		else{
-			img_edit_profile.setVisibility(View.GONE);
-			imgIcon.setVisibility(View.GONE);
-			le_unameandemail_holder.setVisibility(View.GONE);
-			item.setVisibility(View.VISIBLE);
-
-			if(position==1){
-				item.setText(context.getResources().getText(R.string.txt_myaccounts));
-			}
-			else{
-				item.setText(context.getResources().getText(R.string.txt_past_boarding_passes));
-
-			}
-
-		}
-
-
 		return convertView;
 	}
 

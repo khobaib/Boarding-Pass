@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff" >
+
+    <ImageView
+        android:id="@+id/img_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/seatunity_logo" />
+
+    <Button
+        android:id="@+id/btn_facebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/ab_rounded_facebook"
+        android:text="FaceBook"
+        android:onClick="signupWithFacebook"
+        android:textColor="#ffffff"
+        android:textSize="27dp" />
+
+    <Button
+        android:id="@+id/btn_google"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_facebook"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/ab_rounded_facebook"
+        android:text="Google"
+        android:onClick="signupWithGoogle"
+        android:textColor="#ffffff"
+        android:textSize="27dp" />
+
+    <Button
+        android:id="@+id/btn_linked_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_google"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/ab_rounded_facebook"
+        android:text="Linkedin"
+        android:onClick="signupWithLinkedin"
+        android:textColor="#ffffff"
+        android:textSize="27dp" />
+
+    <Button
+        android:id="@+id/btn_mail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_linked_in"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/ab_rounded_facebook"
+        android:text="Email"
+        android:onClick="signupWithEmail"
+        android:textColor="#ffffff"
+        android:textSize="27dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_mail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp" >
+
+        <TextView
+            android:id="@+id/tv_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Have an account?"
+            android:textColor="#777777" />
+
+        <TextView
+            android:id="@+id/tv_loggin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_account"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/tv_account"
+            android:text="Log in"
+            android:textColor="#000000"
+            android:textSize="21dp" />
+    </RelativeLayout>
+
+</RelativeLayout>
