@@ -21,12 +21,12 @@
         android:icon="@drawable/ic_action_overflow"
         android:showAsAction="always" tools:ignore="MenuTitle">
         <menu>
-            <item
-                android:id="@+id/share"
-                android:icon="@drawable/ic_share"
-                android:showAsAction="never"
+<!--             <item -->
+<!--                 android:id="@+id/share" -->
+<!--                 android:icon="@drawable/ic_share" -->
+<!--                 android:showAsAction="never" -->
                
-                android:title="@string/share"/>
+<!--                 android:title="@string/share"/> -->
             <item
                 android:id="@+id/refresh"
                 android:icon="@drawable/ic_action_refresh"

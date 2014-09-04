@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-             <string name="txt_failedto_add_boardingpasses">Please scan valid boarding passes</string>
-    
-     <string name="version">Version</string>
-      <string name="send_feedback">Send feedback</string>
-       <string name="tell_us">Tell us what you think</string>
-        <string name="report_problem">Report a problem</string>
-       <string name="let_know_bug">Let us know about bug or problem</string>
-       <string name="st_ubnity_bring">SeatUnity bring you closer to those who flight with you.</string>
-       <string name="rate_app">Rate application</string>
-      <string name="txt_exit_message">Do you want to exit?</string>
+
+    <string name="txt_failedto_add_boardingpasses">Please scan valid boarding passes</string>
+    <string name="version">Version</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="tell_us">Tell us what you think</string>
+    <string name="report_problem">Report a problem</string>
+    <string name="let_know_bug">Let us know about bug or problem</string>
+    <string name="st_ubnity_bring">SeatUnity bring you closer to those who flight with you.</string>
+    <string name="rate_app">Rate application</string>
+    <string name="txt_exit_message">Do you want to exit?</string>
     <string name="trms_of_servces">Terms of service</string>
     <string name="privcy_plcy">Privacy Policy</string>
-    
-     <string name="app_not_found">Unable to find market app</string>
-     <string name="share_via">Share Via</string>
+    <string name="app_not_found">Unable to find market app</string>
+    <string name="share_via">Share Via</string>
     <string name="share">Share App</string>
     <string name="refresh">Refresh</string>
- 	<string name="about">About</string>
- 	<string name="all_seatmate">ALL SEATMATES</string>
- 	
-     <string name="txt_noseatmate_isfound">No seatmate of </string>
-     <string name="txt_is_found">is found.</string>
+    <string name="about">About</string>
+    <string name="all_seatmate">ALL SEATMATES</string>
+    <string name="txt_noseatmate_isfound">No seatmate of </string>
+    <string name="txt_is_found">is found.</string>
     <string name="txt_no_shared_flight">There is no shared flight.</string>
-         <string name="txt_failed_to_get_seatmet">Failed to get seatmates list. Please try again</string>
+    <string name="txt_failed_to_get_seatmet">Failed to get seatmates list. Please try again</string>
     <string name="txt_live_in">Live in</string>
-     <string name="txt_prefer_to">Prefer to</string>
-     <string name="txt_message">Message.</string>
+    <string name="txt_prefer_to">Prefer to</string>
+    <string name="txt_message">Message.</string>
     <string name="txt_send_email">Please type message to send email</string>
-     <string name="txt_seatmet_message_only_online">The seatmates list is only vailable in the online mode</string>
+    <string name="txt_seatmet_message_only_online">The seatmates list is only vailable in the online mode</string>
     <string name="txt_getseatmate_failure">Failed to get seatmates. Pleasze try again</string>
     <string name="txt_emailsen_failure">No account accociated with this email. Please try again.</string>
     <string name="txt_emailsent_success">Email is sent successfully</string>
-<string name="txt_emailsen_success">Password is sent to your email. Please check your email</string>
+    <string name="txt_emailsen_success">Password is sent to your email. Please check your email</string>
     <string name="txt_delete_boarding_pass">Delete Boarding Pass</string>
     <string name="txt_send">Send Message</string>
     <string name="txt_delete_boarding_pass_text">Are you sure you want to delete boarding pass</string>
@@ -61,7 +59,7 @@
     <string name="txt_gender_rather_not_say">Rather not say</string>
     <string name="txt_sign_out_msz">Are you sure you want to sign out?</string>
     <string name="app_name_seatunity">Seat Unity</string>
-     <string name="txt_startscan_forboardingpass">Start scan for boarding pass</string>
+    <string name="txt_startscan_forboardingpass">Start scan for boarding pass</string>
     <string name="txt_select_country">Select country</string>
     <string name="txt_select_photo">Change profile image</string>
     <string name="txt_select_age">Select age</string>
@@ -100,7 +98,7 @@
     <string name="txt_email_senttomail">Email is successfully send to your address. You will get a confirmation mail soon. Please confirm the account.</string>
     <string name="txt_confirmtaion">You will get a confirmation mail soon. Please confirm the account....</string>
     <string name="txt_wrong_email">Wrong email or password. Please try again</string>
-     <string name="txt_no_pastbpass">No past boarding passes.</string>
+    <string name="txt_no_pastbpass">No past boarding passes.</string>
     <string name="txt_email_sent">Email is sent to your email account. Please activite your account from there</string>
     <string name="txt_signup_failed1">Sign up is failed. Please try again</string>
     <string name="txt_login_failed">Log-in failed. Please try again</string>
@@ -134,7 +132,7 @@
     <string name="txt_register">Register</string>
     <string name="txt_register_msz">By registering, you acknowledge that you have read and agreed to the SeatUnit</string>
     <string name="txt_term_off_condition">Terms of Conditions</string>
-     <string name="txt_term_and_condition">Terms and Conditions</string>
+    <string name="txt_term_and_condition">Terms and Conditions</string>
     <string name="txt_password">Password</string>
     <string name="txt_login">Login</string>
     <string name="txt_forgot_pass">Forgot Password?</string>
@@ -276,7 +274,7 @@
     <string name="wifi_changing_network">Requesting connection to network\u2026</string>
     <string name="wifi_ssid_label">Network Name</string>
     <string name="wifi_type_label">Type</string>
-     <string name="lorem_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tincidunt elit elit, quis interdum mauris vehicula ac. Vestibulum et felis volutpat, tincidunt elit et, vehicula nunc. Nullam cursus viverra nulla vel malesuada. Ut tortor risus, egestas at dolor sit amet, pharetra faucibus tortor. Morbi mauris dui, condimentum nec fringilla nec, congue vitae dolor. Quisque dictum libero ac velit pharetra venenatis. Etiam non massa aliquet, facilisis magna ut, convallis leo. Pellentesque eu iaculis nibh. Maecenas aliquet, elit at viverra sagittis, massa augue eleifend eros, eget tempus mauris nibh quis neque. Nulla et ligula hendrerit, pulvinar felis nec, pulvinar metus. Pellentesque venenatis neque eu sem aliquet posuere. Quisque in vehicula dui, vel ultrices massa.
+    <string name="lorem_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tincidunt elit elit, quis interdum mauris vehicula ac. Vestibulum et felis volutpat, tincidunt elit et, vehicula nunc. Nullam cursus viverra nulla vel malesuada. Ut tortor risus, egestas at dolor sit amet, pharetra faucibus tortor. Morbi mauris dui, condimentum nec fringilla nec, congue vitae dolor. Quisque dictum libero ac velit pharetra venenatis. Etiam non massa aliquet, facilisis magna ut, convallis leo. Pellentesque eu iaculis nibh. Maecenas aliquet, elit at viverra sagittis, massa augue eleifend eros, eget tempus mauris nibh quis neque. Nulla et ligula hendrerit, pulvinar felis nec, pulvinar metus. Pellentesque venenatis neque eu sem aliquet posuere. Quisque in vehicula dui, vel ultrices massa.
 
 Proin nec tortor ac enim commodo gravida a a dolor. Praesent sed ipsum mi. Nam adipiscing eget turpis ut viverra. Cras ut auctor metus. Vivamus vehicula, ligula sed pharetra molestie, massa libero malesuada est, nec semper arcu nibh vel felis. Curabitur porta justo ac purus condimentum semper nec vel dolor. Suspendisse massa dui, lacinia nec aliquet a, eleifend vitae velit. Suspendisse pulvinar ante justo.
 
@@ -285,5 +283,7 @@ Nullam volutpat elementum tellus, ac rutrum nulla ultrices sit amet. Etiam iacul
 Nullam vel adipiscing odio. Integer risus lectus, scelerisque eget varius et, accumsan eget est. Ut eget fringilla ipsum. Vivamus tempus odio ut elementum suscipit. Phasellus facilisis pellentesque mollis. Nunc convallis aliquam sagittis. Sed quis condimentum risus. Quisque gravida lectus orci, in pulvinar magna consectetur quis. Nunc nibh turpis, placerat quis mattis sit amet, convallis porta turpis. Suspendisse malesuada odio eu porttitor molestie. Aliquam ligula justo, varius id odio at, tincidunt malesuada felis. Suspendisse vulputate rutrum ullamcorper. Duis arcu mauris, fermentum a fringilla sed, vulputate id massa.
 
 Vivamus ultrices massa lacus, nec euismod ligula tempus cursus. Pellentesque tincidunt porta velit, in fermentum mi eleifend vel. Praesent sed erat eget dolor ultrices fringilla vel eu orci. Aenean cursus ipsum ut mi mollis, non viverra eros vestibulum. Donec eget tortor id felis tristique auctor. Pellentesque hendrerit vulputate sem, a lacinia nibh elementum id. Mauris varius ultricies nunc, quis ultricies ligula hendrerit id. Pellentesque sed eros at nisl dictum varius. Mauris lorem lorem, consectetur sit amet lobortis sit amet, hendrerit a tortor. Ut at leo venenatis, viverra turpis a, euismod justo. Integer eleifend libero non lectus interdum hendrerit. Aliquam pharetra malesuada lacus, non ornare tortor vehicula rhoncus. Aenean ligula sem, varius ut ipsum ac, consectetur aliquam nisi. Praesent pellentesque blandit egestas. Nunc hendrerit viverra magna hendrerit feugiat. Aliquam vitae sodales augue.</string>
+    <string name="outline_title">Outline</string>
+    <string name="print">Print</string>
 
 </resources>

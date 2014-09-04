@@ -149,8 +149,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 						JSONObject job = new JSONObject(boardingpass);
 						saveScannedBoardingPasstodatabes(job.getString("message"), job.getString("format"));
 					} catch (JSONException e) {
-						Toast.makeText(MainActivity.this,
-								getResources().getString(R.string.txt_invalid_borading_pass),
+						Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_invalid_borading_pass),
 								Toast.LENGTH_SHORT).show();
 					}
 				}
@@ -177,7 +176,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
 		navMenuIcons.recycle();
 		mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
-		adapter = new NavDrawerListAdapter(MainActivity.this,getApplicationContext(), appInstance);
+		adapter = new NavDrawerListAdapter(MainActivity.this, getApplicationContext(), appInstance);
 		mDrawerList.setAdapter(adapter);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_navigation_drawer_closed,
@@ -259,11 +258,11 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 			// openSearch();
 			// item.setVisible(false);
 			return true;
-		case R.id.share:
+			// case R.id.share:
 			// openSearch();
 			// item.setVisible(false);
-			shareApp();
-			return true;
+			// shareApp();
+			// return true;
 		case R.id.about:
 			if (lastselectedposition == 0) {
 				fragHome.startFragmentAbout();

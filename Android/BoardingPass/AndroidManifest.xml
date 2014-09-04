@@ -12,7 +12,7 @@
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
- limitations under the License.
+ limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -22,7 +22,8 @@
     android:versionName="4.5.1" >
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
-	<uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -32,7 +33,7 @@
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="19" tools:ignore="OldTargetApi"/>
 
     <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
     <uses-feature
@@ -45,7 +46,9 @@
     <!-- <uses-feature android:name="android.hardware.camera.any"/> -->
     <uses-feature
         android:name="android.hardware.camera.autofocus"
-        android:required="false" />
+        android:required="false"
+        tools:ignore="DuplicateUsesFeature" />
+
     <uses-feature
         android:name="android.hardware.camera.flash"
         android:required="false" />
@@ -72,20 +75,21 @@
         android:label="@string/app_name_seatunity" >
         <activity
             android:name="com.touhiDroid.filepicker.FilePickerActivity"
-             android:label="@string/app_name_seatunity" >
+            android:label="@string/app_name_seatunity" >
         </activity>
         <activity
             android:name="com.seatunity.boardingpass.ActingAsHookActivity"
-             android:label="@string/app_name_seatunity" 
+            android:label="@string/app_name_seatunity"
             android:theme="@style/HomeActivityTheme" >
         </activity>
         <activity
             android:name="com.seatunity.boardingpass.SplasActivity"
-            android:label="@string/app_name_seatunity" 
+            android:label="@string/app_name_seatunity"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-				 <category android:name="android.intent.category.LAUNCHER" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -101,15 +105,14 @@
         <activity
             android:name="com.seatunity.boardingpass.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/HomeActivityTheme"
-             >
+            android:theme="@style/HomeActivityTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<data android:mimeType="*/*" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="*/*" />
             </intent-filter>
-            
-            
         </activity>
         <activity
             android:name="com.seatunity.boardingpass.ForgotPassActivity"
@@ -130,12 +133,14 @@
             android:name="com.seatunity.boardingpass.TermAndConditionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/HomeActivityTheme" >
-             <intent-filter>
-        <data android:scheme="startActivityFromLink" />
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <category android:name="android.intent.category.DEFAULT" />
-    </intent-filter>
+            <intent-filter>
+                <data android:scheme="startActivityFromLink" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.seatunity.boardingpass.AcountActivity"
@@ -173,7 +178,7 @@
         </activity>
         <activity
             android:name="com.artifex.mupdfdemo.MuPDFActivity"
-              android:label="@string/app_name_seatunity" 
+            android:label="@string/app_name_seatunity"
             android:theme="@style/AppBaseTheme" >
         </activity>
         <activity
