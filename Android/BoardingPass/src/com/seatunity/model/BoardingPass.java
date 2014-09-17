@@ -1,5 +1,7 @@
 package com.seatunity.model;
 
+import java.io.Serializable;
+
 /**
  * The model to hold the BoardingPass object sent from the API as JSON formatted
  * as below: <br>
@@ -28,7 +30,11 @@ package com.seatunity.model;
  * @author Sumon
  * 
  */
-public class BoardingPass {
+public class BoardingPass implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5141578146062991340L;
 	String stringform, firstname, lastname, PNR, travel_from, travel_to, carrier, flight_no, julian_date,
 			compartment_code, seat, departure, arrival, codetype, travel_from_name, travel_to_name, carrier_name,
 			travel_class = "";

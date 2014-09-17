@@ -199,7 +199,7 @@ public class HomeListFragment extends TabFragment {
 	 * 
 	 * @param bpass
 	 */
-	public void startUpCommingBoadingDetails(BoardingPass bpass) {
+	public void startUpCommingBoardingDetails(BoardingPass bpass) {
 		Log.e("insideList", bpass.getTravel_from_name());
 		FragmentUpcomingBoardingPassDetails newFragment = new FragmentUpcomingBoardingPassDetails(bpass);
 		newFragment.parent = this;
@@ -312,7 +312,7 @@ public class HomeListFragment extends TabFragment {
 				.getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
 		TextView tvtitle = (TextView) customTitleView.findViewById(R.id.tv_title);
-		tvtitle.setText(getActivity().getString(R.string.app_name));
+		tvtitle.setText(getActivity().getString(R.string.app_name_seatunity));
 		d.setCustomTitle(customTitleView);
 		d.setOnShowListener(new DialogInterface.OnShowListener() {
 			@Override

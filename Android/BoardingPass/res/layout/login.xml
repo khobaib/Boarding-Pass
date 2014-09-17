@@ -1,71 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:orientation="vertical" >
-    <TextView 
-        android:id="@+id/tv_errorshow"
-         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="50dp"
-        android:padding="10dp"
-        android:ems="10"
-        android:visibility="gone"
-        android:text="@string/txt_wrong_email"
-        android:background="@drawable/rounded_button_loginfailure"
-        android:textColor="#777777"
-        />
+    android:fillViewport="true" >
 
-    <EditText
-        android:id="@+id/et_email"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="120dp"
-        android:ems="10"
-        android:hint="@string/txt_email" >
+        android:background="#ffffff"
+        android:orientation="vertical" >
 
-        <requestFocus />
-    </EditText>
+        <TextView
+            android:id="@+id/tv_errorshow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rounded_button_loginfailure"
+            android:ems="10"
+            android:padding="10dp"
+            android:text="@string/txt_wrong_email"
+            android:textColor="#777777"
+            android:visibility="gone" />
 
-    <EditText
-        android:id="@+id/et_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/et_email"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:inputType="textPassword"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:hint="@string/txt_password" >
-    </EditText>
-	 <Button
-        android:id="@+id/bt_login"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_below="@+id/et_password"
-       android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="15dp"
-        android:textSize="23dp"
-        android:background="@drawable/rounded_button"
-        android:textColor="#ffffff"
-        android:text="@string/txt_login" />
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="120dp"
+            android:ems="10"
+            android:hint="@string/txt_email"
+            android:inputType="textEmailAddress" >
 
-    <TextView
-        android:id="@+id/tv_forgot_pass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bt_login"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-         android:textColor="#0099cc"
-          android:textSize="23dp"
-         android:text="@string/txt_forgot_pass" />
+            <requestFocus />
+        </EditText>
 
-</RelativeLayout>
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_email"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:ems="10"
+            android:hint="@string/txt_password"
+            android:inputType="textPassword" >
+        </EditText>
+
+        <Button
+            android:id="@+id/bt_login"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/et_password"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/txt_login"
+            android:textColor="#ffffff"
+            android:textSize="23sp" />
+
+        <TextView
+            android:id="@+id/tv_forgot_pass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bt_login"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/txt_forgot_pass"
+            android:textColor="#0099cc"
+            android:textSize="23sp" />
+    </RelativeLayout>
+
+</ScrollView>

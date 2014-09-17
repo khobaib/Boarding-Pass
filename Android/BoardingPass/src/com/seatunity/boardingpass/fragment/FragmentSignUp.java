@@ -22,9 +22,12 @@ import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
@@ -32,7 +35,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 import android.widget.Toast;
@@ -54,20 +56,22 @@ import com.seatunity.boardingpass.utilty.MyCustomSpannable;
  */
 @SuppressLint("NewApi")
 public class FragmentSignUp extends Fragment implements CallBackApiCall {
-	TextView tv_signup_message, tv_sign_message;
-	EditText et_email, et_password, et_confirm_password, et_first_name, et_last_name, et_livein, et_profession,
+	private final String TAG = this.getClass().getSimpleName();
+	// private TextView tv_signup_message;
+	private TextView tv_sign_message;
+	private EditText et_email, et_password, et_confirm_password, et_first_name, et_last_name, et_livein, et_profession,
 			et_seatting_pref, et_age;
-	Button bt_register;
+	private Button bt_register;
 	String email = "", gender, password = "", confirmpassword = "", firstname = "", lastname = "", livein = "",
 			age = "", profession = "", seating = "";
-	RadioGroup rdgrp_gender;
-	int SEATING_PREF = 0;
-	int AGE = 1;
-	int LIVE_IN = 2;
-	MyCustomSpannable customSpannable;
-	RadioButton radio_male, radio_female, radio_not_say;
-	ArrayList<String> agelist = new ArrayList<String>();
-	String[] NoCore_Array = new String[5];
+	private RadioGroup rdgrp_gender;
+	private int SEATING_PREF = 0;
+	private int AGE = 1;
+	// private int LIVE_IN = 2;
+	private MyCustomSpannable customSpannable;
+	private RadioButton radio_male, radio_female, radio_not_say;
+	private ArrayList<String> agelist = new ArrayList<String>();
+	private String[] NoCore_Array = new String[5];
 	{
 		NoCore_Array[0] = "1";
 		NoCore_Array[1] = "2";
@@ -91,9 +95,7 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 		agelist.add("100 <");
 		for (int i = 0; i < agelist.size(); i++) {
 			Log.i("" + i, agelist.get(i));
-
 		}
-
 	}
 
 	/**
@@ -101,18 +103,27 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 	 * successfully sent
 	 */
 	public void showCustomDialog() {
+		Log.d(TAG, "Sign up OK dialog");
 		final Dialog dialog = new Dialog(getActivity());
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.custom_dilog);
-		RelativeLayout re_ok = (RelativeLayout) dialog.findViewById(R.id.re_ok);
-		re_ok.setOnClickListener(new OnClickListener() {
+		Button btnOK = (Button) dialog.findViewById(R.id.ok);
+		btnOK.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
-				dialog.cancel();
-
+				Log.d(TAG, "Sign up OK dialog : on-click");
+				dialog.dismiss();
+				if (dialog.isShowing())
+					dialog.cancel();
 			}
 		});
+
+		Window window = dialog.getWindow();
+		WindowManager.LayoutParams wlp = window.getAttributes();
+
+		wlp.gravity = Gravity.CENTER;
+		wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+		window.setAttributes(wlp);
 		dialog.show();
 	}
 
@@ -120,7 +131,6 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.signup, container, false);
 		rdgrp_gender = (RadioGroup) v.findViewById(R.id.rdgrp_gender);
-
 		initview(v);
 		return v;
 	}
@@ -133,7 +143,8 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 	 */
 	public void initview(ViewGroup v) {
 		bt_register = (Button) v.findViewById(R.id.bt_register);
-		tv_signup_message = (TextView) v.findViewById(R.id.tv_signup_message);
+		// tv_signup_message = (TextView)
+		// v.findViewById(R.id.tv_signup_message);
 		tv_sign_message = (TextView) v.findViewById(R.id.tv_sign_message);
 		et_email = (EditText) v.findViewById(R.id.et_email);
 		et_password = (EditText) v.findViewById(R.id.et_password);
@@ -150,31 +161,47 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 		radio_female.setTextColor(Color.parseColor("#FFFFFF"));
 		radio_male.setTextColor(Color.parseColor("#000000"));
 		radio_not_say.setTextColor(Color.parseColor("#000000"));
-		et_seatting_pref.setOnClickListener(new OnClickListener() {
 
+		et_seatting_pref.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					String[] seating_pref_list = getActivity().getResources().getStringArray(R.array.seating_pref);
+					String title = getActivity().getResources().getString(R.string.txt_seatting_pref_cap);
+					showDialogForSeatingPref(seating_pref_list, title, SEATING_PREF);
+				}
+			}
+		});
+		et_seatting_pref.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				String[] seating_pref_list = getActivity().getResources().getStringArray(R.array.seating_pref);
 				String title = getActivity().getResources().getString(R.string.txt_seatting_pref_cap);
 				showDialogForSeatingPref(seating_pref_list, title, SEATING_PREF);
 			}
 		});
 		et_age.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
 				showDialogForSeatingPref(agelist.toArray(new CharSequence[agelist.size()]), getActivity()
 						.getResources().getString(R.string.txt_age), AGE);
-
 			}
 		});
-		String text1 = "By registering, you acknowledge that you have read and agreed to the SeatUnity Terms of Conditions";
+		et_age.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					showDialogForSeatingPref(agelist.toArray(new CharSequence[agelist.size()]), getActivity()
+							.getResources().getString(R.string.txt_age), AGE);
+				}
+			}
+		});
+		String text1 = "By registering, you acknowledge that you have read "
+				+ "and agreed to the SeatUnity Terms of Conditions";
 		int i = text1.indexOf("Terms of Conditions");
 		Log.e("size", i + "  " + text1.length());
-		String text = "<font color=#000000>By registering, you acknowledge that you have read and agreed to the SeatUnit</font>"
+		String text = "<font color=#000000>By registering, you acknowledge "
+				+ "that you have read and agreed to the SeatUnit</font>"
 				+ " <font color=#0099cc>Terms of Conditions</font>";
 		// tv_sign_message.setText(Html.fromHtml(text));
 		Log.e("size", i + "  " + text1.length());
@@ -194,11 +221,8 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 		tv_sign_message.setMovementMethod(LinkMovementMethod.getInstance());
 
 		bt_register.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-
-				// TODO Auto-generated method stub
 				// email,password,confirmpassword,firstname,lastname,livein,age,profession,seating
 				email = et_email.getText().toString();
 				password = et_password.getText().toString();
@@ -213,18 +237,14 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 					@Override
 					public void onTextChanged(CharSequence s, int start, int before, int count) {
 						et_email.setBackgroundResource(android.R.drawable.editbox_background_normal);
-
 					}
 
 					@Override
 					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-						// TODO Auto-generated method stub
 					}
 
 					@Override
 					public void afterTextChanged(Editable s) {
-						// TODO Auto-generated method stub
-
 					}
 				});
 
@@ -232,18 +252,14 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 					@Override
 					public void onTextChanged(CharSequence s, int start, int before, int count) {
 						et_password.setBackgroundResource(android.R.drawable.editbox_background_normal);
-
 					}
 
 					@Override
 					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-						// TODO Auto-generated method stub
 					}
 
 					@Override
 					public void afterTextChanged(Editable s) {
-						// TODO Auto-generated method stub
-
 					}
 				});
 
@@ -273,10 +289,8 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 		});
 		// setcity();
 		rdgrp_gender.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				// TODO Auto-generated method stub
 				switch (checkedId) {
 				case R.id.radio_female:
 					radio_female.setTextColor(Color.parseColor("#FFFFFF"));
@@ -379,14 +393,13 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 			loginObj.put("seating_pref", seating);
 			return loginObj.toString();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "";
 	}
 
 	/**
-	 * Shows a custom dialog saying the response is OK.
+	 * Shows a custom dialog providing the user a list of items to choose.
 	 * 
 	 * @param items
 	 * @param title
@@ -409,7 +422,23 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 					}
 				});
 
-		builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+		// G
+		String prevText = "";
+		if (type == AGE)
+			prevText = et_age.getText().toString();
+		else
+			prevText = et_seatting_pref.getText().toString();
+		int checkedItem = -1;
+		if (!prevText.equals(null) && prevText.length() > 0)
+			for (int i = 0; i < items.length; i++) {
+				Log.d("List of :" + ((type == AGE) ? "AGE" : "Seating"), "prev text: " + prevText + ", item: "
+						+ items[i]);
+				if (prevText.equalsIgnoreCase((String) items[i])) {
+					checkedItem = i;
+					break;
+				}
+			}
+		builder.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

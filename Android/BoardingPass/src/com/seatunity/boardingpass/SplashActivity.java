@@ -16,11 +16,12 @@ import com.seatunity.boardingpass.utilty.Constants;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
-public class SplasActivity extends Activity {
+public class SplashActivity extends Activity {
+	@SuppressWarnings("unused")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		BugSenseHandler.initAndStartSession(SplasActivity.this, "2b60c090");
+		BugSenseHandler.initAndStartSession(SplashActivity.this, "2b60c090");
 		setContentView(R.layout.splash);
 
 		File directory = Constants.APP_DIRECTORY;
@@ -28,17 +29,17 @@ public class SplasActivity extends Activity {
 		handler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				Intent intent = new Intent(SplasActivity.this, MainActivity.class);
+				Intent intent = new Intent(SplashActivity.this, MainActivity.class);
 				startActivity(intent);
 				finish();
 			}
-		}, 4000);
+		}, 1000);
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		BugSenseHandler.closeSession(SplasActivity.this);
+		BugSenseHandler.closeSession(SplashActivity.this);
 	}
 
 	@Override

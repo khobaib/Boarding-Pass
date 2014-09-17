@@ -28,6 +28,8 @@ public class BoardingPassParser {
 		String num_of_leg_enoced = boarding_key.substring(1, 2);
 		String name = boarding_key.substring(2, 21);
 		String[] nameParts = name.split("/");
+		if (nameParts.length <= 0)
+			return;// Barcode in invalid boarding-pass format is received
 		lastname = nameParts[0];
 		firstname = nameParts[1];
 		if (firstname.contains("MR")) {

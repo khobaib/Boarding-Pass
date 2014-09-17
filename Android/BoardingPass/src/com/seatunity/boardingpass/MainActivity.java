@@ -139,8 +139,6 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 				if (Constants.isImage(filepath)) {
 					Bitmap bitmap = BitmapFactory.decodeFile(filepath);
 					scanBarcodeFromImage(bitmap);
-					// Toast.makeText(MainActivity.this,
-					// "ab "+bitmap.getHeight(), 2000).show();
 				} else if (Constants.isPdf(filepath)) {
 					GetBoardingPassFromPDF(filepath);
 				} else if (Constants.isPkPass(filepath)) {

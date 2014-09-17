@@ -26,7 +26,7 @@
     <string name="txt_prefer_to">Prefer to</string>
     <string name="txt_message">Message.</string>
     <string name="txt_send_email">Please type message to send email</string>
-    <string name="txt_seatmet_message_only_online">The seatmates list is only vailable in the online mode</string>
+    <string name="txt_seatmet_message_only_online">The seatmates list is only available in the online mode</string>
     <string name="txt_getseatmate_failure">Failed to get seatmates. Pleasze try again</string>
     <string name="txt_emailsen_failure">No account accociated with this email. Please try again.</string>
     <string name="txt_emailsent_success">Email is sent successfully</string>
@@ -58,7 +58,7 @@
     <string name="txt_confirm">Confirm</string>
     <string name="txt_gender_rather_not_say">Rather not say</string>
     <string name="txt_sign_out_msz">Are you sure you want to sign out?</string>
-    <string name="app_name_seatunity">Seat Unity</string>
+    <string name="app_name_seatunity">SeatUnity</string>
     <string name="txt_startscan_forboardingpass">Start scan for boarding pass</string>
     <string name="txt_select_country">Select country</string>
     <string name="txt_select_photo">Change profile image</string>

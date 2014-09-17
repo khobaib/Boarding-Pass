@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff" >
@@ -10,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"
-        android:src="@drawable/seatunity_logo" />
+        android:src="@drawable/seatunity_logo"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/tv_message"
@@ -18,12 +20,12 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/et_email"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
         android:text="@string/txt_enter_email_address"
         android:textColor="#2D3E50"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
     <EditText
@@ -34,28 +36,28 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/rounded_email_forgot_pass"
+        android:padding="5dp"
         android:ems="10"
         android:hint="@string/txt_email"
         android:paddingLeft="5dp"
-        android:textColor="#ffffff"
-        android:textSize="25dp" >
+        android:textSize="25sp"
+        tools:ignore="TextFields" >
 
         <requestFocus />
     </EditText>
 
     <Button
         android:id="@+id/btn_send"
-        android:onClick="ForgotPassBtnClicked"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_below="@+id/et_email"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:textSize="24dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/rounded_seatmate_button"
+        android:onClick="ForgotPassBtnClicked"
         android:text="@string/txt_send"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:textSize="24sp" />
 
 </RelativeLayout>

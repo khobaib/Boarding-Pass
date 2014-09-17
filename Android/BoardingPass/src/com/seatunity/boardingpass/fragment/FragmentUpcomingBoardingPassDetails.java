@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,8 +16,11 @@ import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -59,7 +63,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	int callfrom = 0;
 	Context context;
 	MainActivity landingActivity;
-	BoardingPass boardingPass;
+	// BoardingPass boardingPass;
 	TextView tv_name_carrier, tv_month_inside_icon, tv_date_inside_icon, tv_from_air, tv_to_air, tv_start_time,
 			tv_arrival_time, tv_flight_var, tv_seat_var, tv_compartment_class_var, tv_passenger_name, tv_from, tv_to;
 
@@ -70,7 +74,6 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		if (getActivity() != null) {
 			landingActivity = (MainActivity) getActivity();
@@ -107,10 +110,10 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		tv_to_air.setText(bpass.getTravel_to());
 		tv_start_time.setText(bpass.getDeparture());
 		tv_arrival_time.setText(bpass.getArrival());
-		tv_flight_var.setText(bpass.getCarrier()+bpass.getFlight_no());
+		tv_flight_var.setText(bpass.getCarrier() + bpass.getFlight_no());
 		tv_seat_var.setText(Constants.removeingprecingZero(bpass.getSeat()));
 		tv_compartment_class_var.setText(bpass.getTravel_class());
-		tv_passenger_name.setText(bpass.getFirstname());
+		tv_passenger_name.setText(bpass.getFirstname().trim() + " " + bpass.getLastname().trim());
 		String date = com.seatunity.boardingpass.utilty.Constants
 				.getDayandYear(Integer.parseInt(bpass.getJulian_date()));
 		String[] dateParts = date.split(":");
@@ -123,8 +126,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		btn_seatmate.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
+			public void onClick(View v) {
 				if ((Constants.isOnline(getActivity())) && (!appInstance.getUserCred().getEmail().equals(""))) {
 					callSeatmet();
 				} else {
@@ -230,7 +232,6 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		appInstance = (BoardingPassApplication) getActivity().getApplication();
 		context = getActivity();
@@ -305,11 +306,11 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	 * After confirmation from the user, this method deletes any boarding pass
 	 * even from the server(if net is on).
 	 */
+	@SuppressLint("InflateParams")
 	public void deleteBoardingPass() {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-		LayoutInflater inflater = (LayoutInflater) getActivity()
-				.getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
-		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View customTitleView = inflater.inflate(R.layout.custom_title_view, null, false);
 		TextView title = (TextView) customTitleView.findViewById(R.id.tv_title);
 		title.setText(R.string.txt_delete_boarding_pass);
 		alertDialogBuilder.setCustomTitle(customTitleView);
@@ -391,7 +392,6 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 			loginObj.put("token", appInstance.getUserCred().getToken());
 			return loginObj.toString();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "";
@@ -410,6 +410,8 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 					this.list = seatmet_listlist;
 					if (list.getAllSeatmateList().size() > 0) {
 						parent.startSeatmetList(list, bpass);
+					} else {
+						showNoSeatmateDialog();
 					}
 
 				}
@@ -420,6 +422,32 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 			e.printStackTrace();
 		}
 
+	}
+
+	private void showNoSeatmateDialog() {
+		// Log.d(TAG, "Sign up OK dialog");
+		final Dialog dialog = new Dialog(getActivity());
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.custom_dilog);
+		Button btnOK = (Button) dialog.findViewById(R.id.ok);
+		TextView tv = (TextView) dialog.findViewById(R.id.tv_success);
+		tv.setText("No seatmate is found with this boarding-pass!");
+		btnOK.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Log.d(TAG, "Sign up OK dialog : on-click");
+				dialog.dismiss();
+				if (dialog.isShowing())
+					dialog.cancel();
+			}
+		});
+		Window window = dialog.getWindow();
+		WindowManager.LayoutParams wlp = window.getAttributes();
+
+		wlp.gravity = Gravity.CENTER;
+		wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+		window.setAttributes(wlp);
+		dialog.show();
 	}
 
 	@Override

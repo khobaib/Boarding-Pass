@@ -12,7 +12,7 @@
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
- limitations under the License.
+ limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,41 +21,37 @@
     android:versionCode="94"
     android:versionName="4.5.1" >
 
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> -->
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="19" tools:ignore="OldTargetApi"/>
+        android:targetSdkVersion="19"
+        tools:ignore="OldTargetApi" />
 
     <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera.front"
-        android:required="false" />
+    <!-- <uses-feature -->
+    <!-- android:name="android.hardware.camera" -->
+    <!-- android:required="false" /> -->
+    <!-- <uses-feature -->
+    <!-- android:name="android.hardware.camera.front" -->
+    <!-- android:required="false" /> -->
     <!-- TODO replace above two with next line after Android 4.2 -->
     <!-- <uses-feature android:name="android.hardware.camera.any"/> -->
-    <uses-feature
-        android:name="android.hardware.camera.autofocus"
-        android:required="false"
-        tools:ignore="DuplicateUsesFeature" />
+    <!-- <uses-feature -->
+    <!-- android:name="android.hardware.camera.autofocus" -->
+    <!-- android:required="false" -->
+    <!-- tools:ignore="DuplicateUsesFeature" /> -->
 
-    <uses-feature
-        android:name="android.hardware.camera.flash"
-        android:required="false" />
+    <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.screen.landscape" />
-    <uses-feature
-        android:name="android.hardware.wifi"
-        android:required="false" />
+    <!-- <uses-feature -->
+    <!-- android:name="android.hardware.wifi" -->
+    <!-- android:required="false" /> -->
     <!-- This excludes Google TV, which is unfortunately included by virtue of not requiring a camera -->
     <uses-feature android:name="android.hardware.touchscreen" />
     <!-- TODO make this not required again after android.hardware.camera.any is available -->
@@ -70,20 +66,20 @@
     <application
         android:name="com.seatunity.boardingpass.utilty.BoardingPassApplication"
         android:allowBackup="true"
-        android:configChanges="orientation"
+        android:configChanges="orientation|keyboard"
         android:icon="@drawable/ic_home"
         android:label="@string/app_name_seatunity" >
         <activity
             android:name="com.touhiDroid.filepicker.FilePickerActivity"
             android:label="@string/app_name_seatunity" >
         </activity>
+        <!-- <activity -->
+        <!-- android:name="com.seatunity.boardingpass.ActingAsHookActivity" -->
+        <!-- android:label="@string/app_name_seatunity" -->
+        <!-- android:theme="@style/HomeActivityTheme" > -->
+        <!-- </activity> -->
         <activity
-            android:name="com.seatunity.boardingpass.ActingAsHookActivity"
-            android:label="@string/app_name_seatunity"
-            android:theme="@style/HomeActivityTheme" >
-        </activity>
-        <activity
-            android:name="com.seatunity.boardingpass.SplasActivity"
+            android:name="com.seatunity.boardingpass.SplashActivity"
             android:label="@string/app_name_seatunity"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
@@ -91,11 +87,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.seatunity.boardingpass.UploadPicActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HomeActivityTheme" >
         </activity>
         <activity
             android:name="com.seatunity.boardingpass.EditUserNameActivity"
@@ -124,11 +115,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/HomeActivityTheme" >
         </activity>
-        <activity
-            android:name="com.seatunity.boardingpass.HomeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/HomeActivityTheme" >
-        </activity>
+        <!-- <activity -->
+        <!-- android:name="com.seatunity.boardingpass.HomeActivity" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:theme="@style/HomeActivityTheme" > -->
+        <!-- </activity> -->
+
         <activity
             android:name="com.seatunity.boardingpass.TermAndConditionActivity"
             android:screenOrientation="portrait"

@@ -17,12 +17,11 @@ import com.seatunity.boardingpass.networkstatetracker.SyncLocalDbtoBackend;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
-import com.seatunity.model.BoardingPassList;
 import com.seatunity.model.ServerResponse;
 
 /**
- * The mammoth {@link AsyncTask} to handle all the asynchronous operations inside
- * the app, esp. the user-driven operations.
+ * The mammoth {@link AsyncTask} to handle all the asynchronous operations
+ * inside the app, esp. the user-driven operations.
  * 
  * @author Sumon
  * 
@@ -57,8 +56,8 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	public AsyncaTaskApiCall(CallBackApiCall CaBLisenar, String body, Context context, String addedurl,
 			int requestType, boolean redundantLoginState) {
 		this.body = body;
-		this.appInstance = appInstance;
-		this.myaccounturl = myaccounturl;
+		// this.appInstance = appInstance;
+		// this.myaccounturl = myaccounturl;
 		this.context = context;
 		this.addedurl = addedurl;
 		this.CaBLisenar = CaBLisenar;
@@ -84,7 +83,7 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 		this.bpass = bpass;
 		this.deletelisenarfromnetstate = deletelisenarfromnetstate;
 		this.body = body;
-		this.appInstance = appInstance;
+//		this.appInstance = appInstance;
 		this.myaccounturl = myaccounturl;
 		this.context = context;
 		jsonParser = new JsonParser();
@@ -100,8 +99,8 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	 */
 	public AsyncaTaskApiCall(CallBackApiCall CaBLisenar, String body, Context context, String addedurl, int requestType) {
 		this.body = body;
-		this.appInstance = appInstance;
-		this.myaccounturl = myaccounturl;
+//		this.appInstance = appInstance;
+//		this.myaccounturl = myaccounturl;
 		this.context = context;
 		this.addedurl = addedurl;
 		this.CaBLisenar = CaBLisenar;
@@ -222,7 +221,8 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 			JSONObject job = result.getjObj();
 			try {
 				if (job.getString("success").equals("true")) {
-					BoardingPassList list = BoardingPassList.getBoardingPassListObject(job);
+					// BoardingPassList list =
+					// BoardingPassList.getBoardingPassListObject(job);
 					deletelisenarfromnetstate.updateDatabaseWithoutServernotification(bpass);
 				} else {
 				}

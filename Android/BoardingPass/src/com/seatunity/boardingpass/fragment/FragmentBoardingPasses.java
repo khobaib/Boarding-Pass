@@ -8,16 +8,20 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -83,7 +87,6 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 		super.onCreate(savedInstanceState);
 		appInstance = (BoardingPassApplication) getActivity().getApplication();
 		context = getActivity();
-
 	}
 
 	@Override
@@ -114,11 +117,10 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 			}
 		});
 		btn_boarding_pass.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				if (list_greaterthan.size() > 0) {
-					parent.startUpCommingBoadingDetails(highlitedboardingpass);
+					parent.startUpCommingBoardingDetails(highlitedboardingpass);
 				}
 			}
 		});
@@ -144,11 +146,24 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 
 			if ((ju_date >= dayofyear) && (!list.get(i).getDeletestate())) {
 				list_greaterthan.add(list.get(i));
-
 			}
-
 		}
 		setlist();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable("bpass", highlitedboardingpass);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (savedInstanceState != null) {
+			highlitedboardingpass = (BoardingPass) savedInstanceState.getSerializable("bpass");
+			setDetailsBoaredingpass(highlitedboardingpass);
+		}
 	}
 
 	/**
@@ -191,8 +206,6 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 			if (list_greaterthan.size() > 0) {
 				AdapterForBoardingPass adapter = new AdapterForBoardingPass(getActivity(), list_greaterthan);
 				lv_boarding_pass.setAdapter(adapter);
-				setDetailsBoaredingpass(list_greaterthan.get(0));
-				highlitedboardingpass = list_greaterthan.get(0);
 			} else {
 				if (appInstance.isRememberMe()) {
 					parent.backEndStack.pop();
@@ -205,13 +218,16 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 		}
 
 		lv_boarding_pass.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				setDetailsBoaredingpass(list_greaterthan.get(position));
+			public void onItemClick(AdapterView<?> parentView, View v, int position, long id) {
 				highlitedboardingpass = list_greaterthan.get(position);
+				setDetailsBoaredingpass(highlitedboardingpass);
 			}
 		});
+		if (highlitedboardingpass == null) {
+			highlitedboardingpass = list_greaterthan.get(0);
+		}
+		setDetailsBoaredingpass(highlitedboardingpass);
 	}
 
 	/**
@@ -248,8 +264,36 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 		tv_month_inside_icon.setText(month);
 		tv_date_inside_icon.setText(dateofmonth);
 
-		tv_seat_no.setText(context.getResources().getString(R.string.txt_seat_nno) + " " + Constants.removeingprecingZero(bpass.getSeat()));
-		tv_flight_no.setText(context.getResources().getString(R.string.txt_flight_no) + " "+ bpass.getCarrier()+ bpass.getFlight_no());
+		tv_seat_no.setText(context.getResources().getString(R.string.txt_seat_nno) + " "
+				+ Constants.removeingprecingZero(bpass.getSeat()));
+		tv_flight_no.setText(context.getResources().getString(R.string.txt_flight_no) + " " + bpass.getCarrier()
+				+ bpass.getFlight_no());
+	}
+
+	private void showNoSeatmateDialog() {
+		// Log.d(TAG, "Sign up OK dialog");
+		final Dialog dialog = new Dialog(getActivity());
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.custom_dilog);
+		Button btnOK = (Button) dialog.findViewById(R.id.ok);
+		TextView tv = (TextView) dialog.findViewById(R.id.tv_success);
+		tv.setText("No seatmate is found with this boarding-pass!");
+		btnOK.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Log.d(TAG, "Sign up OK dialog : on-click");
+				dialog.dismiss();
+				if (dialog.isShowing())
+					dialog.cancel();
+			}
+		});
+		Window window = dialog.getWindow();
+		WindowManager.LayoutParams wlp = window.getAttributes();
+
+		wlp.gravity = Gravity.CENTER;
+		wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+		window.setAttributes(wlp);
+		dialog.show();
 	}
 
 	@Override
@@ -260,6 +304,8 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 				SeatMetList seatmet_listlist = SeatMetList.getSeatmetListObj(job);
 				if (seatmet_listlist.getAllSeatmateList().size() > 0) {
 					parent.startSeatmetList(seatmet_listlist, highlitedboardingpass);
+				} else {
+					showNoSeatmateDialog();
 				}
 			}
 		} catch (JSONException e) {

@@ -1,280 +1,283 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:orientation="vertical" >
+    android:fillViewport="true" >
 
-    <EditText
-        android:id="@+id/et_email"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="50dp"
-        android:ems="10"
-        android:textSize="14dp"
-        android:hint="@string/txt_email" >
-
-        <requestFocus />
-    </EditText>
-
-    <LinearLayout
-        android:id="@+id/le_pass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/et_email"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:weightSum="2" >
+        android:background="#ffffff"
+        android:orientation="vertical" >
 
         <EditText
-            android:id="@+id/et_password"
-            android:layout_width="0dp"
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="50dp"
             android:ems="10"
-            android:hint="@string/txt_password"
-            android:textSize="14dp"
-            android:inputType="textPassword" >
+            android:hint="@string/txt_email"
+            android:inputType="textEmailAddress"
+            android:textSize="14sp" >
+
+            <requestFocus />
         </EditText>
 
-        <EditText
-            android:id="@+id/et_confirm_password"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/le_pass"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:textSize="14dp"
-            android:hint="@string/txt_confirm_password"
-            android:inputType="textPassword" >
-        </EditText>
-    </LinearLayout>
+            android:layout_below="@+id/et_email"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2" >
 
-    <TextView
-        android:id="@+id/tv_signup_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/le_pass"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-         android:textColor="#2D3E50"
-        android:text="@string/txt_signup_message" >
-    </TextView>
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/txt_password"
+                android:inputType="textPassword"
+                android:textSize="14sp" >
+            </EditText>
 
-    <LinearLayout
-        android:id="@+id/le_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_signup_message"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:weightSum="2" >
+            <EditText
+                android:id="@+id/et_confirm_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/txt_confirm_password"
+                android:inputType="textPassword"
+                android:textSize="14sp" >
+            </EditText>
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/et_first_name"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tv_signup_message"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:textSize="14dp"
-            android:hint="@string/txt_first_name" >
-        </EditText>
-
-        <EditText
-            android:id="@+id/et_last_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:textSize="14dp"
-            android:hint="@string/txt_last_name" >
-        </EditText>
-    </LinearLayout>
-    <LinearLayout
-         android:id="@+id/le_gender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-       android:background="@color/radio_selected_geneder"
-       android:padding="1dp"
-        android:layout_below="@+id/le_name"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-         >
-
-        <RadioGroup
-        android:id="@+id/rdgrp_gender"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:divider="@color/radio_selected_geneder"
-        
-        android:layout_alignParentLeft="true"
-        android:orientation="horizontal"
-        android:weightSum="3"
-         >
-
-        <RadioButton
-            android:id="@+id/radio_female"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:checked="true"
-            android:layout_weight="1"
+            android:layout_below="@+id/le_pass"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
-            android:background="@drawable/radio_background"
-            android:button="@android:color/transparent"
-            android:textSize="14dp"
-            android:text="@string/txt_gender_female" />
-         <View
-             android:layout_width="1dp"
-             android:layout_height="match_parent"
-             android:background="@color/radio_selected_geneder"
-             />
+            android:text="@string/txt_signup_message"
+            android:textColor="#2D3E50" >
+        </TextView>
 
-        <RadioButton
-            android:id="@+id/radio_male"
-            android:layout_width="0dp"
-             android:layout_height="match_parent"
-                        android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="14dp"
-            android:background="@drawable/radio_background"
-            android:button="@android:color/transparent"
-            android:text="@string/txt_gender_male" />
-        <View
-             android:layout_width="1dp"
-             android:layout_height="match_parent"
-             android:background="@color/radio_selected_geneder"
-             />
-        <RadioButton
-            android:id="@+id/radio_not_say"
-            android:layout_width="0dp"
-             android:layout_height="match_parent"
-                        android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="14dp"
-            android:background="@drawable/radio_background"
-            android:button="@android:color/transparent"
-            android:text="@string/txt_gender_rather_not_say" />
-     </RadioGroup>
-        
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/le_liveage"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_below="@+id/le_gender"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:weightSum="2" >
-
-        <EditText
-            android:id="@+id/et_livein"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/le_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:textSize="14dp"
-            android:hint="@string/txt_livein" >
-        </EditText>
-        
-        <EditText
-             android:id="@+id/et_age"
-            android:layout_width="0dp"
-            android:textSize="14dp"
+            android:layout_below="@+id/tv_signup_message"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2" >
+
+            <EditText
+                android:id="@+id/et_first_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/txt_first_name"
+                android:textSize="14sp" >
+            </EditText>
+
+            <EditText
+                android:id="@+id/et_last_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/txt_last_name"
+                android:textSize="14sp" >
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/le_gender"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:editable="false"
-            android:gravity="center"
-            android:text="@string/txt_age"
-            android:textColor="#777777"
-              android:paddingLeft="42dp"
-            android:singleLine="true" >
-        </EditText>
+            android:layout_below="@+id/le_name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/radio_selected_geneder"
+            android:orientation="horizontal"
+            android:padding="1dp" >
 
-        <Spinner
-            android:id="@+id/s_age"
-            android:layout_width="0dp"
-            android:textSize="14dp"
+            <RadioGroup
+                android:id="@+id/rdgrp_gender"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:divider="@color/radio_selected_geneder"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                tools:ignore="UselessParent" >
+
+                <RadioButton
+                    android:id="@+id/radio_female"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_background"
+                    android:button="@android:color/transparent"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="@string/txt_gender_female"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/radio_selected_geneder" />
+
+                <RadioButton
+                    android:id="@+id/radio_male"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_background"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="@string/txt_gender_male"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/radio_selected_geneder" />
+
+                <RadioButton
+                    android:id="@+id/radio_not_say"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_background"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="@string/txt_gender_rather_not_say"
+                    android:textSize="14sp" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/le_liveage"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@+id/le_gender"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2" >
+
+            <EditText
+                android:id="@+id/et_livein"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/txt_livein"
+                android:textSize="14sp" >
+            </EditText>
+
+            <EditText
+                android:id="@+id/et_age"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:editable="false"
+                android:ems="10"
+                android:singleLine="true"
+                android:text="@string/txt_age"
+                android:textColor="#777777"
+                android:textSize="14sp"
+                tools:ignore="Deprecated,TextFields" >
+            </EditText>
+
+            <Spinner
+                android:id="@+id/s_age"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingLeft="42dp"
+                android:textSize="14sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/proffesion"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-             android:layout_weight="1"
-            android:paddingLeft="42dp"
-            android:visibility="gone"
-             />
+            android:layout_below="@+id/le_liveage"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2" >
 
-     
-    </LinearLayout>
+            <EditText
+                android:id="@+id/et_profession"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/txt_profession"
+                android:textSize="14sp" >
+            </EditText>
 
-    <LinearLayout
-        android:id="@+id/proffesion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/le_liveage"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:weightSum="2" >
+            <EditText
+                android:id="@+id/et_seatting_pref"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:editable="false"
+                android:ems="10"
+                android:hint="@string/txt_seatting_pref"
+                android:singleLine="true"
+                android:textSize="14sp"
+                tools:ignore="Deprecated" >
+            </EditText>
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/et_profession"
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/bt_register"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/proffesion"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/txt_register"
+            android:textColor="#ffffff"
+            android:textSize="23sp" />
+
+        <TextView
+            android:id="@+id/tv_sign_message"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:textSize="14dp"
-            android:hint="@string/txt_profession" >
-        </EditText>
+            android:layout_below="@+id/bt_register"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/txt_signup_message"
+            android:textColor="#0099cc"
+            android:textSize="14sp" />
+    </RelativeLayout>
 
-        <EditText
-            android:id="@+id/et_seatting_pref"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:editable="false"
-            android:textSize="14dp"
-            android:hint="@string/txt_seatting_pref"
-            android:singleLine="true" >
-        </EditText>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/bt_register"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_below="@+id/proffesion"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:textSize="23dp"
-        android:background="@drawable/rounded_button"
-        android:text="@string/txt_register"
-        android:textColor="#ffffff" />
-
-    <TextView
-        android:id="@+id/tv_sign_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bt_register"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:textSize="14dp"
-        android:text="@string/txt_signup_message"
-        android:textColor="#0099cc" />
-
-</RelativeLayout>
+</ScrollView>
