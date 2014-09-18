@@ -22,7 +22,7 @@ import com.seatunity.model.BoardingPass;
  * Adapter to show the past boarding-pass list.
  * 
  * @author Sumon
- *
+ * 
  */
 public class AdapterForPastBoardingPass extends BaseAdapter {
 	String month;
@@ -32,6 +32,7 @@ public class AdapterForPastBoardingPass extends BaseAdapter {
 
 	/**
 	 * The only constructor
+	 * 
 	 * @param context
 	 * @param item
 	 */
@@ -40,9 +41,10 @@ public class AdapterForPastBoardingPass extends BaseAdapter {
 		this.list = item;
 		Collections.sort(list, new Comparator<BoardingPass>() {
 			public int compare(BoardingPass o1, BoardingPass o2) {
-				if (o1.getJulian_date() == o2.getJulian_date())
+				if (o1.getJulian_date().trim() == o2.getJulian_date().trim())
 					return 0;
-				return Integer.parseInt(o1.getJulian_date()) < Integer.parseInt(o2.getJulian_date()) ? -1 : 1;
+				return Integer.parseInt(o1.getJulian_date().trim()) < Integer.parseInt(o2.getJulian_date().trim()) ? -1
+						: 1;
 			}
 		});
 
@@ -140,8 +142,8 @@ public class AdapterForPastBoardingPass extends BaseAdapter {
 			holder.tv_to.setText(list.get(position).getTravel_to_name());
 		}
 
-		holder.tv_flight_no.setText(context.getResources().getString(R.string.txt_flight_no) + " "+list.get(position).getCarrier()
-				+ list.get(position).getFlight_no());
+		holder.tv_flight_no.setText(context.getResources().getString(R.string.txt_flight_no) + " "
+				+ list.get(position).getCarrier() + list.get(position).getFlight_no());
 
 		return convertView;
 	}

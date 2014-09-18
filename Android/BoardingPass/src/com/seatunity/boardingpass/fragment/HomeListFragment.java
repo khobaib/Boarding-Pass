@@ -1,6 +1,5 @@
 package com.seatunity.boardingpass.fragment;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 import android.annotation.SuppressLint;
@@ -9,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,12 +40,14 @@ import com.seatunity.model.SeatMetList;
 @SuppressLint({ "NewApi", "InflateParams" })
 public class HomeListFragment extends TabFragment {
 
+	private final String TAG = this.getClass().getSimpleName();
+
 	/**
 	 * Fragment-stack to implement the back-stack app flow.
 	 */
 	protected Stack<Fragment> backEndStack;
 	BoardingPassApplication appInstance;
-	ArrayList<BoardingPass> list;
+	// private ArrayList<BoardingPass> list;
 
 	/**
 	 * Indicator of the fragment-no. to load.
@@ -68,7 +70,8 @@ public class HomeListFragment extends TabFragment {
 		backEndStack = new Stack<Fragment>();
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 		dbInstance.open();
-		ArrayList<BoardingPass> list = (ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+		// ArrayList<BoardingPass> list = (ArrayList<BoardingPass>)
+		// dbInstance.retrieveBoardingPassList();
 		dbInstance.close();
 		String email = appInstance.getUserCred().getEmail();
 		if (from == 0) {
@@ -163,13 +166,14 @@ public class HomeListFragment extends TabFragment {
 	}
 
 	/**
-	 * Shows the passed boarding-pass list in the {@link FragmentBoardingPasses }
+	 * Shows the future boarding-pass list in the {@link FragmentBoardingPasses }
 	 * fragment.
 	 * 
-	 * @param list_greaterthan
+	 * @param futureBPList
 	 */
-	public void startFragmentBoardingPasses(ArrayList<BoardingPass> list_greaterthan) {
-		FragmentBoardingPasses newFragment = new FragmentBoardingPasses(list_greaterthan);
+	public void startFragmentBoardingPasses() {
+		Log.i(TAG, "startFragmentBoardingPasses");
+		FragmentBoardingPasses newFragment = FragmentBoardingPasses.newInstance();
 		newFragment.parent = this;
 		FragmentManager fragmentManager = getActivity().getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -249,7 +253,7 @@ public class HomeListFragment extends TabFragment {
 
 	/**
 	 * If the {@link #backEndStack} does not have user-pushed fragment, then
-	 * this method calls {@link #ShowAlertToExit()} to show an exit-confirmation
+	 * this method calls {@link #showAlertToExit()} to show an exit-confirmation
 	 * dialog.<br>
 	 * Otherwise, it backs to the previously opened fragment on back-button
 	 * pressed.
@@ -262,7 +266,7 @@ public class HomeListFragment extends TabFragment {
 	public void onBackPressed() {
 		if (from == 0) {
 			if (backEndStack.size() == 2) {
-				ShowAlertToExit();
+				showAlertToExit();
 
 			} else {
 				if (backEndStack.size() == 2) {
@@ -279,7 +283,7 @@ public class HomeListFragment extends TabFragment {
 			}
 		} else {
 			if (backEndStack.size() == 1) {
-				ShowAlertToExit();
+				showAlertToExit();
 
 			} else {
 				if (backEndStack.size() == 1) {
@@ -301,15 +305,13 @@ public class HomeListFragment extends TabFragment {
 	/**
 	 * Shows an exit-confirmation dialog.
 	 */
-	@SuppressWarnings("static-access")
-	public void ShowAlertToExit() {
+	public void showAlertToExit() {
 		final AlertDialog d = new AlertDialog.Builder(getActivity())
 				.setPositiveButton(getActivity().getResources().getString(R.string.txt_ok), null)
-				
+
 				.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel), null)
 				.setMessage(getActivity().getString(R.string.txt_exit_message)).create();
-		LayoutInflater inflater = (LayoutInflater) getActivity()
-				.getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
 		TextView tvtitle = (TextView) customTitleView.findViewById(R.id.tv_title);
 		tvtitle.setText(getActivity().getString(R.string.app_name_seatunity));
@@ -322,7 +324,6 @@ public class HomeListFragment extends TabFragment {
 				cancel.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						// TODO Auto-generated method stub
 						d.cancel();
 					}
 				});

@@ -20,8 +20,9 @@ import com.seatunity.model.BoardingPass;
 
 /**
  * Adapter for the {@link BoardingPass} list
+ * 
  * @author Sumon
- *
+ * 
  */
 @SuppressLint("InflateParams")
 public class AdapterForBoardingPass extends BaseAdapter {
@@ -32,6 +33,7 @@ public class AdapterForBoardingPass extends BaseAdapter {
 
 	/**
 	 * The only constructor
+	 * 
 	 * @param context
 	 * @param item
 	 */
@@ -40,9 +42,11 @@ public class AdapterForBoardingPass extends BaseAdapter {
 		this.list = item;
 		Collections.sort(list, new Comparator<BoardingPass>() {
 			public int compare(BoardingPass o1, BoardingPass o2) {
-				if (o1.getJulian_date() == o2.getJulian_date())
+				String s1 = o1.getJulian_date().trim();
+				String s2 = o2.getJulian_date().trim();
+				if (s1 == s2)
 					return 0;
-				return Integer.parseInt(o1.getJulian_date()) < Integer.parseInt(o2.getJulian_date()) ? -1 : 1;
+				return Integer.parseInt(s1) < Integer.parseInt(s2) ? -1 : 1;
 			}
 		});
 
@@ -88,7 +92,7 @@ public class AdapterForBoardingPass extends BaseAdapter {
 
 		ViewHolder holder = new ViewHolder();
 		Log.e("deletestate", "" + list.get(position).getDeletestate());
-		String date = Constants.getDayandYear(Integer.parseInt(list.get(position).getJulian_date()));
+		String date = Constants.getDayandYear(Integer.parseInt(list.get(position).getJulian_date().trim()));
 		String[] dateParts = date.split(":");
 		month = dateParts[1];
 		day = dateParts[0];

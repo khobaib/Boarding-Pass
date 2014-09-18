@@ -18,7 +18,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.seatunity.boardingpass.fragment.HomeListFragment;
@@ -26,19 +25,21 @@ import com.seatunity.boardingpass.fragment.HomeListFragment;
 @TargetApi(Build.VERSION_CODES.KITKAT)
 @SuppressLint({ "NewApi", "DefaultLocale" })
 public class Constants {
-	
-	//StringBuilder sb = new StringBuilder(inputString);
-//	It has the method deleteCharAt(), along with many other mutator methods.
-//
-//	Just delete the characters that you need to delete and then get the result as follows:
-//
-//	String resultString = sb.toString();
-	
-	public static String removeingprecingZero(String seat_no){
-		String seatno=seat_no;
-		seatno=seatno.replaceFirst("^0+(?!$)", "");
+
+	// StringBuilder sb = new StringBuilder(inputString);
+	// It has the method deleteCharAt(), along with many other mutator methods.
+	//
+	// Just delete the characters that you need to delete and then get the
+	// result as follows:
+	//
+	// String resultString = sb.toString();
+
+	public static String removeingprecingZero(String seat_no) {
+		String seatno = seat_no;
+		seatno = seatno.replaceFirst("^0+(?!$)", "");
 		return seatno;
 	}
+
 	/**
 	 * @param context
 	 * @param uri
@@ -328,6 +329,13 @@ public class Constants {
 	public static String userid = "8150";
 	public static String baseurl = "http://seatunity.net/";
 
+	/**
+	 * @param context
+	 *            : Working context
+	 * @return true : if any net-connection is on (but noe necessarily
+	 *         activate), <br>
+	 *         false: otherwise
+	 */
 	public static boolean isOnline(Context context) {
 		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -337,6 +345,12 @@ public class Constants {
 		return false;
 	}
 
+	/**
+	 * @param target
+	 *            : The email to be verified
+	 * @return true : if the email is well-formatted <br>
+	 *         false: otherwise
+	 */
 	public static boolean isValidEmail(CharSequence target) {
 		if (target == null) {
 			return false;

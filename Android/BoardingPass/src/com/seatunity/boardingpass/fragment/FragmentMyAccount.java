@@ -63,27 +63,27 @@ import com.seatunity.model.UserCred;
 @SuppressLint({ "NewApi", "InflateParams" })
 @SuppressWarnings("unused")
 public class FragmentMyAccount extends Fragment implements CallBackApiCall {
-	ImageView img_edit, img_prof_pic, img_status;
-	ArrayList<String> setting_criteria;
-	BoardingPassApplication appInstance;
-	AdapterForSettings adapter;
-	ListView lv_setting;
-	Spinner spn_country;
-	AccountListFragment parent;
-	Activity activity;
-	TextView tv_uname, tv_email, tv_stataus, tv_statau;
-	UserCred userCred;
-	int ACTION_REQUEST_CAMERA = 31;
-	int ACTION_REQUEST_GALLERY = 21;
-	int ACTION_REQUEST_GALLERY_KITKAT = 22;
-	String drectory;
-	String photofromcamera;
-	Context context;
-	String contentbodyremeber = "";
-	ViewGroup v;
-	Bitmap photo;
-	int callfrom = 0;
-	JSONObject loginObj;
+	private ImageView img_edit, img_prof_pic, img_status;
+	private ArrayList<String> setting_criteria;
+	private BoardingPassApplication appInstance;
+	private AdapterForSettings adapter;
+	private ListView lv_setting;
+	private Spinner spn_country;
+	public AccountListFragment parent;
+	private Activity activity;
+	private TextView tv_uname, tv_email, tv_stataus, tv_statau;
+	private UserCred userCred;
+	private int ACTION_REQUEST_CAMERA = 31;
+	private int ACTION_REQUEST_GALLERY = 21;
+	private int ACTION_REQUEST_GALLERY_KITKAT = 22;
+	private String drectory;
+	private String photofromcamera;
+	private Context context;
+	private String contentbodyremeber = "";
+	private ViewGroup v;
+	private Bitmap photo;
+	private int callfrom = 0;
+	private JSONObject loginObj;
 	private Bundle savedState = null;
 
 	/**

@@ -115,7 +115,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		tv_compartment_class_var.setText(bpass.getTravel_class());
 		tv_passenger_name.setText(bpass.getFirstname().trim() + " " + bpass.getLastname().trim());
 		String date = com.seatunity.boardingpass.utilty.Constants
-				.getDayandYear(Integer.parseInt(bpass.getJulian_date()));
+				.getDayandYear(Integer.parseInt(bpass.getJulian_date().trim()));
 		String[] dateParts = date.split(":");
 		String month = dateParts[1];
 		String dateofmonth = dateParts[0];
@@ -163,7 +163,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	public void callSeatmet() {
 		callfrom = 2;
 		String extendedurl = "seatmatelist/" + bpass.getCarrier() + "/" + bpass.getFlight_no() + "/"
-				+ bpass.getJulian_date();
+				+ bpass.getJulian_date().trim();
 		extendedurl = extendedurl.replace(" ", "");
 		AsyncaTaskApiCall get_list = new AsyncaTaskApiCall(this, getJsonObjet(), getActivity(), extendedurl,
 				Constants.REQUEST_TYPE_POST);

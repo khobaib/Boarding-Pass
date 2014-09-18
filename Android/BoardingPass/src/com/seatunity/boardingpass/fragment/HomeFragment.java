@@ -40,28 +40,24 @@ public class HomeFragment extends Fragment {
 		tv_add_boardingpass = (TextView) rootView.findViewById(R.id.tv_add_boardingpass);
 		tv_add_profile = (TextView) rootView.findViewById(R.id.tv_add_profile);
 		img_addprofile.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				onclickprofile();
 			}
 		});
 		tv_add_profile.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View arg0) {
 				onclickprofile();
 			}
 		});
 		tv_add_boardingpass.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				onclickaddboardingpass();
 			}
 		});
 		img_add_boardingpass.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				onclickaddboardingpass();

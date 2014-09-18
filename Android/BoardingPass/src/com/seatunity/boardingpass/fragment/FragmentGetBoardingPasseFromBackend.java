@@ -1,7 +1,6 @@
 package com.seatunity.boardingpass.fragment;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,10 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seatunity.boardingpass.R;
@@ -41,22 +36,27 @@ import com.seatunity.model.UserCred;
  */
 @SuppressLint("NewApi")
 public class FragmentGetBoardingPasseFromBackend extends Fragment implements CallBackApiCall {
-	HomeListFragment parent;
-	EditText et_email, et_password;
-	TextView tv_errorshow;
-	Button bt_login;
-	AsyncaTaskApiCall retreive;
-	ArrayList<BoardingPass> list;
-	ArrayList<BoardingPass> list_greaterthan;
-	Button btn_boarding_pass, btn_seatmate;
-	String email, password;
-	Context context;
-	BoardingPass highlitedboardingpass;
-	BoardingPassApplication appInstance;
-	ListView lv_boarding_pass;
-	TextView tv_from, tv_to, tv_month_inside_icon, tv_date_inside_icon, tv_seat_no, tv_flight_no, tv_start_time,
-			tv_arrival_time, tv_cdg, tv_jfk;
-	int callfrom = 0;
+
+	private final String TAG = this.getClass().getSimpleName();
+
+	public HomeListFragment parent;
+	// private EditText et_email, et_password;
+	// private TextView tv_errorshow;
+	// private Button bt_login;
+	private AsyncaTaskApiCall apiCaller;
+	private ArrayList<BoardingPass> allBoardingPassList;
+	private ArrayList<BoardingPass> futureBoardingPassList;
+	// private Button btn_boarding_pass, btn_seatmate;
+	// private String email, password;
+	private Context context;
+	// private BoardingPass highlitedboardingpass;
+	private BoardingPassApplication appInstance;
+
+	// private ListView lv_boarding_pass;
+	// private TextView tv_from, tv_to, tv_month_inside_icon,
+	// tv_date_inside_icon, tv_seat_no, tv_flight_no, tv_start_time,
+	// tv_arrival_time, tv_cdg, tv_jfk;
+	// private int callfrom = 0;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -71,83 +71,85 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 
 		if (Constants.isOnline(getActivity())) {
 			// Log.e("Test", "")
-			Log.e("Test", "" + appInstance.isRememberMe());
+			Log.d("Test", "User remembered: " + appInstance.isRememberMe());
 			if (!appInstance.isRememberMe()) {
-				Log.e("Test", "" + appInstance.isRememberMe());
 				SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 				dbInstance.open();
-				list = (ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+				// list = (ArrayList<BoardingPass>)
+				// dbInstance.retrieveBoardingPassList();
+				// dbInstance.close();
+				// Calendar c = Calendar.getInstance();
+				// int dayofyear = c.get(Calendar.DAY_OF_YEAR);
+				futureBoardingPassList = (ArrayList<BoardingPass>) dbInstance.retrieveFutureBoardingPassList();
 				dbInstance.close();
-				Calendar c = Calendar.getInstance();
-				int dayofyear = c.get(Calendar.DAY_OF_YEAR);
-				list_greaterthan = new ArrayList<BoardingPass>();
-				for (int i = 0; i < list.size(); i++) {
-					Log.e("test", "t " + list.get(i).getTravel_from_name());
-					int ju_date = Integer.parseInt(list.get(i).getJulian_date());
-					if ((ju_date >= dayofyear) && (!list.get(i).getDeletestate())) {
-						list_greaterthan.add(list.get(i));
-					}
-
-				}
-				if (list_greaterthan.size() < 1) {
-					Log.e("tagg", "as " + parent);
-					Log.e("Test", "1");
+				// for (int i = 0; i < list.size(); i++) {
+				// Log.i(TAG, "Future pass no. : " + i + " :: " +
+				// list.get(i).getTravel_from_name());
+				// int ju_date =
+				// Integer.parseInt(list.get(i).getJulian_date().trim());
+				// if ((ju_date >= dayofyear) &&
+				// (!list.get(i).getDeletestate())) {
+				// list_greaterthan.add(list.get(i));
+				// }
+				// }
+				int sz = futureBoardingPassList.size();
+				if (sz < 1) {
+					Log.i(TAG, "futureBoardingPassList.size() = " + sz + ", so starting HomeFragment");
 					parent.startHomeFragment();
 				} else {
-					Log.e("Test", "2");
-					parent.startFragmentBoardingPasses(list_greaterthan);
+					Log.i(TAG, "futureBoardingPassList.size()=" + sz + ", so starting FragmentBoardingPasses");
+					parent.startFragmentBoardingPasses();
 				}
 			} else {
 				// CallBackApiCall CaBLisenar,String body,Context context,String
 				// addedurl,int requestType
-				Log.e("Test", "3");
-				callfrom = 1;
-				retreive = new AsyncaTaskApiCall(this, getJsonObjet(), getActivity(), "bplist",
+				// Log.e("Test", "3");
+				// callfrom = 1;
+				apiCaller = new AsyncaTaskApiCall(this, getJsonObjet(), getActivity(), "bplist",
 						Constants.REQUEST_TYPE_POST);
-				retreive.execute();
+				apiCaller.execute();
 			}
 		} else {
-			Log.e("Test", "4");
+			Log.e(TAG, "Net connection is disabled");
 			SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 			dbInstance.open();
-			list = (ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+			// list = (ArrayList<BoardingPass>)
+			// dbInstance.retrieveBoardingPassList();
+			// dbInstance.close();
+			// Calendar c = Calendar.getInstance();
+			// int dayofyear = c.get(Calendar.DAY_OF_YEAR);
+			futureBoardingPassList = (ArrayList<BoardingPass>) dbInstance.retrieveFutureBoardingPassList();
 			dbInstance.close();
-			Calendar c = Calendar.getInstance();
-			int dayofyear = c.get(Calendar.DAY_OF_YEAR);
-			list_greaterthan = new ArrayList<BoardingPass>();
-			for (int i = 0; i < list.size(); i++) {
-				Log.e("test", "t " + list.get(i).getTravel_from_name());
-				int ju_date = Integer.parseInt(list.get(i).getJulian_date());
-				if ((ju_date >= dayofyear) && (!list.get(i).getDeletestate())) {
-					list_greaterthan.add(list.get(i));
-
-				}
-
-			}
+			// for (int i = 0; i < list.size(); i++) {
+			// Log.i(TAG, "Traveler name: " +
+			// list.get(i).getTravel_from_name());
+			// int ju_date =
+			// Integer.parseInt(list.get(i).getJulian_date().trim());
+			// if ((ju_date >= dayofyear) && (!list.get(i).getDeletestate())) {
+			// list_greaterthan.add(list.get(i));
+			// }
+			// }
 
 			if (appInstance.isRememberMe()) {
-				Log.e("Test", "5");
-				if (list_greaterthan.size() < 1) {
+				Log.e(TAG, "appInstance.isRememberMe()=true");
+				if (futureBoardingPassList.size() < 1) {
 					parent.startAddBoardingPassDuringLogin();
-					Log.e("Test", "6");
+					Log.e(TAG, "list_greaterthan.size() < 1");
 				} else {
-					Log.e("Test", "7");
-					parent.startFragmentBoardingPasses(list_greaterthan);
+					Log.e(TAG, "list_greaterthan.size() >= 1");
+					parent.startFragmentBoardingPasses();
 				}
-
 			} else {
-				Log.e("Test", "8");
-				if (list_greaterthan.size() < 1) {
-					Log.e("Test", "9");
+				Log.e(TAG, "appInstance.isRememberMe()=false");
+				if (futureBoardingPassList.size() < 1) {
+					Log.e(TAG, "list_greaterthan.size() < 1");
 					parent.startHomeFragment();
 				} else {
-					Log.e("Test", "10");
-					parent.startFragmentBoardingPasses(list_greaterthan);
+					Log.e(TAG, "list_greaterthan.size() >= 1");
+					parent.startFragmentBoardingPasses();
 				}
 			}
-
 		}
-
 	}
 
 	@Override
@@ -184,44 +186,45 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 	public void responseOk(JSONObject job) {
 		try {
 			if (job.getString("success").equals("true")) {
-
-				this.list = BoardingPassList.getBoardingPassListObject(job).getBoardingPassList();
+				this.allBoardingPassList = BoardingPassList.getBoardingPassListObject(job).getBoardingPassList();
 				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
 				Log.e("db", dbInstance + " ab");
 				dbInstance.open();
-				for (int i = 0; i < list.size(); i++) {
-					Log.e("testing", "" + i + "  " + list.get(i).getTravel_from_name());
-					dbInstance.insertOrUpdateBoardingPass(list.get(i));
+				for (int i = 0; i < allBoardingPassList.size(); i++) {
+					Log.e("testing", "" + i + "  " + allBoardingPassList.get(i).getTravel_from_name());
+					dbInstance.insertOrUpdateBoardingPass(allBoardingPassList.get(i));
 				}
-				list = (ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+				// list = (ArrayList<BoardingPass>)
+				// dbInstance.retrieveBoardingPassList();
+				// dbInstance.close();
+
+				// Calendar c = Calendar.getInstance();
+				// int dayofyear = c.get(Calendar.DAY_OF_YEAR);
+				futureBoardingPassList = (ArrayList<BoardingPass>) dbInstance.retrieveFutureBoardingPassList();
 				dbInstance.close();
-
-				Calendar c = Calendar.getInstance();
-				int dayofyear = c.get(Calendar.DAY_OF_YEAR);
-				list_greaterthan = new ArrayList<BoardingPass>();
-				for (int i = 0; i < list.size(); i++) {
-					Log.e("test", "t " + list.get(i).getTravel_from_name());
-					int ju_date = Integer.parseInt(list.get(i).getJulian_date());
-					if ((ju_date >= dayofyear) && (!list.get(i).getDeletestate())) {
-						list_greaterthan.add(list.get(i));
-
-					}
-
-				}
-				if (list_greaterthan.size() < 1) {
+				// for (int i = 0; i < list.size(); i++) {
+				// Log.e("test", "t " + list.get(i).getTravel_from_name());
+				// int ju_date =
+				// Integer.parseInt(list.get(i).getJulian_date().trim());
+				// if ((ju_date >= dayofyear) &&
+				// (!list.get(i).getDeletestate())) {
+				// list_greaterthan.add(list.get(i));
+				// }
+				// }
+				if (futureBoardingPassList.size() < 1) {
 					parent.startAddBoardingPassDuringLogin();
 				} else {
-					parent.startFragmentBoardingPasses(list_greaterthan);
+					parent.startFragmentBoardingPasses();
 				}
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
 	public void responseFailure(JSONObject job) {
+		Log.e(TAG, "Response failure: " + job.toString());
 		try {
 			JSONObject joberror = new JSONObject(job.getString("error"));
 			String code = joberror.getString("code");
@@ -230,7 +233,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 				loginObj.put("email", appInstance.getUserCred().getEmail());
 				loginObj.put("password", appInstance.getUserCred().getPassword());
 				String loginData = loginObj.toString();
-				Log.e("tagged ", "msg  " + getActivity());
+				Log.i(TAG, "Log in re-submission");
 				AsyncaTaskApiCall log_in_lisenar = new AsyncaTaskApiCall(FragmentGetBoardingPasseFromBackend.this,
 						loginData, context, "login", Constants.REQUEST_TYPE_POST, true);
 				log_in_lisenar.execute();
@@ -253,10 +256,10 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 				userCred.setPassword(appInstance.getUserCred().getPassword());
 				appInstance.setUserCred(userCred);
 				appInstance.setRememberMe(true);
-				callfrom = 1;
-				retreive = new AsyncaTaskApiCall(FragmentGetBoardingPasseFromBackend.this, getJsonObjet(), context,
+				// callfrom = 1;
+				apiCaller = new AsyncaTaskApiCall(FragmentGetBoardingPasseFromBackend.this, getJsonObjet(), context,
 						"bplist", Constants.REQUEST_TYPE_POST);
-				retreive.execute();
+				apiCaller.execute();
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();

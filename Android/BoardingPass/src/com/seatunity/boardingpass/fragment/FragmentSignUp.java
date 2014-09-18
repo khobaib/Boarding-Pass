@@ -78,7 +78,6 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 		NoCore_Array[2] = "3";
 		NoCore_Array[3] = "4";
 		NoCore_Array[4] = "5";
-
 	}
 
 	@SuppressLint("NewApi")

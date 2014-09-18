@@ -93,7 +93,7 @@ public class AccountListFragment extends TabFragment {
 	}
 	/**
 	 * If the {@link #backEndStack} does not have user-pushed fragment, then
-	 * this method calls {@link #ShowAlertToExit()} to show an exit-confirmation
+	 * this method calls {@link #showAlertToExit()} to show an exit-confirmation
 	 * dialog.<br>
 	 * Otherwise, it backs to the previously opened fragment on back-button
 	 * pressed.

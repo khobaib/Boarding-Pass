@@ -90,6 +90,7 @@ public class PkpassReader {
 						MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
 						jsonStr = Charset.defaultCharset().decode(bb).toString();
 						JSONObject jObj = new JSONObject(jsonStr);
+						Log.i("Touhid_uzip", "Returning pass.json: " + jsonStr);
 						return jObj;
 					} catch (Exception e) {
 						Log.e("Touhid_uzip_Excp", "JSONException/IOException");
@@ -170,7 +171,9 @@ public class PkpassReader {
 		}
 		path += "/";
 		Log.d("getPassbookBarcodeString", path + ", " + passFileName);
-		return getJSONFromPass("pass").get("barcode").toString();
+		String barcodeStr = getJSONFromPass("pass").get("barcode").toString();
+		Log.i("T_pass_barode", "Got brcode :D :: " + barcodeStr);
+		return barcodeStr;
 	}
 
 }

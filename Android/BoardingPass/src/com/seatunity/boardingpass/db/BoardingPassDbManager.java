@@ -1,6 +1,7 @@
 package com.seatunity.boardingpass.db;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -18,41 +19,43 @@ import com.seatunity.model.BoardingPass;
  * 
  */
 public class BoardingPassDbManager {
-	@SuppressWarnings("unused")
 	private static final String TAG = BoardingPassDbManager.class.getSimpleName();
-	private static String TABLE_BOARDING_PASS_LIST = "boardingpass";
-	public static final String TABLE_PRIMARY_KEY = "_id";
-	private static String travel_class = "travel_class";
-	private static String stringform = "stringform";
-	private static String firstname = "firstname";
-	private static String lastname = "lastname";
-	private static String PNR = "PNR";
-	private static String travel_from = "travel_from";
-	private static String travel_to = "travel_to";
-	private static String carrier = "carrier";
-	private static String flight_no = "flight_no";
-	private static String julian_date = "julian_date";
-	private static String compartment_code = "compartment_code";
-	private static String seat = "seat";
-	private static String departure = "departure";
-	private static String arrival = "arrival";
-	private static String codetype = "codetype";
-	private static String id = "id";
-	private static String travel_from_name = "travel_from_name";
-	private static String travel_to_name = "travel_to_name";
-	private static String carrier_name = "carrier_name";
-	private static String deletestate = "deletestate";
 
-	private static final String CREATE_TABLE_BOARDING_LIST = "create table " + TABLE_BOARDING_PASS_LIST + " ( "
-			+ TABLE_PRIMARY_KEY + " integer primary key autoincrement, " + travel_class + " text, " + stringform
-			+ " text, " + firstname + " text, " + lastname + " text, " + PNR + " text, " + travel_from + " text, "
-			+ travel_to + " text, " + carrier + " text, " + flight_no + " text, " + julian_date + " text, "
-			+ compartment_code + " text, " + seat + " text, " + departure + " text, " + arrival + " text, " + codetype
-			+ " text, " + travel_from_name + " text, " + travel_to_name + " text, " + carrier_name + " text, "
-			+ deletestate + " text, " + id + " text);";
+	private static String TABLE_BOARDING_PASS_LIST = "boardingpass";
+	private static final String TABLE_PRIMARY_KEY = "_id";
+	private static final String KEY_TRAVEL_CLASS = "travel_class";
+	private static final String KEY_STRING_FORM = "stringform";
+	private static final String KEY_FIRSTNAME = "firstname";
+	private static final String KEY_LASTNAME = "lastname";
+	private static final String KEY_PNR = "PNR";
+	private static final String KEY_TRAVEL_FROM = "travel_from";
+	private static final String KEY_TRAVEL_TO = "travel_to";
+	private static final String KEY_CARRIER = "carrier";
+	private static final String KEY_FLIGHT_NO = "flight_no";
+	private static final String KEY_JULIAN_DATE = "julian_date";
+	private static final String KEY_COMPARTMENT_CODE = "compartment_code";
+	private static final String KEY_SEAT = "seat";
+	private static final String KEY_DEPARTURE = "departure";
+	private static final String KEY_ARRIVAL = "arrival";
+	private static final String KEY_CODETYPE = "codetype";
+	private static final String KEY_ID = "id";
+	private static final String KEY_TRAVEL_FROM_NAME = "travel_from_name";
+	private static final String KEY_TRAVEL_TO_NAME = "travel_to_name";
+	private static final String KEY_CARRIER_NAME = "carrier_name";
+	private static final String KEY_DELETESTATE = "deletestate";
+
+	private static final String CREATE_TABLE_BOARDING_LIST = "create table if not exists " + TABLE_BOARDING_PASS_LIST
+			+ " ( " + TABLE_PRIMARY_KEY + " integer primary key autoincrement, " + KEY_TRAVEL_CLASS + " text, "
+			+ KEY_STRING_FORM + " text, " + KEY_FIRSTNAME + " text, " + KEY_LASTNAME + " text, " + KEY_PNR + " text, "
+			+ KEY_TRAVEL_FROM + " text, " + KEY_TRAVEL_TO + " text, " + KEY_CARRIER + " text, " + KEY_FLIGHT_NO
+			+ " text, " + KEY_JULIAN_DATE + " text, " + KEY_COMPARTMENT_CODE + " text, " + KEY_SEAT + " text, "
+			+ KEY_DEPARTURE + " text, " + KEY_ARRIVAL + " text, " + KEY_CODETYPE + " text, " + KEY_TRAVEL_FROM_NAME
+			+ " text, " + KEY_TRAVEL_TO_NAME + " text, " + KEY_CARRIER_NAME + " text, " + KEY_DELETESTATE + " text, "
+			+ KEY_ID + " text);";
 
 	/**
 	 * Inserts the boarding-pass as a new one in the DB.
+	 * 
 	 * @param db
 	 * @param boardingPass
 	 * @return
@@ -60,26 +63,26 @@ public class BoardingPassDbManager {
 	 */
 	private static long insert(SQLiteDatabase db, BoardingPass boardingPass) throws SQLException {
 		ContentValues cv = new ContentValues();
-		cv.put(travel_class, boardingPass.getTravel_class());
-		cv.put(stringform, boardingPass.getStringform());
-		cv.put(firstname, boardingPass.getFirstname());
-		cv.put(lastname, boardingPass.getLastname());
-		cv.put(PNR, boardingPass.getPNR());
-		cv.put(travel_from, boardingPass.getTravel_from());
-		cv.put(travel_to, boardingPass.getTravel_to());
-		cv.put(carrier, boardingPass.getCarrier());
-		cv.put(flight_no, boardingPass.getFlight_no());
-		cv.put(julian_date, boardingPass.getJulian_date());
-		cv.put(compartment_code, boardingPass.getCompartment_code());
-		cv.put(seat, boardingPass.getSeat());
-		cv.put(departure, boardingPass.getDeparture());
-		cv.put(arrival, boardingPass.getArrival());
-		cv.put(codetype, boardingPass.getCodetype());
-		cv.put(id, boardingPass.getId());
-		cv.put(travel_from_name, boardingPass.getTravel_from_name());
-		cv.put(travel_to_name, boardingPass.getTravel_to_name());
-		cv.put(carrier_name, boardingPass.getCarrier_name());
-		cv.put(deletestate, "" + boardingPass.getDeletestate());
+		cv.put(KEY_TRAVEL_CLASS, boardingPass.getTravel_class());
+		cv.put(KEY_STRING_FORM, boardingPass.getStringform());
+		cv.put(KEY_FIRSTNAME, boardingPass.getFirstname());
+		cv.put(KEY_LASTNAME, boardingPass.getLastname());
+		cv.put(KEY_PNR, boardingPass.getPNR());
+		cv.put(KEY_TRAVEL_FROM, boardingPass.getTravel_from());
+		cv.put(KEY_TRAVEL_TO, boardingPass.getTravel_to());
+		cv.put(KEY_CARRIER, boardingPass.getCarrier());
+		cv.put(KEY_FLIGHT_NO, boardingPass.getFlight_no());
+		cv.put(KEY_JULIAN_DATE, boardingPass.getJulian_date());
+		cv.put(KEY_COMPARTMENT_CODE, boardingPass.getCompartment_code());
+		cv.put(KEY_SEAT, boardingPass.getSeat());
+		cv.put(KEY_DEPARTURE, boardingPass.getDeparture());
+		cv.put(KEY_ARRIVAL, boardingPass.getArrival());
+		cv.put(KEY_CODETYPE, boardingPass.getCodetype());
+		cv.put(KEY_ID, boardingPass.getId());
+		cv.put(KEY_TRAVEL_FROM_NAME, boardingPass.getTravel_from_name());
+		cv.put(KEY_TRAVEL_TO_NAME, boardingPass.getTravel_to_name());
+		cv.put(KEY_CARRIER_NAME, boardingPass.getCarrier_name());
+		cv.put(KEY_DELETESTATE, "" + boardingPass.getDeletestate());
 
 		return db.insert(TABLE_BOARDING_PASS_LIST, null, cv);
 	}
@@ -104,6 +107,7 @@ public class BoardingPassDbManager {
 
 	/**
 	 * Sends a list containing all the boarding-pass existing in the DB.
+	 * 
 	 * @param db
 	 * @return
 	 * @throws SQLException
@@ -114,26 +118,26 @@ public class BoardingPassDbManager {
 		if (c != null && c.getCount() >= 0) {
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
-				String travel_class_local = c.getString(c.getColumnIndex(travel_class));
-				String stringform_local = c.getString(c.getColumnIndex(stringform));
-				String firstname_local = c.getString(c.getColumnIndex(firstname));
-				String lastname_local = c.getString(c.getColumnIndex(lastname));
-				String PNR_local = c.getString(c.getColumnIndex(PNR));
-				String travel_from_local = c.getString(c.getColumnIndex(travel_from));
-				String travel_to_local = c.getString(c.getColumnIndex(travel_to));
-				String carrier_local = c.getString(c.getColumnIndex(carrier));
-				String flight_no_local = c.getString(c.getColumnIndex(flight_no));
-				String julian_date_local = c.getString(c.getColumnIndex(julian_date));
-				String compartment_code_local = c.getString(c.getColumnIndex(compartment_code));
-				String seat_local = c.getString(c.getColumnIndex(seat));
-				String departure_local = c.getString(c.getColumnIndex(departure));
-				String arrival_local = c.getString(c.getColumnIndex(arrival));
-				String codetype_local = c.getString(c.getColumnIndex(codetype));
-				String travel_from_name_local = c.getString(c.getColumnIndex(travel_from_name));
-				String travel_to_name_local = c.getString(c.getColumnIndex(travel_to_name));
-				String carrier_name_local = c.getString(c.getColumnIndex(carrier_name));
-				boolean deletestate_local = Boolean.parseBoolean(c.getString(c.getColumnIndex(deletestate)));
-				String id_local = c.getString(c.getColumnIndex(id));
+				String travel_class_local = c.getString(c.getColumnIndex(KEY_TRAVEL_CLASS));
+				String stringform_local = c.getString(c.getColumnIndex(KEY_STRING_FORM));
+				String firstname_local = c.getString(c.getColumnIndex(KEY_FIRSTNAME));
+				String lastname_local = c.getString(c.getColumnIndex(KEY_LASTNAME));
+				String PNR_local = c.getString(c.getColumnIndex(KEY_PNR));
+				String travel_from_local = c.getString(c.getColumnIndex(KEY_TRAVEL_FROM));
+				String travel_to_local = c.getString(c.getColumnIndex(KEY_TRAVEL_TO));
+				String carrier_local = c.getString(c.getColumnIndex(KEY_CARRIER));
+				String flight_no_local = c.getString(c.getColumnIndex(KEY_FLIGHT_NO));
+				String julian_date_local = c.getString(c.getColumnIndex(KEY_JULIAN_DATE));
+				String compartment_code_local = c.getString(c.getColumnIndex(KEY_COMPARTMENT_CODE));
+				String seat_local = c.getString(c.getColumnIndex(KEY_SEAT));
+				String departure_local = c.getString(c.getColumnIndex(KEY_DEPARTURE));
+				String arrival_local = c.getString(c.getColumnIndex(KEY_ARRIVAL));
+				String codetype_local = c.getString(c.getColumnIndex(KEY_CODETYPE));
+				String travel_from_name_local = c.getString(c.getColumnIndex(KEY_TRAVEL_FROM_NAME));
+				String travel_to_name_local = c.getString(c.getColumnIndex(KEY_TRAVEL_TO_NAME));
+				String carrier_name_local = c.getString(c.getColumnIndex(KEY_CARRIER_NAME));
+				boolean deletestate_local = Boolean.parseBoolean(c.getString(c.getColumnIndex(KEY_DELETESTATE)));
+				String id_local = c.getString(c.getColumnIndex(KEY_ID));
 				BoardingPass bpass = new BoardingPass(travel_class_local, stringform_local, firstname_local,
 						lastname_local, PNR_local, travel_from_local, travel_to_local, carrier_local, flight_no_local,
 						julian_date_local, compartment_code_local, seat_local, departure_local, arrival_local,
@@ -142,6 +146,49 @@ public class BoardingPassDbManager {
 				boardingPasslistlist.add(bpass);
 
 				c.moveToNext();
+			}
+		}
+		return boardingPasslistlist;
+	}
+
+	public static List<BoardingPass> retrieveFutureList(SQLiteDatabase db) {
+		Calendar cal = Calendar.getInstance();
+		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+		List<BoardingPass> boardingPasslistlist = new ArrayList<BoardingPass>();
+		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BOARDING_PASS_LIST + " WHERE " + KEY_JULIAN_DATE + " > ?",
+				new String[] { dayOfYear + "" });
+		Log.d(TAG, "retrieveFutureList : got queried size: " + cursor.getCount());
+		if (cursor != null && cursor.getCount() >= 0 && cursor.moveToFirst()) {
+			while (!cursor.isAfterLast()) {
+				String travel_class_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_CLASS));
+				String stringform_local = cursor.getString(cursor.getColumnIndex(KEY_STRING_FORM));
+				String firstname_local = cursor.getString(cursor.getColumnIndex(KEY_FIRSTNAME));
+				String lastname_local = cursor.getString(cursor.getColumnIndex(KEY_LASTNAME));
+				String PNR_local = cursor.getString(cursor.getColumnIndex(KEY_PNR));
+				String travel_from_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_FROM));
+				String travel_to_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_TO));
+				String carrier_local = cursor.getString(cursor.getColumnIndex(KEY_CARRIER));
+				String flight_no_local = cursor.getString(cursor.getColumnIndex(KEY_FLIGHT_NO));
+				String julian_date_local = cursor.getString(cursor.getColumnIndex(KEY_JULIAN_DATE));
+				String compartment_code_local = cursor.getString(cursor.getColumnIndex(KEY_COMPARTMENT_CODE));
+				String seat_local = cursor.getString(cursor.getColumnIndex(KEY_SEAT));
+				String departure_local = cursor.getString(cursor.getColumnIndex(KEY_DEPARTURE));
+				String arrival_local = cursor.getString(cursor.getColumnIndex(KEY_ARRIVAL));
+				String codetype_local = cursor.getString(cursor.getColumnIndex(KEY_CODETYPE));
+				String travel_from_name_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_FROM_NAME));
+				String travel_to_name_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_TO_NAME));
+				String carrier_name_local = cursor.getString(cursor.getColumnIndex(KEY_CARRIER_NAME));
+				boolean deletestate_local = Boolean.parseBoolean(cursor.getString(cursor
+						.getColumnIndex(KEY_DELETESTATE)));
+				String id_local = cursor.getString(cursor.getColumnIndex(KEY_ID));
+				BoardingPass bpass = new BoardingPass(travel_class_local, stringform_local, firstname_local,
+						lastname_local, PNR_local, travel_from_local, travel_to_local, carrier_local, flight_no_local,
+						julian_date_local, compartment_code_local, seat_local, departure_local, arrival_local,
+						codetype_local, id_local, travel_from_name_local, travel_to_name_local, carrier_name_local,
+						deletestate_local);
+				boardingPasslistlist.add(bpass);
+
+				cursor.moveToNext();
 			}
 		}
 		return boardingPasslistlist;
@@ -157,28 +204,29 @@ public class BoardingPassDbManager {
 	 * @throws SQLException
 	 */
 	public static long update(SQLiteDatabase db, BoardingPass boardingPass) throws SQLException {
+		Log.d(TAG, "update : inside");
 		ContentValues cv = new ContentValues();
-		cv.put(travel_class, boardingPass.getTravel_class());
-		cv.put(stringform, boardingPass.getStringform());
-		cv.put(firstname, boardingPass.getFirstname());
-		cv.put(lastname, boardingPass.getLastname());
-		cv.put(PNR, boardingPass.getPNR());
-		cv.put(travel_from, boardingPass.getTravel_from());
-		cv.put(travel_to, boardingPass.getTravel_to());
-		cv.put(carrier, boardingPass.getCarrier());
-		cv.put(flight_no, boardingPass.getFlight_no());
-		cv.put(julian_date, boardingPass.getJulian_date());
-		cv.put(compartment_code, boardingPass.getCompartment_code());
-		cv.put(seat, boardingPass.getSeat());
-		cv.put(departure, boardingPass.getDeparture());
-		cv.put(arrival, boardingPass.getArrival());
-		cv.put(codetype, boardingPass.getCodetype());
-		cv.put(id, boardingPass.getId());
-		cv.put(travel_from_name, boardingPass.getTravel_from_name());
-		cv.put(travel_to_name, boardingPass.getTravel_to_name());
-		cv.put(carrier_name, boardingPass.getCarrier_name());
-		cv.put(deletestate, "" + boardingPass.getDeletestate());
-		return db.update(TABLE_BOARDING_PASS_LIST, cv, stringform + " = ?",
+		cv.put(KEY_TRAVEL_CLASS, boardingPass.getTravel_class());
+		cv.put(KEY_STRING_FORM, boardingPass.getStringform());
+		cv.put(KEY_FIRSTNAME, boardingPass.getFirstname());
+		cv.put(KEY_LASTNAME, boardingPass.getLastname());
+		cv.put(KEY_PNR, boardingPass.getPNR());
+		cv.put(KEY_TRAVEL_FROM, boardingPass.getTravel_from());
+		cv.put(KEY_TRAVEL_TO, boardingPass.getTravel_to());
+		cv.put(KEY_CARRIER, boardingPass.getCarrier());
+		cv.put(KEY_FLIGHT_NO, boardingPass.getFlight_no());
+		cv.put(KEY_JULIAN_DATE, boardingPass.getJulian_date());
+		cv.put(KEY_COMPARTMENT_CODE, boardingPass.getCompartment_code());
+		cv.put(KEY_SEAT, boardingPass.getSeat());
+		cv.put(KEY_DEPARTURE, boardingPass.getDeparture());
+		cv.put(KEY_ARRIVAL, boardingPass.getArrival());
+		cv.put(KEY_CODETYPE, boardingPass.getCodetype());
+		cv.put(KEY_ID, boardingPass.getId());
+		cv.put(KEY_TRAVEL_FROM_NAME, boardingPass.getTravel_from_name());
+		cv.put(KEY_TRAVEL_TO_NAME, boardingPass.getTravel_to_name());
+		cv.put(KEY_CARRIER_NAME, boardingPass.getCarrier_name());
+		cv.put(KEY_DELETESTATE, "" + boardingPass.getDeletestate());
+		return db.update(TABLE_BOARDING_PASS_LIST, cv, KEY_STRING_FORM + " = ?",
 				new String[] { String.valueOf(boardingPass.getStringform()) });
 		// return db.update(TABLE_BOARDING_PASS_LIST, cv, stringform + "= ?" +
 		// new String[] {boardingPass.getStringform()}, null);
@@ -192,7 +240,7 @@ public class BoardingPassDbManager {
 	 * @throws SQLException
 	 */
 	public static void delete(SQLiteDatabase db, BoardingPass boardingPass) throws SQLException {
-		db.delete(TABLE_BOARDING_PASS_LIST, stringform + " = ?",
+		db.delete(TABLE_BOARDING_PASS_LIST, KEY_STRING_FORM + " = ?",
 				new String[] { String.valueOf(boardingPass.getStringform()) });
 
 	}
@@ -205,8 +253,8 @@ public class BoardingPassDbManager {
 	 */
 	public static boolean isExist(SQLiteDatabase db, String stringformtocheck) throws SQLException {
 		boolean itemExist = false;
-		Cursor c = db.query(TABLE_BOARDING_PASS_LIST, null, stringform + "= ?", new String[] { stringformtocheck },
-				null, null, null);
+		Cursor c = db.query(TABLE_BOARDING_PASS_LIST, null, KEY_STRING_FORM + "= ?",
+				new String[] { stringformtocheck }, null, null, null);
 		if ((c != null) && (c.getCount() > 0)) {
 			itemExist = true;
 		}
@@ -221,29 +269,22 @@ public class BoardingPassDbManager {
 	 * @param boardingPass
 	 */
 	public static void insertOrupdate(SQLiteDatabase db, BoardingPass boardingPass) {
-
+		Log.d(TAG, "insertOrupdate : inside");
 		if (isExist(db, boardingPass.getStringform())) {
-			Log.e("tag", "1");
+			Log.e(TAG, "boardingPass : exists");
 			if (boardingPass.getId().equals("-1")) {
-				Log.e("tag", "2");
-
+				Log.e(TAG, "boardingPass.getId().equals('-1')");
 				update(db, boardingPass);
-				Log.e("tag", "3");
-
+				Log.e(TAG, "update process returned");
 			} else {
-				Log.e("tag", "4");
-
+				Log.e(TAG, "boardingPass ID >-1");
 				update(db, boardingPass);
-				Log.e("tag", "5");
+				Log.e(TAG, "update process returned");
 			}
-
 		} else {
-			Log.e("tag", "6");
-
+			Log.e(TAG, "6");
 			insert(db, boardingPass);
-			Log.e("tag", "7");
-
+			Log.e(TAG, "7");
 		}
-
 	}
 }

@@ -18,7 +18,6 @@ import android.util.Log;
  * 
  */
 public class SeatUnityDatabase {
-	@SuppressWarnings("unused")
 	private static final String TAG = SeatUnityDatabase.class.getSimpleName();
 	private DatabaseHelper dbHelper;
 	private SQLiteDatabase db;
@@ -54,6 +53,7 @@ public class SeatUnityDatabase {
 	 * @param ctx
 	 */
 	public SeatUnityDatabase(Context ctx) {
+		Log.i(TAG,"constructor : inside");
 		mContext = ctx;
 	}
 
@@ -63,7 +63,7 @@ public class SeatUnityDatabase {
 	 */
 	public SeatUnityDatabase open() throws SQLException {
 		dbHelper = new DatabaseHelper(mContext);
-		Log.e("context", "ab " + mContext + "  " + dbHelper);
+		Log.e(TAG, "ab " + mContext + "  " + dbHelper);
 		db = dbHelper.getWritableDatabase();
 		return this;
 	}
@@ -121,6 +121,7 @@ public class SeatUnityDatabase {
 	 * @param boardingPasseslist
 	 */
 	public void insertOrUpdateBoardingPass(BoardingPass boardingPass) {
+		Log.d(TAG,"insertOrUpdateBoardingPass : inside");
 		BoardingPassDbManager.insertOrupdate(this.db, boardingPass);
 	}
 	/**
@@ -130,5 +131,13 @@ public class SeatUnityDatabase {
 	 */
 	public List<BoardingPass> retrieveBoardingPassList() {
 		return BoardingPassDbManager.retrieve(this.db);
+	}
+	/**
+	 * Calls the {@link BoardingPassDbManager#retrieveFutureList(SQLiteDatabase)} method.
+	 * 
+	 * @return a list containing all the future boarding-passes in the DB.
+	 */
+	public List<BoardingPass> retrieveFutureBoardingPassList() {
+		return BoardingPassDbManager.retrieveFutureList(this.db);
 	}
 }

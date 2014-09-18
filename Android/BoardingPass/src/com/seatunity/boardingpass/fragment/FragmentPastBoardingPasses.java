@@ -65,7 +65,7 @@ public class FragmentPastBoardingPasses extends Fragment{
 		ArrayList<BoardingPass> list_smaller=new ArrayList<BoardingPass>();
 		//list.get(0).getJulian_date();
 		for(int count=0;count<list.size();count++){
-			int ju_date=Integer.parseInt(list.get(count).getJulian_date());
+			int ju_date=Integer.parseInt(list.get(count).getJulian_date().trim());
 			if((ju_date<dayofyear)){
 				list_smaller.add(list.get(count));
 			}

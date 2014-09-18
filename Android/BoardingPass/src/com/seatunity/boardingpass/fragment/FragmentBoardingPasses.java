@@ -1,7 +1,6 @@
 package com.seatunity.boardingpass.fragment;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +9,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
@@ -25,11 +23,11 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.adapter.AdapterForBoardingPass;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
@@ -49,36 +47,49 @@ import com.seatunity.model.UserCred;
  */
 @SuppressLint("NewApi")
 public class FragmentBoardingPasses extends Fragment implements CallBackApiCall {
-	HomeListFragment parent;
-	EditText et_email, et_password;
-	TextView tv_errorshow;
-	Button bt_login;
-	AsyncaTaskApiCall retreive;
-	ArrayList<BoardingPass> list_greaterthan;
-	Button btn_boarding_pass, btn_seatmate;
-	String email, password;
-	Context context;
-	BoardingPass highlitedboardingpass;
-	BoardingPassApplication appInstance;
-	ListView lv_boarding_pass;
 
-	TextView tv_from, tv_to, tv_month_inside_icon, tv_date_inside_icon, tv_seat_no, tv_flight_no, tv_start_time,
-			tv_arrival_time, tv_cdg, tv_jfk;
+	private final String TAG = this.getClass().getSimpleName();
 
+	public HomeListFragment parent;
+	// private EditText et_email, et_password;
+	// private TextView tv_errorshow;
+	// private Button bt_login;
+	// private AsyncaTaskApiCall retreive;
+	private ArrayList<BoardingPass> futureBPList;
+	// private Button btn_boarding_pass, btn_seatmate;
+	// private String email, password;
+	// private Context context;
+	private BoardingPass highlitedboardingpass;
+	private BoardingPassApplication appInstance;
+	private ListView lv_boarding_pass;
+
+	private TextView tv_from, tv_to, tv_month_inside_icon, tv_date_inside_icon, tv_cdg, tv_jfk, tv_seat_no,
+			tv_flight_no;
+	private MainActivity landingActivity;
+
+	// tv_start_time, tv_arrival_time;
+
+	// /**
+	// * Constructor intializing the boarding-pass list as passed in the param.
+	// *
+	// * @param list_greaterthan
+	// * The boarding-pass list to show in the list-view.
+	// */
+	// public FragmentBoardingPasses(ArrayList<BoardingPass> list_greaterthan) {
+	// this.list_greaterthan = list_greaterthan;
+	// }
+	//
+	// /**
+	// * Empty constructor doing nothing special inside.
+	// */
+	// public FragmentBoardingPasses() {
+	// }
 	/**
 	 * Constructor intializing the boarding-pass list as passed in the param.
 	 * 
-	 * @param list_greaterthan
-	 *            The boarding-pass list to show in the list-view.
 	 */
-	public FragmentBoardingPasses(ArrayList<BoardingPass> list_greaterthan) {
-		this.list_greaterthan = list_greaterthan;
-	}
-
-	/**
-	 * Empty constructor doing nothing special inside.
-	 */
-	public FragmentBoardingPasses() {
+	public static FragmentBoardingPasses newInstance() {
+		return new FragmentBoardingPasses();
 	}
 
 	@SuppressLint("NewApi")
@@ -86,11 +97,15 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		appInstance = (BoardingPassApplication) getActivity().getApplication();
-		context = getActivity();
+		// context = getActivity();
+		landingActivity = (MainActivity) getActivity();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		// futureBPList = (ArrayList<BoardingPass>)
+		// this.getArguments().getSerializable("bplist");
+		Log.i(TAG, "onCreateView");
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_boarding_passes, container, false);
 		lv_boarding_pass = (ListView) v.findViewById(R.id.lv_boarding_pass);
 		tv_cdg = (TextView) v.findViewById(R.id.tv_cdg);
@@ -101,30 +116,26 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 		tv_date_inside_icon = (TextView) v.findViewById(R.id.tv_date_inside_icon);
 		tv_seat_no = (TextView) v.findViewById(R.id.tv_seat_no);
 		tv_flight_no = (TextView) v.findViewById(R.id.tv_flight_no);
-		tv_start_time = (TextView) v.findViewById(R.id.tv_start_time);
-		tv_arrival_time = (TextView) v.findViewById(R.id.tv_arrival_time);
-		btn_boarding_pass = (Button) v.findViewById(R.id.btn_boarding_pass);
-		btn_seatmate = (Button) v.findViewById(R.id.btn_seatmate);
-		btn_seatmate.setOnClickListener(new OnClickListener() {
+		// tv_start_time = (TextView) v.findViewById(R.id.tv_start_time);
+		// tv_arrival_time = (TextView) v.findViewById(R.id.tv_arrival_time);
+		v.findViewById(R.id.btn_seatmate).setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View v) {
 				if ((Constants.isOnline(getActivity())) && (!appInstance.getUserCred().getEmail().equals(""))) {
 					callSeatmet();
 				} else {
 					showAlertMessage();
 				}
-
 			}
 		});
-		btn_boarding_pass.setOnClickListener(new OnClickListener() {
+		v.findViewById(R.id.btn_boarding_pass).setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View arg0) {
-				if (list_greaterthan.size() > 0) {
+			public void onClick(View v) {
+				if (futureBPList.size() > 0) {
 					parent.startUpCommingBoardingDetails(highlitedboardingpass);
 				}
 			}
 		});
-
 		return v;
 	}
 
@@ -133,22 +144,27 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 		super.onResume();
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 		dbInstance.open();
-		ArrayList<BoardingPass> list = (ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+		futureBPList = (ArrayList<BoardingPass>) dbInstance.retrieveFutureBoardingPassList();
 		dbInstance.close();
-		Calendar c = Calendar.getInstance();
-		int dayofyear = c.get(Calendar.DAY_OF_YEAR);
-		list_greaterthan = new ArrayList<BoardingPass>();
-		list_greaterthan.clear();
-
-		for (int i = 0; i < list.size(); i++) {
-			Log.e("test", "t " + list.get(i).getTravel_from_name());
-			int ju_date = Integer.parseInt(list.get(i).getJulian_date());
-
-			if ((ju_date >= dayofyear) && (!list.get(i).getDeletestate())) {
-				list_greaterthan.add(list.get(i));
-			}
-		}
-		setlist();
+		setListViewWithSizeChecks();
+		landingActivity.mTitle = landingActivity.getResources().getString(R.string.app_name_seatunity);
+		landingActivity.getActionBar().setTitle(landingActivity.mTitle);
+		// ArrayList<BoardingPass> list = (ArrayList<BoardingPass>)
+		// dbInstance.retrieveBoardingPassList();
+		// dbInstance.close();
+		// Calendar c = Calendar.getInstance();
+		// int dayofyear = c.get(Calendar.DAY_OF_YEAR);
+		// futureBPList = new ArrayList<BoardingPass>();
+		// futureBPList.clear();
+		//
+		// for (int i = 0; i < list.size(); i++) {
+		// Log.e("test", "t " + list.get(i).getTravel_from_name());
+		// int ju_date = Integer.parseInt(list.get(i).getJulian_date().trim());
+		//
+		// if ((ju_date >= dayofyear) && (!list.get(i).getDeletestate())) {
+		// futureBPList.add(list.get(i));
+		// }
+		// }
 	}
 
 	@Override
@@ -201,10 +217,10 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 	/**
 	 * Initiates the boarding-pass list.
 	 */
-	public void setlist() {
-		if (list_greaterthan != null) {
-			if (list_greaterthan.size() > 0) {
-				AdapterForBoardingPass adapter = new AdapterForBoardingPass(getActivity(), list_greaterthan);
+	public void setListViewWithSizeChecks() {
+		if (futureBPList != null) {
+			if (futureBPList.size() > 0) {
+				AdapterForBoardingPass adapter = new AdapterForBoardingPass(getActivity(), futureBPList);
 				lv_boarding_pass.setAdapter(adapter);
 			} else {
 				if (appInstance.isRememberMe()) {
@@ -220,12 +236,12 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 		lv_boarding_pass.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parentView, View v, int position, long id) {
-				highlitedboardingpass = list_greaterthan.get(position);
+				highlitedboardingpass = futureBPList.get(position);
 				setDetailsBoaredingpass(highlitedboardingpass);
 			}
 		});
 		if (highlitedboardingpass == null) {
-			highlitedboardingpass = list_greaterthan.get(0);
+			highlitedboardingpass = futureBPList.get(0);
 		}
 		setDetailsBoaredingpass(highlitedboardingpass);
 	}
@@ -253,7 +269,7 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 	 *            The data of whih are to be shown in details.
 	 */
 	public void setDetailsBoaredingpass(BoardingPass bpass) {
-		String date = Constants.getDayandYear(Integer.parseInt(bpass.getJulian_date()));
+		String date = Constants.getDayandYear(Integer.parseInt(bpass.getJulian_date().trim()));
 		String[] dateParts = date.split(":");
 		String month = dateParts[1];
 		String dateofmonth = dateParts[0];
@@ -264,10 +280,10 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 		tv_month_inside_icon.setText(month);
 		tv_date_inside_icon.setText(dateofmonth);
 
-		tv_seat_no.setText(context.getResources().getString(R.string.txt_seat_nno) + " "
+		tv_seat_no.setText(landingActivity.getResources().getString(R.string.txt_seat_nno) + " "
 				+ Constants.removeingprecingZero(bpass.getSeat()));
-		tv_flight_no.setText(context.getResources().getString(R.string.txt_flight_no) + " " + bpass.getCarrier()
-				+ bpass.getFlight_no());
+		tv_flight_no.setText(landingActivity.getResources().getString(R.string.txt_flight_no) + " "
+				+ bpass.getCarrier() + bpass.getFlight_no());
 	}
 
 	private void showNoSeatmateDialog() {
@@ -338,7 +354,7 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 						+ highlitedboardingpass.getFlight_no() + "/" + highlitedboardingpass.getJulian_date();
 				extendedurl = extendedurl.replace(" ", "");
 				AsyncaTaskApiCall get_list = new AsyncaTaskApiCall(FragmentBoardingPasses.this, getJsonObjet(),
-						context, extendedurl, Constants.REQUEST_TYPE_POST);
+						landingActivity, extendedurl, Constants.REQUEST_TYPE_POST);
 				get_list.execute();
 
 			}
@@ -356,7 +372,7 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 			// String code =joberror.getString("code");
 			Constants.setAllFlagFalse();
 			String message = joberror.getString("message");
-			Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+			Toast.makeText(landingActivity, message, Toast.LENGTH_SHORT).show();
 		} catch (NotFoundException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {
