@@ -51,36 +51,14 @@
                 android:textColor="#777777" />
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tv_seat_no"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/img_icon"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/txt_seat_nno"
-            android:textColor="#777777"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/tv_flight_no"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/tv_seat_no"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="2dp"
-            android:text="@string/txt_flight_no"
-            android:textColor="#777777"
-            android:textSize="12sp" />
-
         <LinearLayout
             android:layout_width="200dp"
             android:layout_height="100dp"
             android:layout_alignParentLeft="true"
             android:layout_alignTop="@+id/img_icon"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="7dp"
+            android:layout_toLeftOf="@+id/img_icon"
             android:orientation="horizontal"
             android:weightSum="2.40"
             tools:ignore="DisableBaselineAlignment" >
@@ -94,9 +72,10 @@
                     android:id="@+id/tv_from"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="12dp"
+                    android:layout_toRightOf="@+id/tv_start_time"
                     android:gravity="center"
                     android:text="@string/txt_seat_nno"
                     android:textColor="#777777"
@@ -150,10 +129,13 @@
                     android:id="@+id/tv_to"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentRight="true"
                     android:layout_marginTop="12dp"
+                    android:layout_toRightOf="@+id/tv_arrival_time"
+                    android:ellipsize="end"
                     android:gravity="center"
-                    android:text="@string/txt_seat_nno"
+                    android:singleLine="true"
+                    android:text="Nuremberg"
                     android:textColor="#777777"
                     android:textSize="17sp" />
 
@@ -181,6 +163,27 @@
                     android:visibility="gone" />
             </RelativeLayout>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_flight_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/tv_seat_no"
+            android:layout_below="@+id/tv_seat_no"
+            android:text="@string/txt_flight_no"
+            android:textColor="#777777"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_seat_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/img_icon"
+            android:layout_below="@+id/img_icon"
+            android:text="@string/txt_seat_nno"
+            android:textColor="#777777"
+            android:textSize="12sp" />
+
     </RelativeLayout>
 
     <View

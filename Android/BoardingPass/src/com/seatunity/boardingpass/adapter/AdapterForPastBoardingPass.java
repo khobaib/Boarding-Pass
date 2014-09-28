@@ -93,7 +93,7 @@ public class AdapterForPastBoardingPass extends BaseAdapter {
 
 		ViewHolder holder = new ViewHolder();
 		Log.e("deletestate", "" + list.get(position).getDeletestate());
-		String date = Constants.getDayandYear(Integer.parseInt(list.get(position).getJulian_date()));
+		String date = Constants.getDayandYear(Integer.parseInt(list.get(position).getJulian_date().trim()));
 		String[] dateParts = date.split(":");
 		month = dateParts[1];
 		day = dateParts[0];

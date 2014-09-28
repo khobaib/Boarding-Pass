@@ -88,7 +88,6 @@ public class AdapterForSeatmet extends BaseAdapter {
 	 */
 	private class ViewHolder {
 		ImageView img_profile, img_send_msz;
-		@SuppressWarnings("unused")
 		TextView txt_name, tv_prof, tv_seat_pref;
 
 	}

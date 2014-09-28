@@ -65,7 +65,6 @@ import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.fragment.AccountListFragment;
 import com.seatunity.boardingpass.fragment.FragmentAbout;
-import com.seatunity.boardingpass.fragment.FragmentGetBoardingPasseFromBackend;
 import com.seatunity.boardingpass.fragment.HomeListFragment;
 import com.seatunity.boardingpass.fragment.PastBoardingPassListFragment;
 import com.seatunity.boardingpass.fragment.TabFragment;
@@ -76,6 +75,7 @@ import com.seatunity.boardingpass.utilty.PkpassReader;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.BoardingPassParser;
 import com.seatunity.model.NavDrawerItem;
+import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 import com.touhiDroid.filepicker.FilePickerActivity;
 
@@ -97,17 +97,17 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	private TypedArray navMenuIcons;
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
-	BoardingPassApplication appInstance;
+	private BoardingPassApplication appInstance;
 	@SuppressWarnings("unused")
 	private FragmentManager fragmentManager;
 	int lastselectedposition = -1;
-	BoardingPass boardingPass, needtoReusedBoardingPass;
-	HomeListFragment fragHome;
+	private BoardingPass boardingPass, needtoReusedBoardingPass;
+	private HomeListFragment fragHome;
 	int prevselectedposition = -2;
-	ImageView img_from_camera, img_from_sdcard;
-	TextView tv_add_boardingpasswith_camera, tv_add_fromsdcard;
-	RelativeLayout vw_bottom;
-	MainActivity lisenar;
+	private ImageView img_from_camera, img_from_sdcard;
+	private TextView tv_add_boardingpasswith_camera, tv_add_fromsdcard;
+	private RelativeLayout vw_bottom;
+	// private MainActivity lisenar;
 	int BARCODE_SCAN_FROM_DIRECT = 0;
 	int SCAN_BOARDING_PASS_FROM_SD_CARD = 10;
 	int SCANBOARDINGPASSFROMSDCAdIMAGE_FIRST_ROATAION = 101;
@@ -145,14 +145,14 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		checkHookedCall();
 
 		getOverflowMenu();
-		
+
 		ImageView icon = (ImageView) findViewById(android.R.id.home);
 		FrameLayout.LayoutParams iconLp = (FrameLayout.LayoutParams) icon.getLayoutParams();
 		iconLp.leftMargin = iconLp.rightMargin = 20;
 		icon.setLayoutParams(iconLp);
 		fragmentManager = getFragmentManager();
 		appInstance = (BoardingPassApplication) getApplication();
-		
+
 		mTitle = mDrawerTitle = getTitle();
 		initDrawerAndOtherFields();
 
@@ -242,7 +242,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		lisenar = this;
+		// lisenar = this;
 		if (Constants.SELECTEDBOARDINGPASSPOSITION == 1) {
 			displayView(1);
 			Constants.SELECTEDBOARDINGPASSPOSITION = 0;
@@ -975,6 +975,13 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 			Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void responseFailure(ServerResponse response) {
+		if (response.getStatus() != 200) {
+			BoardingPassApplication.alert(MainActivity.this, "Internet connectivity is lost! Please retry the operation.");
 		}
 	}
 

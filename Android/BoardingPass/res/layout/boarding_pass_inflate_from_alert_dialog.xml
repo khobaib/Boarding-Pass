@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#ffffff"
     android:orientation="vertical"
     android:paddingLeft="10dp"
-    android:paddingRight="10dp" >
+    android:paddingRight="10dp"
+    tools:ignore="HardcodedText" >
 
     <TextView
         android:id="@+id/tv_jfk"
@@ -14,7 +16,7 @@
         android:layout_alignParentRight="true"
         android:text="@string/txt_jfk"
         android:textColor="#2D3E50"
-        android:textSize="22dp"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
     <TextView
@@ -25,7 +27,7 @@
         android:layout_below="@+id/tv_jfk"
         android:text="24.00"
         android:textColor="#777777"
-        android:textSize="17dp" />
+        android:textSize="17sp" />
 
     <TextView
         android:id="@+id/tv_start_time"
@@ -35,7 +37,7 @@
         android:layout_below="@+id/tv_cdg"
         android:text="22.00"
         android:textColor="#777777"
-        android:textSize="17dp" />
+        android:textSize="17sp" />
 
     <TextView
         android:id="@+id/tv_flight_date"
@@ -45,7 +47,7 @@
         android:layout_alignParentLeft="true"
         android:text="Aprl 22 AfGh"
         android:textColor="#777777"
-        android:textSize="17dp" />
+        android:textSize="17sp" />
 
     <TextView
         android:id="@+id/tv_seat_no"
@@ -55,7 +57,7 @@
         android:layout_below="@+id/tv_flight_date"
         android:text="@string/txt_seat_nno"
         android:textColor="#777777"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tv_flight_to_from"
@@ -66,7 +68,7 @@
         android:layout_marginTop="7dp"
         android:text="Paris - New Yourk"
         android:textColor="#2D3E50"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
     <TextView
@@ -74,11 +76,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/tv_arrival_time"
+        android:layout_marginRight="6dp"
         android:layout_toLeftOf="@+id/tv_jfk"
         android:text="@string/txt_cdg"
         android:textColor="#2D3E50"
-        android:layout_marginRight="6dp"
-        android:textSize="22dp"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
 </RelativeLayout>

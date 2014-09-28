@@ -24,6 +24,7 @@ import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
+import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 
 /**
@@ -165,6 +166,13 @@ public class ForgotPassActivity extends Activity implements CallBackApiCall {
 
 	@Override
 	public void LoginFailed(JSONObject job) {
+	}
+
+	@Override
+	public void responseFailure(ServerResponse response) {
+		if (response.getStatus() != 200) {
+			BoardingPassApplication.alert(ForgotPassActivity.this, "Internet connectivity is lost! Please retry the operation.");
+		}
 	}
 
 }

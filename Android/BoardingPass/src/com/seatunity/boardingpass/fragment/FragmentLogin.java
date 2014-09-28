@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,6 +40,8 @@ import com.seatunity.model.UserCred;
  */
 @SuppressLint("NewApi")
 public class FragmentLogin extends Fragment implements CallBackApiCall {
+	
+	private final String TAG=this.getClass().getSimpleName();
 	EditText et_email, et_password;
 	TextView tv_errorshow, tv_forgot_pass;
 	Button bt_login;
@@ -55,6 +58,7 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.i(TAG,"onCreateView");
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.login, container, false);
 		initview(v);
 		return v;
@@ -249,5 +253,12 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 
 	@Override
 	public void LoginFailed(JSONObject job) {
+	}
+
+	@Override
+	public void responseFailure(ServerResponse response) {
+		if (response.getStatus() != 200) {
+			BoardingPassApplication.alert(getActivity(), "Internet connectivity is lost! Please retry the operation.");
+		}
 	}
 }

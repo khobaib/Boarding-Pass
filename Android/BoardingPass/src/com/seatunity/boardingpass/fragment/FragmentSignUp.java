@@ -44,8 +44,10 @@ import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.TermAndConditionActivity;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.interfaces.CallBackApiCall;
+import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.boardingpass.utilty.MyCustomSpannable;
+import com.seatunity.model.ServerResponse;
 
 /**
  * Fragment containing the UI & necessary API call to support a new user
@@ -129,6 +131,7 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.signup, container, false);
+		Log.i(TAG,"onCreateView");
 		rdgrp_gender = (RadioGroup) v.findViewById(R.id.rdgrp_gender);
 		initview(v);
 		return v;
@@ -476,5 +479,12 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 		// Toast.makeText(getActivity(),
 		// getActivity().getResources().getString(R.string.txt_signup_failed1),
 		// Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void responseFailure(ServerResponse response) {
+		if (response.getStatus() != 200) {
+			BoardingPassApplication.alert(getActivity(), "Internet connectivity is lost! Please retry the operation.");
+		}
 	}
 }

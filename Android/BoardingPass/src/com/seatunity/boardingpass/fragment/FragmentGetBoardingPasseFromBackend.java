@@ -24,6 +24,7 @@ import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.BoardingPassList;
+import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 
 /**
@@ -44,7 +45,6 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 	// private TextView tv_errorshow;
 	// private Button bt_login;
 	private AsyncaTaskApiCall apiCaller;
-	private ArrayList<BoardingPass> allBoardingPassList;
 	private ArrayList<BoardingPass> futureBoardingPassList;
 	// private Button btn_boarding_pass, btn_seatmate;
 	// private String email, password;
@@ -163,6 +163,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_get_bpass_from_backend, container, false);
+		Log.i(TAG, "onCreateView");
 		return v;
 	}
 
@@ -184,9 +185,10 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 
 	@Override
 	public void responseOk(JSONObject job) {
+		ArrayList<BoardingPass> allBoardingPassList;
 		try {
 			if (job.getString("success").equals("true")) {
-				this.allBoardingPassList = BoardingPassList.getBoardingPassListObject(job).getBoardingPassList();
+				allBoardingPassList = BoardingPassList.getBoardingPassListObject(job).getBoardingPassList();
 				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
 				Log.e("db", dbInstance + " ab");
 				dbInstance.open();
@@ -280,6 +282,13 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 			e.printStackTrace();
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void responseFailure(ServerResponse response) {
+		if (response.getStatus() != 200) {
+			BoardingPassApplication.alert(getActivity(), "Internet connectivity is lost! Please retry the operation.");
 		}
 	}
 }

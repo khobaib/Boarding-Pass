@@ -44,6 +44,7 @@ import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.SeatMetList;
+import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 
 /**
@@ -54,6 +55,9 @@ import com.seatunity.model.UserCred;
  */
 @SuppressLint("NewApi")
 public class FragmentUpcomingBoardingPassDetails extends Fragment implements CallBackApiCall {
+
+	private final String TAG = this.getClass().getSimpleName();
+	
 	BoardingPass bpass;
 	SeatMetList list;
 	HomeListFragment parent;
@@ -67,9 +71,17 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	TextView tv_name_carrier, tv_month_inside_icon, tv_date_inside_icon, tv_from_air, tv_to_air, tv_start_time,
 			tv_arrival_time, tv_flight_var, tv_seat_var, tv_compartment_class_var, tv_passenger_name, tv_from, tv_to;
 
-	public FragmentUpcomingBoardingPassDetails(BoardingPass bpass) {
-		this.bpass = bpass;
-		Log.e("insideList5", bpass.getTravel_from_name());
+//	public FragmentUpcomingBoardingPassDetails(BoardingPass bpass) {
+//		this.bpass = bpass;
+//		Log.e("insideList5", bpass.getTravel_from_name());
+//	}
+	
+	public static FragmentUpcomingBoardingPassDetails newInstance(BoardingPass bpass){
+		FragmentUpcomingBoardingPassDetails f = new FragmentUpcomingBoardingPassDetails();
+		Bundle b = new Bundle();
+		b.putSerializable("bpass", bpass);
+		f.setArguments(b);
+		return f;
 	}
 
 	@Override
@@ -83,7 +95,10 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+		Log.i(TAG,"onCreateView");
 		appInstance = (BoardingPassApplication) getActivity().getApplication();
+		this.bpass = (BoardingPass) getArguments().getSerializable("bpass");
 		View rootView = inflater.inflate(R.layout.fragment_boarding_details, container, false);
 		btn_seatmate = (Button) rootView.findViewById(R.id.btn_seatmate);
 		img_barcode = (ImageView) rootView.findViewById(R.id.img_barcode);
@@ -521,6 +536,13 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 			e.printStackTrace();
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void responseFailure(ServerResponse response) {
+		if (response.getStatus() != 200) {
+			BoardingPassApplication.alert(getActivity(), "Internet connectivity is lost! Please retry the operation.");
 		}
 	}
 

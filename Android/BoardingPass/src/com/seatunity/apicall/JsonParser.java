@@ -250,17 +250,13 @@ public class JsonParser {
 
 		// try parse the string to a JSON object
 		try {
-			Log.e("test", "41");
-
+			Log.e(TAG, "trying to parse the string to a JSON object");
 			jObj = new JSONObject(json);
-			Log.e("test", "42");
-
 		} catch (JSONException e) {
-			Log.e("test", "43");
-
-			Log.e("JSON Parser", "Error parsing data " + e.toString());
+			Log.e(TAG, "JSONException");
+			Log.e(TAG, "Error parsing data " + e.toString());
 		}
-		Log.e("test", "44");
+		Log.e(TAG, "44");
 
 		// return ServerResponse
 		return new ServerResponse(jObj, status);

@@ -185,6 +185,10 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 			}
 		}
 
+		if(result.getStatus()!=200){
+			CaBLisenar.responseFailure(result);
+			return;
+		}
 		if (netstatelisenaer != null) {
 			netstatelisenaer.addBoardingPassonBackendSuccess(result.getjObj(), bpass);
 		} else if (loginsuccesslisenar != null) {

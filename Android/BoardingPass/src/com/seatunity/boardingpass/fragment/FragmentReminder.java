@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +24,8 @@ import com.seatunity.boardingpass.utilty.BoardingPassApplication;
  */
 @SuppressLint("NewApi")
 public class FragmentReminder extends Fragment {
+	
+	private final String TAG=this.getClass().getSimpleName();
 
 	BoardingPassApplication appInstance;
 	AccountListFragment parent;
@@ -38,6 +41,7 @@ public class FragmentReminder extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.i(TAG,"onCreateView");
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_reminder, container, false);
 		tv_login = (TextView) v.findViewById(R.id.tv_login);
 		tv_signup = (TextView) v.findViewById(R.id.tv_signup);

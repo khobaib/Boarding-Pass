@@ -37,6 +37,7 @@ import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.SeatMetList;
+import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 
 /**
@@ -377,6 +378,13 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 			e.printStackTrace();
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void responseFailure(ServerResponse response) {
+		if (response.getStatus() != 200) {
+			BoardingPassApplication.alert(getActivity(), "Internet connectivity is lost! Please retry the operation.");
 		}
 	}
 }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,13 +26,20 @@ import com.seatunity.boardingpass.R;
  */
 @SuppressLint("NewApi")
 public class FragmentAbout extends Fragment implements OnClickListener {
+	
+	private final String TAG=this.getClass().getSimpleName();
 	HomeListFragment parent;
 	TextView tv_verion_code, tv_send_feedback, tv_report_prob, tv_rate_app, tv_trmsof_srvs, tv_prvcy_pilcy,
 			tv_let_know_bug;
 
+	public static FragmentAbout newInstance(){
+		return new FragmentAbout();
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+		Log.i(TAG,"onCreateView");
 		View rootView = inflater.inflate(R.layout.about, container, false);
 		tv_let_know_bug = (TextView) rootView.findViewById(R.id.tv_let_know_bug);
 		tv_verion_code = (TextView) rootView.findViewById(R.id.tv_verion_code);

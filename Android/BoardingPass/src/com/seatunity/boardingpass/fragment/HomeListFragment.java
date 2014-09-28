@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
-import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
@@ -62,18 +61,17 @@ public class HomeListFragment extends TabFragment {
 		// this.from = from;
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		appInstance = (BoardingPassApplication) getActivity().getApplication();
 		backEndStack = new Stack<Fragment>();
-		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
-		dbInstance.open();
+		// SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
+		// dbInstance.open();
 		// ArrayList<BoardingPass> list = (ArrayList<BoardingPass>)
 		// dbInstance.retrieveBoardingPassList();
-		dbInstance.close();
-		String email = appInstance.getUserCred().getEmail();
+		// dbInstance.close();
+		// String email = appInstance.getUserCred().getEmail();
 		if (from == 0) {
 			FragmentGetBoardingPasseFromBackend fragment = new FragmentGetBoardingPasseFromBackend();
 			fragment.parent = this;
@@ -187,7 +185,7 @@ public class HomeListFragment extends TabFragment {
 	 * Starts the {@link FragmentAbout} with some brief of the app.
 	 */
 	public void startFragmentAbout() {
-		FragmentAbout newFragment = new FragmentAbout();
+		FragmentAbout newFragment = FragmentAbout.newInstance();
 		newFragment.parent = this;
 		FragmentManager fragmentManager = getActivity().getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -205,7 +203,7 @@ public class HomeListFragment extends TabFragment {
 	 */
 	public void startUpCommingBoardingDetails(BoardingPass bpass) {
 		Log.e("insideList", bpass.getTravel_from_name());
-		FragmentUpcomingBoardingPassDetails newFragment = new FragmentUpcomingBoardingPassDetails(bpass);
+		FragmentUpcomingBoardingPassDetails newFragment = FragmentUpcomingBoardingPassDetails.newInstance(bpass);
 		newFragment.parent = this;
 		FragmentManager fragmentManager = getActivity().getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

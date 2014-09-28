@@ -52,6 +52,7 @@ import com.seatunity.boardingpass.utilty.Base64;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.ImageScale;
+import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 
 /**
@@ -85,6 +86,8 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 	private int callfrom = 0;
 	private JSONObject loginObj;
 	private Bundle savedState = null;
+	
+	private final String TAG=this.getClass().getSimpleName();
 
 	/**
 	 * Empty constructor doing nothing special inside
@@ -180,6 +183,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		v = (ViewGroup) inflater.inflate(R.layout.fragment_my_account, container, false);
+		Log.i(TAG, "onCreateView");
 		tv_uname = (TextView) v.findViewById(R.id.tv_uname);
 		tv_email = (TextView) v.findViewById(R.id.tv_email);
 		tv_stataus = (TextView) v.findViewById(R.id.tv_stataus);
@@ -933,6 +937,13 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 			e.printStackTrace();
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void responseFailure(ServerResponse response) {
+		if (response.getStatus() != 200) {
+			BoardingPassApplication.alert(getActivity(), "Internet connectivity is lost! Please retry the operation.");
 		}
 	}
 

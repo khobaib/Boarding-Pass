@@ -36,6 +36,7 @@ import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.BoardingPassListForSharedFlight;
 import com.seatunity.model.SeatMate;
+import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 
 /**
@@ -44,8 +45,11 @@ import com.seatunity.model.UserCred;
  * @author Sumon
  * 
  */
-@SuppressLint("NewApi")
+@SuppressLint({ "NewApi", "InflateParams" })
 public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
+
+	private final String TAG = this.getClass().getSimpleName();
+	
 	HomeListFragment parent;
 	ImageView img_prof_pic;
 	BoardingPassApplication appInstance;
@@ -93,7 +97,6 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		if (getActivity() != null) {
 			landingActivity = (MainActivity) getActivity();
@@ -103,6 +106,7 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.i(TAG,"onCreateView");
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_single_seatmate, container, false);
 		tv_uname = (TextView) v.findViewById(R.id.tv_uname);
 		tv_profession = (TextView) v.findViewById(R.id.tv_profession);
@@ -189,7 +193,7 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 				.setPositiveButton(getActivity().getResources().getString(R.string.txt_ok), null) // Set
 				.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel), null).create();
 		LayoutInflater inflater = (LayoutInflater) getActivity()
-				.getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
 		TextView title = (TextView) customTitleView.findViewById(R.id.tv_title);
 		title.setText(getActivity().getResources().getString(R.string.txt_send_email));
@@ -249,7 +253,7 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 	public void showAlertDilogToshowSharedFlight(ArrayList<BoardingPass> item) {
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = (LayoutInflater) getActivity()
-				.getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
 		TextView title = (TextView) customTitleView.findViewById(R.id.tv_title);
 		title.setText(getActivity().getResources().getString(R.string.txt_shared_flight_title));
@@ -277,7 +281,6 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 
 	@Override
 	public void responseOk(JSONObject job) {
-		// TODO Auto-generated method stub
 		try {
 			if (job.getString("success").equals("true")) {
 				if (callfrom == 1) {
@@ -298,7 +301,6 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 			}
 
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -306,7 +308,6 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 
 	@Override
 	public void responseFailure(JSONObject job) {
-		// TODO Auto-generated method stub
 		try {
 			JSONObject joberror = new JSONObject(job.getString("error"));
 			String code = joberror.getString("code");
@@ -323,14 +324,12 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 				Toast.makeText(context, job.getString("message"), Toast.LENGTH_SHORT).show();
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void saveLoginCred(JSONObject job) {
-		// TODO Auto-generated method stub
 		try {
 			UserCred userCred;
 			String status = job.getString("success");
@@ -372,7 +371,7 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 	public void LoginFailed(JSONObject job) {
 		try {
 			JSONObject joberror = new JSONObject(job.getString("error"));
-			String code = joberror.getString("code");
+			// String code = joberror.getString("code");
 			Constants.setAllFlagFalse();
 			String message = joberror.getString("message");
 			Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
@@ -380,6 +379,13 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 			e.printStackTrace();
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void responseFailure(ServerResponse response) {
+		if (response.getStatus() != 200) {
+			BoardingPassApplication.alert(getActivity(), "Internet connectivity is lost! Please retry the operation.");
 		}
 	}
 

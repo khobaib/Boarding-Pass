@@ -24,6 +24,7 @@ import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
+import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 
 /**
@@ -326,6 +327,13 @@ public class EditUserNameActivity extends Activity implements CallBackApiCall {
 			e.printStackTrace();
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void responseFailure(ServerResponse response) {
+		if (response.getStatus() != 200) {
+			BoardingPassApplication.alert(EditUserNameActivity.this, "Internet connectivity is lost! Please retry the operation.");
 		}
 	}
 

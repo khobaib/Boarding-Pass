@@ -1,6 +1,5 @@
 package com.seatunity.boardingpass.fragment;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 import android.annotation.SuppressLint;
@@ -14,13 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
-import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
-import com.seatunity.model.BoardingPass;
 
 /**
  * Fragment showing the past boarding-pass list.
@@ -31,6 +27,9 @@ import com.seatunity.model.BoardingPass;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
 public class PastBoardingPassListFragment extends TabFragment {
+
+	private final String TAG = this.getClass().getSimpleName();
+	
 	protected Stack<Fragment> backEndStack;
 	BoardingPassApplication appInstance;
 
@@ -40,12 +39,13 @@ public class PastBoardingPassListFragment extends TabFragment {
 		appInstance = (BoardingPassApplication) getActivity().getApplication();
 		// Log.e("testting", "PastBoardingPassListFragment");
 		backEndStack = new Stack<Fragment>();
-		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
-		dbInstance.open();
-		ArrayList<BoardingPass> list = (ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+		// SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
+		// dbInstance.open();
+		// ArrayList<BoardingPass> list = (ArrayList<BoardingPass>)
+		// dbInstance.retrieveBoardingPassList();
 
-		dbInstance.close();
-		String email = appInstance.getUserCred().getEmail();
+		// dbInstance.close();
+		// String email = appInstance.getUserCred().getEmail();
 
 		FragmentPastBoardingPasses fragment = new FragmentPastBoardingPasses();
 		fragment.parent = this;
@@ -55,8 +55,9 @@ public class PastBoardingPassListFragment extends TabFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		ViewParent parent = (ViewParent) container.getParent();
+		// ViewParent parent = (ViewParent) container.getParent();
 		Log.e("testting", "PastBoardingPassListFragmentonCreateView");
+		Log.i(TAG,"onCreateView");
 		// if (parent instanceof View) {
 		// ((TextView) ((View) parent).findViewById(R.id.welcome_title))
 		// .setText(this.getTag());
@@ -79,20 +80,20 @@ public class PastBoardingPassListFragment extends TabFragment {
 		super.onStart();
 	}
 
-	/**
-	 * All commented inside this method.
-	 */
-	public void startAddBoardingPass() {
-		// FragmentAddBoardingPass newFragment = new FragmentAddBoardingPass() ;
-		// newFragment.parent = this;
-		// FragmentManager fragmentManager = getActivity().getFragmentManager();
-		// FragmentTransaction fragmentTransaction = fragmentManager
-		// .beginTransaction();
-		// fragmentTransaction.replace(R.id.tab3Content, newFragment);
-		// fragmentTransaction.addToBackStack(null);
-		// backEndStack.push(newFragment);
-		// fragmentTransaction.commitAllowingStateLoss();
-	}
+	// /**
+	// * All commented inside this method.
+	// */
+	// public void startAddBoardingPass() {
+	// FragmentAddBoardingPass newFragment = new FragmentAddBoardingPass() ;
+	// newFragment.parent = this;
+	// FragmentManager fragmentManager = getActivity().getFragmentManager();
+	// FragmentTransaction fragmentTransaction = fragmentManager
+	// .beginTransaction();
+	// fragmentTransaction.replace(R.id.tab3Content, newFragment);
+	// fragmentTransaction.addToBackStack(null);
+	// backEndStack.push(newFragment);
+	// fragmentTransaction.commitAllowingStateLoss();
+	// }
 
 	/**
 	 * Pop out the last fragment from the {@link #backEndStack}

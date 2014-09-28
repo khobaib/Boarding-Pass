@@ -2,6 +2,7 @@ package com.seatunity.boardingpass.fragment;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,9 @@ import com.seatunity.boardingpass.R;
  */
 @SuppressLint("NewApi")
 public class FragmentTermsAndCondition extends Fragment  {
+
+	private final String TAG = this.getClass().getSimpleName();
+	
 	HomeListFragment parent;
 	TextView tv_title,tv_details;
 	String title,details;
@@ -29,6 +33,7 @@ public class FragmentTermsAndCondition extends Fragment  {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		Log.i(TAG,"onCreateView");
 		View rootView = inflater.inflate(R.layout.terms_privacy_policy, container, false);
 		tv_title=(TextView) rootView.findViewById(R.id.tv_title);
 		tv_details=(TextView) rootView.findViewById(R.id.tv_details);

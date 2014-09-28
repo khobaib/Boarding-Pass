@@ -29,6 +29,8 @@ import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
 public class AccountListFragment extends TabFragment {
+	
+	private final String TAG=this.getClass().getSimpleName();
 	protected Stack<Fragment> backEndStack;
 	BoardingPassApplication appInstance;
 
@@ -63,7 +65,8 @@ public class AccountListFragment extends TabFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Log.e("testting", "AccountListFragmentononCreateView");
+		Log.e(TAG, "AccountListFragmentononCreateView");
+		Log.i(TAG,"onCreateView");
 		// ViewParent parent = (ViewParent) container.getParent();
 		View v = inflater.inflate(R.layout.fragment_tab3, container, false);
 		return v;

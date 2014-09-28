@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +28,8 @@ import com.seatunity.boardingpass.R;
 @SuppressLint("NewApi")
 public class HomeFragment extends Fragment {
 
+	private final String TAG = this.getClass().getSimpleName();
+
 	ImageView img_add_boardingpass, img_addprofile;
 	TextView tv_add_boardingpass, tv_add_profile;
 	HomeListFragment parent;
@@ -34,6 +37,7 @@ public class HomeFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+		Log.i(TAG,"onCreateView");
 		View rootView = inflater.inflate(R.layout.fragment_add_screen_not_loggedin, container, false);
 		img_add_boardingpass = (ImageView) rootView.findViewById(R.id.img_add_boardingpass);
 		img_addprofile = (ImageView) rootView.findViewById(R.id.img_addprofile);

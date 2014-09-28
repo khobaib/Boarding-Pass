@@ -16,7 +16,6 @@ import com.seatunity.boardingpass.networkstatetracker.NetworkStateReceiver;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
-import com.seatunity.model.BoardingPassList;
 import com.seatunity.model.ServerResponse;
 
 /**
@@ -99,6 +98,10 @@ public class AsyncaTaskApiCallAfterLoginToBackEndSync extends AsyncTask<Void, Vo
 			}
 		}
 
+		if(result.getStatus()!=200){
+			CaBLisenar.responseFailure(result);
+			return;
+		}
 		if (netstatelisenaer != null) {
 			netstatelisenaer.addBoardingPassonBackendSuccess(result.getjObj(), bpass);
 		} else if (CaBLisenar != null) {
@@ -113,8 +116,6 @@ public class AsyncaTaskApiCallAfterLoginToBackEndSync extends AsyncTask<Void, Vo
 						CaBLisenar.LoginFailed(job);
 					}
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-
 					e.printStackTrace();
 				}
 			} else {
@@ -127,8 +128,6 @@ public class AsyncaTaskApiCallAfterLoginToBackEndSync extends AsyncTask<Void, Vo
 						CaBLisenar.responseFailure(job);
 					}
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-
 					e.printStackTrace();
 				}
 			}
@@ -137,12 +136,12 @@ public class AsyncaTaskApiCallAfterLoginToBackEndSync extends AsyncTask<Void, Vo
 			JSONObject job = result.getjObj();
 			try {
 				if (job.getString("success").equals("true")) {
-					BoardingPassList list = BoardingPassList.getBoardingPassListObject(job);
+					// BoardingPassList list =
+					// BoardingPassList.getBoardingPassListObject(job);
 					deletelisenarfromnetstate.updateDatabaseWithoutServernotification(bpass);
 				} else {
 				}
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

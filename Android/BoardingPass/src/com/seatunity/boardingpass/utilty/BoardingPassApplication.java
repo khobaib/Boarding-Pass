@@ -1,7 +1,9 @@
 package com.seatunity.boardingpass.utilty;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
@@ -51,6 +53,7 @@ public class BoardingPassApplication extends Application {
 
 	/**
 	 * All are commented out inside this function.
+	 * 
 	 * @param firstTimeFlag
 	 */
 	public void setFirstTime(Boolean firstTimeFlag) {
@@ -133,5 +136,17 @@ public class BoardingPassApplication extends Application {
 	public boolean isRememberMe() {
 		Boolean rememberMeFlag = User.getBoolean(Constants.REMEMBER_ME, false);
 		return rememberMeFlag;
+	}
+
+	public static void alert(Context context, String message) {
+		AlertDialog.Builder bld = new AlertDialog.Builder(context);
+		bld.setMessage(message);
+		bld.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		bld.create().show();
 	}
 }
