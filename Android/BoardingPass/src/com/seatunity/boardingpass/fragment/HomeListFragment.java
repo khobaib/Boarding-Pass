@@ -222,7 +222,7 @@ public class HomeListFragment extends TabFragment {
 	public void startSeatmetList(SeatMetList seatmetlist, BoardingPass bpass) {
 		Log.e("insideList3", bpass.getTravel_from_name());
 		FragmentSeatMet newFragment = new FragmentSeatMet(seatmetlist, bpass);
-		newFragment.parent = this;
+		newFragment.parentAsHome = this;
 		FragmentManager fragmentManager = getActivity().getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		fragmentTransaction.replace(R.id.tab3Content, newFragment);
@@ -233,7 +233,7 @@ public class HomeListFragment extends TabFragment {
 
 	public void startAddBoardingPassDuringLogin() {
 		FragmentAddBoardingPassDuringLogin newFragment = new FragmentAddBoardingPassDuringLogin();
-		newFragment.parent = this;
+		newFragment.parentAsHome = this;
 		FragmentManager fragmentManager = getActivity().getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		fragmentTransaction.replace(R.id.tab3Content, newFragment);

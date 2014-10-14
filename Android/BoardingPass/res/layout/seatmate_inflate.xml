@@ -6,7 +6,7 @@
     android:background="#ffffff"
     android:orientation="vertical"
     android:padding="10dp"
-        tools:ignore="HardcodedText"  >
+    tools:ignore="HardcodedText" >
 
     <ImageView
         android:id="@+id/img_profile"
@@ -22,18 +22,21 @@
         android:id="@+id/txt_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/img_profile"
         android:layout_marginLeft="4dp"
         android:layout_toRightOf="@+id/img_profile"
         android:text="Alfred fred"
-        android:textColor="#2D3E50"/>
+        android:textColor="#2D3E50" />
 
     <TextView
         android:id="@+id/tv_prof"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/txt_name"
+        android:layout_alignRight="@+id/img_send_msz"
         android:layout_below="@+id/txt_name"
+        android:layout_marginBottom="4dp"
         android:layout_marginTop="4dp"
         android:textColor="#777777" />
 
@@ -42,8 +45,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_prof"
-        android:layout_below="@+id/tv_prof"
-        android:layout_marginTop="4dp"
+        android:layout_alignTop="@+id/img_send_msz"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_toLeftOf="@+id/img_send_msz"
         android:textColor="#777777" />
 
     <ImageView
@@ -52,6 +57,9 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/img_profile"
         android:layout_alignParentRight="true"
-        android:src="@drawable/ic_send_message" />
+        android:layout_below="@+id/tv_prof"
+        android:padding="2dp"
+        android:src="@drawable/ic_send_message"
+        tools:ignore="ContentDescription" />
 
 </RelativeLayout>

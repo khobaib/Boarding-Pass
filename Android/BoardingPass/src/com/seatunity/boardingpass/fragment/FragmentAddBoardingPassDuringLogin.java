@@ -27,7 +27,8 @@ import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 public class FragmentAddBoardingPassDuringLogin extends Fragment {
 	
 	private final String TAG=this.getClass().getSimpleName();
-	HomeListFragment parent;
+	HomeListFragment parentAsHome;
+	PastBoardingPassListFragment parentAsPast;
 	ImageView img_add_boardingpass;
 	TextView tv_add_boardingpass;
 	BoardingPassApplication appInstance;

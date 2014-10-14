@@ -49,7 +49,7 @@ import com.seatunity.model.UserCred;
 public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 
 	private final String TAG = this.getClass().getSimpleName();
-	
+
 	HomeListFragment parent;
 	ImageView img_prof_pic;
 	BoardingPassApplication appInstance;
@@ -68,6 +68,8 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 	Context context;
 	String savedMessage;
 	private int callfrom = 0;
+
+	public PastBoardingPassListFragment parentAsPast;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -106,11 +108,13 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Log.i(TAG,"onCreateView");
+		Log.i(TAG, "onCreateView");
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_single_seatmate, container, false);
 		tv_uname = (TextView) v.findViewById(R.id.tv_uname);
 		tv_profession = (TextView) v.findViewById(R.id.tv_profession);
 		tv_shared_flight = (TextView) v.findViewById(R.id.tv_shared_flight);
+		//TODO (Still 4? Contact Mashruk/Sumon vaia through Khobaib vaia)
+		tv_shared_flight.setText(seatmate.getShared_flight() + " Shared Flights");
 		tv_status = (TextView) v.findViewById(R.id.tv_status);
 		tv_age = (TextView) v.findViewById(R.id.tv_age);
 		tv_class = (TextView) v.findViewById(R.id.tv_class);
@@ -159,9 +163,10 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 		tv_profession.setText(seatmate.getProfession());
 		tv_seat.setText(seatmate.getTravel_class() + ", " + Constants.removeingprecingZero(seatmate.getSeat()));
 		tv_status.setText(seatmate.getStatus());
-		tv_live_in.setText(getActivity().getResources().getString(R.string.txt_live_in) + seatmate.getLive_in());
+		tv_live_in.setText(getActivity().getResources().getString(R.string.txt_live_in) + " " + seatmate.getLive_in());
 		tv_age.setText(getActivity().getResources().getString(R.string.txt_age) + " " + seatmate.getAge());
-		tv_class.setText(getActivity().getResources().getString(R.string.txt_prefer_to) + seatmate.getSeating_pref());
+		tv_class.setText(getActivity().getResources().getString(R.string.txt_prefer_to) + " "
+				+ seatmate.getSeating_pref());
 		tv_sothn_about.setText(seatmate.getSome_about_you());
 		if ((seatmate.getImage_url() != null) && (!seatmate.getImage_url().equals(""))) {
 			ImageLoader.getInstance().displayImage(seatmate.getImage_url(), img_prof_pic);
@@ -192,8 +197,7 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 		d = new AlertDialog.Builder(getActivity()).setView(input)
 				.setPositiveButton(getActivity().getResources().getString(R.string.txt_ok), null) // Set
 				.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel), null).create();
-		LayoutInflater inflater = (LayoutInflater) getActivity()
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
 		TextView title = (TextView) customTitleView.findViewById(R.id.tv_title);
 		title.setText(getActivity().getResources().getString(R.string.txt_send_email));
@@ -252,8 +256,7 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 	 */
 	public void showAlertDilogToshowSharedFlight(ArrayList<BoardingPass> item) {
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
-		LayoutInflater inflater = (LayoutInflater) getActivity()
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
 		TextView title = (TextView) customTitleView.findViewById(R.id.tv_title);
 		title.setText(getActivity().getResources().getString(R.string.txt_shared_flight_title));
@@ -262,7 +265,6 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 
 		builderSingle.setNegativeButton(getActivity().getResources().getString(R.string.txt_cancel),
 				new DialogInterface.OnClickListener() {
-
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
@@ -286,7 +288,6 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 				if (callfrom == 1) {
 					Toast.makeText(context, context.getResources().getString(R.string.txt_emailsent_success),
 							Toast.LENGTH_SHORT).show();
-
 				} else if (callfrom == 2) {
 					BoardingPassListForSharedFlight list = BoardingPassListForSharedFlight
 							.getBoardingPassListObject(job);

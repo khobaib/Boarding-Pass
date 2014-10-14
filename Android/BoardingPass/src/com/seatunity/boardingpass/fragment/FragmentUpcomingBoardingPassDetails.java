@@ -61,6 +61,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	BoardingPass bpass;
 	SeatMetList list;
 	HomeListFragment parent;
+	PastBoardingPassListFragment parentAsPast;
 	ImageView img_barcode;
 	Button btn_seatmate;
 	BoardingPassApplication appInstance;
@@ -137,9 +138,8 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		tv_month_inside_icon.setText(month);
 		tv_date_inside_icon.setText(dateofmonth);
 
-		generateBArcode();
+		generateBarcode();
 		btn_seatmate.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				if ((Constants.isOnline(getActivity())) && (!appInstance.getUserCred().getEmail().equals(""))) {
@@ -147,7 +147,6 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 				} else {
 					sowAlertMessage();
 				}
-
 			}
 		});
 		return rootView;
@@ -167,7 +166,6 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 						dialog.cancel();
 					}
 				});
-
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
 	}
@@ -214,7 +212,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	 * Generates a barcode using the boarding-pass data inside the global
 	 * {@link #bpass} object.
 	 */
-	public void generateBArcode() {
+	public void generateBarcode() {
 		String barcode_data = bpass.getStringform();
 
 		// barcode image

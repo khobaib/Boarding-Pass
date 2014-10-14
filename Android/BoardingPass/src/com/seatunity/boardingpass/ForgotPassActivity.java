@@ -59,7 +59,7 @@ public class ForgotPassActivity extends Activity implements CallBackApiCall {
 		et_email.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				et_email.setBackgroundResource(R.drawable.rounded_email_forgot_pass);
+				et_email.setBackgroundResource(android.R.drawable.editbox_background_normal);
 			}
 
 			@Override

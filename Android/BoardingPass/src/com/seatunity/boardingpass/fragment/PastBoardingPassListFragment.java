@@ -17,6 +17,9 @@ import android.view.ViewGroup;
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
+import com.seatunity.model.BoardingPass;
+import com.seatunity.model.SeatMate;
+import com.seatunity.model.SeatMetList;
 
 /**
  * Fragment showing the past boarding-pass list.
@@ -29,7 +32,7 @@ import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 public class PastBoardingPassListFragment extends TabFragment {
 
 	private final String TAG = this.getClass().getSimpleName();
-	
+
 	protected Stack<Fragment> backEndStack;
 	BoardingPassApplication appInstance;
 
@@ -57,7 +60,7 @@ public class PastBoardingPassListFragment extends TabFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// ViewParent parent = (ViewParent) container.getParent();
 		Log.e("testting", "PastBoardingPassListFragmentonCreateView");
-		Log.i(TAG,"onCreateView");
+		Log.i(TAG, "onCreateView");
 		// if (parent instanceof View) {
 		// ((TextView) ((View) parent).findViewById(R.id.welcome_title))
 		// .setText(this.getTag());
@@ -125,5 +128,90 @@ public class PastBoardingPassListFragment extends TabFragment {
 			}
 
 		}
+	}
+
+	/**
+	 * Starts the {@link HomeFragment} when the user has not registered yet or
+	 * is logged out.
+	 */
+	public void startHomeFragment() {
+		HomeFragment newFragment = new HomeFragment();
+		// newFragment.parent = null;
+		FragmentManager fragmentManager = getActivity().getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+		fragmentTransaction.addToBackStack(null);
+		backEndStack.push(newFragment);
+		fragmentTransaction.commitAllowingStateLoss();
+	}
+
+	/**
+	 * Shows the details of the passed boaring-pass in the
+	 * {@link FragmentUpcomingBoardingPassDetails } fragment.
+	 * 
+	 * @param bpass
+	 */
+	public void startPastBoardingDetails(BoardingPass bpass) {
+		Log.e("insideList", bpass.getTravel_from_name());
+		FragmentUpcomingBoardingPassDetails newFragment = FragmentUpcomingBoardingPassDetails.newInstance(bpass);
+		newFragment.parentAsPast = this;
+		newFragment.parent = null;
+		FragmentManager fragmentManager = getActivity().getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+		fragmentTransaction.addToBackStack(null);
+		backEndStack.push(newFragment);
+		fragmentTransaction.commitAllowingStateLoss();
+	}
+
+	/**
+	 * Shows the passed seat-mate list in the {@link FragmentSeatMet } fragment.
+	 * 
+	 * @param seatmetlist
+	 * @param bpass
+	 */
+	public void startSeatmetList(SeatMetList seatmetlist, BoardingPass bpass) {
+		Log.e("insideList3", bpass.getTravel_from_name());
+		FragmentSeatMet newFragment = new FragmentSeatMet(seatmetlist, bpass);
+		newFragment.parentAsPast = this;
+		newFragment.parentAsHome = null;
+		FragmentManager fragmentManager = getActivity().getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+		fragmentTransaction.addToBackStack(null);
+		backEndStack.push(newFragment);
+		fragmentTransaction.commitAllowingStateLoss();
+	}
+
+	public void startAddBoardingPassDuringLogin() {
+		FragmentAddBoardingPassDuringLogin newFragment = new FragmentAddBoardingPassDuringLogin();
+		newFragment.parentAsPast = this;
+		newFragment.parentAsHome = null;
+		FragmentManager fragmentManager = getActivity().getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+		fragmentTransaction.addToBackStack(null);
+		backEndStack.push(newFragment);
+		fragmentTransaction.commitAllowingStateLoss();
+	}
+
+	/**
+	 * Opens the {@link FragmentSingleSeatMet} fragment with the selected
+	 * boarding-pass & seat-mate data.
+	 * 
+	 * @param seatmate
+	 * @param bpass
+	 */
+	public void startFragmentSingleSeatmet(SeatMate seatmate, BoardingPass bpass) {
+		Log.e("insideList", bpass.getTravel_from_name());
+		FragmentSingleSeatMet newFragment = new FragmentSingleSeatMet(seatmate, bpass);
+		newFragment.parent = null;
+		newFragment.parentAsPast = this;
+		FragmentManager fragmentManager = getActivity().getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+		fragmentTransaction.addToBackStack(null);
+		backEndStack.push(newFragment);
+		fragmentTransaction.commitAllowingStateLoss();
 	}
 }

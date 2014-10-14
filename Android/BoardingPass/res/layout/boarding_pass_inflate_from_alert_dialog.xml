@@ -14,37 +14,67 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/tv_flight_to_from"
         android:text="@string/txt_jfk"
         android:textColor="#2D3E50"
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tv_arrival_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_jfk"
-        android:text="24.00"
-        android:textColor="#777777"
-        android:textSize="17sp" />
+    <!-- <TextView -->
+    <!-- android:id="@+id/tv_arrival_time" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_alignParentRight="true" -->
+    <!-- android:layout_below="@+id/tv_jfk" -->
+    <!-- android:text="24.00" -->
+    <!-- android:textColor="#777777" -->
+    <!-- android:textSize="17sp" /> -->
+
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/tv_start_time" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_alignRight="@+id/tv_cdg" -->
+    <!-- android:layout_below="@+id/tv_cdg" -->
+    <!-- android:text="22.00" -->
+    <!-- android:textColor="#777777" -->
+    <!-- android:textSize="17sp" /> -->
 
     <TextView
-        android:id="@+id/tv_start_time"
+        android:id="@+id/tv_flight_to_from"
+        android:layout_width="135dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="7dp"
+        android:layout_toLeftOf="@+id/tv_flight_date"
+        android:text="Paris - New York"
+        android:textColor="#2D3E50"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_cdg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/tv_cdg"
-        android:layout_below="@+id/tv_cdg"
-        android:text="22.00"
-        android:textColor="#777777"
-        android:textSize="17sp" />
+        android:layout_alignBottom="@+id/tv_jfk"
+        android:layout_marginRight="6dp"
+        android:layout_toLeftOf="@+id/tv_jfk"
+        android:text="@string/txt_cdg"
+        android:textColor="#2D3E50"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv_flight_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tv_start_time"
-        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/tv_jfk"
+        android:layout_below="@+id/tv_jfk"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="2dp"
+        android:padding="3dp"
         android:text="Aprl 22 AfGh"
         android:textColor="#777777"
         android:textSize="17sp" />
@@ -53,34 +83,11 @@
         android:id="@+id/tv_seat_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tv_flight_date"
+        android:layout_alignLeft="@+id/tv_flight_to_from"
+        android:layout_below="@+id/tv_flight_to_from"
+        android:layout_marginTop="3dp"
         android:text="@string/txt_seat_nno"
         android:textColor="#777777"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/tv_flight_to_from"
-        android:layout_width="135dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/tv_cdg"
-        android:layout_marginTop="7dp"
-        android:text="Paris - New Yourk"
-        android:textColor="#2D3E50"
-        android:textSize="15sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tv_cdg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_arrival_time"
-        android:layout_marginRight="6dp"
-        android:layout_toLeftOf="@+id/tv_jfk"
-        android:text="@string/txt_cdg"
-        android:textColor="#2D3E50"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:textSize="19sp" />
 
 </RelativeLayout>

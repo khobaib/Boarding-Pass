@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E7E7E7"
@@ -22,13 +23,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/vw_mid"
-            android:onClick="canCel"
-            android:gravity="center" >
+            android:gravity="center"
+            android:onClick="canCel" >
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:onClick="Cancel"  >
+                android:onClick="Cancel"
+                tools:ignore="UselessParent" >
 
                 <ImageView
                     android:id="@+id/img_cross"
@@ -36,7 +38,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_action_cancel" />
+                    android:src="@drawable/ic_action_cancel"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/tv_cancel"
@@ -46,7 +49,7 @@
                     android:layout_toRightOf="@+id/img_cross"
                     android:text="@string/txt_cancel_cap"
                     android:textColor="#ffffff"
-                    android:textSize="28dp" />
+                    android:textSize="28sp" />
             </RelativeLayout>
         </RelativeLayout>
 
@@ -59,7 +62,8 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="ChangeStatus" >
+                android:onClick="ChangeStatus"
+                tools:ignore="UselessParent" >
 
                 <ImageView
                     android:id="@+id/img_accept"
@@ -67,7 +71,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_action_accept" />
+                    android:src="@drawable/ic_action_accept"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/tv_accept"
@@ -77,14 +82,14 @@
                     android:layout_toRightOf="@+id/img_accept"
                     android:text="@string/txt_apply_cap"
                     android:textColor="#ffffff"
-                    android:textSize="28dp" />
+                    android:textSize="28sp" />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dip"
         android:layout_weight="0.06"
         android:orientation="vertical" >
 
@@ -93,7 +98,8 @@
             android:layout_height="200dp"
             android:layout_margin="9dp"
             android:background="@drawable/rounded_layout_white"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            tools:ignore="UselessParent" >
 
             <EditText
                 android:id="@+id/et_uname"
@@ -102,30 +108,32 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="@string/txt_user_name" >           
+                android:hint="@string/txt_user_name" >
             </EditText>
-             <EditText
+
+            <EditText
                 android:id="@+id/et_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="@string/txt_email" >           
+                android:hint="@string/txt_email"
+                android:inputType="textEmailAddress" >
             </EditText>
-             <EditText
+
+            <EditText
                 android:id="@+id/et_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="@string/txt_status" > 
-              <requestFocus />             
+                android:hint="@string/txt_status" >
+
+                <requestFocus />
             </EditText>
-
         </LinearLayout>
-
     </LinearLayout>
 
 </LinearLayout>

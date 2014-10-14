@@ -206,7 +206,6 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 				.setCancelable(false)
 				.setPositiveButton(getResources().getString(R.string.txt_ok), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-
 						dialog.cancel();
 					}
 				});

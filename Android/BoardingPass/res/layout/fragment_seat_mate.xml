@@ -4,15 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E7E7E7"
-    android:orientation="vertical" >
-  
+    android:orientation="vertical"
+    tools:ignore="HardcodedText" >
 
     <RelativeLayout
         android:id="@+id/re_details_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#7C7C7C"
-        android:paddingBottom="10dp" >
+        android:paddingBottom="10dp"
+        tools:ignore="ContentDescription" >
 
         <LinearLayout
             android:id="@+id/re_top_holder"
@@ -28,7 +29,8 @@
             <RelativeLayout
                 android:id="@+id/re_top_top_holder"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                tools:ignore="UselessParent" >
 
                 <RelativeLayout
                     android:id="@+id/img_icon"
@@ -75,9 +77,9 @@
                     android:layout_below="@+id/img_icon"
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="5dp"
-                    android:text="@string/txt_seat_nno"
+                    android:text="Seat 11A"
                     android:textColor="#777777"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_flight_no"
@@ -87,16 +89,19 @@
                     android:layout_below="@+id/tv_seat_no"
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="2dp"
-                    android:text="@string/txt_flight_no"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="Flight 4U7051"
                     android:textColor="#777777"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
                 <LinearLayout
                     android:layout_width="190dp"
                     android:layout_height="120dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignTop="@+id/img_icon"
-                    android:layout_marginLeft="12dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toLeftOf="@+id/tv_flight_no"
                     android:orientation="vertical"
                     android:weightSum="2.40" >
 
@@ -104,31 +109,36 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
-                        android:weightSum="2.40" >
+                        android:weightSum="2.20" >
 
                         <TextView
                             android:id="@+id/tv_from"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:ellipsize="end"
                             android:gravity="center"
+                            android:singleLine="true"
+                            android:text="Nuremberg"
                             android:textColor="#7C7C7C"
-                            android:textSize="19dp" />
+                            android:textSize="19sp" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.4" />
+                            android:layout_weight="0.2" />
 
                         <TextView
                             android:id="@+id/tv_to"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
                             android:layout_weight="1"
+                            android:ellipsize="end"
                             android:gravity="center"
+                            android:singleLine="true"
+                            android:text="Humburger"
                             android:textColor="#7C7C7C"
-                            android:textSize="19dp" />
+                            android:textSize="19sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -142,8 +152,10 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
+                            android:maxLength="3"
+                            android:text="NUE"
                             android:textColor="#2D3E50"
-                            android:textSize="32dp"
+                            android:textSize="32sp"
                             android:textStyle="bold" />
 
                         <ImageView
@@ -158,11 +170,12 @@
                             android:id="@+id/tv_jfk"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
                             android:layout_weight="1"
                             android:gravity="center"
+                            android:maxLength="3"
+                            android:text="HUM"
                             android:textColor="#2D3E50"
-                            android:textSize="32dp"
+                            android:textSize="32sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -175,12 +188,10 @@
                             android:id="@+id/tv_start_time"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/tv_cdg"
-                            android:layout_centerHorizontal="true"
                             android:layout_marginTop="7dp"
                             android:layout_weight="1"
                             android:textColor="#7C7C7C"
-                            android:textSize="17dp"
+                            android:textSize="17sp"
                             android:visibility="gone" />
 
                         <TextView
@@ -193,13 +204,12 @@
                             android:id="@+id/tv_arrival_time"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
                             android:layout_marginTop="7dp"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="edewd"
                             android:textColor="#7C7C7C"
-                            android:textSize="19dp"
+                            android:textSize="19sp"
                             android:visibility="gone" />
                     </LinearLayout>
                 </LinearLayout>
@@ -211,12 +221,10 @@
         android:id="@+id/re_list_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/re_details_holder"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:layout_weight="2"
-        android:layout_below="@+id/re_details_holder"
-       
         android:background="@drawable/rounded_layout_white" >
 
         <ListView
@@ -244,22 +252,21 @@
             android:background="@drawable/rounded_button_loginfailure"
             android:padding="15dp"
             android:textColor="#777777"
-            android:textSize="17dp"
+            android:textSize="17sp"
             android:visibility="gone" />
     </RelativeLayout>
-  		<ListView
-            android:id="@+id/lv_class_list"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="6dp"
-            android:background="#2d3e50"
-            android:visibility="gone"
-            android:dividerHeight="1dp"
-            android:divider="#000000"
-             >
-        </ListView>
-  
+
+    <ListView
+        android:id="@+id/lv_class_list"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="6dp"
+        android:background="#2d3e50"
+        android:divider="#000000"
+        android:dividerHeight="1dp"
+        android:visibility="gone" >
+    </ListView>
 
 </RelativeLayout>

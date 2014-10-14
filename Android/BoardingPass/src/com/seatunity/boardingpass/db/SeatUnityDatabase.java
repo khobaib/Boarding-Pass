@@ -140,4 +140,12 @@ public class SeatUnityDatabase {
 	public List<BoardingPass> retrieveFutureBoardingPassList() {
 		return BoardingPassDbManager.retrieveFutureList(this.db);
 	}
+	/**
+	 * Calls the {@link BoardingPassDbManager#retrievePastList(SQLiteDatabase)} method.
+	 * 
+	 * @return a list containing all the future boarding-passes in the DB.
+	 */
+	public List<BoardingPass> retrievePastBoardingPassList() {
+		return BoardingPassDbManager.retrievePastList(this.db);
+	}
 }

@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.ActionBar.OnNavigationListener;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
@@ -32,7 +31,6 @@ import android.widget.Toast;
 
 import com.seatunity.boardingpass.MainActivity;
 import com.seatunity.boardingpass.R;
-import com.seatunity.boardingpass.adapter.AdapterBaseMaps;
 import com.seatunity.boardingpass.adapter.AdapterForSeatmet;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.interfaces.CallBackApiCall;
@@ -50,13 +48,13 @@ import com.seatunity.model.UserCred;
  * @author Sumon
  * 
  */
-@SuppressWarnings("deprecation")
 @SuppressLint("NewApi")
 public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 
 	private final String TAG = this.getClass().getSimpleName();
 
-	HomeListFragment parent;
+	HomeListFragment parentAsHome;
+	PastBoardingPassListFragment parentAsPast;
 	ImageView img_add_boardingpass;
 	TextView tv_add_boardingpass;
 	BoardingPassApplication appInstance;
@@ -74,10 +72,13 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 	ListView lv_class_list;
 	ArrayAdapter<String> aAdpt;
 
+	private boolean isClassDropDownVisible = false;
+
 	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 		appInstance = (BoardingPassApplication) getActivity().getApplication();
 		context = getActivity();
 	}
@@ -112,7 +113,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 		tv_jfk = (TextView) v.findViewById(R.id.tv_jfk);
 		lv_seat_met_list = (ListView) v.findViewById(R.id.lv_seat_met_list);
 		lv_class_list = (ListView) v.findViewById(R.id.lv_class_list);
-		setListView(0);
+		setListViewAtPosition(0);
 		selectedposition = 0;
 		setDetailsBoaredingpass();
 
@@ -127,7 +128,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 	 * @param i
 	 *            The position of the action-menu list-item
 	 */
-	public void setListView(int i) {
+	public void setListViewAtPosition(int i) {
 		AdapterForSeatmet adapter;
 
 		if (i == 0) {
@@ -209,30 +210,33 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 		}
 
 		lv_seat_met_list.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				parent.startFragmentSingleSeatmet(seatmet_listobj.getAllSeatmateList().get(position), bpass);
+				if (parentAsHome != null)
+					parentAsHome.startFragmentSingleSeatmet(seatmet_listobj.getAllSeatmateList().get(position), bpass);
+				else if (parentAsPast != null)
+					parentAsPast.startFragmentSingleSeatmet(seatmet_listobj.getAllSeatmateList().get(position), bpass);
 			}
 		});
 	}
 
-	ActionBar actionBar;
+	private ActionBar actionBar;
 
-	@SuppressWarnings("unused")
 	public void setActionBarNavigation(boolean show) {
 		actionBar = getActivity().getActionBar();
-		OnNavigationListener imll = new OnNavigationListener() {
-			@Override
-			public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-				setListView(itemPosition);
-				selectedposition = itemPosition;
-				return false;
-			}
-		};
+		// OnNavigationListener imll = new OnNavigationListener() {
+		// @Override
+		// public boolean onNavigationItemSelected(int itemPosition, long
+		// itemId) {
+		// setListView(itemPosition);
+		// selectedposition = itemPosition;
+		// return false;
+		// }
+		// };
 		String[] class_list = getActivity().getResources().getStringArray(R.array.seat_class);
 		itemList = new ArrayList<String>(Arrays.asList(class_list));
-		AdapterBaseMaps adapter = new AdapterBaseMaps(getActivity(), itemList);
+		// AdapterBaseMaps adapter = new AdapterBaseMaps(getActivity(),
+		// itemList);
 		aAdpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1,
 				itemList);
 		if (show) {
@@ -248,20 +252,36 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 			TextView titleTxtView = (TextView) v.findViewById(R.id.txt_title);
 			final TextView txt_seatmate = (TextView) v.findViewById(R.id.txt_seatmate);
 			titleTxtView.setOnClickListener(new OnClickListener() {
-
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					lv_class_list.setVisibility(View.VISIBLE);
+					if (!isClassDropDownVisible) {
+						lv_class_list.setVisibility(View.VISIBLE);
+						isClassDropDownVisible = true;
+					} else {
+						lv_class_list.setVisibility(View.GONE);
+						isClassDropDownVisible = false;
+					}
 					lv_class_list.setAdapter(aAdpt);
+				}
+			});
+			// TODO Collapse the lv_class_list on outside click : But how?
+			v.findViewById(R.id.img_icon).setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					goBack();
+				}
+			});
+			v.findViewById(R.id.img_back).setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					goBack();
 				}
 			});
 			lv_class_list.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1, int itemPosition, long arg3) {
-					// TODO Auto-generated method stub
-					setListView(itemPosition);
+					setListViewAtPosition(itemPosition);
 					selectedposition = itemPosition;
 					lv_class_list.setVisibility(View.GONE);
 					txt_seatmate.setText(itemList.get(itemPosition));
@@ -276,6 +296,27 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 			actionBar.setListNavigationCallbacks(null, null);
 		}
 
+	}
+
+	protected boolean goBack() {
+		if (parentAsHome != null)
+			parentAsHome.onBackPressed();
+		else if (parentAsPast != null)
+			parentAsPast.onBackPressed();
+		else
+			return false;
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			if (goBack())
+				return true;
+			else
+				return super.onOptionsItemSelected(item);
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -402,7 +443,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 					SeatMetList seatmet_listlist = SeatMetList.getSeatmetListObj(job);
 					this.seatmet_listobj = seatmet_listlist;
 					if (seatmet_listobj.getAllSeatmateList().size() > 0) {
-						setListView(selectedposition);
+						setListViewAtPosition(selectedposition);
 					} else {
 						Toast.makeText(context, context.getResources().getString(R.string.txt_getseatmate_failure),
 								Toast.LENGTH_SHORT).show();

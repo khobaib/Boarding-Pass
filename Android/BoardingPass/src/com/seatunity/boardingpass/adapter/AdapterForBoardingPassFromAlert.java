@@ -32,6 +32,7 @@ public class AdapterForBoardingPassFromAlert extends BaseAdapter {
 
 	/**
 	 * The only constructor
+	 * 
 	 * @param context
 	 * @param item
 	 */
@@ -69,15 +70,14 @@ public class AdapterForBoardingPassFromAlert extends BaseAdapter {
 	 * @author Sumon
 	 * 
 	 */
-	@SuppressWarnings("unused")
 	private class ViewHolder {
 
 		TextView tv_flight_to_from;
 		TextView tv_cdg;
 		TextView tv_jfk;
 		TextView tv_flight_date;
-		TextView tv_start_time;
-		TextView tv_arrival_time;
+		// TextView tv_start_time;
+		// TextView tv_arrival_time;
 		TextView tv_seat_no;
 
 	}
@@ -101,10 +101,12 @@ public class AdapterForBoardingPassFromAlert extends BaseAdapter {
 			holder.tv_cdg = (TextView) convertView.findViewById(R.id.tv_cdg);
 			holder.tv_jfk = (TextView) convertView.findViewById(R.id.tv_jfk);
 			holder.tv_flight_date = (TextView) convertView.findViewById(R.id.tv_flight_date);
-			holder.tv_start_time = (TextView) convertView.findViewById(R.id.tv_start_time);
+			// holder.tv_start_time = (TextView)
+			// convertView.findViewById(R.id.tv_start_time);
 			// holder.tv_flight_date=(TextView)
 			// convertView.findViewById(R.id.tv_flight_date);
-			holder.tv_arrival_time = (TextView) convertView.findViewById(R.id.tv_arrival_time);
+			// holder.tv_arrival_time = (TextView)
+			// convertView.findViewById(R.id.tv_arrival_time);
 			holder.tv_seat_no = (TextView) convertView.findViewById(R.id.tv_seat_no);
 			convertView.setTag(holder);
 

@@ -86,8 +86,8 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 	private int callfrom = 0;
 	private JSONObject loginObj;
 	private Bundle savedState = null;
-	
-	private final String TAG=this.getClass().getSimpleName();
+
+	private final String TAG = this.getClass().getSimpleName();
 
 	/**
 	 * Empty constructor doing nothing special inside
@@ -260,17 +260,16 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 				if (position == 0) {
-
 					String[] country_list = context.getResources().getStringArray(R.array.countries_array);
-					showDialogForGender(country_list, context.getResources().getString(R.string.txt_select_country),
+					showDialogWithChooser(country_list, context.getResources().getString(R.string.txt_select_country),
 							position);
 				}
 				if (position == 1) {
 					String[] age_list = context.getResources().getStringArray(R.array.age_range_list);
-					showDialogForGender(age_list, context.getResources().getString(R.string.txt_select_age), position);
+					showDialogWithChooser(age_list, context.getResources().getString(R.string.txt_select_age), position);
 				} else if (position == 2) {
 					String[] gender_list = context.getResources().getStringArray(R.array.gender);
-					showDialogForGender(gender_list, context.getResources().getString(R.string.txt_gender), position);
+					showDialogWithChooser(gender_list, context.getResources().getString(R.string.txt_gender), position);
 				} else if (position == 3) {
 					Constants.POFESSION_FLAG = true;
 					setSomethingAbout(context.getResources().getString(R.string.txt_edit_profesion), context
@@ -278,7 +277,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 				} else if (position == 4) {
 					String[] seating_pref_list = context.getResources().getStringArray(R.array.seating_pref);
 					String title = context.getResources().getString(R.string.txt_seatting_pref_cap);
-					showDialogForGender(seating_pref_list, title, position);
+					showDialogWithChooser(seating_pref_list, title, position);
 				} else if (position == 5) {
 					Constants.SOME_ABOUT_FLAG = true;
 					setSomethingAbout(context.getResources().getString(R.string.txt_sm_about), context.getResources()
@@ -375,9 +374,9 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 	 * 
 	 * @param items
 	 * @param title
-	 * @param postion
+	 * @param position
 	 */
-	public void showDialogForGender(final CharSequence[] items, String title, final int postion) {
+	public void showDialogWithChooser(final CharSequence[] items, String title, final int position) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
@@ -392,7 +391,9 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 						Constants.setAllFlagFalse();
 					}
 				});
-		builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+		String val = getValueByPosition(position);
+		int posInArray = getPositionInArray(items, val);
+		builder.setSingleChoiceItems(items, posInArray, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
@@ -413,24 +414,24 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 					loginObj.put("image_name", "");
 					loginObj.put("image_type", "");
 					loginObj.put("image_content", "");
-					if (postion == 0) {
+					if (position == 0) {
 						String country = items[which].toString();
 						loginObj.put("live_in", country);
 						userCred.setLive_in(country);
 						Constants.LIVE_IN_FLAG = true;
-					} else if (postion == 1) {
+					} else if (position == 1) {
 						String age = items[which].toString();
 						loginObj.put("age", age);
 						userCred.setAge(age);
 						Constants.AGE_FLAG = true;
 
-					} else if (postion == 2) {
+					} else if (position == 2) {
 						String gender = items[which].toString();
 						loginObj.put("gender", gender);
 						userCred.setGender(gender);
 						Constants.GENDER_FLAG = true;
 
-					} else if (postion == 4) {
+					} else if (position == 4) {
 						String seat_pref = items[which].toString();
 						loginObj.put("seating_pref", seat_pref);
 						userCred.setSeating_pref(seat_pref);
@@ -457,6 +458,28 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 
 	}
 
+	private String getValueByPosition(int position) {
+		String val = "";
+		if (position == 0)
+			val = userCred.getLive_in();
+		else if (position == 1)
+			val = userCred.getAge();
+		else if (position == 2)
+			val = userCred.getGender();
+		else if (position == 4)
+			val = userCred.getSeating_pref();
+		return val;
+	}
+
+	private int getPositionInArray(CharSequence[] items, String string) {
+		int len = items.length;
+		for (int i = 0; i < len; i++) {
+			if (items[i].equals(string))
+				return i;
+		}
+		return -1;
+	}
+
 	/**
 	 * Shows a dialog with the details of the user's 'about-info'.
 	 * 
@@ -478,14 +501,14 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 		tvtitle.setText(title);
 		if (position == 3) {
 			input.setText(appInstance.getUserCred().getProfession());
-			
+
 		} else if (position == 5) {
 
 			input.setText(appInstance.getUserCred().getSomethinAbout());
 
 		}
 		d.setCustomTitle(customTitleView);
-		
+
 		d.setOnShowListener(new DialogInterface.OnShowListener() {
 
 			@Override
@@ -738,6 +761,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 
 	/**
 	 * Deletes the file passed.
+	 * 
 	 * @param path
 	 * @return
 	 */
@@ -777,19 +801,20 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 					Toast.makeText(context, getResources().getString(R.string.txt_logout_success), Toast.LENGTH_SHORT)
 							.show();
 				} else if (callfrom == 2) {
-					if(job.has("image_url")){
+					if (job.has("image_url")) {
 						String imageurl = job.getString("image_url");
 						if (!imageurl.equals("")) {
 							userCred.setImage_url(imageurl);
 							appInstance.setUserCred(userCred);
-							ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url(), img_prof_pic);
+							ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url(),
+									img_prof_pic);
 						}
 
 					}
-				
+
 					Toast.makeText(context, context.getResources().getString(R.string.txt_update_success),
 							Toast.LENGTH_SHORT).show();
-				
+
 					appInstance.setUserCred(userCred);
 					setlistView();
 					Constants.photo = null;

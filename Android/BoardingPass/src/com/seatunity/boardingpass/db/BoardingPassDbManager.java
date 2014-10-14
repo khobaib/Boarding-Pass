@@ -193,6 +193,49 @@ public class BoardingPassDbManager {
 		}
 		return boardingPasslistlist;
 	}
+	
+	public static List<BoardingPass> retrievePastList(SQLiteDatabase db) {
+		Calendar cal = Calendar.getInstance();
+		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+		List<BoardingPass> boardingPasslistlist = new ArrayList<BoardingPass>();
+		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BOARDING_PASS_LIST + " WHERE " + KEY_JULIAN_DATE + " < ?",
+				new String[] { dayOfYear + "" });
+		Log.d(TAG, "retrieveFutureList : got queried size: " + cursor.getCount());
+		if (cursor != null && cursor.getCount() >= 0 && cursor.moveToFirst()) {
+			while (!cursor.isAfterLast()) {
+				String travel_class_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_CLASS));
+				String stringform_local = cursor.getString(cursor.getColumnIndex(KEY_STRING_FORM));
+				String firstname_local = cursor.getString(cursor.getColumnIndex(KEY_FIRSTNAME));
+				String lastname_local = cursor.getString(cursor.getColumnIndex(KEY_LASTNAME));
+				String PNR_local = cursor.getString(cursor.getColumnIndex(KEY_PNR));
+				String travel_from_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_FROM));
+				String travel_to_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_TO));
+				String carrier_local = cursor.getString(cursor.getColumnIndex(KEY_CARRIER));
+				String flight_no_local = cursor.getString(cursor.getColumnIndex(KEY_FLIGHT_NO));
+				String julian_date_local = cursor.getString(cursor.getColumnIndex(KEY_JULIAN_DATE));
+				String compartment_code_local = cursor.getString(cursor.getColumnIndex(KEY_COMPARTMENT_CODE));
+				String seat_local = cursor.getString(cursor.getColumnIndex(KEY_SEAT));
+				String departure_local = cursor.getString(cursor.getColumnIndex(KEY_DEPARTURE));
+				String arrival_local = cursor.getString(cursor.getColumnIndex(KEY_ARRIVAL));
+				String codetype_local = cursor.getString(cursor.getColumnIndex(KEY_CODETYPE));
+				String travel_from_name_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_FROM_NAME));
+				String travel_to_name_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_TO_NAME));
+				String carrier_name_local = cursor.getString(cursor.getColumnIndex(KEY_CARRIER_NAME));
+				boolean deletestate_local = Boolean.parseBoolean(cursor.getString(cursor
+						.getColumnIndex(KEY_DELETESTATE)));
+				String id_local = cursor.getString(cursor.getColumnIndex(KEY_ID));
+				BoardingPass bpass = new BoardingPass(travel_class_local, stringform_local, firstname_local,
+						lastname_local, PNR_local, travel_from_local, travel_to_local, carrier_local, flight_no_local,
+						julian_date_local, compartment_code_local, seat_local, departure_local, arrival_local,
+						codetype_local, id_local, travel_from_name_local, travel_to_name_local, carrier_name_local,
+						deletestate_local);
+				boardingPasslistlist.add(bpass);
+
+				cursor.moveToNext();
+			}
+		}
+		return boardingPasslistlist;
+	}
 
 	/**
 	 * Updats an existing boarding-pass with the one passed as the param.

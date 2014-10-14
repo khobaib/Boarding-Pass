@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E7E7E7"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    tools:ignore="HardcodedText,ContentDescription" >
 
     <RelativeLayout
         android:id="@+id/re_details_holder"
@@ -33,65 +34,62 @@
                     android:id="@+id/re_holder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="9dp" 
                     android:gravity="center_vertical"
-                    android:weightSum="4">
+                    android:padding="9dp"
+                    android:weightSum="4" >
+
                     <TextView
                         android:id="@+id/tv_name_carrier"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:text="Lunthasa"
-                        android:gravity="center"
-                        android:textColor="#2D3E50"
-                        android:textSize="25dp"
                         android:layout_weight="1.5"
+                        android:gravity="center"
+                        android:text="Lunthasa"
+                        android:textColor="#2D3E50"
+                        android:textSize="25sp"
                         android:textStyle="bold" />
-                    <RelativeLayout 
-                         android:layout_width="0dp"
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                         android:layout_weight="2.5"
-                         android:layout_gravity="right"
-                        >
-                         <RelativeLayout
-                        android:id="@+id/img_icon"
-                        android:layout_alignParentRight="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/icon_bodaing_details" >
+                        android:layout_gravity="right"
+                        android:layout_weight="2.5" >
 
-                        <TextView
-                            android:id="@+id/tv_month_inside_icon"
+                        <RelativeLayout
+                            android:id="@+id/img_icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="12dp"
-                            android:text="APR"
-                            android:textColor="#7C7C7C" />
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/icon_bodaing_details"
+                            tools:ignore="UselessParent" >
 
-                        <ImageView
-                            android:id="@+id/img_icon_inner"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/tv_month_inside_icon"
-                            android:layout_centerHorizontal="true"
-                            android:src="@drawable/icon_inner_bodaing_details" />
+                            <TextView
+                                android:id="@+id/tv_month_inside_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="12dp"
+                                android:text="APR"
+                                android:textColor="#7C7C7C" />
 
-                        <TextView
-                            android:id="@+id/tv_date_inside_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/img_icon_inner"
-                            android:layout_centerHorizontal="true"
-                            android:text="22"
-                            android:textColor="#7C7C7C" />
+                            <ImageView
+                                android:id="@+id/img_icon_inner"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tv_month_inside_icon"
+                                android:layout_centerHorizontal="true"
+                                android:src="@drawable/icon_inner_bodaing_details" />
+
+                            <TextView
+                                android:id="@+id/tv_date_inside_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/img_icon_inner"
+                                android:layout_centerHorizontal="true"
+                                android:text="22"
+                                android:textColor="#7C7C7C" />
+                        </RelativeLayout>
                     </RelativeLayout>
-                        
-                    </RelativeLayout>
-
-                   
-                    
                 </LinearLayout>
 
                 <View
@@ -122,35 +120,31 @@
                             android:id="@+id/tv_from"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
                             android:layout_weight="1.5"
                             android:gravity="center"
                             android:paddingRight="5dp"
                             android:text="Munic"
-                                  android:textColor="#7C7C7C"
-                            android:textSize="15dp" />
+                            android:textColor="#7C7C7C"
+                            android:textSize="15sp" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:textColor="#777777"
-                            android:textSize="17dp" />
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_to"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/tv_cdg"
-                            android:layout_centerHorizontal="true"
                             android:layout_weight="1.5"
                             android:gravity="right"
                             android:paddingLeft="5dp"
                             android:text="Mancester"
                             android:textColor="#777777"
-                            android:textSize="15dp" />
+                            android:textSize="15sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -163,36 +157,32 @@
                             android:id="@+id/tv_from_air"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
                             android:layout_weight="1.5"
                             android:gravity="center"
                             android:paddingRight="5dp"
                             android:text="MUC"
                             android:textColor="#EE2653"
-                            android:textSize="38dp"
+                            android:textSize="38sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:textColor="#777777"
-                            android:textSize="17dp" />
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_to_air"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/tv_cdg"
-                            android:layout_centerHorizontal="true"
                             android:layout_weight="1.5"
                             android:gravity="right"
                             android:paddingLeft="5dp"
                             android:text="MAN"
                             android:textColor="#EE2653"
-                            android:textSize="38dp"
+                            android:textSize="38sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -206,37 +196,33 @@
                             android:id="@+id/tv_start_time"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:paddingRight="5dp"
                             android:text="10"
-                            android:visibility="gone"
-                                  android:textColor="#7C7C7C"
-                            android:textSize="17dp" />
+                            android:textColor="#7C7C7C"
+                            android:textSize="17sp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="0dp"
-                            android:layout_alignParentTop="true"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:textColor="#777777"
-                            android:textSize="17dp" />
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/tv_arrival_time"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/tv_cdg"
-                            android:layout_centerHorizontal="true"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:paddingLeft="5dp"
                             android:text="12"
-                             android:visibility="gone"
-                                  android:textColor="#7C7C7C"
-                            android:textSize="17dp" />
+                            android:textColor="#7C7C7C"
+                            android:textSize="17sp"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -274,33 +260,30 @@
                             android:gravity="center"
                             android:paddingRight="5dp"
                             android:text="@string/txt_flight_no"
-                                android:textColor="#7C7C7C"
-                            android:textSize="15dp" />
+                            android:textColor="#7C7C7C"
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/tv_seat_no"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:paddingRight="5dp"
                             android:text="@string/txt_seat_nno"
-                                  android:textColor="#7C7C7C"
-                            android:textSize="15dp" />
+                            android:textColor="#7C7C7C"
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/tv_compartment_class"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/tv_cdg"
-                            android:layout_centerHorizontal="true"
                             android:layout_weight="1.5"
                             android:gravity="center"
                             android:paddingLeft="5dp"
                             android:text="@string/txt_class"
-                                 android:textColor="#7C7C7C"
-                            android:textSize="15dp" />
+                            android:textColor="#7C7C7C"
+                            android:textSize="15sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -319,32 +302,29 @@
                             android:paddingRight="5dp"
                             android:text="Lg2540"
                             android:textColor="#2D3E50"
-                            android:textSize="19dp" />
+                            android:textSize="19sp" />
 
                         <TextView
                             android:id="@+id/tv_seat_var"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:paddingRight="5dp"
                             android:text="15E"
                             android:textColor="#2D3E50"
-                            android:textSize="19dp" />
+                            android:textSize="19sp" />
 
                         <TextView
                             android:id="@+id/tv_compartment_class_var"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/tv_cdg"
-                            android:layout_centerHorizontal="true"
                             android:layout_weight="1.5"
                             android:gravity="center"
                             android:paddingLeft="5dp"
                             android:text="First"
                             android:textColor="#2D3E50"
-                            android:textSize="19dp" />
+                            android:textSize="19sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -358,8 +338,8 @@
                     android:layout_marginTop="14dp"
                     android:gravity="left"
                     android:text="@string/txt_psnger"
-                         android:textColor="#7C7C7C"
-                    android:textSize="15dp" />
+                    android:textColor="#7C7C7C"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_passenger_name"
@@ -367,22 +347,21 @@
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/tv_passengar"
                     android:layout_below="@+id/tv_passengar"
-                    android:text="Linel Messi"
                     android:gravity="left"
+                    android:text="Linel Messi"
                     android:textColor="#2D3E50"
-                    android:textSize="19dp" />
+                    android:textSize="19sp" />
             </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/le_top_bottom_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                >
+                android:layout_marginTop="8dp" >
 
                 <Button
                     android:id="@+id/btn_seatmate"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="45dp"
                     android:layout_marginBottom="7dp"
                     android:layout_marginLeft="12dp"
@@ -405,8 +384,8 @@
         <ImageView
             android:id="@+id/img_barcode"
             android:layout_width="120dp"
-            android:layout_height="wrap_content" 
-            android:background="@android:color/transparent"/>
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent" />
     </RelativeLayout>
 
 </LinearLayout>

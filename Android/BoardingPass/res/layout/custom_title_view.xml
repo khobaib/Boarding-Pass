@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/transparent"
@@ -8,20 +9,21 @@
 
     <ImageView
         android:id="@+id/im_icon"
-        android:layout_margin="5dp"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_home" />
+        android:layout_margin="5dp"
+        android:src="@drawable/ic_home"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#33B5E5"
-        android:text="sdhcbkfdsj"
         android:padding="10dp"
-        android:textSize="22dp"
-       />
+        android:text="sdhcbkfdsj"
+        android:textColor="#33B5E5"
+        android:textSize="22sp"
+        tools:ignore="HardcodedText" />
 
 </LinearLayout>
