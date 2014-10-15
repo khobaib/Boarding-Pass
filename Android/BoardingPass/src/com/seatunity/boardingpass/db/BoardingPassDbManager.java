@@ -115,6 +115,7 @@ public class BoardingPassDbManager {
 	public static List<BoardingPass> retrieve(SQLiteDatabase db) throws SQLException {
 		List<BoardingPass> boardingPasslistlist = new ArrayList<BoardingPass>();
 		Cursor c = db.query(TABLE_BOARDING_PASS_LIST, null, null, null, null, null, null);
+		Log.i(TAG, "All b-pass count in local DB: " + c.getCount());
 		if (c != null && c.getCount() >= 0) {
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
@@ -193,7 +194,7 @@ public class BoardingPassDbManager {
 		}
 		return boardingPasslistlist;
 	}
-	
+
 	public static List<BoardingPass> retrievePastList(SQLiteDatabase db) {
 		Calendar cal = Calendar.getInstance();
 		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
@@ -325,9 +326,9 @@ public class BoardingPassDbManager {
 				Log.e(TAG, "update process returned");
 			}
 		} else {
-			Log.e(TAG, "6");
-			insert(db, boardingPass);
-			Log.e(TAG, "7");
+			Log.e(TAG, "inserting ... ");
+			long ret = insert(db, boardingPass);
+			Log.e(TAG, "inserted = " + ret);
 		}
 	}
 }

@@ -74,9 +74,7 @@ public class JsonParser {
 			URL urltoconnect = new URL(url);
 			HttpURLConnection connection = (HttpURLConnection) urltoconnect.openConnection();
 			connection.setRequestProperty("Content-Type", "application/json");
-			Log.e("test", "16");
 			connection.setDoOutput(true);
-			Log.e("test", "17");
 			HttpResponse httpResponse = null;
 			if (reqType == Constants.REQUEST_TYPE_GET) {
 				connection.setRequestMethod("GET");
@@ -204,47 +202,32 @@ public class JsonParser {
 			status = connection.getResponseCode();
 			// connection.
 			Log.d(TAG, "STAUS = " + status);
-			Log.e("test", "32");
 
 			// HttpEntity httpEntity = httpResponse.getEntity();
 			is = connection.getInputStream();
 		} catch (UnsupportedEncodingException e) {
-			Log.e("test", "33");
-
 			e.printStackTrace();
 		} catch (ClientProtocolException e) {
-			Log.e("test", "34");
-
 			e.printStackTrace();
 		} catch (IOException e) {
-			Log.e("test", "35");
-
 			e.printStackTrace();
 		}
 
 		try {
 			Log.d(TAG, "trying to read input stream.");
 			// new InputStreamReader
-			Log.e("test", "36");
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
-			Log.e("test", "37");
 
 			sb = new StringBuilder();
 			String line = null;
-			Log.e("test", "380");
-
 			while ((line = reader.readLine()) != null) {
 				sb.append(line + "\n");
 			}
-			Log.e("test", "39");
-
 			is.close();
 			Log.d(TAG, "sb = " + sb.toString());
 			json = sb.toString();
 		} catch (Exception e) {
-			Log.e("test", "40");
-
 			Log.e("Buffer Error", "Error converting result " + e.toString());
 		}
 
@@ -256,8 +239,6 @@ public class JsonParser {
 			Log.e(TAG, "JSONException");
 			Log.e(TAG, "Error parsing data " + e.toString());
 		}
-		Log.e(TAG, "44");
-
 		// return ServerResponse
 		return new ServerResponse(jObj, status);
 	}

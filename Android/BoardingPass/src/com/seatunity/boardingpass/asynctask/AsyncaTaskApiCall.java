@@ -14,7 +14,6 @@ import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.networkstatetracker.NetworkStateReceiver;
 import com.seatunity.boardingpass.networkstatetracker.SyncLocalDbtoBackend;
-import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.ServerResponse;
@@ -28,22 +27,22 @@ import com.seatunity.model.ServerResponse;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
-	String body;
-	BoardingPassApplication appInstance;
-	String myaccounturl;
-	JsonParser jsonParser;
-	ProgressDialog pd;
-	Context context;
-	BoardingPass bpass;
-	String addedurl;
-	String receiverid;
-	int requestType;
-	boolean redundantLoginState = false;
-	CallBackApiCall CaBLisenar;
-	SyncLocalDbtoBackend loginsuccesslisenar;
-	NetworkStateReceiver deletelisenarfromnetstate;
+	private String body;
+	// private BoardingPassApplication appInstance;
+	private String myaccounturl;
+	private JsonParser jsonParser;
+	private static ProgressDialog pd;
+	// Context context;
+	private BoardingPass bpass;
+	private String addedurl;
+	// private String receiverid;
+	private int requestType;
+	private boolean redundantLoginState = false;
+	private CallBackApiCall CaBLisenar;
+	private SyncLocalDbtoBackend loginsuccesslisenar;
+	private NetworkStateReceiver deletelisenarfromnetstate;
 
-	NetworkStateReceiver netstatelisenaer;
+	private NetworkStateReceiver netstatelisenaer;
 
 	/**
 	 * @param CaBLisenar
@@ -58,16 +57,22 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 		this.body = body;
 		// this.appInstance = appInstance;
 		// this.myaccounturl = myaccounturl;
-		this.context = context;
+		// this.context = context;
 		this.addedurl = addedurl;
 		this.CaBLisenar = CaBLisenar;
 		this.requestType = requestType;
 		jsonParser = new JsonParser();
 		this.redundantLoginState = redundantLoginState;
-		pd = new ProgressDialog(context);
-		pd.show();
-		pd.setCancelable(true);
-		pd.setContentView(R.layout.progress_content);
+		try {
+			if (pd == null)
+				pd = new ProgressDialog(context);
+			if (!pd.isShowing())
+				pd.show();
+			pd.setCancelable(true);
+			pd.setContentView(R.layout.progress_content);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -83,10 +88,16 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 		this.bpass = bpass;
 		this.deletelisenarfromnetstate = deletelisenarfromnetstate;
 		this.body = body;
-//		this.appInstance = appInstance;
+		// this.appInstance = appInstance;
 		this.myaccounturl = myaccounturl;
-		this.context = context;
+		// this.context = context;
 		jsonParser = new JsonParser();
+		try {
+			if (pd != null && pd.isShowing())
+				pd.cancel();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -99,16 +110,22 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	 */
 	public AsyncaTaskApiCall(CallBackApiCall CaBLisenar, String body, Context context, String addedurl, int requestType) {
 		this.body = body;
-//		this.appInstance = appInstance;
-//		this.myaccounturl = myaccounturl;
-		this.context = context;
+		// this.appInstance = appInstance;
+		// this.myaccounturl = myaccounturl;
+		// this.context = context;
 		this.addedurl = addedurl;
 		this.CaBLisenar = CaBLisenar;
 		this.requestType = requestType;
 		jsonParser = new JsonParser();
-		pd = new ProgressDialog(context);
-		pd.show();
-		pd.setContentView(R.layout.progress_content);
+		try {
+			if (pd == null)
+				pd = new ProgressDialog(context);
+			if (!pd.isShowing())
+				pd.show();
+			pd.setContentView(R.layout.progress_content);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -120,7 +137,7 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	public AsyncaTaskApiCall(NetworkStateReceiver netstatelisenaer, BoardingPass bpass, String body, Context context) {
 		this.netstatelisenaer = netstatelisenaer;
 		this.body = body;
-		this.context = context;
+		// this.context = context;
 		jsonParser = new JsonParser();
 		this.bpass = bpass;
 
@@ -135,7 +152,7 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	public AsyncaTaskApiCall(SyncLocalDbtoBackend loginsuccesslisenar, BoardingPass bpass, String body, Context context) {
 		this.loginsuccesslisenar = loginsuccesslisenar;
 		this.body = body;
-		this.context = context;
+		// this.context = context;
 		jsonParser = new JsonParser();
 		this.bpass = bpass;
 
@@ -185,7 +202,7 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 			}
 		}
 
-		if(result.getStatus()!=200){
+		if (result.getStatus() != 200) {
 			CaBLisenar.responseFailure(result);
 			return;
 		}

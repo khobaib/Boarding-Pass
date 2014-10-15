@@ -29,7 +29,7 @@ public class AsyncaTaskApiCallAfterLoginToBackEndSync extends AsyncTask<Void, Vo
 	BoardingPassApplication appInstance;
 	String myaccounturl;
 	JsonParser jsonParser;
-	ProgressDialog pd;
+	private static ProgressDialog pd;
 	Context context;
 	BoardingPass bpass;
 	String addedurl;

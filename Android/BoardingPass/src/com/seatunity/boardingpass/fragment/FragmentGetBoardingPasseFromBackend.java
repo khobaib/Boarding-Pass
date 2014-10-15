@@ -1,6 +1,7 @@
 package com.seatunity.boardingpass.fragment;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,57 +70,42 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 			parent = Constants.parent;
 		}
 
+		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
+		dbInstance.open();
+		futureBoardingPassList = (ArrayList<BoardingPass>) dbInstance.retrieveFutureBoardingPassList();
+		dbInstance.close();
 		if (Constants.isOnline(getActivity())) {
-			// Log.e("Test", "")
-			Log.d("Test", "User remembered: " + appInstance.isRememberMe());
+			Log.d(TAG, "User remembered: " + appInstance.isRememberMe());
 			if (!appInstance.isRememberMe()) {
-				SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
-				dbInstance.open();
-				// list = (ArrayList<BoardingPass>)
-				// dbInstance.retrieveBoardingPassList();
-				// dbInstance.close();
-				// Calendar c = Calendar.getInstance();
-				// int dayofyear = c.get(Calendar.DAY_OF_YEAR);
-				futureBoardingPassList = (ArrayList<BoardingPass>) dbInstance.retrieveFutureBoardingPassList();
-				dbInstance.close();
-				// for (int i = 0; i < list.size(); i++) {
-				// Log.i(TAG, "Future pass no. : " + i + " :: " +
-				// list.get(i).getTravel_from_name());
-				// int ju_date =
-				// Integer.parseInt(list.get(i).getJulian_date().trim());
-				// if ((ju_date >= dayofyear) &&
-				// (!list.get(i).getDeletestate())) {
-				// list_greaterthan.add(list.get(i));
-				// }
-				// }
 				int sz = futureBoardingPassList.size();
 				if (sz < 1) {
-					Log.i(TAG, "futureBoardingPassList.size() = " + sz + ", so starting HomeFragment");
+					Log.e(TAG, "futureBoardingPassList.size() = " + sz + ", so starting HomeFragment");
 					parent.startHomeFragment();
 				} else {
 					Log.i(TAG, "futureBoardingPassList.size()=" + sz + ", so starting FragmentBoardingPasses");
 					parent.startFragmentBoardingPasses();
 				}
-			} else {
-				// CallBackApiCall CaBLisenar,String body,Context context,String
-				// addedurl,int requestType
-				// Log.e("Test", "3");
-				// callfrom = 1;
+			}
+			// User is registered, so try to retrieve his/her bpasses from
+			// server
+			else {
 				apiCaller = new AsyncaTaskApiCall(this, getJsonObjet(), getActivity(), "bplist",
 						Constants.REQUEST_TYPE_POST);
 				apiCaller.execute();
 			}
 		} else {
 			Log.e(TAG, "Net connection is disabled");
-			SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
-			dbInstance.open();
+			// SeatUnityDatabase dbInstance = new
+			// SeatUnityDatabase(getActivity());
+			// dbInstance.open();
 			// list = (ArrayList<BoardingPass>)
 			// dbInstance.retrieveBoardingPassList();
 			// dbInstance.close();
 			// Calendar c = Calendar.getInstance();
 			// int dayofyear = c.get(Calendar.DAY_OF_YEAR);
-			futureBoardingPassList = (ArrayList<BoardingPass>) dbInstance.retrieveFutureBoardingPassList();
-			dbInstance.close();
+			// futureBoardingPassList = (ArrayList<BoardingPass>)
+			// dbInstance.retrieveFutureBoardingPassList();
+			// dbInstance.close();
 			// for (int i = 0; i < list.size(); i++) {
 			// Log.i(TAG, "Traveler name: " +
 			// list.get(i).getTravel_from_name());
@@ -183,6 +169,67 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 		return "";
 	}
 
+	/**
+	 * Calls the API to save the passed boarding-pass object in server.
+	 * 
+	 * @param bpass
+	 */
+	private void saveBoardingPasstoServer(BoardingPass bpass) {
+		Log.d(TAG, "saveBoardingPasstoServer : inside");
+		// needtoReusedBoardingPass = bpass;
+		String bpassdata = "";
+		bpassdata = getJsonOfBoardingPass(bpass);
+		AsyncaTaskApiCall upBPass = new AsyncaTaskApiCall(this, bpassdata, context, "newbp",
+				Constants.REQUEST_TYPE_POST);
+		upBPass.execute();
+	}
+
+	/**
+	 * Forms a JSON-string to send boarding-pass data to save at the server.
+	 * 
+	 * @param bpass
+	 *            The boarding-pass to save in the server.
+	 * @return
+	 */
+	private String getJsonOfBoardingPass(BoardingPass bpass) {
+		JSONObject bPassObj = new JSONObject();
+		try {
+			bPassObj.put("token", appInstance.getUserCred().getToken());
+			bPassObj.put("version", "1");
+			bPassObj.put("stringform", bpass.getStringform());
+			bPassObj.put("firstname", bpass.getFirstname());
+			bPassObj.put("lastname", bpass.getLastname());
+			bPassObj.put("PNR", bpass.getPNR());
+			bPassObj.put("travel_from", bpass.getTravel_from());
+			bPassObj.put("travel_to", bpass.getTravel_to());
+			bPassObj.put("carrier", bpass.getCarrier());
+			bPassObj.put("flight_no", bpass.getFlight_no());
+			bPassObj.put("julian_date", bpass.getJulian_date().trim());
+			bPassObj.put("compartment_code", bpass.getCompartment_code());
+			bPassObj.put("seat", bpass.getSeat());
+			bPassObj.put("departure", bpass.getDeparture());
+			bPassObj.put("arrival", bpass.getArrival());
+			bPassObj.put("year", "2014");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return bPassObj.toString();
+	}
+
+	private ArrayList<BoardingPass> isolateFutureBPass(ArrayList<BoardingPass> allBPassList) {
+		Calendar c = Calendar.getInstance();
+		int dayofyear = c.get(Calendar.DAY_OF_YEAR);
+		ArrayList<BoardingPass> fbpList = new ArrayList<BoardingPass>();
+		for (int i = 0; i < allBPassList.size(); i++) {
+			Log.i(TAG, "Traveler name: " + allBPassList.get(i).getTravel_from_name());
+			int ju_date = Integer.parseInt(allBPassList.get(i).getJulian_date().trim());
+			if ((ju_date >= dayofyear) && (!allBPassList.get(i).getDeletestate())) {
+				fbpList.add(allBPassList.get(i));
+			}
+		}
+		return fbpList;
+	}
+
 	@Override
 	public void responseOk(JSONObject job) {
 		ArrayList<BoardingPass> allBoardingPassList;
@@ -190,29 +237,27 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 			if (job.getString("success").equals("true")) {
 				allBoardingPassList = BoardingPassList.getBoardingPassListObject(job).getBoardingPassList();
 				SeatUnityDatabase dbInstance = new SeatUnityDatabase(context);
-				Log.e("db", dbInstance + " ab");
+				Log.i(TAG, "Server  has retrieved BPass list ... Now saving BPass in local DB.");
 				dbInstance.open();
 				for (int i = 0; i < allBoardingPassList.size(); i++) {
-					Log.e("testing", "" + i + "  " + allBoardingPassList.get(i).getTravel_from_name());
+					Log.d(TAG, "Inserting: " + i + " : BPass For Travel From: "
+							+ allBoardingPassList.get(i).getTravel_from_name());
 					dbInstance.insertOrUpdateBoardingPass(allBoardingPassList.get(i));
 				}
-				// list = (ArrayList<BoardingPass>)
-				// dbInstance.retrieveBoardingPassList();
-				// dbInstance.close();
-
-				// Calendar c = Calendar.getInstance();
-				// int dayofyear = c.get(Calendar.DAY_OF_YEAR);
-				futureBoardingPassList = (ArrayList<BoardingPass>) dbInstance.retrieveFutureBoardingPassList();
-				dbInstance.close();
-				// for (int i = 0; i < list.size(); i++) {
-				// Log.e("test", "t " + list.get(i).getTravel_from_name());
-				// int ju_date =
-				// Integer.parseInt(list.get(i).getJulian_date().trim());
-				// if ((ju_date >= dayofyear) &&
-				// (!list.get(i).getDeletestate())) {
-				// list_greaterthan.add(list.get(i));
-				// }
-				// }
+				// isolate future b-pass from all b-pass
+				ArrayList<BoardingPass> fbpList = isolateFutureBPass(allBoardingPassList);
+				if (fbpList.size() < futureBoardingPassList.size()) {
+					// TODO upload the unsynched local boarding passes to server
+					Log.e(TAG, "UNSYNCHED B.PASS in LOCAL DB !!!!!!");
+					for (BoardingPass boardingPass : futureBoardingPassList) {
+						if (!fbpList.contains(boardingPass)) {
+							saveBoardingPasstoServer(boardingPass);
+						}
+					}
+				} else {
+					futureBoardingPassList = (ArrayList<BoardingPass>) dbInstance.retrieveFutureBoardingPassList();
+					dbInstance.close();
+				}
 				if (futureBoardingPassList.size() < 1) {
 					parent.startAddBoardingPassDuringLogin();
 				} else {

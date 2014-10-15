@@ -34,6 +34,7 @@ import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.adapter.AdapterForSeatmet;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.interfaces.CallBackApiCall;
+import com.seatunity.boardingpass.interfaces.CollapseClassSelectionList;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
@@ -69,7 +70,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 	int selectedposition = 0;
 	Context context;
 	public int callfrom = 0;
-	ListView lv_class_list;
+	ListView lvClassSelectionABar;
 	ArrayAdapter<String> aAdpt;
 
 	private boolean isClassDropDownVisible = false;
@@ -112,10 +113,28 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 		tv_cdg = (TextView) v.findViewById(R.id.tv_cdg);
 		tv_jfk = (TextView) v.findViewById(R.id.tv_jfk);
 		lv_seat_met_list = (ListView) v.findViewById(R.id.lv_seat_met_list);
-		lv_class_list = (ListView) v.findViewById(R.id.lv_class_list);
+		lvClassSelectionABar = (ListView) v.findViewById(R.id.lv_class_list);
+		MainActivity.setCollapseListForSeatMetListener(ccsListener);
+
 		setListViewAtPosition(0);
 		selectedposition = 0;
 		setDetailsBoaredingpass();
+
+		v.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				lvClassSelectionABar.setVisibility(View.GONE);
+				isClassDropDownVisible = false;
+			}
+		});
+		// v.findViewById(R.id.re_details_holder).setOnClickListener(new
+		// OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// lvClassSelectionABar.setVisibility(View.GONE);
+		// isClassDropDownVisible = false;
+		// }
+		// });
 
 		return v;
 	}
@@ -137,7 +156,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 				lv_seat_met_list.setVisibility(View.VISIBLE);
 				tv_message.setVisibility(View.GONE);
 				adapter = new AdapterForSeatmet(appInstance.getUserCred().getToken(), FragmentSeatMet.this,
-						getActivity(), seatmet_listobj.getAllSeatmateList());
+						getActivity(), seatmet_listobj.getAllSeatmateList(), ccsListener);
 				lv_seat_met_list.setAdapter(adapter);
 			} else {
 				lv_seat_met_list.setVisibility(View.GONE);
@@ -157,7 +176,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 				lv_seat_met_list.setVisibility(View.VISIBLE);
 				tv_message.setVisibility(View.GONE);
 				adapter = new AdapterForSeatmet(appInstance.getUserCred().getToken(), FragmentSeatMet.this,
-						getActivity(), seatmatelist_firstclass);
+						getActivity(), seatmatelist_firstclass, ccsListener);
 				lv_seat_met_list.setAdapter(adapter);
 			} else {
 				lv_seat_met_list.setVisibility(View.GONE);
@@ -178,7 +197,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 				lv_seat_met_list.setVisibility(View.VISIBLE);
 				tv_message.setVisibility(View.GONE);
 				adapter = new AdapterForSeatmet(appInstance.getUserCred().getToken(), FragmentSeatMet.this,
-						getActivity(), seatmatelist_business_class);
+						getActivity(), seatmatelist_business_class, ccsListener);
 				lv_seat_met_list.setAdapter(adapter);
 			} else {
 				lv_seat_met_list.setVisibility(View.GONE);
@@ -199,7 +218,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 				lv_seat_met_list.setVisibility(View.VISIBLE);
 				tv_message.setVisibility(View.GONE);
 				adapter = new AdapterForSeatmet(appInstance.getUserCred().getToken(), FragmentSeatMet.this,
-						getActivity(), seatmatelist_economy_calss);
+						getActivity(), seatmatelist_economy_calss, ccsListener);
 				lv_seat_met_list.setAdapter(adapter);
 			} else {
 				lv_seat_met_list.setVisibility(View.GONE);
@@ -212,6 +231,8 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 		lv_seat_met_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+				lvClassSelectionABar.setVisibility(View.GONE);
+				isClassDropDownVisible = false;
 				if (parentAsHome != null)
 					parentAsHome.startFragmentSingleSeatmet(seatmet_listobj.getAllSeatmateList().get(position), bpass);
 				else if (parentAsPast != null)
@@ -249,22 +270,28 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 			actionBar.setCustomView(R.layout.action_bar_title);
 
 			View v = actionBar.getCustomView();
+			v.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					lvClassSelectionABar.setVisibility(View.GONE);
+					isClassDropDownVisible = false;
+				}
+			});
 			TextView titleTxtView = (TextView) v.findViewById(R.id.txt_title);
 			final TextView txt_seatmate = (TextView) v.findViewById(R.id.txt_seatmate);
 			titleTxtView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					if (!isClassDropDownVisible) {
-						lv_class_list.setVisibility(View.VISIBLE);
+						lvClassSelectionABar.setVisibility(View.VISIBLE);
 						isClassDropDownVisible = true;
 					} else {
-						lv_class_list.setVisibility(View.GONE);
+						lvClassSelectionABar.setVisibility(View.GONE);
 						isClassDropDownVisible = false;
 					}
-					lv_class_list.setAdapter(aAdpt);
+					lvClassSelectionABar.setAdapter(aAdpt);
 				}
 			});
-			// TODO Collapse the lv_class_list on outside click : But how?
 			v.findViewById(R.id.img_icon).setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -277,13 +304,12 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 					goBack();
 				}
 			});
-			lv_class_list.setOnItemClickListener(new OnItemClickListener() {
-
+			lvClassSelectionABar.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1, int itemPosition, long arg3) {
 					setListViewAtPosition(itemPosition);
 					selectedposition = itemPosition;
-					lv_class_list.setVisibility(View.GONE);
+					lvClassSelectionABar.setVisibility(View.GONE);
 					txt_seatmate.setText(itemList.get(itemPosition));
 
 				}
@@ -310,6 +336,8 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		lvClassSelectionABar.setVisibility(View.GONE);
+		isClassDropDownVisible = false;
 		if (item.getItemId() == android.R.id.home) {
 			if (goBack())
 				return true;
@@ -539,5 +567,15 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 			BoardingPassApplication.alert(getActivity(), "Internet connectivity is lost! Please retry the operation.");
 		}
 	}
+
+	private CollapseClassSelectionList ccsListener = new CollapseClassSelectionList() {
+		@Override
+		public void collapseList(boolean isToCollapse) {
+			if (isToCollapse && lvClassSelectionABar != null) {
+				lvClassSelectionABar.setVisibility(View.GONE);
+				isClassDropDownVisible = false;
+			}
+		}
+	};
 
 }

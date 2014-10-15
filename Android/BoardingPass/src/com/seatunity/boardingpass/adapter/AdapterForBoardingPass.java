@@ -26,6 +26,8 @@ import com.seatunity.model.BoardingPass;
  */
 @SuppressLint("InflateParams")
 public class AdapterForBoardingPass extends BaseAdapter {
+	private final String TAG = this.getClass().getSimpleName();
+
 	String month;
 	String day;
 	private Context context;
@@ -91,7 +93,7 @@ public class AdapterForBoardingPass extends BaseAdapter {
 		LayoutInflater mInflater;
 
 		ViewHolder holder = new ViewHolder();
-		Log.e("deletestate", "" + list.get(position).getDeletestate());
+		Log.d(TAG, "BPass's local DB delete-state = " + list.get(position).getDeletestate());
 		String date = Constants.getDayandYear(Integer.parseInt(list.get(position).getJulian_date().trim()));
 		String[] dateParts = date.split(":");
 		month = dateParts[1];

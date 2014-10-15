@@ -26,6 +26,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.fragment.FragmentSeatMet;
+import com.seatunity.boardingpass.interfaces.CollapseClassSelectionList;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.SeatMate;
@@ -49,6 +50,8 @@ public class AdapterForSeatmet extends BaseAdapter {
 	EditText input;
 	AlertDialog d;
 
+	private CollapseClassSelectionList collapseClsSelector;
+
 	/**
 	 * The only constructor
 	 * 
@@ -57,11 +60,13 @@ public class AdapterForSeatmet extends BaseAdapter {
 	 * @param context
 	 * @param item
 	 */
-	public AdapterForSeatmet(String token, FragmentSeatMet lisenar, Context context, ArrayList<SeatMate> item) {
+	public AdapterForSeatmet(String token, FragmentSeatMet lisenar, Context context, ArrayList<SeatMate> item,
+			CollapseClassSelectionList collapseClsSelector) {
 		this.lisenar = lisenar;
 		this.context = context;
 		this.token = token;
 		this.list = item;
+		this.collapseClsSelector = collapseClsSelector;
 
 	}
 
@@ -114,9 +119,10 @@ public class AdapterForSeatmet extends BaseAdapter {
 			holder.txt_name.setText(list.get(position).getName());
 		}
 		if ((list.get(position).getTravel_class() != null) && (list.get(position).getSeat() != null)) {
-			holder.tv_seat_pref.setText(list.get(position).getTravel_class()+", " + Constants.removeingprecingZero(list.get(position).getSeat()));
+			holder.tv_seat_pref.setText(list.get(position).getTravel_class() + ", "
+					+ Constants.removeingprecingZero(list.get(position).getSeat()));
 		}
-		Log.e("Error", position+" "+list.get(position).getProfession());
+		Log.e("Error", position + " " + list.get(position).getProfession());
 		if (list.get(position).getProfession() != null) {
 			holder.tv_prof.setText(list.get(position).getProfession());
 		}
@@ -126,9 +132,9 @@ public class AdapterForSeatmet extends BaseAdapter {
 			ImageLoader.getInstance().displayImage(list.get(position).getImage_url(), holder.img_profile);
 		}
 		holder.img_send_msz.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
+				collapseClsSelector.collapseList(true);
 				showAlertDilog(position);
 			}
 		});

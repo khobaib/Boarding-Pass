@@ -150,22 +150,6 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 		setListViewWithSizeChecks();
 		landingActivity.mTitle = landingActivity.getResources().getString(R.string.app_name_seatunity);
 		landingActivity.getActionBar().setTitle(landingActivity.mTitle);
-		// ArrayList<BoardingPass> list = (ArrayList<BoardingPass>)
-		// dbInstance.retrieveBoardingPassList();
-		// dbInstance.close();
-		// Calendar c = Calendar.getInstance();
-		// int dayofyear = c.get(Calendar.DAY_OF_YEAR);
-		// futureBPList = new ArrayList<BoardingPass>();
-		// futureBPList.clear();
-		//
-		// for (int i = 0; i < list.size(); i++) {
-		// Log.e("test", "t " + list.get(i).getTravel_from_name());
-		// int ju_date = Integer.parseInt(list.get(i).getJulian_date().trim());
-		//
-		// if ((ju_date >= dayofyear) && (!list.get(i).getDeletestate())) {
-		// futureBPList.add(list.get(i));
-		// }
-		// }
 	}
 
 	@Override
@@ -179,7 +163,7 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 		super.onActivityCreated(savedInstanceState);
 		if (savedInstanceState != null) {
 			highlitedboardingpass = (BoardingPass) savedInstanceState.getSerializable("bpass");
-			setDetailsBoaredingpass(highlitedboardingpass);
+			setDetailsBoardingpass(highlitedboardingpass);
 		}
 	}
 
@@ -237,13 +221,13 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 			@Override
 			public void onItemClick(AdapterView<?> parentView, View v, int position, long id) {
 				highlitedboardingpass = futureBPList.get(position);
-				setDetailsBoaredingpass(highlitedboardingpass);
+				setDetailsBoardingpass(highlitedboardingpass);
 			}
 		});
 		if (highlitedboardingpass == null) {
 			highlitedboardingpass = futureBPList.get(0);
 		}
-		setDetailsBoaredingpass(highlitedboardingpass);
+		setDetailsBoardingpass(highlitedboardingpass);
 	}
 
 	/**
@@ -268,7 +252,7 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 	 * @param bpass
 	 *            The data of whih are to be shown in details.
 	 */
-	public void setDetailsBoaredingpass(BoardingPass bpass) {
+	public void setDetailsBoardingpass(BoardingPass bpass) {
 		String date = Constants.getDayandYear(Integer.parseInt(bpass.getJulian_date().trim()));
 		String[] dateParts = date.split(":");
 		String month = dateParts[1];
@@ -316,6 +300,8 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 	public void responseOk(JSONObject job) {
 		try {
 			if (job.getString("success").equals("true")) {
+
+				Log.i("StamateList got", job.toString());
 
 				SeatMetList seatmet_listlist = SeatMetList.getSeatmetListObj(job);
 				if (seatmet_listlist.getAllSeatmateList().size() > 0) {

@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
@@ -69,6 +70,7 @@ import com.seatunity.boardingpass.fragment.HomeListFragment;
 import com.seatunity.boardingpass.fragment.PastBoardingPassListFragment;
 import com.seatunity.boardingpass.fragment.TabFragment;
 import com.seatunity.boardingpass.interfaces.CallBackApiCall;
+import com.seatunity.boardingpass.interfaces.CollapseClassSelectionList;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.boardingpass.utilty.PkpassReader;
@@ -108,15 +110,16 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	private TextView tv_add_boardingpasswith_camera, tv_add_fromsdcard;
 	private RelativeLayout vw_bottom;
 	// private MainActivity lisenar;
-	int BARCODE_SCAN_FROM_DIRECT = 0;
+	int BARCODE_SCAN_FROM_CAMERA = 0;
 	int SCAN_BOARDING_PASS_FROM_SD_CARD = 10;
 	int SCANBOARDINGPASSFROMSDCAdIMAGE_FIRST_ROATAION = 101;
 	int SCANBOARDINGPASSFROMSDCAdIMAGE_SECOND_ROATAION = 102;
 	int SCANBOARDINGPASSFROMSDCAdIMAGE_THIIRD_ROATAION = 10;
 
 	int SCAN_BARCODE_FROM_PDF = 12;
+	// private ProgressDialog progDialog;
 
-	private ProgressDialog progDialog;
+	private static CollapseClassSelectionList ccsListenerSeatMetView;
 
 	/**
 	 * This method sets a custom-listview to the overflow-menu.
@@ -208,7 +211,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 				if (Constants.isImage(filePath)) {
 					Log.d(TAG, "onCreate : External intent received for an image file: " + filePath);
 					Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-					scanBarcodeFromImage(bitmap);
+					scanBPassFromBmp(bitmap);
 				} else if (Constants.isPdf(filePath)) {
 					Log.d(TAG, "onCreate : External intent received for PDF file: " + filePath);
 					getBoardingPassFromPDF(filePath);
@@ -220,7 +223,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 						String m = job.getString("message");
 						String f = job.getString("format");
 						Log.e(TAG, "Barcode Message: " + m + "\nBarcode Format: " + f);
-						saveScannedBoardingPasstodatabes(m, f);
+						saveScannedBoardingPassToDB(m, f);
 					} catch (JSONException e) {
 						Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_invalid_borading_pass),
 								Toast.LENGTH_SHORT).show();
@@ -229,7 +232,8 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.e(TAG, "There wasn't any hook call, just a normal app-open");
+			;
 		}
 	}
 
@@ -277,15 +281,20 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		return true;
 	}
 
+	public static void setCollapseListForSeatMetListener(CollapseClassSelectionList ccsListener) {
+		ccsListenerSeatMetView = ccsListener;
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle presses on the action bar items
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
+		if (ccsListenerSeatMetView != null)
+			ccsListenerSeatMetView.collapseList(true);
 		switch (item.getItemId()) {
 		case R.id.add:
-
 			openDialogToAddBoardingPass();
 			return true;
 		case R.id.delete:
@@ -352,7 +361,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	@SuppressLint("NewApi")
 	public void displayView(int position) {
 
-		Log.d(TAG, "displayView : position=" + position);
+		// Log.d(TAG, "displayView : position=" + position);
 		lastselectedposition = position;
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(MainActivity.this);
 		dbInstance.open();
@@ -408,15 +417,12 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		// Log.e("main", "onPostCreate");
-
 		mDrawerToggle.syncState();
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		// Log.e("main", "onConfigurationChanged");
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
@@ -466,7 +472,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 
 			@Override
 			public void onClick(View arg0) {
-				onclickacamera();
+				onClickCamera();
 				dialog.cancel();
 			}
 		});
@@ -474,7 +480,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 
 			@Override
 			public void onClick(View arg0) {
-				onclickacamera();
+				onClickCamera();
 				dialog.cancel();
 			}
 		});
@@ -494,11 +500,11 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	/**
 	 * Calls the MuPDF library's custom-intent to scan a barcode with camera.
 	 */
-	public void onclickacamera() {
+	public void onClickCamera() {
 		Intent intent = new Intent("com.touhiDroid.android.SCAN");
 		intent.putExtra(Intents.Scan.FORMATS, Intents.Scan.AZTEC_MODE + "," + Intents.Scan.PDF417_MODE + ","
 				+ Intents.Scan.QR_CODE_MODE + "," + Intents.Scan.DATA_MATRIX_MODE);
-		startActivityForResult(intent, BARCODE_SCAN_FROM_DIRECT);
+		startActivityForResult(intent, BARCODE_SCAN_FROM_CAMERA);
 	}
 
 	/**
@@ -510,7 +516,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	 * @param filename
 	 *            The chosen file's absolute name.
 	 */
-	public void showalert(final String filename) {
+	public void showAlert(final String filename) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
 		alertDialogBuilder.setTitle(getResources().getString(R.string.app_name));
 		alertDialogBuilder
@@ -521,16 +527,14 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 						dialog.cancel();
 						if (Constants.isImage(filename)) {
 							Bitmap bitmap = BitmapFactory.decodeFile(filename);
-							scanBarcodeFromImage(bitmap);
-							// Toast.makeText(MainActivity.this,
-							// "ab "+bitmap.getHeight(), 2000).show();
+							scanAndSaveBPassFromBmp(bitmap);
 						} else if (Constants.isPdf(filename)) {
 							getBoardingPassFromPDF(filename);
 						} else if (Constants.isPkPass(filename)) {
 							try {
 								String boardingpass = PkpassReader.getPassbookBarcodeString(filename);
 								JSONObject job = new JSONObject(boardingpass);
-								saveScannedBoardingPasstodatabes(job.getString("message"), job.getString("format"));
+								saveScannedBoardingPassToDB(job.getString("message"), job.getString("format"));
 							} catch (JSONException e) {
 								Toast.makeText(MainActivity.this,
 										getResources().getString(R.string.txt_invalid_borading_pass),
@@ -552,18 +556,13 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		if (requestCode == BARCODE_SCAN_FROM_DIRECT) {
-			if (resultCode == RESULT_OK) {
+		if (resultCode == RESULT_OK) {
+			if (requestCode == BARCODE_SCAN_FROM_CAMERA) {
 				String contents = intent.getStringExtra("SCAN_RESULT");
 				String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
 				Log.d("result", contents + " " + format);
-				saveScannedBoardingPasstodatabes(contents, format);
-			} else if (resultCode == RESULT_CANCELED) {
-			}
-		}
-
-		else if (requestCode == SCAN_BOARDING_PASS_FROM_SD_CARD) {
-			if (resultCode == RESULT_OK) {
+				saveScannedBoardingPassToDB(contents, format);
+			} else if (requestCode == SCAN_BOARDING_PASS_FROM_SD_CARD) {
 				int format = intent.getIntExtra(FilePickerActivity.FILE_FORMAT_KEY, 0);
 				String filepath = intent.getStringExtra(FilePickerActivity.FILE_PATH);
 				if (format == FilePickerActivity.PDF_FILE) {
@@ -572,7 +571,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 					try {
 						String boardingpass = PkpassReader.getPassbookBarcodeString(filepath);
 						JSONObject job = new JSONObject(boardingpass);
-						saveScannedBoardingPasstodatabes(job.getString("message"), job.getString("format"));
+						saveScannedBoardingPassToDB(job.getString("message"), job.getString("format"));
 					} catch (JSONException e) {
 					}
 				} else if (format == FilePickerActivity.IMAGE_FILE) {
@@ -591,22 +590,22 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 					// original.getWidth(), original.getHeight(),
 					// matrix, true);
 
-					boolean scanstatus = scanBarcodeFromImage(bitmap);
+					boolean scanstatus = scanAndSaveBPassFromBmp(bitmap);
 					if (scanstatus) {
 						// Toast.makeText(MainActivity.this, "scanstatus",
 						// Toast.LENGTH_SHORT).show();
-					} else if (scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+					} else if (scanAndSaveBPassFromBmp(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
 							bitmap.getHeight(), matrix_NINTY, true))) {
 						// Toast.makeText(MainActivity.this, "matrix_NINTY",
 						// Toast.LENGTH_SHORT).show();
 
-					} else if (scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+					} else if (scanAndSaveBPassFromBmp(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
 							bitmap.getHeight(), matrix_ONE80, true))) {
 						// Log.e("matrix_NINTY", "matrix_ONE80");
 						// Toast.makeText(MainActivity.this, "matrix_ONE80",
 						// Toast.LENGTH_SHORT).show();
 
-					} else if (scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+					} else if (scanAndSaveBPassFromBmp(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
 							bitmap.getHeight(), matrix_TWO70, true))) {
 						// Log.e("matrix_TWO70", "matrix_TWO70");
 						// Toast.makeText(MainActivity.this, "matrix_TWO70",
@@ -616,33 +615,35 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 						Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_failed_to_scan),
 								Toast.LENGTH_SHORT).show();
 					}
-
 				}
-
-			} else if (resultCode == RESULT_CANCELED) {
-			}
-		} else if (requestCode == SCAN_BARCODE_FROM_PDF) {
-			if (resultCode == RESULT_OK) {
+			} else if (requestCode == SCAN_BARCODE_FROM_PDF) {
 				String path = intent.getStringExtra("bitmap_file_path");
 				Log.d(TAG, "Result got from MuPDF: file_path = " + path);
 				// getResultFromActivity(requestCode, resultCode, path);
-				showProgDialog("Scanning the file for boarding pass...");
+				// showProgDialog("Scanning the PDF file for boarding pass...");
 				new BarcodeScanTask().execute(path);
-			} else if (resultCode == RESULT_CANCELED) {
 			}
 		}
 	}
 
-	private void showProgDialog(final String message) {
-		// runOnUiThread(new Runnable() {
-		// @Override
-		// public void run() {
-		progDialog = new ProgressDialog(MainActivity.this);
-		progDialog.setTitle("SeatUnity");
-		progDialog.setMessage(message);
-		progDialog.show();
-		// }
-		// });
+	// private void showProgDialog(final String message) {
+	// // runOnUiThread(new Runnable() {
+	// // @Override
+	// // public void run() {
+	// progDialog = new ProgressDialog(MainActivity.this);
+	// progDialog.setContentView(R.layout.progress_content);
+	// ((TextView) progDialog.findViewById(R.id.tv_message)).setText(message);
+	// if (!progDialog.isShowing())
+	// progDialog.show();
+	// // }
+	// // });
+	// }
+
+	private boolean scanAndSaveBPassFromBmp(Bitmap bmap) {
+		Result scanResult = scanBPassFromBmp(bmap);
+		if (scanResult != null)
+			saveScannedBoardingPassToDB(scanResult.getText().toString(), scanResult.getBarcodeFormat().toString());
+		return scanResult != null;
 	}
 
 	/**
@@ -652,9 +653,9 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	 * @param bmap
 	 * @return
 	 */
-	public boolean scanBarcodeFromImage(Bitmap bmap) {
+	private Result scanBPassFromBmp(Bitmap bmap) {
 		Log.d(TAG, "Scanning barcode ...");
-		boolean scansuccess = false;
+		Result result = null;
 		Bitmap bMap = bmap;
 		try {
 			int[] intArray = new int[bMap.getWidth() * bMap.getHeight()];
@@ -666,30 +667,26 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 				Hashtable<DecodeHintType, Object> decodeHints = new Hashtable<DecodeHintType, Object>();
 				decodeHints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
 				decodeHints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
-				Result result = reader.decode(bitmap, decodeHints);
-				Log.e("text", result.getText());
-				Log.e("format", result.getBarcodeFormat().toString());
+				result = reader.decode(bitmap, decodeHints);
+				Log.i("text", result.getText());
+				Log.i("format", result.getBarcodeFormat().toString());
 
-				saveScannedBoardingPasstodatabes(result.getText().toString(), result.getBarcodeFormat().toString());
-				scansuccess = true;
+				// saveScannedBoardingPassToDB(result.getText().toString(),
+				// result.getBarcodeFormat().toString());
+				// scansuccess = true;
 			} catch (NotFoundException e) {
-				scansuccess = false;
 				e.printStackTrace();
 			} catch (ChecksumException e) {
-				scansuccess = false;
 				e.printStackTrace();
 			} catch (FormatException e) {
 				e.printStackTrace();
-				scansuccess = false;
 			} catch (NullPointerException e) {
-				scansuccess = false;
 				e.printStackTrace();
 			}
 		} catch (Exception e) {
-			scansuccess = false;
 			e.printStackTrace();
 		}
-		return scansuccess;
+		return result;
 	}
 
 	/**
@@ -712,7 +709,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	 * @param contents
 	 * @param format
 	 */
-	public void saveScannedBoardingPasstodatabes(String contents, String format) {
+	public void saveScannedBoardingPassToDB(String contents, String format) {
 		//
 		if ((contents.length() > 60) && (contents.charAt(0) == 'M')) {
 			BoardingPassParser boardingpassparser = new BoardingPassParser(contents, format);
@@ -721,13 +718,17 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 			if (appInstance == null)
 				appInstance = (BoardingPassApplication) getApplication();
 			if (!appInstance.isRememberMe()) {
-				Log.e("notlogin", contents);
+				Log.e(TAG, "User not logged in : Contents=" + contents);
 				saveBoardingpassInLocalDB();
 			} else {
 				if (Constants.isOnline(MainActivity.this)) {
 					Log.i(TAG, "Saving boardingpass in local-db & server");
 					saveBoardingpassInLocalDB();
-					saveBoardingPasstoServer(boardingPass);
+					// TODO Check - will it update the boarding pass in
+					// the remote-server in any later phase, rather than
+					// instantly?
+					if (Looper.myLooper() == Looper.getMainLooper())
+						saveBoardingPasstoServer(boardingPass);
 				} else {
 					Log.e("No Internet", contents);
 					saveBoardingpassInLocalDB();
@@ -749,7 +750,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		Log.d(TAG, "saveBoardingPasstoServer : inside");
 		needtoReusedBoardingPass = bpass;
 		String bpassdata = "";
-		bpassdata = getJsonObjet(bpass);
+		bpassdata = getJsonOfBoardingPass(bpass);
 		AsyncaTaskApiCall change_pass = new AsyncaTaskApiCall(MainActivity.this, bpassdata, MainActivity.this, "newbp",
 				Constants.REQUEST_TYPE_POST);
 		change_pass.execute();
@@ -762,30 +763,29 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	 *            The boarding-pass to save in the server.
 	 * @return
 	 */
-	public String getJsonObjet(BoardingPass bpass) {
+	public String getJsonOfBoardingPass(BoardingPass bpass) {
+		JSONObject bPassObj = new JSONObject();
 		try {
-			JSONObject loginObj = new JSONObject();
-			loginObj.put("token", appInstance.getUserCred().getToken());
-			loginObj.put("version", "1");
-			loginObj.put("stringform", bpass.getStringform());
-			loginObj.put("firstname", bpass.getFirstname());
-			loginObj.put("lastname", bpass.getLastname());
-			loginObj.put("PNR", bpass.getPNR());
-			loginObj.put("travel_from", bpass.getTravel_from());
-			loginObj.put("travel_to", bpass.getTravel_to());
-			loginObj.put("carrier", bpass.getCarrier());
-			loginObj.put("flight_no", bpass.getFlight_no());
-			loginObj.put("julian_date", bpass.getJulian_date().trim());
-			loginObj.put("compartment_code", bpass.getCompartment_code());
-			loginObj.put("seat", bpass.getSeat());
-			loginObj.put("departure", bpass.getDeparture());
-			loginObj.put("arrival", bpass.getArrival());
-			loginObj.put("year", "2014");
-			return loginObj.toString();
+			bPassObj.put("token", appInstance.getUserCred().getToken());
+			bPassObj.put("version", "1");
+			bPassObj.put("stringform", bpass.getStringform());
+			bPassObj.put("firstname", bpass.getFirstname());
+			bPassObj.put("lastname", bpass.getLastname());
+			bPassObj.put("PNR", bpass.getPNR());
+			bPassObj.put("travel_from", bpass.getTravel_from());
+			bPassObj.put("travel_to", bpass.getTravel_to());
+			bPassObj.put("carrier", bpass.getCarrier());
+			bPassObj.put("flight_no", bpass.getFlight_no());
+			bPassObj.put("julian_date", bpass.getJulian_date().trim());
+			bPassObj.put("compartment_code", bpass.getCompartment_code());
+			bPassObj.put("seat", bpass.getSeat());
+			bPassObj.put("departure", bpass.getDeparture());
+			bPassObj.put("arrival", bpass.getArrival());
+			bPassObj.put("year", "2014");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return "";
+		return bPassObj.toString();
 	}
 
 	/**
@@ -801,14 +801,22 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		// dbInstance.retrieveBoardingPassList();
 		dbInstance.close();
 		Calendar c = Calendar.getInstance();
-		int dayofyear = c.get(Calendar.DAY_OF_YEAR);
-		int ju_date = Integer.parseInt(boardingPass.getJulian_date().trim());
-		if ((ju_date < dayofyear)) {
-			displayView(2);
-
-		} else {
-			displayView(0);
-		}
+		final int dayofyear = c.get(Calendar.DAY_OF_YEAR);
+		final int ju_date = Integer.parseInt(boardingPass.getJulian_date().trim());
+		Log.d(TAG,
+				"Calling displayView from ui thread, where currnt thread is-main="
+						+ (Looper.myLooper() == Looper.getMainLooper()));
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Log.i(TAG, "UI Thread run to call displayView(2 / 0)");
+				if ((ju_date < dayofyear)) {
+					displayView(2);
+				} else {
+					displayView(0);
+				}
+			}
+		});
 	}
 
 	/**
@@ -830,48 +838,26 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		if (bitmap != null) {
 			Matrix matrix_NINTY = new Matrix();
 			matrix_NINTY.postRotate(90);
-
 			Matrix matrix_ONE80 = new Matrix();
 			matrix_ONE80.postRotate(180);
-
 			Matrix matrix_TWO70 = new Matrix();
 			matrix_TWO70.postRotate(270);
 
-			// rotated = Bitmap.createBitmap(original, 0, 0,
-			// original.getWidth(), original.getHeight(),
-			// matrix, true);
-
-			boolean scanstatus = scanBarcodeFromImage(bitmap);
-			if (scanstatus) {
-				// Toast.makeText(MainActivity.this, "scanstatus",
-				// Toast.LENGTH_SHORT).show();
-			} else if (scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
+			if (scanAndSaveBPassFromBmp(bitmap)) {
+			} else if (scanAndSaveBPassFromBmp(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
 					matrix_NINTY, true))) {
-				// Toast.makeText(MainActivity.this, "matrix_NINTY",
-				// Toast.LENGTH_SHORT).show();
 
-			} else if (scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
+			} else if (scanAndSaveBPassFromBmp(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
 					matrix_ONE80, true))) {
-				// Log.e("matrix_NINTY", "matrix_ONE80");
-				// Toast.makeText(MainActivity.this, "matrix_ONE80",
-				// Toast.LENGTH_SHORT).show();
 
-			} else if (scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
+			} else if (scanAndSaveBPassFromBmp(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
 					matrix_TWO70, true))) {
-				// Log.e("matrix_TWO70", "matrix_TWO70");
-				// Toast.makeText(MainActivity.this, "matrix_TWO70",
-				// Toast.LENGTH_SHORT).show();
 
 			} else {
 				Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_failed_to_scan),
 						Toast.LENGTH_SHORT).show();
 			}
-
 		}
-		// else{
-		// Toast.makeText(MainActivity.this,"Not working",
-		// Toast.LENGTH_SHORT).show();
-		// }
 		if (f.exists())
 			f.delete();
 		if (pd.isShowing())
@@ -909,7 +895,6 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 							.show();
 				}
 				saveBoardingpassInLocalDB();
-
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -954,7 +939,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 				appInstance.setUserCred(userCred);
 				appInstance.setRememberMe(true);
 				String bpassdata = "";
-				bpassdata = getJsonObjet(needtoReusedBoardingPass);
+				bpassdata = getJsonOfBoardingPass(needtoReusedBoardingPass);
 				AsyncaTaskApiCall change_pass = new AsyncaTaskApiCall(MainActivity.this, bpassdata, MainActivity.this,
 						"newbp", Constants.REQUEST_TYPE_POST);
 				change_pass.execute();
@@ -981,7 +966,8 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	@Override
 	public void responseFailure(ServerResponse response) {
 		if (response.getStatus() != 200) {
-			BoardingPassApplication.alert(MainActivity.this, "Internet connectivity is lost! Please retry the operation.");
+			BoardingPassApplication.alert(MainActivity.this,
+					"Internet connectivity is lost! Please retry the operation.");
 		}
 	}
 
@@ -995,14 +981,17 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	 *            The bitmap-image's file path. The file is deleted after
 	 *            processing.
 	 */
-	private class BarcodeScanTask extends AsyncTask<String, Void, Boolean> {
+	private class BarcodeScanTask extends AsyncTask<String, Void, Result> {
+
 		@Override
-		protected Boolean doInBackground(String... params) {
+		protected Result doInBackground(String... params) {
 			// ProgressDialog pd = new ProgressDialog(MainActivity.this);
 			// pd.show();
 			String path = params[0];
 			File f = new File(path);
 			Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+			Result result = null;
+			Log.i(TAG, "Bitmap created from the PDF provided barcode at location: " + path);
 			if (bitmap != null) {
 				Matrix matrix_NINTY = new Matrix();
 				matrix_NINTY.postRotate(90);
@@ -1017,62 +1006,50 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 				// original.getWidth(), original.getHeight(),
 				// matrix, true);
 
-				boolean scanstatus = scanBarcodeFromImage(bitmap);
-				if (scanstatus) {
-					// Toast.makeText(MainActivity.this, "scanstatus",
-					// Toast.LENGTH_SHORT).show();
-				} else if (scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-						bitmap.getHeight(), matrix_NINTY, true))) {
-					// Toast.makeText(MainActivity.this, "matrix_NINTY",
-					// Toast.LENGTH_SHORT).show();
-
-				} else if (scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-						bitmap.getHeight(), matrix_ONE80, true))) {
-					// Log.e("matrix_NINTY", "matrix_ONE80");
-					// Toast.makeText(MainActivity.this, "matrix_ONE80",
-					// Toast.LENGTH_SHORT).show();
-
-				} else if (scanBarcodeFromImage(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-						bitmap.getHeight(), matrix_TWO70, true))) {
-					// Log.e("matrix_TWO70", "matrix_TWO70");
-					// Toast.makeText(MainActivity.this, "matrix_TWO70",
-					// Toast.LENGTH_SHORT).show();
-
+				result = scanBPassFromBmp(bitmap);
+				if (result != null) {
+					Log.i(TAG, "Real image is scanned!");
+				} else if ((result = scanBPassFromBmp(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+						bitmap.getHeight(), matrix_NINTY, true))) != null) {
+					Log.i(TAG, "90 deg. rotated image is scanned!");
+				} else if ((result = scanBPassFromBmp(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+						bitmap.getHeight(), matrix_ONE80, true))) != null) {
+					Log.i(TAG, "180 deg. rotated image is scanned!");
+				} else if ((result = scanBPassFromBmp(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+						bitmap.getHeight(), matrix_TWO70, true))) != null) {
+					Log.i(TAG, "270 deg. rotated image is scanned!");
 				} else {
-					// Toast.makeText(MainActivity.this,
-					// getResources().getString(R.string.txt_failed_to_scan),
-					// Toast.LENGTH_SHORT).show();
-					return false;
+					return null;
 				}
-
+			} else {
+				Log.e(TAG, "Retrieved bitmap is null!");
 			}
-			// else{
-			// Toast.makeText(MainActivity.this,"Not working",
-			// Toast.LENGTH_SHORT).show();
-			// }
-			if (f.exists())
-				f.delete();
-			// if (pd.isShowing())
-			// pd.cancel();
-			return true;
+			if (f.exists() && f.delete())
+				Log.i(TAG, "The PDF-parsed temporary file is deleted safely.");
+			return result;
 		}
 
 		@Override
-		protected void onPostExecute(Boolean result) {
-			if (!result) {
-				try {
-					MainActivity.this.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							if (progDialog.isShowing())
-								progDialog.cancel();
-							Toast.makeText(MainActivity.this, "Barcode format is not in boarding-pass format!",
-									Toast.LENGTH_SHORT).show();
-						}
-					});
-				} catch (Exception e) {
-					e.printStackTrace();
+		protected void onPostExecute(Result result) {
+			try {
+				// if (progDialog.isShowing())
+				// progDialog.cancel();
+				if (result == null) {
+					// MainActivity.this.runOnUiThread(new Runnable() {
+					// @Override
+					// public void run() {
+					Log.e(TAG, "Barcode format is not in boarding-pass format!");
+					Toast.makeText(MainActivity.this, "Barcode format is not in boarding-pass format!",
+							Toast.LENGTH_SHORT).show();
+					// }
+					// });
+				} else {
+					Log.i(TAG, "Boarding pass added successfully.");
+					Toast.makeText(MainActivity.this, "Boarding pass added successfully.", Toast.LENGTH_SHORT).show();
+					saveScannedBoardingPassToDB(result.getText().toString(), result.getBarcodeFormat().toString());
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
