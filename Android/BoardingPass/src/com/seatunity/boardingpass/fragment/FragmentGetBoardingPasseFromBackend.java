@@ -193,6 +193,8 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 	 */
 	private String getJsonOfBoardingPass(BoardingPass bpass) {
 		JSONObject bPassObj = new JSONObject();
+		Calendar cal =Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
 		try {
 			bPassObj.put("token", appInstance.getUserCred().getToken());
 			bPassObj.put("version", "1");
@@ -209,7 +211,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 			bPassObj.put("seat", bpass.getSeat());
 			bPassObj.put("departure", bpass.getDeparture());
 			bPassObj.put("arrival", bpass.getArrival());
-			bPassObj.put("year", "2014");
+			bPassObj.put("year", year);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
