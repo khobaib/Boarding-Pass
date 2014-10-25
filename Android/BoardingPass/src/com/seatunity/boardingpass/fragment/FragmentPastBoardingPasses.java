@@ -97,21 +97,22 @@ public class FragmentPastBoardingPasses extends Fragment implements CallBackApiC
 		tv_errorshow = (TextView) v.findViewById(R.id.tv_errorshow);
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(getActivity());
 		dbInstance.open();
-		pastBPasslist = (ArrayList<BoardingPass>) dbInstance.retrieveBoardingPassList();
+		pastBPasslist = (ArrayList<BoardingPass>) dbInstance.retrievePastBoardingPassList();
 		dbInstance.close();
-		ArrayList<BoardingPass> list_smaller = new ArrayList<BoardingPass>();
-		// list.get(0).getJulian_date();
-		for (int count = 0; count < pastBPasslist.size(); count++) {
-			int ju_date = Integer.parseInt(pastBPasslist.get(count).getJulian_date().trim());
-			if ((ju_date < dayofyear)) {
-				list_smaller.add(pastBPasslist.get(count));
-			}
-		}
-		pastBPasslist = list_smaller;
-		if (list_smaller.size() > 0) {
+		// ArrayList<BoardingPass> list_smaller = new ArrayList<BoardingPass>();
+		// // list.get(0).getJulian_date();
+		// for (int count = 0; count < pastBPasslist.size(); count++) {
+		// int ju_date =
+		// Integer.parseInt(pastBPasslist.get(count).getJulian_date().trim());
+		// if ((ju_date < dayofyear)) {
+		// list_smaller.add(pastBPasslist.get(count));
+		// }
+		// }
+		// pastBPasslist = list_smaller;
+		if (pastBPasslist.size() > 0) {
 			re_errorshow.setVisibility(View.GONE);
 			re_list_holder.setVisibility(View.VISIBLE);
-			AdapterForPastBoardingPass adapter = new AdapterForPastBoardingPass(getActivity(), list_smaller);
+			AdapterForPastBoardingPass adapter = new AdapterForPastBoardingPass(getActivity(), pastBPasslist);
 			lv_boarding_past_pass.setAdapter(adapter);
 		} else {
 			re_errorshow.setVisibility(View.VISIBLE);

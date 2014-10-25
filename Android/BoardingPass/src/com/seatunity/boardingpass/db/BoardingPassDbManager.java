@@ -156,7 +156,8 @@ public class BoardingPassDbManager {
 		Calendar cal = Calendar.getInstance();
 		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
 		List<BoardingPass> boardingPasslistlist = new ArrayList<BoardingPass>();
-		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BOARDING_PASS_LIST + " WHERE " + KEY_JULIAN_DATE + " > ?",
+		Cursor cursor = db.rawQuery(
+				"SELECT * FROM " + TABLE_BOARDING_PASS_LIST + " WHERE " + KEY_JULIAN_DATE + " >= ?",
 				new String[] { dayOfYear + "" });
 		Log.d(TAG, "retrieveFutureList : got queried size: " + cursor.getCount());
 		if (cursor != null && cursor.getCount() >= 0 && cursor.moveToFirst()) {
@@ -201,7 +202,7 @@ public class BoardingPassDbManager {
 		List<BoardingPass> boardingPasslistlist = new ArrayList<BoardingPass>();
 		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BOARDING_PASS_LIST + " WHERE " + KEY_JULIAN_DATE + " < ?",
 				new String[] { dayOfYear + "" });
-		Log.d(TAG, "retrieveFutureList : got queried size: " + cursor.getCount());
+		Log.d(TAG, "retrievePastList : got queried size: " + cursor.getCount());
 		if (cursor != null && cursor.getCount() >= 0 && cursor.moveToFirst()) {
 			while (!cursor.isAfterLast()) {
 				String travel_class_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_CLASS));
@@ -286,7 +287,6 @@ public class BoardingPassDbManager {
 	public static void delete(SQLiteDatabase db, BoardingPass boardingPass) throws SQLException {
 		db.delete(TABLE_BOARDING_PASS_LIST, KEY_STRING_FORM + " = ?",
 				new String[] { String.valueOf(boardingPass.getStringform()) });
-
 	}
 
 	/**
@@ -318,12 +318,12 @@ public class BoardingPassDbManager {
 			Log.e(TAG, "boardingPass : exists");
 			if (boardingPass.getId().equals("-1")) {
 				Log.e(TAG, "boardingPass.getId().equals('-1')");
-				update(db, boardingPass);
-				Log.e(TAG, "update process returned");
+				long r = update(db, boardingPass);
+				Log.e(TAG, "update process returned: " + r);
 			} else {
 				Log.e(TAG, "boardingPass ID >-1");
-				update(db, boardingPass);
-				Log.e(TAG, "update process returned");
+				long ret = update(db, boardingPass);
+				Log.e(TAG, "update process returned: " + ret);
 			}
 		} else {
 			Log.e(TAG, "inserting ... ");

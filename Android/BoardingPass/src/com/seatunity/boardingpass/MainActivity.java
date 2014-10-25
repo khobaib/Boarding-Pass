@@ -288,8 +288,8 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle presses on the action bar items
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
+		if (item.getItemId() == android.R.id.home) {
+			return mDrawerToggle.onOptionsItemSelected(item);
 		}
 		if (ccsListenerSeatMetView != null)
 			ccsListenerSeatMetView.collapseList(true);

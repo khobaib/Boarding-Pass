@@ -223,9 +223,10 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 				appInstance.setUserCred(usercred);
 				appInstance.setRememberMe(true);
 				SyncLocalDbtoBackend synlocaldat = new SyncLocalDbtoBackend();
-				synlocaldat.SendBoardingPasstoDB(getActivity());
+				synlocaldat.sendBoardingPasstoRemoteDB(getActivity());
 				Intent intent = new Intent(getActivity(), MainActivity.class);
 				intent.putExtra("select", 1);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 				getActivity().finish();
 				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_login_success),

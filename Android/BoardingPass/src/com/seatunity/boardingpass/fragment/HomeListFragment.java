@@ -263,16 +263,15 @@ public class HomeListFragment extends TabFragment {
 	@Override
 	public void onBackPressed() {
 		if (from == 0) {
-			if (backEndStack.size() == 2) {
+			if (backEndStack.size() <= 2) {
 				showAlertToExit();
-
 			} else {
 				if (backEndStack.size() == 2) {
 					((MainActivity) getActivity()).close();
 				} else {
 					backEndStack.pop();
 					Fragment frg = backEndStack.peek();
-					Log.d("1", "4");
+					Log.d(TAG, "Stack-size greater than 2 ...");
 					FragmentManager fragmentManager = getActivity().getFragmentManager();
 					FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 					fragmentTransaction.replace(R.id.tab3Content, frg).commitAllowingStateLoss();
@@ -280,16 +279,15 @@ public class HomeListFragment extends TabFragment {
 
 			}
 		} else {
-			if (backEndStack.size() == 1) {
+			if (backEndStack.size() <= 1) {
 				showAlertToExit();
-
 			} else {
 				if (backEndStack.size() == 1) {
 					((MainActivity) getActivity()).close();
 				} else {
 					backEndStack.pop();
 					Fragment frg = backEndStack.peek();
-					Log.d("1", "4");
+					Log.d(TAG, "Stack-size greater than 1 ...");
 					FragmentManager fragmentManager = getActivity().getFragmentManager();
 					FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 					fragmentTransaction.replace(R.id.tab3Content, frg).commitAllowingStateLoss();

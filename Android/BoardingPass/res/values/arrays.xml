@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resources>
-     <string-array name="seat_class">
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string-array name="seat_class">
         <item>All Seatmates</item>
         <item>First Class</item>
         <item>Business Class</item>
@@ -14,7 +15,6 @@
         <item>SeatUnity</item>
         <item>My Account</item>
         <item>Past Boarding Passes</item>
-        
     </string-array>
     <string-array name="seating_pref">
         <item>Relax</item>
@@ -28,25 +28,25 @@
         <item>Male</item>
         <item>I prefer to not say</item>
     </string-array>
-    <string-array name="age_range_list">
-        <item>&lt;  10</item>
-        <item>15-19</item>
-        <item>20-24</item>
-        <item>25-29</item>
-        <item>30-34</item>
-        <item>35-39</item>
-        <item>40-44</item>
-        <item>45-49</item>
-        <item>50-54</item>
-        <item>55-59</item>
-        <item>60-64</item>
-        <item>65-69</item>
-        <item>70-74</item>
-        <item>75-79</item>
-        <item>80-84</item>
-        <item>85-89</item>
-        <item>90-94</item>
-        <item>95-99</item>
+    <string-array name="age_range_list" tools:ignore="TypographyDashes">
+        <item>&lt;  15</item>
+        <item>15 - 19</item>
+        <item>20 – 24</item>
+        <item>25 – 29</item>
+        <item>30 – 34</item>
+        <item>35 - 39</item>
+        <item>40 - 44</item>
+        <item>45 - 49</item>
+        <item>50 - 54</item>
+        <item>55 – 59</item>
+        <item>60 - 64</item>
+        <item>65 - 69</item>
+        <item>70 - 74</item>
+        <item>75 - 79</item>
+        <item>80 - 84</item>
+        <item>85 - 89</item>
+        <item>90 - 94</item>
+        <item>95 - 99</item>
         <item>&gt; 100</item>
     </string-array>
     <string-array name="countries_array">

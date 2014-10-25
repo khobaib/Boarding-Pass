@@ -43,6 +43,9 @@ public class AsyncaTaskApiCallAfterLoginToBackEndSync extends AsyncTask<Void, Vo
 	ArrayList<BoardingPass> listnotsynced;
 
 	/**
+	 * Sync b-passes whose local-id is -1, i.e., not uploaded to the
+	 * remote-server
+	 * 
 	 * @param context
 	 */
 	public AsyncaTaskApiCallAfterLoginToBackEndSync(Context context) {
@@ -98,7 +101,7 @@ public class AsyncaTaskApiCallAfterLoginToBackEndSync extends AsyncTask<Void, Vo
 			}
 		}
 
-		if(result.getStatus()!=200){
+		if (result.getStatus() != 200) {
 			CaBLisenar.responseFailure(result);
 			return;
 		}

@@ -22,7 +22,7 @@ public class SeatUnityDatabase {
 	private DatabaseHelper dbHelper;
 	private SQLiteDatabase db;
 	private Context mContext;
-	private static final String DATABASE_NAME = "lipberry_db2";
+	private static final String DATABASE_NAME = "seat_unity.db";
 	private static final int DATABASE_VERSION = 4;
 
 	/**
@@ -53,7 +53,7 @@ public class SeatUnityDatabase {
 	 * @param ctx
 	 */
 	public SeatUnityDatabase(Context ctx) {
-		Log.i(TAG,"constructor : inside");
+		Log.i(TAG, "constructor : inside");
 		mContext = ctx;
 	}
 
@@ -62,9 +62,13 @@ public class SeatUnityDatabase {
 	 * @throws SQLException
 	 */
 	public SeatUnityDatabase open() throws SQLException {
-		dbHelper = new DatabaseHelper(mContext);
-		Log.e(TAG, "ab " + mContext + "  " + dbHelper);
-		db = dbHelper.getWritableDatabase();
+		try {
+			dbHelper = new DatabaseHelper(mContext);
+			Log.e(TAG, "ab " + mContext + "  " + dbHelper);
+			db = dbHelper.getWritableDatabase();
+		} catch (Exception e) {
+			Log.e(TAG, "DB opening failed: " + e.getMessage());
+		}
 		return this;
 	}
 
@@ -79,6 +83,9 @@ public class SeatUnityDatabase {
 	 * Calls {@code dropTable()} method of {@link BoardingPassDbManager }
 	 */
 	public void droptableBoardingPassDbManager() {
+		if (db == null)
+			return;
+		// open();
 		BoardingPassDbManager.dropTable(this.db);
 	}
 
@@ -87,6 +94,9 @@ public class SeatUnityDatabase {
 	 * create a new table.
 	 */
 	public void createtableBoardingPassDbManager() {
+		if (db == null)
+			return;
+		// open();
 		BoardingPassDbManager.createTable(db);
 	}
 
@@ -112,6 +122,9 @@ public class SeatUnityDatabase {
 	 * @param boardingPasseslist
 	 */
 	public void DeleteBoardingPass(BoardingPass boardingPass) {
+		if (db == null)
+			return;
+		// open();
 		BoardingPassDbManager.delete(this.db, boardingPass);
 	}
 
@@ -121,31 +134,48 @@ public class SeatUnityDatabase {
 	 * @param boardingPasseslist
 	 */
 	public void insertOrUpdateBoardingPass(BoardingPass boardingPass) {
-		Log.d(TAG,"insertOrUpdateBoardingPass : inside");
+		Log.d(TAG, "insertOrUpdateBoardingPass : inside");
+		if (db == null)
+			return;
+		// open();
 		BoardingPassDbManager.insertOrupdate(this.db, boardingPass);
 	}
+
 	/**
 	 * Calls the retrieve() method of {@link BoardingPassDbManager }.
 	 * 
 	 * @return a list containing all the boarding-passes in the DB.
 	 */
 	public List<BoardingPass> retrieveBoardingPassList() {
+		if (db == null)
+			return null;
+		// open();
 		return BoardingPassDbManager.retrieve(this.db);
 	}
+
 	/**
-	 * Calls the {@link BoardingPassDbManager#retrieveFutureList(SQLiteDatabase)} method.
+	 * Calls the
+	 * {@link BoardingPassDbManager#retrieveFutureList(SQLiteDatabase)} method.
 	 * 
 	 * @return a list containing all the future boarding-passes in the DB.
 	 */
 	public List<BoardingPass> retrieveFutureBoardingPassList() {
+		if (db == null)
+			return null;
+		// open();
 		return BoardingPassDbManager.retrieveFutureList(this.db);
 	}
+
 	/**
-	 * Calls the {@link BoardingPassDbManager#retrievePastList(SQLiteDatabase)} method.
+	 * Calls the {@link BoardingPassDbManager#retrievePastList(SQLiteDatabase)}
+	 * method.
 	 * 
 	 * @return a list containing all the future boarding-passes in the DB.
 	 */
 	public List<BoardingPass> retrievePastBoardingPassList() {
+		if (db == null)
+			return null;
+		// open();
 		return BoardingPassDbManager.retrievePastList(this.db);
 	}
 }

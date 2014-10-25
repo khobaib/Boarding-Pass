@@ -1,6 +1,7 @@
 package com.seatunity.boardingpass.networkstatetracker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,9 +30,10 @@ public class SyncLocalDbtoBackend {
 
 	/**
 	 * Saves own {@link BoardingPass} object to the DB
+	 * 
 	 * @param context
 	 */
-	public void SendBoardingPasstoDB(Context context) {
+	public void sendBoardingPasstoRemoteDB(Context context) {
 		this.context = context;
 		appInstance = (BoardingPassApplication) context.getApplicationContext();
 		if (Constants.isOnline(context)) {
@@ -58,7 +60,6 @@ public class SyncLocalDbtoBackend {
 						apicalling.execute();
 					}
 				}
-
 			}
 
 			// else
@@ -109,11 +110,9 @@ public class SyncLocalDbtoBackend {
 				// Context context;
 				setBoardingpassInLocalDB(bpass);
 			}
-
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	/**
@@ -136,6 +135,8 @@ public class SyncLocalDbtoBackend {
 	 *         arrival & year.
 	 */
 	public String getJsonObject(BoardingPass bpass) {
+		Calendar cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
 
 		try {
 			JSONObject loginObj = new JSONObject();
@@ -154,7 +155,7 @@ public class SyncLocalDbtoBackend {
 			loginObj.put("seat", bpass.getSeat());
 			loginObj.put("departure", bpass.getDeparture());
 			loginObj.put("arrival", bpass.getArrival());
-			loginObj.put("year", "2014");
+			loginObj.put("year", year);
 			return loginObj.toString();
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -164,6 +165,7 @@ public class SyncLocalDbtoBackend {
 
 	/**
 	 * The passed boarding pass is deleted from the DB
+	 * 
 	 * @param bpass
 	 */
 	public void updateDatabaseWithoutServernotification(BoardingPass bpass) {

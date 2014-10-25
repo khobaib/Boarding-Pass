@@ -229,7 +229,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 
 			}
 		});
-		setlistView();
+		setListView();
 		Log.e("onResume", "onResume test ");
 		Log.e("Image Url", "" + this.img_prof_pic);
 
@@ -252,7 +252,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 	 * option. The password, gender & 'about-me' can also be updated from this
 	 * list-actions.
 	 */
-	public void setlistView() {
+	public void setListView() {
 		userCred = appInstance.getUserCred();
 		adapter = new AdapterForSettings(context, setting_criteria, userCred);
 		lv_setting.setAdapter(adapter);
@@ -346,13 +346,16 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 										AsyncaTaskApiCall log_in_lisenar = new AsyncaTaskApiCall(
 												FragmentMyAccount.this, loginObj.toString(), context, "logout",
 												Constants.REQUEST_TYPE_POST);
+										// TODO Check table delete when logged
+										// out;
+										SeatUnityDatabase sDb = new SeatUnityDatabase(context);
+										sDb.droptableBoardingPassDbManager();
 										log_in_lisenar.execute();
 									} else {
 										Toast.makeText(getActivity(),
 												activity.getResources().getString(R.string.txt_please_check_internet),
 												Toast.LENGTH_SHORT).show();
 									}
-
 								} catch (JSONException e) {
 									e.printStackTrace();
 								}
@@ -445,8 +448,9 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 						update_prof_lisenar.execute();
 					} else {
 						Toast.makeText(getActivity(),
-								activity.getResources().getString(R.string.txt_please_check_internet),
-								Toast.LENGTH_SHORT).show();
+								activity.getResources().getString(R.string.txt_please_check_internet), Toast.LENGTH_SHORT)
+								.show();
+						return;
 					}
 
 				} catch (JSONException e) {
@@ -816,7 +820,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 							Toast.LENGTH_SHORT).show();
 
 					appInstance.setUserCred(userCred);
-					setlistView();
+					setListView();
 					Constants.photo = null;
 				}
 				// this.img_prof_pic.setImageBitmap(photo);

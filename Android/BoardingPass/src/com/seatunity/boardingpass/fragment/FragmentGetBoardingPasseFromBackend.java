@@ -174,6 +174,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 	 * 
 	 * @param bpass
 	 */
+	@SuppressWarnings("unused")
 	private void saveBoardingPasstoServer(BoardingPass bpass) {
 		Log.d(TAG, "saveBoardingPasstoServer : inside");
 		// needtoReusedBoardingPass = bpass;
@@ -193,7 +194,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 	 */
 	private String getJsonOfBoardingPass(BoardingPass bpass) {
 		JSONObject bPassObj = new JSONObject();
-		Calendar cal =Calendar.getInstance();
+		Calendar cal = Calendar.getInstance();
 		int year = cal.get(Calendar.YEAR);
 		try {
 			bPassObj.put("token", appInstance.getUserCred().getToken());
@@ -250,16 +251,20 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 				ArrayList<BoardingPass> fbpList = isolateFutureBPass(allBoardingPassList);
 				if (fbpList.size() < futureBoardingPassList.size()) {
 					// TODO upload the unsynched local boarding passes to server
-					Log.e(TAG, "UNSYNCHED B.PASS in LOCAL DB !!!!!!");
-					for (BoardingPass boardingPass : futureBoardingPassList) {
-						if (!fbpList.contains(boardingPass)) {
-							saveBoardingPasstoServer(boardingPass);
-						}
-					}
+					Log.e(TAG, "Upload the UNSYNCHED local boarding passes to server");
+					// Log.e(TAG,
+					// "UNSYNCHED B.PASS in LOCAL DB !!!!!!\nSynchronizing with remote ...");
+					// for (BoardingPass boardingPass : futureBoardingPassList)
+					// {
+					// if (!fbpList.contains(boardingPass)) {
+					// saveBoardingPasstoServer(boardingPass);
+					// }
+					// }
 				} else {
 					futureBoardingPassList = (ArrayList<BoardingPass>) dbInstance.retrieveFutureBoardingPassList();
 					dbInstance.close();
 				}
+				Log.i(TAG, "Got B-pass list as: " + futureBoardingPassList.size());
 				if (futureBoardingPassList.size() < 1) {
 					parent.startAddBoardingPassDuringLogin();
 				} else {

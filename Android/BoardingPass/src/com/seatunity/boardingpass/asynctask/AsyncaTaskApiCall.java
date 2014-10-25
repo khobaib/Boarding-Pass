@@ -39,7 +39,7 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	private int requestType;
 	private boolean redundantLoginState = false;
 	private CallBackApiCall CaBLisenar;
-	private SyncLocalDbtoBackend loginsuccesslisenar;
+	private SyncLocalDbtoBackend localDbSyncer;
 	private NetworkStateReceiver deletelisenarfromnetstate;
 
 	private NetworkStateReceiver netstatelisenaer;
@@ -144,13 +144,13 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	}
 
 	/**
-	 * @param loginsuccesslisenar
+	 * @param localDbSyncListener
 	 * @param bpass
 	 * @param body
 	 * @param context
 	 */
-	public AsyncaTaskApiCall(SyncLocalDbtoBackend loginsuccesslisenar, BoardingPass bpass, String body, Context context) {
-		this.loginsuccesslisenar = loginsuccesslisenar;
+	public AsyncaTaskApiCall(SyncLocalDbtoBackend localDbSyncListener, BoardingPass bpass, String body, Context context) {
+		this.localDbSyncer = localDbSyncListener;
 		this.body = body;
 		// this.context = context;
 		jsonParser = new JsonParser();
@@ -163,29 +163,19 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 		ServerResponse response = null;
 
 		if (netstatelisenaer != null) {
-
 			String url = Constants.baseurl + "newbp";
 			response = jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null, body, null);
-		}
-
-		else if (loginsuccesslisenar != null) {
-
+		} else if (localDbSyncer != null) {
 			String url = Constants.baseurl + "newbp";
 			response = jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null, body, null);
 		} else if (netstatelisenaer != null) {
-
 			String url = Constants.baseurl + "newbp";
 			response = jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null, body, null);
 		} else if (deletelisenarfromnetstate != null) {
-
 			String url = Constants.baseurl + myaccounturl;
 			response = jsonParser.retrieveServerData(Constants.REQUEST_TYPE_POST, url, null, body, null);
-		}
-
-		else if (CaBLisenar != null) {
-
+		} else if (CaBLisenar != null) {
 			String url = Constants.baseurl + addedurl;
-
 			response = jsonParser.retrieveServerData(requestType, url, null, body, null);
 		}
 		return response;
@@ -208,17 +198,15 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 		}
 		if (netstatelisenaer != null) {
 			netstatelisenaer.addBoardingPassonBackendSuccess(result.getjObj(), bpass);
-		} else if (loginsuccesslisenar != null) {
-			loginsuccesslisenar.addBoardingPassonBackendSuccess(result.getjObj(), bpass);
+		} else if (localDbSyncer != null) {
+			localDbSyncer.addBoardingPassonBackendSuccess(result.getjObj(), bpass);
 		} else if (CaBLisenar != null) {
 			if (redundantLoginState) {
 				JSONObject job = result.getjObj();
 				try {
 					if (job.getString("success").equals("true")) {
 						CaBLisenar.saveLoginCred(job);
-
 					} else {
-
 						CaBLisenar.LoginFailed(job);
 					}
 				} catch (JSONException e) {
@@ -230,7 +218,6 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 					if (job.getString("success").equals("true")) {
 						CaBLisenar.responseOk(job);
 					} else {
-
 						CaBLisenar.responseFailure(job);
 					}
 				} catch (JSONException e) {

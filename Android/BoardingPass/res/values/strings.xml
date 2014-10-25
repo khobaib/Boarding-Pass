@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="txt_failedto_add_boardingpasses">Please scan valid boarding passes</string>
     <string name="version">Version</string>
@@ -67,7 +67,7 @@
     <string name="txt_gender_female">Female</string>
     <string name="txt_gender_male">Male</string>
     <string name="txt_gender_not_say">I prefer to not say</string>
-    <string name="txt_cancel_cap">CANCEL</string>
+    <string name="txt_cancel_cap" tools:ignore="ButtonCase">CANCEL</string>
     <string name="txt_apply_cap">APPLY</string>
     <string name="txt_status">Status</string>
     <string name="acc_live_in">Live in</string>
