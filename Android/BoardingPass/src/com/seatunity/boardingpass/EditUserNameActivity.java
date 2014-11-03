@@ -37,13 +37,14 @@ import com.seatunity.model.UserCred;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
 public class EditUserNameActivity extends Activity implements CallBackApiCall {
-	EditText et_uname, et_email, et_status;
-	String username, email, status;
-	BoardingPassApplication appInstance;
-	UserCred userCred;
-	Drawable back;
-	JSONObject contentbodyremeber;
-	EditUserNameActivity lisenar;
+	private EditText et_uname, et_email, et_status;
+	private String username, email, status;
+	private BoardingPassApplication appInstance;
+	private UserCred userCred;
+	private Drawable back;
+
+	// private JSONObject contentbodyremeber;
+	// private EditUserNameActivity lisenar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class EditUserNameActivity extends Activity implements CallBackApiCall {
 		appInstance = (BoardingPassApplication) getApplication();
 		userCred = appInstance.getUserCred();
 		setContentView(R.layout.edit_user_name);
-		lisenar = this;
+		// lisenar = this;
 		et_uname = (EditText) findViewById(R.id.et_uname);
 		et_email = (EditText) findViewById(R.id.et_email);
 		et_status = (EditText) findViewById(R.id.et_status);
@@ -333,7 +334,8 @@ public class EditUserNameActivity extends Activity implements CallBackApiCall {
 	@Override
 	public void responseFailure(ServerResponse response) {
 		if (response.getStatus() != 200) {
-			BoardingPassApplication.alert(EditUserNameActivity.this, "Internet connectivity is lost! Please retry the operation.");
+			BoardingPassApplication.alert(EditUserNameActivity.this,
+					"Internet connectivity is lost! Please retry the operation.");
 		}
 	}
 

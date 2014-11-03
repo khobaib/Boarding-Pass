@@ -1,6 +1,5 @@
 package com.seatunity.boardingpass.fragment;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
 import org.json.JSONException;
@@ -25,11 +24,11 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -46,6 +45,7 @@ import com.seatunity.boardingpass.asynctask.AsyncaTaskApiCall;
 import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
+import com.seatunity.boardingpass.utilty.DialogViewer;
 import com.seatunity.boardingpass.utilty.MyCustomSpannable;
 import com.seatunity.model.ServerResponse;
 
@@ -64,16 +64,17 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 	private EditText et_email, et_password, et_confirm_password, et_first_name, et_last_name, et_livein, et_profession,
 			et_seatting_pref, et_age;
 	private Button bt_register;
-	String email = "", gender, password = "", confirmpassword = "", firstname = "", lastname = "", livein = "",
-			age = "", profession = "", seating = "";
+	private String email = "", gender, password = "", confirmpassword = "", firstname = "", lastname = "", livein = "",
+			profession = "", seating = "";
 	private RadioGroup rdgrp_gender;
 	private int SEATING_PREF = 0;
 	private int AGE = 1;
 	// private int LIVE_IN = 2;
 	private MyCustomSpannable customSpannable;
 	private RadioButton radio_male, radio_female, radio_not_say;
-	private ArrayList<String> agelist = new ArrayList<String>();
+	// private ArrayList<String> agelist = new ArrayList<String>();
 	private String[] NoCore_Array = new String[5];
+
 	{
 		NoCore_Array[0] = "1";
 		NoCore_Array[1] = "2";
@@ -86,17 +87,17 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		agelist.clear();
-		agelist.add("< 15");
-		for (int i = 15; i < 100;) {
-			String agecalculation = i + " - " + (i + 4);
-			agelist.add(agecalculation);
-			i = i + 5;
-		}
-		agelist.add("100 <");
-		for (int i = 0; i < agelist.size(); i++) {
-			Log.i("" + i, agelist.get(i));
-		}
+		// agelist.clear();
+		// agelist.add("< 15");
+		// for (int i = 15; i < 100;) {
+		// String agecalculation = i + " - " + (i + 4);
+		// agelist.add(agecalculation);
+		// i = i + 5;
+		// }
+		// agelist.add("100 <");
+		// for (int i = 0; i < agelist.size(); i++) {
+		// Log.i("" + i, agelist.get(i));
+		// }
 	}
 
 	/**
@@ -131,7 +132,7 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.signup, container, false);
-		Log.i(TAG,"onCreateView");
+		Log.i(TAG, "onCreateView");
 		rdgrp_gender = (RadioGroup) v.findViewById(R.id.rdgrp_gender);
 		initview(v);
 		return v;
@@ -164,6 +165,8 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 		radio_male.setTextColor(Color.parseColor("#000000"));
 		radio_not_say.setTextColor(Color.parseColor("#000000"));
 
+		final String[] age_list = getActivity().getResources().getStringArray(R.array.age_range_list);
+
 		et_seatting_pref.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
@@ -185,16 +188,14 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 		et_age.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				showDialogForSeatingPref(agelist.toArray(new CharSequence[agelist.size()]), getActivity()
-						.getResources().getString(R.string.txt_age), AGE);
+				showDialogForSeatingPref(age_list, getActivity().getResources().getString(R.string.txt_age), AGE);
 			}
 		});
 		et_age.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
-					showDialogForSeatingPref(agelist.toArray(new CharSequence[agelist.size()]), getActivity()
-							.getResources().getString(R.string.txt_age), AGE);
+					showDialogForSeatingPref(age_list, getActivity().getResources().getString(R.string.txt_age), AGE);
 				}
 			}
 		});
@@ -232,7 +233,7 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 				firstname = et_first_name.getText().toString();
 				lastname = et_last_name.getText().toString();
 				livein = et_livein.getText().toString();
-				age = et_age.getText().toString();
+				// age = et_age.getText().toString();
 				profession = et_profession.getText().toString();
 				// seating=et_seatting_pref.getText().toString();
 				et_email.addTextChangedListener(new TextWatcher() {
@@ -377,7 +378,6 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 			int selected = rdgrp_gender.getCheckedRadioButtonId();
 			RadioButton rb_gender;
 			if (selected == R.id.radio_female) {
-
 				gender = getActivity().getResources().getString(R.string.txt_gender_female);
 			} else if (selected == R.id.radio_male) {
 				gender = getActivity().getResources().getString(R.string.txt_gender_male);
@@ -463,11 +463,23 @@ public class FragmentSignUp extends Fragment implements CallBackApiCall {
 		showCustomDialog();
 	}
 
+	// {"error":{"message":"email in use","code":"x03"},"success":"false"}
+
 	@Override
 	public void responseFailure(JSONObject job) {
-		Log.e("A", "1");
-		Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_signup_failed1),
-				Toast.LENGTH_SHORT).show();
+		Log.e("SignUp", "responseFailure:: \n" + job.toString());
+
+		try {
+			if (job.getJSONObject("error").getString("code").equals("x03"))
+				DialogViewer.alertSimple(getActivity(), "The provided email address is already in use!");
+		} catch (JSONException e) {
+			e.printStackTrace();
+			try {
+				DialogViewer.alertSimple(getActivity(), "Error: " + job.getJSONObject("error").getString("message"));
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 	@Override

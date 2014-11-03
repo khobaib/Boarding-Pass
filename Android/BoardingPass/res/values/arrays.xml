@@ -31,9 +31,9 @@
     <string-array name="age_range_list" tools:ignore="TypographyDashes">
         <item>&lt;  15</item>
         <item>15 - 19</item>
-        <item>20 – 24</item>
-        <item>25 – 29</item>
-        <item>30 – 34</item>
+        <item>20 - 24</item>
+        <item>25 - 29</item>
+        <item>30 - 34</item>
         <item>35 - 39</item>
         <item>40 - 44</item>
         <item>45 - 49</item>

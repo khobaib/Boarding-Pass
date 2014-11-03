@@ -186,10 +186,12 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	protected void onPostExecute(ServerResponse result) {
 		super.onPostExecute(result);
 
-		if (pd != null) {
-			if (pd.isShowing()) {
+		try {
+			if (pd != null && pd.isShowing()) {
 				pd.cancel();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		if (result.getStatus() != 200) {

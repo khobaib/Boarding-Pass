@@ -155,6 +155,7 @@ public class BoardingPassDbManager {
 	public static List<BoardingPass> retrieveFutureList(SQLiteDatabase db) {
 		Calendar cal = Calendar.getInstance();
 		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+		Log.i(TAG, "retrieveFutureList : Current day of the year: " + dayOfYear);
 		List<BoardingPass> boardingPasslistlist = new ArrayList<BoardingPass>();
 		Cursor cursor = db.rawQuery(
 				"SELECT * FROM " + TABLE_BOARDING_PASS_LIST + " WHERE " + KEY_JULIAN_DATE + " >= ?",
@@ -199,6 +200,7 @@ public class BoardingPassDbManager {
 	public static List<BoardingPass> retrievePastList(SQLiteDatabase db) {
 		Calendar cal = Calendar.getInstance();
 		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+		Log.i(TAG, "retrieveFutureList : Current day of the year: " + dayOfYear);
 		List<BoardingPass> boardingPasslistlist = new ArrayList<BoardingPass>();
 		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BOARDING_PASS_LIST + " WHERE " + KEY_JULIAN_DATE + " < ?",
 				new String[] { dayOfYear + "" });

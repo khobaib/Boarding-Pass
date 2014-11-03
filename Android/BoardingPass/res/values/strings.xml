@@ -69,7 +69,7 @@
     <string name="txt_gender_not_say">I prefer to not say</string>
     <string name="txt_cancel_cap" tools:ignore="ButtonCase">CANCEL</string>
     <string name="txt_apply_cap">APPLY</string>
-    <string name="txt_status">Status</string>
+    <string name="txt_status">Your status goes here</string>
     <string name="acc_live_in">Live in</string>
     <string name="acc_age">Age</string>
     <string name="acc_gender">Gender</string>
@@ -95,16 +95,16 @@
     <string name="txt_cancel">Cancel</string>
     <string name="txt_scan_boardingpass">Scan your boarding pass code</string>
     <string name="txt_add_from_locall">Add locally stored</string>
-    <string name="txt_email_senttomail">Email is successfully send to your address. You will get a confirmation mail soon. Please confirm the account.</string>
+    <string name="txt_email_senttomail">Email is successfully sent to your address. You will get a confirmation mail soon. Please confirm the account.</string>
     <string name="txt_confirmtaion">You will get a confirmation mail soon. Please confirm the account....</string>
     <string name="txt_wrong_email">Wrong email or password. Please try again</string>
     <string name="txt_no_pastbpass">No past boarding passes.</string>
     <string name="txt_email_sent">Email is sent to your email account. Please activite your account from there</string>
     <string name="txt_signup_failed1">Sign up is failed. Please try again</string>
     <string name="txt_login_failed">Log-in failed. Please try again</string>
-    <string name="txt_login_success">Log-in successfull</string>
+    <string name="txt_login_success">Log-in successful</string>
     <string name="txt_update_success">Successfully update your profile</string>
-    <string name="txt_update_failed">Failed to update your profile. Please try again... </string>
+    <string name="txt_update_failed" tools:ignore="TypographyEllipsis">Failed to update your profile. Please try again... </string>
     <string name="txt_logout_success">Successfully logged-out </string>
     <string name="txt_logout_failed">Failed to sign-out. Please try again </string>
     <string name="txt_select_city">Age</string>
@@ -112,7 +112,7 @@
                              you share your fight</string>
     <string name="txt_say_to_register">Register for free to use our social features and
                               to connect with your seat mates</string>
-    <string name="txt_welcome">Welcome?</string>
+    <string name="txt_welcome">Welcome</string>
     <string name="txt_enter_password">Please enter password</string>
     <string name="txt_fillup_required_field">Please fill up required field</string>
     <string name="txt_check_internet">Please check your internet connection</string>
@@ -274,7 +274,7 @@
     <string name="wifi_changing_network">Requesting connection to network\u2026</string>
     <string name="wifi_ssid_label">Network Name</string>
     <string name="wifi_type_label">Type</string>
-    <string name="lorem_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tincidunt elit elit, quis interdum mauris vehicula ac. Vestibulum et felis volutpat, tincidunt elit et, vehicula nunc. Nullam cursus viverra nulla vel malesuada. Ut tortor risus, egestas at dolor sit amet, pharetra faucibus tortor. Morbi mauris dui, condimentum nec fringilla nec, congue vitae dolor. Quisque dictum libero ac velit pharetra venenatis. Etiam non massa aliquet, facilisis magna ut, convallis leo. Pellentesque eu iaculis nibh. Maecenas aliquet, elit at viverra sagittis, massa augue eleifend eros, eget tempus mauris nibh quis neque. Nulla et ligula hendrerit, pulvinar felis nec, pulvinar metus. Pellentesque venenatis neque eu sem aliquet posuere. Quisque in vehicula dui, vel ultrices massa.
+    <string name="lorem_text" tools:ignore="Typos">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tincidunt elit elit, quis interdum mauris vehicula ac. Vestibulum et felis volutpat, tincidunt elit et, vehicula nunc. Nullam cursus viverra nulla vel malesuada. Ut tortor risus, egestas at dolor sit amet, pharetra faucibus tortor. Morbi mauris dui, condimentum nec fringilla nec, congue vitae dolor. Quisque dictum libero ac velit pharetra venenatis. Etiam non massa aliquet, facilisis magna ut, convallis leo. Pellentesque eu iaculis nibh. Maecenas aliquet, elit at viverra sagittis, massa augue eleifend eros, eget tempus mauris nibh quis neque. Nulla et ligula hendrerit, pulvinar felis nec, pulvinar metus. Pellentesque venenatis neque eu sem aliquet posuere. Quisque in vehicula dui, vel ultrices massa.
 
 Proin nec tortor ac enim commodo gravida a a dolor. Praesent sed ipsum mi. Nam adipiscing eget turpis ut viverra. Cras ut auctor metus. Vivamus vehicula, ligula sed pharetra molestie, massa libero malesuada est, nec semper arcu nibh vel felis. Curabitur porta justo ac purus condimentum semper nec vel dolor. Suspendisse massa dui, lacinia nec aliquet a, eleifend vitae velit. Suspendisse pulvinar ante justo.
 

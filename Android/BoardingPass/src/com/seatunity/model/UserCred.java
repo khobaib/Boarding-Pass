@@ -25,6 +25,7 @@ import com.google.gson.GsonBuilder;
  * 
  */
 public class UserCred {
+
 	private String email = "";
 	private String password = "";
 	private String token;
@@ -226,6 +227,17 @@ public class UserCred {
 
 	public String getGender() {
 		return gender;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "UserCred [email=" + email + ", password=" + password + ", token=" + token + ", language=" + language
+				+ ", firstname=" + firstname + ", lastname=" + lastname + ", gender=" + gender + ", live_in=" + live_in
+				+ ", age=" + age + ", profession=" + profession + ", seating_pref=" + seating_pref + ", image_url="
+				+ image_url + ", some_about_you=" + some_about_you + ", status=" + status + "]";
 	}
 
 }

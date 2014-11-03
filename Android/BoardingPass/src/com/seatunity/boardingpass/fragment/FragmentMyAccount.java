@@ -229,12 +229,12 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 
 			}
 		});
-		setListView();
 		Log.e("onResume", "onResume test ");
 		Log.e("Image Url", "" + this.img_prof_pic);
 
 		appInstance = (BoardingPassApplication) getActivity().getApplication();
 		userCred = appInstance.getUserCred();
+		setListView();
 
 		if ((appInstance.getUserCred().getImage_url().equals("")) || (appInstance.getUserCred().getImage_url() == null)) {
 
@@ -253,7 +253,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 	 * list-actions.
 	 */
 	public void setListView() {
-		userCred = appInstance.getUserCred();
+		Log.i("MyAccount: setListView",userCred.toString());
 		adapter = new AdapterForSettings(context, setting_criteria, userCred);
 		lv_setting.setAdapter(adapter);
 		lv_setting.setOnItemClickListener(new OnItemClickListener() {
@@ -286,7 +286,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 					Intent intent = new Intent(context, PasswordChangeActivity.class);
 					startActivity(intent);
 				} else if (position == 7) {
-					Signout();
+					signOut();
 				}
 			}
 		});
@@ -322,7 +322,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 	 * Calls the sign-out API with necessary data after getting confirmation
 	 * from the user by a dialog & checking the internet connection.
 	 */
-	public void Signout() {
+	public void signOut() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
@@ -379,7 +379,8 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 	 * @param title
 	 * @param position
 	 */
-	public void showDialogWithChooser(final CharSequence[] items, String title, final int position) {
+	public void showDialogWithChooser(final String[] items, String title, final int position) {
+		userCred = appInstance.getUserCred();
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
@@ -417,6 +418,8 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 					loginObj.put("image_name", "");
 					loginObj.put("image_type", "");
 					loginObj.put("image_content", "");
+					if(userCred==null)
+						userCred = appInstance.getUserCred();
 					if (position == 0) {
 						String country = items[which].toString();
 						loginObj.put("live_in", country);
@@ -439,8 +442,8 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 						loginObj.put("seating_pref", seat_pref);
 						userCred.setSeating_pref(seat_pref);
 						Constants.SEATING_PREF_FLAG = true;
-
 					}
+					appInstance.setUserCred(userCred);
 					callfrom = 2;
 					if (Constants.isOnline(activity)) {
 						AsyncaTaskApiCall update_prof_lisenar = new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj
@@ -475,10 +478,10 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 		return val;
 	}
 
-	private int getPositionInArray(CharSequence[] items, String string) {
+	private int getPositionInArray(String[] items, String string) {
 		int len = items.length;
 		for (int i = 0; i < len; i++) {
-			if (items[i].equals(string))
+			if (items[i].equalsIgnoreCase(string))
 				return i;
 		}
 		return -1;

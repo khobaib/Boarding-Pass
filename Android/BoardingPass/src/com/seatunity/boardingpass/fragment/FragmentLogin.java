@@ -29,6 +29,7 @@ import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.networkstatetracker.SyncLocalDbtoBackend;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
+import com.seatunity.boardingpass.utilty.DialogViewer;
 import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 
@@ -40,8 +41,8 @@ import com.seatunity.model.UserCred;
  */
 @SuppressLint("NewApi")
 public class FragmentLogin extends Fragment implements CallBackApiCall {
-	
-	private final String TAG=this.getClass().getSimpleName();
+
+	private final String TAG = this.getClass().getSimpleName();
 	EditText et_email, et_password;
 	TextView tv_errorshow, tv_forgot_pass;
 	Button bt_login;
@@ -53,12 +54,11 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		appInstance = (BoardingPassApplication) getActivity().getApplication();
-
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Log.i(TAG,"onCreateView");
+		Log.i(TAG, "onCreateView");
 		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.login, container, false);
 		initview(v);
 		return v;
@@ -82,7 +82,6 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				et_password.setBackgroundResource(android.R.drawable.editbox_background_normal);
 				tv_errorshow.setVisibility(View.GONE);
-
 			}
 
 			@Override
@@ -240,12 +239,24 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 		}
 	}
 
+	// {"error":{"message":"email in use","code":"x03"},"success":"false"}
+
 	@Override
 	public void responseFailure(JSONObject job) {
-		tv_errorshow.setVisibility(View.VISIBLE);
-		Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_login_failed),
-				Toast.LENGTH_SHORT).show();
+		Log.e("SignUp", "responseFailure:: \n" + job.toString());
 
+		try {
+			if (job.getJSONObject("error").getString("code").equals("x13"))
+				DialogViewer.alertSimple(getActivity(),
+						"You haven't confirmed this registered email.\nCheck your email to confirm this account.");
+		} catch (JSONException e) {
+			e.printStackTrace();
+			try {
+				DialogViewer.alertSimple(getActivity(), "Error: " + job.getJSONObject("error").getString("message"));
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 	@Override
