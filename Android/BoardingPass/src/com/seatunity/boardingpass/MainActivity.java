@@ -1,6 +1,10 @@
 package com.seatunity.boardingpass;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,7 +19,9 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -202,37 +208,117 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	 * boarding-pass from the selected image, pdf or pkpass file.
 	 */
 	private void checkHookedCall() {
+
+		Log.i(TAG, "\n.\nHooking app data ... \n.\n.");
 		try {
 			Intent intent = getIntent();
-			String filePath = intent.getData().toString();
-			filePath = filePath.replace("file://", "");
-			if ((!filePath.equals(null)) && (!filePath.equals(""))) {
-				if (Constants.isImage(filePath)) {
-					Log.d(TAG, "onCreate : External intent received for an image file: " + filePath);
-					Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-					scanBPassFromBmp(bitmap);
-				} else if (Constants.isPdf(filePath)) {
-					Log.d(TAG, "onCreate : External intent received for PDF file: " + filePath);
-					getBoardingPassFromPDF(filePath);
-				} else if (Constants.isPkPass(filePath)) {
-					Log.d(TAG, "onCreate : External intent received for pkpass file: " + filePath);
-					try {
-						String boardingpass = PkpassReader.getPassbookBarcodeString(filePath);
-						JSONObject job = new JSONObject(boardingpass);
-						String m = job.getString("message");
-						String f = job.getString("format");
-						Log.e(TAG, "Barcode Message: " + m + "\nBarcode Format: " + f);
-						saveScannedBoardingPassToDB(m, f);
-					} catch (JSONException e) {
-						Toast.makeText(MainActivity.this, getResources().getString(R.string.txt_invalid_borading_pass),
-								Toast.LENGTH_SHORT).show();
-					}
-				}
+			if (intent == null) {
+				Log.e(TAG, "Hooked intent is null");
+				return;
 			}
+			Uri u = intent.getData();
+			if (u == null) {
+				Log.e(TAG, "Hooked intent data as URI is null");
+				return;
+			}
+			String scheme = u.getScheme();
 
+			if (scheme.equals(ContentResolver.SCHEME_FILE)) {
+				String filePath = intent.getData().toString();
+				filePath = filePath.replace("file://", "");
+				Log.d(TAG, "Got file path: " + filePath);
+				if ((!filePath.equals(null)) && (!filePath.equals(""))) {
+					if (Constants.isImage(filePath)) {
+						Log.d(TAG, "onCreate : External intent received for an image file: " + filePath);
+						Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+						scanBPassFromBmp(bitmap);
+					} else if (Constants.isPdf(filePath)) {
+						Log.d(TAG, "onCreate : External intent received for PDF file: " + filePath);
+						getBoardingPassFromPDF(filePath);
+					} else if (Constants.isPkPass(filePath)) {
+						Log.d(TAG, "onCreate : External intent received for pkpass file: " + filePath);
+						try {
+							String boardingpass = PkpassReader.getPassbookBarcodeString(filePath);
+							JSONObject job = new JSONObject(boardingpass);
+							String m = job.getString("message");
+							String f = job.getString("format");
+							Log.e(TAG, "Barcode Message: " + m + "\nBarcode Format: " + f);
+							saveScannedBoardingPassToDB(m, f);
+						} catch (JSONException e) {
+							Log.e(TAG, getResources().getString(R.string.txt_invalid_borading_pass));
+							Toast.makeText(MainActivity.this,
+									getResources().getString(R.string.txt_invalid_borading_pass), Toast.LENGTH_SHORT)
+									.show();
+						}
+					} else
+						Log.e(TAG, "\nUnknown\nFile\nType\nFound");
+				} else
+					Log.e(TAG, "Hooked file path is null/empty");
+			} else if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
+				// TODO
+				try {
+					ContentResolver cr = getContentResolver();
+					String mimeType = cr.getType(u);
+					AssetFileDescriptor afd = cr.openAssetFileDescriptor(u, "r");
+					long length = afd.getLength();
+					byte[] filedata = new byte[(int) length];
+					InputStream is = cr.openInputStream(u);
+					if (is == null) {
+						Log.e(TAG, "Input stream of the content resolver is null");
+						return;
+					}
+					try {
+						// is.read(filedata, 0, (int) length);
+						String filePath = Constants.APP_DIRECTORY + "/temp.thd";
+						File f = new File(filePath);
+						if (f.mkdirs() && f.exists() && f.delete() && f.createNewFile())
+							Log.i(TAG, "New temp.thd file created as data-station");
+						FileOutputStream fout = new FileOutputStream(f);
+						int count = 0;
+						while ((count = is.read(filedata)) != -1) {
+							fout.write(filedata, 0, count);
+						}
+						fout.close();
+						is.close();
+						Log.i(TAG, "file data is read of length: " + length);
+						// Util.loadOTDRFileFromByteArray(filedata);
+						if (mimeType.endsWith("pdf")) {
+							Log.d(TAG, "PDF File found & downloaded at location: " + filePath);
+							getBoardingPassFromPDF(filePath);
+						} else if (mimeType.endsWith("pkpass")) {
+							Log.d(TAG, "Pkpass File found & downloaded at location: " + filePath);
+							try {
+								String boardingpass = PkpassReader.getPassbookBarcodeString(filePath);
+								JSONObject job = new JSONObject(boardingpass);
+								String m = job.getString("message");
+								String format = job.getString("format");
+								Log.e(TAG, "Barcode Message: " + m + "\nBarcode Format: " + format);
+								saveScannedBoardingPassToDB(m, format);
+							} catch (JSONException e) {
+								Log.e(TAG, getResources().getString(R.string.txt_invalid_borading_pass));
+								Toast.makeText(MainActivity.this,
+										getResources().getString(R.string.txt_invalid_borading_pass),
+										Toast.LENGTH_SHORT).show();
+							}
+						} else {
+							Log.d(TAG, "Unknown File found with mimetype=" + mimeType + " & downloaded at location: "
+									+ filePath);
+						}
+						// if(f.delete())
+						// Log.i(TAG,"Temporary file deleted successfully.");
+					} catch (IOException e) {
+						e.printStackTrace();
+						return;
+					}
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					return;
+				}
+			} else {
+				Log.e(TAG, "Scheme didn't match! :: " + scheme);
+			}
 		} catch (Exception e) {
 			Log.e(TAG, "There wasn't any hook call, just a normal app-open");
-			;
 		}
 	}
 

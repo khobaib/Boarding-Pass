@@ -57,7 +57,7 @@ import com.seatunity.model.UserCred;
 public class FragmentUpcomingBoardingPassDetails extends Fragment implements CallBackApiCall {
 
 	private final String TAG = this.getClass().getSimpleName();
-	
+
 	BoardingPass bpass;
 	SeatMetList list;
 	HomeListFragment parent;
@@ -72,12 +72,12 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	TextView tv_name_carrier, tv_month_inside_icon, tv_date_inside_icon, tv_from_air, tv_to_air, tv_start_time,
 			tv_arrival_time, tv_flight_var, tv_seat_var, tv_compartment_class_var, tv_passenger_name, tv_from, tv_to;
 
-//	public FragmentUpcomingBoardingPassDetails(BoardingPass bpass) {
-//		this.bpass = bpass;
-//		Log.e("insideList5", bpass.getTravel_from_name());
-//	}
-	
-	public static FragmentUpcomingBoardingPassDetails newInstance(BoardingPass bpass){
+	// public FragmentUpcomingBoardingPassDetails(BoardingPass bpass) {
+	// this.bpass = bpass;
+	// Log.e("insideList5", bpass.getTravel_from_name());
+	// }
+
+	public static FragmentUpcomingBoardingPassDetails newInstance(BoardingPass bpass) {
 		FragmentUpcomingBoardingPassDetails f = new FragmentUpcomingBoardingPassDetails();
 		Bundle b = new Bundle();
 		b.putSerializable("bpass", bpass);
@@ -97,7 +97,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		Log.i(TAG,"onCreateView");
+		Log.i(TAG, "onCreateView");
 		appInstance = (BoardingPassApplication) getActivity().getApplication();
 		this.bpass = (BoardingPass) getArguments().getSerializable("bpass");
 		View rootView = inflater.inflate(R.layout.fragment_boarding_details, container, false);
@@ -130,8 +130,8 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		tv_seat_var.setText(Constants.removeingprecingZero(bpass.getSeat()));
 		tv_compartment_class_var.setText(bpass.getTravel_class());
 		tv_passenger_name.setText(bpass.getFirstname().trim() + " " + bpass.getLastname().trim());
-		String date = com.seatunity.boardingpass.utilty.Constants
-				.getDayandYear(Integer.parseInt(bpass.getJulian_date().trim()));
+		String date = com.seatunity.boardingpass.utilty.Constants.getDayandYear(Integer.parseInt(bpass.getJulian_date()
+				.trim()));
 		String[] dateParts = date.split(":");
 		String month = dateParts[1];
 		String dateofmonth = dateParts[0];
@@ -392,7 +392,10 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		}
 
 		dbInstance.close();
-		parent.onBackPressed();
+		if (parent != null)
+			parent.onBackPressed();
+		else
+			getActivity().onBackPressed();
 	}
 
 	/**
