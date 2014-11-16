@@ -394,6 +394,8 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 		dbInstance.close();
 		if (parent != null)
 			parent.onBackPressed();
+		else if(parentAsPast!=null)
+			parentAsPast.onBackPressed();
 		else
 			getActivity().onBackPressed();
 	}
@@ -425,7 +427,10 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 					SeatMetList seatmet_listlist = SeatMetList.getSeatmetListObj(job);
 					this.list = seatmet_listlist;
 					if (list.getAllSeatmateList().size() > 0) {
-						parent.startSeatmetList(list, bpass);
+						if(parent!=null)
+							parent.startSeatmetList(list, bpass);
+						else if(parentAsPast!=null)
+							parentAsPast.startSeatmetList(list, bpass);
 					} else {
 						showNoSeatmateDialog();
 					}

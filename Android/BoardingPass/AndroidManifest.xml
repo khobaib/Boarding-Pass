@@ -12,14 +12,14 @@
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
- limitations under the License.
+ limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.seatunity.boardingpass"
     android:installLocation="auto"
-    android:versionCode="2"
-    android:versionName="4.5.3" >
+    android:versionCode="5"
+    android:versionName="4.5.5" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -102,6 +102,13 @@
             android:name="com.seatunity.boardingpass.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/HomeActivityTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="*/*" />
+            </intent-filter>
 
             <!-- For Mail Clients : Scheme=content -->
             <intent-filter>

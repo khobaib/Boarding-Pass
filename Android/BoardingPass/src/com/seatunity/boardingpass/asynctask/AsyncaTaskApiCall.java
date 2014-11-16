@@ -31,7 +31,7 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	// private BoardingPassApplication appInstance;
 	private String myaccounturl;
 	private JsonParser jsonParser;
-	// private static ProgressDialog pd;
+	 private static ProgressDialog pd;
 	// Context context;
 	private BoardingPass bpass;
 	private String addedurl;
@@ -93,8 +93,8 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 		// this.context = context;
 		jsonParser = new JsonParser();
 		try {
-			// if (pd != null && pd.isShowing())
-			// pd.cancel(); TODO
+			 if (pd != null && pd.isShowing())
+			 pd.cancel();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -118,11 +118,11 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 		this.requestType = requestType;
 		jsonParser = new JsonParser();
 		try {
-			// if (pd == null) TODO
-			// pd = new ProgressDialog(context);
-			// pd.setContentView(R.layout.progress_content);
-			// if (!pd.isShowing())
-			// pd.show();
+			 if (pd == null)
+			 pd = new ProgressDialog(context);
+			 pd.setContentView(R.layout.progress_content);
+			 if (!pd.isShowing())
+			 pd.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -187,9 +187,9 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 		super.onPostExecute(result);
 
 		try {
-			// if (pd != null && pd.isShowing()) {
-			// pd.cancel(); TODO
-			// }
+			if (pd != null && pd.isShowing()) {
+				pd.cancel();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
