@@ -155,14 +155,21 @@ public class BoardingPassDbManager {
 	public static List<BoardingPass> retrieveFutureList(SQLiteDatabase db) {
 		Calendar cal = Calendar.getInstance();
 		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+		int year = cal.get(Calendar.YEAR);
+		boolean isLeapYear = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
 		Log.i(TAG, "retrieveFutureList : Current day of the year: " + dayOfYear);
 		List<BoardingPass> boardingPasslistlist = new ArrayList<BoardingPass>();
-		Cursor cursor = db.rawQuery(
-				"SELECT * FROM " + TABLE_BOARDING_PASS_LIST + " WHERE " + KEY_JULIAN_DATE + " >= ?",
-				new String[] { dayOfYear + "" });
+		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BOARDING_PASS_LIST, null);
+		// + " WHERE " + KEY_JULIAN_DATE + " >= ?",
+		// new String[] { dayOfYear + "" });
 		Log.d(TAG, "retrieveFutureList : got queried size: " + cursor.getCount());
 		if (cursor != null && cursor.getCount() >= 0 && cursor.moveToFirst()) {
 			while (!cursor.isAfterLast()) {
+				String julian_date_local = cursor.getString(cursor.getColumnIndex(KEY_JULIAN_DATE));
+				if (!isBPassDateInFuture(dayOfYear, julian_date_local, isLeapYear)){
+					cursor.moveToNext();
+					continue;
+				}
 				String travel_class_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_CLASS));
 				String stringform_local = cursor.getString(cursor.getColumnIndex(KEY_STRING_FORM));
 				String firstname_local = cursor.getString(cursor.getColumnIndex(KEY_FIRSTNAME));
@@ -172,7 +179,6 @@ public class BoardingPassDbManager {
 				String travel_to_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_TO));
 				String carrier_local = cursor.getString(cursor.getColumnIndex(KEY_CARRIER));
 				String flight_no_local = cursor.getString(cursor.getColumnIndex(KEY_FLIGHT_NO));
-				String julian_date_local = cursor.getString(cursor.getColumnIndex(KEY_JULIAN_DATE));
 				String compartment_code_local = cursor.getString(cursor.getColumnIndex(KEY_COMPARTMENT_CODE));
 				String seat_local = cursor.getString(cursor.getColumnIndex(KEY_SEAT));
 				String departure_local = cursor.getString(cursor.getColumnIndex(KEY_DEPARTURE));
@@ -200,13 +206,21 @@ public class BoardingPassDbManager {
 	public static List<BoardingPass> retrievePastList(SQLiteDatabase db) {
 		Calendar cal = Calendar.getInstance();
 		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+		int year = cal.get(Calendar.YEAR);
+		boolean isLeapYear = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
 		Log.i(TAG, "retrieveFutureList : Current day of the year: " + dayOfYear);
 		List<BoardingPass> boardingPasslistlist = new ArrayList<BoardingPass>();
-		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BOARDING_PASS_LIST + " WHERE " + KEY_JULIAN_DATE + " < ?",
-				new String[] { dayOfYear + "" });
+		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BOARDING_PASS_LIST, null);
+		// + " WHERE " + KEY_JULIAN_DATE + " < ?",
+		// new String[] { dayOfYear + "" });
 		Log.d(TAG, "retrievePastList : got queried size: " + cursor.getCount());
 		if (cursor != null && cursor.getCount() >= 0 && cursor.moveToFirst()) {
 			while (!cursor.isAfterLast()) {
+				String julian_date_local = cursor.getString(cursor.getColumnIndex(KEY_JULIAN_DATE));
+				if (isBPassDateInFuture(dayOfYear, julian_date_local, isLeapYear)){
+					cursor.moveToNext();
+					continue;
+				}
 				String travel_class_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_CLASS));
 				String stringform_local = cursor.getString(cursor.getColumnIndex(KEY_STRING_FORM));
 				String firstname_local = cursor.getString(cursor.getColumnIndex(KEY_FIRSTNAME));
@@ -216,7 +230,6 @@ public class BoardingPassDbManager {
 				String travel_to_local = cursor.getString(cursor.getColumnIndex(KEY_TRAVEL_TO));
 				String carrier_local = cursor.getString(cursor.getColumnIndex(KEY_CARRIER));
 				String flight_no_local = cursor.getString(cursor.getColumnIndex(KEY_FLIGHT_NO));
-				String julian_date_local = cursor.getString(cursor.getColumnIndex(KEY_JULIAN_DATE));
 				String compartment_code_local = cursor.getString(cursor.getColumnIndex(KEY_COMPARTMENT_CODE));
 				String seat_local = cursor.getString(cursor.getColumnIndex(KEY_SEAT));
 				String departure_local = cursor.getString(cursor.getColumnIndex(KEY_DEPARTURE));
@@ -239,6 +252,22 @@ public class BoardingPassDbManager {
 			}
 		}
 		return boardingPasslistlist;
+	}
+
+	private static boolean isBPassDateInFuture(int dayOfYear, String bpassJulianDate, boolean isLeapYear) {
+		int bpDate = -1;
+		try {
+			bpDate = Integer.parseInt(bpassJulianDate);
+		} catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
+			return false;
+		}
+		int totalDayInThisYear = isLeapYear ? 366 : 365;
+		if (dayOfYear > (totalDayInThisYear - 7))
+			dayOfYear -= 365;
+		if (dayOfYear <= bpDate && bpDate <= (dayOfYear + 7))
+			return true;
+		return false;
 	}
 
 	/**

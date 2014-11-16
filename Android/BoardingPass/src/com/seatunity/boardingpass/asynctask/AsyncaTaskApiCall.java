@@ -4,13 +4,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 
 import com.seatunity.apicall.JsonParser;
-import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.networkstatetracker.NetworkStateReceiver;
 import com.seatunity.boardingpass.networkstatetracker.SyncLocalDbtoBackend;
@@ -31,7 +29,7 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	// private BoardingPassApplication appInstance;
 	private String myaccounturl;
 	private JsonParser jsonParser;
-	private static ProgressDialog pd;
+	// private static ProgressDialog pd;
 	// Context context;
 	private BoardingPass bpass;
 	private String addedurl;
@@ -63,16 +61,16 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 		this.requestType = requestType;
 		jsonParser = new JsonParser();
 		this.redundantLoginState = redundantLoginState;
-		try {
-			if (pd == null)
-				pd = new ProgressDialog(context);
-			if (!pd.isShowing())
-				pd.show();
-			pd.setCancelable(true);
-			pd.setContentView(R.layout.progress_content);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// try {
+		// if (pd == null)
+		// pd = new ProgressDialog(context);
+		// if (!pd.isShowing())
+		// pd.show();
+		// pd.setCancelable(true);
+		// pd.setContentView(R.layout.progress_content);
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 
 	}
 
@@ -92,12 +90,12 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 		this.myaccounturl = myaccounturl;
 		// this.context = context;
 		jsonParser = new JsonParser();
-		try {
-			if (pd != null && pd.isShowing())
-				pd.cancel();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// try { TODO
+		// if (pd != null && pd.isShowing())
+		// pd.cancel();
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 
 	}
 
@@ -118,11 +116,11 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 		this.requestType = requestType;
 		jsonParser = new JsonParser();
 		try {
-			if (pd == null)
-				pd = new ProgressDialog(context);
-			if (!pd.isShowing())
-				pd.show();
-			pd.setContentView(R.layout.progress_content);
+			// if (pd == null) TODO
+			// pd = new ProgressDialog(context);
+			// if (!pd.isShowing())
+			// pd.show();
+			// pd.setContentView(R.layout.progress_content);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -186,13 +184,13 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 	protected void onPostExecute(ServerResponse result) {
 		super.onPostExecute(result);
 
-		try {
-			if (pd != null && pd.isShowing()) {
-				pd.cancel();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// try { TODO
+		// if (pd != null && pd.isShowing()) {
+		// pd.cancel();
+		// }
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 
 		if (result.getStatus() != 200) {
 			CaBLisenar.responseFailure(result);

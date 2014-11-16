@@ -1,4 +1,5 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <!-- Refresh -->
     <item
@@ -10,7 +11,7 @@
         android:id="@+id/add"
         android:icon="@drawable/ic_action_new"
         android:showAsAction="ifRoom"
-        android:title="Test"/>
+        android:title="Add"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
@@ -19,14 +20,17 @@
     <item
         android:id="@+id/over_flow"
         android:icon="@drawable/ic_action_overflow"
-        android:showAsAction="always" tools:ignore="MenuTitle">
+        android:showAsAction="always"
+        tools:ignore="MenuTitle">
         <menu>
-<!--             <item -->
-<!--                 android:id="@+id/share" -->
-<!--                 android:icon="@drawable/ic_share" -->
-<!--                 android:showAsAction="never" -->
-               
-<!--                 android:title="@string/share"/> -->
+
+            <!-- <item -->
+            <!-- android:id="@+id/share" -->
+            <!-- android:icon="@drawable/ic_share" -->
+            <!-- android:showAsAction="never" -->
+
+
+            <!-- android:title="@string/share"/> -->
             <item
                 android:id="@+id/refresh"
                 android:icon="@drawable/ic_action_refresh"

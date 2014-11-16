@@ -12,7 +12,7 @@
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
- limitations under the License.
+ limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -107,9 +107,27 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="application/pkpass" />
-                <data android:scheme="file" />
-                <data android:mimeType="*/*" />
+                <data android:mimeType="image/*" />
+                <data
+                    host="*"
+                    android:mimeType="application/*"
+                    android:pathPattern=".*.sor"
+                    android:scheme="content"
+                    tools:ignore="MissingPrefix" />
+            </intent-filter>
+
+            <!-- For file browsers -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+				 <data android:mimeType="image/*" />
+                <data
+                    host="*"
+                    android:mimeType="application/*"
+                    android:pathPattern=".*.sor"
+                    android:scheme="file"
+                    tools:ignore="MissingPrefix" />
             </intent-filter>
         </activity>
         <activity
