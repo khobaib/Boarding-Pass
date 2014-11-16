@@ -153,11 +153,6 @@ public class BoardingPassDbManager {
 	}
 
 	public static List<BoardingPass> retrieveFutureList(SQLiteDatabase db) {
-		Calendar cal = Calendar.getInstance();
-		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
-		int year = cal.get(Calendar.YEAR);
-		boolean isLeapYear = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
-		Log.i(TAG, "retrieveFutureList : Current day of the year: " + dayOfYear);
 		List<BoardingPass> boardingPasslistlist = new ArrayList<BoardingPass>();
 		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BOARDING_PASS_LIST, null);
 		// + " WHERE " + KEY_JULIAN_DATE + " >= ?",
@@ -166,7 +161,7 @@ public class BoardingPassDbManager {
 		if (cursor != null && cursor.getCount() >= 0 && cursor.moveToFirst()) {
 			while (!cursor.isAfterLast()) {
 				String julian_date_local = cursor.getString(cursor.getColumnIndex(KEY_JULIAN_DATE));
-				if (!isBPassDateInFuture(dayOfYear, julian_date_local, isLeapYear)){
+				if (!isBPassDateInFuture(julian_date_local)){
 					cursor.moveToNext();
 					continue;
 				}
@@ -204,11 +199,7 @@ public class BoardingPassDbManager {
 	}
 
 	public static List<BoardingPass> retrievePastList(SQLiteDatabase db) {
-		Calendar cal = Calendar.getInstance();
-		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
-		int year = cal.get(Calendar.YEAR);
-		boolean isLeapYear = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
-		Log.i(TAG, "retrieveFutureList : Current day of the year: " + dayOfYear);
+		
 		List<BoardingPass> boardingPasslistlist = new ArrayList<BoardingPass>();
 		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BOARDING_PASS_LIST, null);
 		// + " WHERE " + KEY_JULIAN_DATE + " < ?",
@@ -217,7 +208,7 @@ public class BoardingPassDbManager {
 		if (cursor != null && cursor.getCount() >= 0 && cursor.moveToFirst()) {
 			while (!cursor.isAfterLast()) {
 				String julian_date_local = cursor.getString(cursor.getColumnIndex(KEY_JULIAN_DATE));
-				if (isBPassDateInFuture(dayOfYear, julian_date_local, isLeapYear)){
+				if (isBPassDateInFuture(julian_date_local)){
 					cursor.moveToNext();
 					continue;
 				}
@@ -254,7 +245,12 @@ public class BoardingPassDbManager {
 		return boardingPasslistlist;
 	}
 
-	private static boolean isBPassDateInFuture(int dayOfYear, String bpassJulianDate, boolean isLeapYear) {
+	private static boolean isBPassDateInFuture(String bpassJulianDate) {
+		Calendar cal = Calendar.getInstance();
+		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+		int year = cal.get(Calendar.YEAR);
+		boolean isLeapYear = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+		Log.i(TAG, "isBPassDateInFuture : Current day of the year: " + dayOfYear);
 		int bpDate = -1;
 		try {
 			bpDate = Integer.parseInt(bpassJulianDate);

@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.seatunity.boardingpass.fragment.HomeListFragment;
@@ -38,6 +39,27 @@ public class Constants {
 		String seatno = seat_no;
 		seatno = seatno.replaceFirst("^0+(?!$)", "");
 		return seatno;
+	}
+
+	public static boolean isBPassDateInFuture(String bpassJulianDate) {
+		Calendar cal = Calendar.getInstance();
+		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+		int year = cal.get(Calendar.YEAR);
+		boolean isLeapYear = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+		Log.i("isBPassDateInFuture", "Current day of the year: " + dayOfYear);
+		int bpDate = -1;
+		try {
+			bpDate = Integer.parseInt(bpassJulianDate);
+		} catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
+			return false;
+		}
+		int totalDayInThisYear = isLeapYear ? 366 : 365;
+		if (dayOfYear > (totalDayInThisYear - 7))
+			dayOfYear -= 365;
+		if (dayOfYear <= bpDate && bpDate <= (dayOfYear + 7))
+			return true;
+		return false;
 	}
 
 	/**
@@ -332,8 +354,7 @@ public class Constants {
 	/**
 	 * @param context
 	 *            : Working context
-	 * @return true : if any net-connection is on (but noe necessarily
-	 *         activate), <br>
+	 * @return true : if any net-connection is on (but not necessarily active), <br>
 	 *         false: otherwise
 	 */
 	public static boolean isOnline(Context context) {

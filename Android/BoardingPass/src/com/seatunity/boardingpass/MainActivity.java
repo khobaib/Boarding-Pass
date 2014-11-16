@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Hashtable;
 
 import org.json.JSONException;
@@ -665,6 +664,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 						JSONObject job = new JSONObject(boardingpass);
 						saveScannedBoardingPassToDB(job.getString("message"), job.getString("format"));
 					} catch (JSONException e) {
+						e.printStackTrace();
 					}
 				} else if (format == FilePickerActivity.IMAGE_FILE) {
 					Bitmap bitmap = BitmapFactory.decodeFile(filepath);
@@ -892,20 +892,18 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		// ArrayList<BoardingPass>list=(ArrayList<BoardingPass>)
 		// dbInstance.retrieveBoardingPassList();
 		dbInstance.close();
-		Calendar c = Calendar.getInstance();
-		final int dayofyear = c.get(Calendar.DAY_OF_YEAR);
-		final int ju_date = Integer.parseInt(boardingPass.getJulian_date().trim());
 		Log.d(TAG,
 				"Calling displayView from ui thread, where currnt thread is-main="
 						+ (Looper.myLooper() == Looper.getMainLooper()));
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				Log.i(TAG, "UI Thread run to call displayView(2 / 0)");
-				if ((ju_date < dayofyear)) {
-					displayView(2);
-				} else {
+				if (Constants.isBPassDateInFuture(boardingPass.getJulian_date().trim())) {
+					Log.i(TAG, "UI Thread run to call displayView(0) : Future B-pass list");
 					displayView(0);
+				} else {
+					Log.i(TAG, "UI Thread run to call displayView(2) : Past B-pass list");
+					displayView(2);
 				}
 			}
 		});

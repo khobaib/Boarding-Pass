@@ -308,6 +308,7 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1, int itemPosition, long arg3) {
 					setListViewAtPosition(itemPosition);
+					isClassDropDownVisible=false;
 					selectedposition = itemPosition;
 					lvClassSelectionABar.setVisibility(View.GONE);
 					txt_seatmate.setText(itemList.get(itemPosition));
