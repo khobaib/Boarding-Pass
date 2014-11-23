@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#5c5c5c"
@@ -11,7 +12,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_margin="13dp"
-        android:background="@drawable/rounded_layout_white" >
+        android:background="@drawable/rounded_layout_white"
+        tools:ignore="ContentDescription" >
 
         <ImageView
             android:id="@+id/img_logo"
@@ -30,19 +32,18 @@
             android:layout_marginRight="25dp"
             android:layout_marginTop="14dp"
             android:gravity="center"
-            android:textSize="19dp"
-            android:textColor="#31465d" 
             android:text="@string/txt_reminder_msz"
-            />
+            android:textColor="#31465d"
+            android:textSize="19sp" />
 
         <ImageView
             android:id="@+id/img_connect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_login"
             android:layout_below="@+id/tv_reminder_msz"
-           android:layout_above="@+id/tv_login"
-           android:layout_marginLeft="25dp"
-           android:layout_marginRight="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:src="@drawable/ic_users_connection" />
 
         <TextView
@@ -51,23 +52,22 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tv_reminder_msz"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="20dp"
             android:layout_marginBottom="15dp"
-            android:textSize="23dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/txt_login"
             android:textColor="#0099cc"
-            android:text="@string/txt_login" />
+            android:textSize="23sp" />
 
         <TextView
-           android:id="@+id/tv_signup"
+            android:id="@+id/tv_signup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="15dp"
             android:layout_alignRight="@+id/tv_reminder_msz"
-             android:textSize="23dp"
+            android:layout_marginBottom="15dp"
+            android:text="@string/txt_register"
             android:textColor="#0099cc"
-            android:text="@string/txt_register"/>
-
+            android:textSize="23sp" />
     </RelativeLayout>
 
 </RelativeLayout>

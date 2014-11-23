@@ -312,13 +312,13 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 										Toast.LENGTH_SHORT).show();
 								return false;
 							}
-						}else if(mimeType.startsWith("image")){
+						} else if (mimeType.startsWith("image")) {
 							// TODO Handle image hooks
 							Log.d(TAG, "onCreate : External intent received for an image file: " + filePath);
 							Bitmap bitmap = BitmapFactory.decodeFile(filePath);
 							scanBPassFromBmp(bitmap);
 							return true;
-						}else {
+						} else {
 							Log.d(TAG, "Unknown File found with mimetype=" + mimeType + " & downloaded at location: "
 									+ filePath);
 							return false;
@@ -786,8 +786,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 				Log.i("text", result.getText());
 				Log.i("format", result.getBarcodeFormat().toString());
 
-				// saveScannedBoardingPassToDB(result.getText().toString(),
-				// result.getBarcodeFormat().toString());
+				saveScannedBoardingPassToDB(result.getText().toString(), result.getBarcodeFormat().toString());
 				// scansuccess = true;
 			} catch (NotFoundException e) {
 				e.printStackTrace();
