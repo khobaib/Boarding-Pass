@@ -250,7 +250,8 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 				// isolate future b-pass from all b-pass
 				ArrayList<BoardingPass> fbpList = isolateFutureBPass(allBoardingPassList);
 				if (fbpList.size() < futureBoardingPassList.size()) {
-					// TODO upload the unsynched local boarding passes to server
+					// TO_DO upload the unsynched local boarding passes to
+					// server
 					Log.e(TAG, "Upload the UNSYNCHED local boarding passes to server");
 					// Log.e(TAG,
 					// "UNSYNCHED B.PASS in LOCAL DB !!!!!!\nSynchronizing with remote ...");
@@ -262,14 +263,22 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 					// }
 				} else {
 					futureBoardingPassList = (ArrayList<BoardingPass>) dbInstance.retrieveFutureBoardingPassList();
-					dbInstance.close();
 				}
 				Log.i(TAG, "Got B-pass list as: " + futureBoardingPassList.size());
 				if (futureBoardingPassList.size() < 1) {
-					parent.startAddBoardingPassDuringLogin();
+					// TODO Look for past list
+					ArrayList<BoardingPass> pBpList = (ArrayList<BoardingPass>) dbInstance
+							.retrievePastBoardingPassList();
+					if (pBpList.size() > 0 && BoardingPassApplication.getHookCallMode()){
+						parent.startPastBPassFragmment();
+						BoardingPassApplication.setHookCallMode(false);
+					}
+					else
+						parent.startAddBoardingPassDuringLogin();
 				} else {
 					parent.startFragmentBoardingPasses();
 				}
+				dbInstance.close();
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

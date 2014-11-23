@@ -45,8 +45,8 @@ public class Constants {
 		Calendar cal = Calendar.getInstance();
 		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
 		int year = cal.get(Calendar.YEAR);
-		boolean isLeapYear = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
-		Log.i("isBPassDateInFuture", "Current day of the year: " + dayOfYear);
+		Log.i("isBPassDateInFuture", "Current day of the year: " + dayOfYear + ", B-pass julian-date: "
+				+ bpassJulianDate);
 		int bpDate = -1;
 		try {
 			bpDate = Integer.parseInt(bpassJulianDate);
@@ -54,6 +54,8 @@ public class Constants {
 			nfe.printStackTrace();
 			return false;
 		}
+		
+		boolean isLeapYear = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
 		int totalDayInThisYear = isLeapYear ? 366 : 365;
 		if (dayOfYear > (totalDayInThisYear - 7))
 			dayOfYear -= 365;
@@ -320,6 +322,7 @@ public class Constants {
 	}
 
 	public static String REMEMBER_ME = "remember_me";
+	public static String HOOK_CALL_MODE = "is_hooked";
 	public static boolean pushnotificationcalllive = false;
 
 	public static String type;

@@ -242,6 +242,15 @@ public class HomeListFragment extends TabFragment {
 		fragmentTransaction.commitAllowingStateLoss();
 	}
 
+	public void startPastBPassFragmment() {
+		PastBoardingPassListFragment newFragment = new PastBoardingPassListFragment();
+		FragmentManager fragmentManager = getActivity().getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.replace(R.id.tab3Content, newFragment);
+		fragmentTransaction.addToBackStack(null);
+		backEndStack.push(newFragment);
+		fragmentTransaction.commitAllowingStateLoss();
+	}
 	/**
 	 * Pops up the top fragment from the {@link #backEndStack}.
 	 */

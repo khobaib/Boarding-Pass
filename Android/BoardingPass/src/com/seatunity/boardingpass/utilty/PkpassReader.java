@@ -170,7 +170,7 @@ public class PkpassReader {
 				path += "/" + str;
 		}
 		path += "/";
-		Log.d("getPassbookBarcodeString", path + ", " + passFileName);
+		Log.d("getPassbookBarcodeString", "Parent path: " + path + ", File Name:" + passFileName);
 		String barcodeStr = getJSONFromPass("pass").get("barcode").toString();
 		Log.i("T_pass_barode", "Got brcode :D :: " + barcodeStr);
 		return barcodeStr;

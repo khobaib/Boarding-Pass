@@ -109,7 +109,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	int lastselectedposition = -1;
 	private BoardingPass boardingPass, needtoReusedBoardingPass;
 	private HomeListFragment fragHome;
-	int prevselectedposition = -2;
+	int prevSelectedPosition = -2;
 	private ImageView img_from_camera, img_from_sdcard;
 	private TextView tv_add_boardingpasswith_camera, tv_add_fromsdcard;
 	private RelativeLayout vw_bottom;
@@ -149,7 +149,6 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		setContentView(R.layout.activity_main);
 
 		// First of all, check for hook-intent
-		checkHookedCall();
 
 		getOverflowMenu();
 
@@ -161,15 +160,17 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		appInstance = (BoardingPassApplication) getApplication();
 
 		mTitle = mDrawerTitle = getTitle();
-		initDrawerAndOtherFields();
 
+		initDrawerAndOtherFields(false);
+		boolean isHookSuccessful = checkAndActAsHookedCall();
+		BoardingPassApplication.setHookCallMode(isHookSuccessful);
 	}
 
 	/**
 	 * Initializes navigation-drawer items, adapter & selected item as well as
 	 * fragment.
 	 */
-	private void initDrawerAndOtherFields() {
+	private void initDrawerAndOtherFields(boolean isHookSuccessful) {
 		navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
 		navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -198,27 +199,30 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 		// if (savedInstanceState == null) {
-		displayView(0);
+		if (!isHookSuccessful)
+			displayView(0);
 		// }
 	}
 
 	/**
 	 * This metho checks for hook call from the file-browsing & saves any valid
 	 * boarding-pass from the selected image, pdf or pkpass file.
+	 * 
+	 * @return
 	 */
-	private void checkHookedCall() {
+	private boolean checkAndActAsHookedCall() {
 
 		Log.i(TAG, "\n.\nHooking app data ... \n.\n.");
 		try {
 			Intent intent = getIntent();
 			if (intent == null) {
 				Log.e(TAG, "Hooked intent is null");
-				return;
+				return false;
 			}
 			Uri u = intent.getData();
 			if (u == null) {
 				Log.e(TAG, "Hooked intent data as URI is null");
-				return;
+				return false;
 			}
 			String scheme = u.getScheme();
 
@@ -231,9 +235,11 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 						Log.d(TAG, "onCreate : External intent received for an image file: " + filePath);
 						Bitmap bitmap = BitmapFactory.decodeFile(filePath);
 						scanBPassFromBmp(bitmap);
+						return true;
 					} else if (Constants.isPdf(filePath)) {
 						Log.d(TAG, "onCreate : External intent received for PDF file: " + filePath);
 						getBoardingPassFromPDF(filePath);
+						return true;
 					} else if (Constants.isPkPass(filePath)) {
 						Log.d(TAG, "onCreate : External intent received for pkpass file: " + filePath);
 						try {
@@ -243,16 +249,20 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 							String f = job.getString("format");
 							Log.e(TAG, "Barcode Message: " + m + "\nBarcode Format: " + f);
 							saveScannedBoardingPassToDB(m, f);
+							return true;
 						} catch (JSONException e) {
 							Log.e(TAG, getResources().getString(R.string.txt_invalid_borading_pass));
 							Toast.makeText(MainActivity.this,
 									getResources().getString(R.string.txt_invalid_borading_pass), Toast.LENGTH_SHORT)
 									.show();
+							return false;
 						}
 					} else
 						Log.e(TAG, "\nUnknown\nFile\nType\nFound");
+					return false;
 				} else
 					Log.e(TAG, "Hooked file path is null/empty");
+				return false;
 			} else if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
 				// TODO
 				try {
@@ -264,7 +274,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 					InputStream is = cr.openInputStream(u);
 					if (is == null) {
 						Log.e(TAG, "Input stream of the content resolver is null");
-						return;
+						return false;
 					}
 					try {
 						// is.read(filedata, 0, (int) length);
@@ -284,6 +294,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 						if (mimeType.endsWith("pdf")) {
 							Log.d(TAG, "PDF File found & downloaded at location: " + filePath);
 							getBoardingPassFromPDF(filePath);
+							return true;
 						} else if (mimeType.endsWith("pkpass")) {
 							Log.d(TAG, "Pkpass File found & downloaded at location: " + filePath);
 							try {
@@ -293,31 +304,43 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 								String format = job.getString("format");
 								Log.e(TAG, "Barcode Message: " + m + "\nBarcode Format: " + format);
 								saveScannedBoardingPassToDB(m, format);
+								return true;
 							} catch (JSONException e) {
 								Log.e(TAG, getResources().getString(R.string.txt_invalid_borading_pass));
 								Toast.makeText(MainActivity.this,
 										getResources().getString(R.string.txt_invalid_borading_pass),
 										Toast.LENGTH_SHORT).show();
+								return false;
 							}
-						} else {
+						}else if(mimeType.startsWith("image")){
+							// TODO Handle image hooks
+							Log.d(TAG, "onCreate : External intent received for an image file: " + filePath);
+							Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+							scanBPassFromBmp(bitmap);
+							return true;
+						}else {
 							Log.d(TAG, "Unknown File found with mimetype=" + mimeType + " & downloaded at location: "
 									+ filePath);
+							return false;
 						}
 						// if(f.delete())
 						// Log.i(TAG,"Temporary file deleted successfully.");
 					} catch (IOException e) {
 						e.printStackTrace();
-						return;
+						return false;
 					}
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
-					return;
+					return false;
 				}
 			} else {
 				Log.e(TAG, "Scheme didn't match! :: " + scheme);
+				return false;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			Log.e(TAG, "There wasn't any hook call, just a normal app-open");
+			return false;
 		}
 	}
 
@@ -480,7 +503,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction().add(R.id.frame_container, fragment).addToBackStack("" + position)
 					.commit();
-			prevselectedposition = position;
+			prevSelectedPosition = position;
 			if (position == 3) {
 				mDrawerList.setItemChecked(0, true);
 				mDrawerList.setSelection(0);
@@ -892,21 +915,29 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		// ArrayList<BoardingPass>list=(ArrayList<BoardingPass>)
 		// dbInstance.retrieveBoardingPassList();
 		dbInstance.close();
-		Log.d(TAG,
-				"Calling displayView from ui thread, where currnt thread is-main="
-						+ (Looper.myLooper() == Looper.getMainLooper()));
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if (Constants.isBPassDateInFuture(boardingPass.getJulian_date().trim())) {
-					Log.i(TAG, "UI Thread run to call displayView(0) : Future B-pass list");
-					displayView(0);
-				} else {
-					Log.i(TAG, "UI Thread run to call displayView(2) : Past B-pass list");
-					displayView(2);
-				}
+		boolean isMainThread = (Looper.myLooper() == Looper.getMainLooper());
+		Log.d(TAG, "Calling displayView from ui thread, where currnt thread is-main=" + (isMainThread));
+		if (isMainThread) {
+			if (Constants.isBPassDateInFuture(boardingPass.getJulian_date().trim())) {
+				Log.i(TAG, "Calling displayView(0) : Future B-pass list");
+				displayView(0);
+			} else {
+				Log.i(TAG, "Calling displayView(2) : Past B-pass list");
+				displayView(2);
 			}
-		});
+		} else
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					if (Constants.isBPassDateInFuture(boardingPass.getJulian_date().trim())) {
+						Log.i(TAG, "UI Thread run to call displayView(0) : Future B-pass list");
+						displayView(0);
+					} else {
+						Log.i(TAG, "UI Thread run to call displayView(2) : Past B-pass list");
+						displayView(2);
+					}
+				}
+			});
 	}
 
 	/**

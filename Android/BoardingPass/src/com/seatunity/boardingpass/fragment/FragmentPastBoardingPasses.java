@@ -109,6 +109,7 @@ public class FragmentPastBoardingPasses extends Fragment implements CallBackApiC
 		// }
 		// }
 		// pastBPasslist = list_smaller;
+		Log.i(TAG, "onCreateView : pastBPasslist.size() = " + pastBPasslist.size());
 		if (pastBPasslist.size() > 0) {
 			re_errorshow.setVisibility(View.GONE);
 			re_list_holder.setVisibility(View.VISIBLE);
@@ -186,13 +187,16 @@ public class FragmentPastBoardingPasses extends Fragment implements CallBackApiC
 	 * Initiates the boarding-pass list.
 	 */
 	private void setListViewWithSizeChecks() {
+		Log.i(TAG, "setListViewWithSizeChecks");
 		if (pastBPasslist != null) {
+			Log.i(TAG, "setListViewWithSizeChecks : pastBPasslist.size() = " + pastBPasslist.size());
 			if (pastBPasslist.size() > 0) {
 				AdapterForBoardingPass adapter = new AdapterForBoardingPass(getActivity(), pastBPasslist);
 				lv_boarding_past_pass.setAdapter(adapter);
 			} else {
 				if (appInstance.isRememberMe()) {
 					parent.backEndStack.pop();
+					Log.e(TAG, "Going back to FragmentAddBoardingPassDuringLogin");
 					parent.startAddBoardingPassDuringLogin();
 				} else {
 					parent.backEndStack.pop();

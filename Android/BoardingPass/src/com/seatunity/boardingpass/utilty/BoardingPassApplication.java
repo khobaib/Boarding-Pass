@@ -23,7 +23,7 @@ import com.seatunity.model.UserCred;
  */
 public class BoardingPassApplication extends Application {
 	private static Context context;
-	protected SharedPreferences User;
+	protected static SharedPreferences User;
 
 	@Override
 	public void onCreate() {
@@ -136,6 +136,16 @@ public class BoardingPassApplication extends Application {
 	public boolean isRememberMe() {
 		Boolean rememberMeFlag = User.getBoolean(Constants.REMEMBER_ME, false);
 		return rememberMeFlag;
+	}
+
+	public static void setHookCallMode(boolean isHooked) {
+		Editor editor = User.edit();
+		editor.putBoolean(Constants.HOOK_CALL_MODE, isHooked);
+		editor.commit();
+	}
+
+	public static boolean getHookCallMode() {
+		return User.getBoolean(Constants.HOOK_CALL_MODE, false);
 	}
 
 	public static void alert(Context context, String message) {

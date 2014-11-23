@@ -1,7 +1,6 @@
 package com.seatunity.boardingpass.db;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -10,6 +9,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.model.BoardingPass;
 
 /**
@@ -161,7 +161,7 @@ public class BoardingPassDbManager {
 		if (cursor != null && cursor.getCount() >= 0 && cursor.moveToFirst()) {
 			while (!cursor.isAfterLast()) {
 				String julian_date_local = cursor.getString(cursor.getColumnIndex(KEY_JULIAN_DATE));
-				if (!isBPassDateInFuture(julian_date_local)){
+				if (!isBPassDateInFuture(julian_date_local)) {
 					cursor.moveToNext();
 					continue;
 				}
@@ -199,7 +199,7 @@ public class BoardingPassDbManager {
 	}
 
 	public static List<BoardingPass> retrievePastList(SQLiteDatabase db) {
-		
+
 		List<BoardingPass> boardingPasslistlist = new ArrayList<BoardingPass>();
 		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BOARDING_PASS_LIST, null);
 		// + " WHERE " + KEY_JULIAN_DATE + " < ?",
@@ -208,7 +208,7 @@ public class BoardingPassDbManager {
 		if (cursor != null && cursor.getCount() >= 0 && cursor.moveToFirst()) {
 			while (!cursor.isAfterLast()) {
 				String julian_date_local = cursor.getString(cursor.getColumnIndex(KEY_JULIAN_DATE));
-				if (isBPassDateInFuture(julian_date_local)){
+				if (isBPassDateInFuture(julian_date_local)) {
 					cursor.moveToNext();
 					continue;
 				}
@@ -246,24 +246,7 @@ public class BoardingPassDbManager {
 	}
 
 	private static boolean isBPassDateInFuture(String bpassJulianDate) {
-		Calendar cal = Calendar.getInstance();
-		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
-		int year = cal.get(Calendar.YEAR);
-		boolean isLeapYear = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
-		Log.i(TAG, "isBPassDateInFuture : Current day of the year: " + dayOfYear);
-		int bpDate = -1;
-		try {
-			bpDate = Integer.parseInt(bpassJulianDate);
-		} catch (NumberFormatException nfe) {
-			nfe.printStackTrace();
-			return false;
-		}
-		int totalDayInThisYear = isLeapYear ? 366 : 365;
-		if (dayOfYear > (totalDayInThisYear - 7))
-			dayOfYear -= 365;
-		if (dayOfYear <= bpDate && bpDate <= (dayOfYear + 7))
-			return true;
-		return false;
+		return Constants.isBPassDateInFuture(bpassJulianDate);
 	}
 
 	/**
