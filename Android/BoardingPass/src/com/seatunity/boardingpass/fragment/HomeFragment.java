@@ -3,6 +3,8 @@ package com.seatunity.boardingpass.fragment;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,9 +20,8 @@ import com.seatunity.boardingpass.R;
 
 /**
  * This fragment is shown when the user has not yet registered to the system or
- * has been loagged out. It contains a plus button to add a new
- * boarding pass without registration & a register button to register to the
- * system.
+ * has been loagged out. It contains a plus button to add a new boarding pass
+ * without registration & a register button to register to the system.
  * 
  * @author Sumon
  * 
@@ -37,7 +38,7 @@ public class HomeFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		Log.i(TAG,"onCreateView");
+		Log.i(TAG, "onCreateView");
 		View rootView = inflater.inflate(R.layout.fragment_add_screen_not_loggedin, container, false);
 		img_add_boardingpass = (ImageView) rootView.findViewById(R.id.img_add_boardingpass);
 		img_addprofile = (ImageView) rootView.findViewById(R.id.img_addprofile);
@@ -68,6 +69,12 @@ public class HomeFragment extends Fragment {
 			}
 		});
 
+		ImageView ivWelcome = (ImageView) rootView.findViewById(R.id.iv_welcome);
+		float w = getActivity().getResources().getDisplayMetrics().widthPixels * 0.3f;
+		Bitmap bm = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.welcome_txt);
+		bm = Bitmap.createScaledBitmap(bm, Math.round(w), Math.round(w / bm.getWidth() * bm.getHeight()), true);
+		ivWelcome.setImageBitmap(bm);
+
 		return rootView;
 	}
 
@@ -78,8 +85,7 @@ public class HomeFragment extends Fragment {
 		Intent intent = new Intent(getActivity(), AcountActivity.class);
 		intent.putExtra("to", "0");
 		startActivity(intent);
-//		getActivity().finish();
-
+		// getActivity().finish();
 	}
 
 	/**

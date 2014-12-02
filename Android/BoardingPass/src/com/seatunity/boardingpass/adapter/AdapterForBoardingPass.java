@@ -48,7 +48,7 @@ public class AdapterForBoardingPass extends BaseAdapter {
 				String s2 = o2.getJulian_date().trim();
 				if (s1 == s2)
 					return 0;
-				return Integer.parseInt(s1) < Integer.parseInt(s2) ? -1 : 1;
+				return Integer.parseInt(s1) < Integer.parseInt(s2) ? 1 : -1;
 			}
 		});
 
@@ -125,7 +125,8 @@ public class AdapterForBoardingPass extends BaseAdapter {
 		holder.tv_flight_to_from.setText(list.get(position).getTravel_from_name() + " - "
 				+ list.get(position).getTravel_to_name());
 
-		holder.tv_flight_date.setText(month + day + ", " + list.get(position).getFlight_no());
+		holder.tv_flight_date.setText(month + day + ", " + list.get(position).getCarrier()
+				+ list.get(position).getFlight_no());
 		// holder.tv_start_time.setText(list.get(position).getDeparture());
 		holder.tv_cdg.setText(list.get(position).getTravel_from());
 		holder.tv_jfk.setText(list.get(position).getTravel_to());

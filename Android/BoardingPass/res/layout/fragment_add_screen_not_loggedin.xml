@@ -3,25 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#e7e7e7"
     tools:ignore="ContentDescription" >
 
-    <TextView
-        android:id="@+id/tv_welcome"
+    <ImageView
+        android:id="@+id/iv_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
-        android:text="@string/txt_welcome"
-        android:textColor="#EE2654"
-        android:textSize="22sp" />
+        android:src="@drawable/welcome_txt" />
 
     <LinearLayout
         android:id="@+id/le_ad_boardingpass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_welcome"
+        android:layout_below="@+id/iv_welcome"
         android:layout_marginTop="50dp"
         android:padding="10dp"
         android:weightSum="3" >
