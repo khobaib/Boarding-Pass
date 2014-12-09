@@ -225,7 +225,7 @@ public class FragmentPastBoardingPasses extends Fragment implements CallBackApiC
 	 * @param bpass
 	 *            The data of whih are to be shown in details.
 	 */
-	public void setDetailsBoaredingpass(BoardingPass bpass) {
+	private void setDetailsBoaredingpass(BoardingPass bpass) {
 		if (bpass == null)
 			return;
 		String date = Constants.getDayandYear(Integer.parseInt(bpass.getJulian_date().trim()));
