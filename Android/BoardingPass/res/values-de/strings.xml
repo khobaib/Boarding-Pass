@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="txt_failedto_add_boardingpasses">Bitte scannen gültigen Bordkarten</string>
+    <string name="version">Version</string>
+    <string name="send_feedback">Feedback schicken</string>
+    <string name="tell_us">Sagen Sie uns was Sie denken</string>
+    <string name="report_problem">Ein Problem melden</string>
+    <string name="let_know_bug">Lassen Sie uns über Bug oder das Problem kennen</string>
+    <string name="st_ubnity_bring">SeatUnity bringen Sie näher an diejenigen, die Flug mit Ihnen.</string>
+    <string name="rate_app">bewerten Anwendung</string>
+    <string name="txt_exit_message">Wollen Sie verlassen?</string>
+    <string name="trms_of_servces">Nutzungsbedingungen</string>
+    <string name="privcy_plcy">Datenschutz-Bestimmungen</string>
+    <string name="app_not_found">Kann Markt app finden</string>
+    <string name="share_via">Teilen Via</string>
+    <string name="share">Teilen App</string>
+    <string name="refresh">erfrischen</string>
+    <string name="about">über</string>
+    <string name="all_seatmate">Alle Seatmates</string>
+    <string name="txt_noseatmate_isfound">Kein Sitznachbar von </string>
+    <string name="txt_is_found">gefunden wird.</string>
+    <string name="txt_no_shared_flight">Es gibt keine gemeinsamen Fluges.</string>
+    <string name="txt_failed_to_get_seatmet">Fehler beim seatmates Liste zu erhalten. Bitte versuchen Sie es erneut.</string>
+    <string name="txt_live_in">bewohnen</string>
+    <string name="txt_prefer_to">es vorziehen</string>
+    <string name="txt_message">Nachricht.</string>
+    <string name="txt_send_email">Bitte geben Nachricht per E-Mail</string>
+    <string name="txt_seatmet_message_only_online">Die Sitznachbarn Liste ist nur im Online-Modus verfügbar</string>
+    <string name="txt_getseatmate_failure">Fehler beim Sitznachbarn zu bekommen. Bitte versuchen Sie es erneut.</string>
+    <string name="txt_emailsen_failure">Kein Konto mit dieser E-Mail genommen haben, sofort. Bitte versuchen Sie es erneut.</string>
+    <string name="txt_emailsent_success">E-Mail erfolgreich gesendet wurde.</string>
+    <string name="txt_emailsen_success">Passwort sind auf Ihre E-Mail gesendet. Bitte überprüfen Sie Ihre E-Mail.</string>
+    <string name="txt_delete_boarding_pass">Löschen Bordkarte</string>
+    <string name="txt_send">Nachricht senden</string>
+    <string name="txt_delete_boarding_pass_text">Sind Sie sicher, dass Sie die Bordkarte löschen?</string>
+    <string name="txt_enter_email_address">Geben Sie die E-Mail-Adresse, die Sie verwendet werden, um mit SeatUnity registrieren</string>
+    <string name="txt_failed_to_get_list">Konnte zu bringen. Bitte überprüfen Sie Ihre Internetverbindung.</string>
+    <string name="txt_please_check_internet">Bitte überprüfen Sie Ihre Internetverbindung.</string>
+    <string name="txt_newand_old_pass_missmatchced">New password and old password mis-matched</string>
+    <string name="txt_please_enter_correct_password">Bitte geben Sie korrekte Passwort</string>
+    <string name="txt_please_enter">Bitte geben </string>
+    <string name="txt_please_enter_username">Bitte geben Sie Ihren Namen</string>
+    <string name="txt_boarding_pass_added_successfully">Bordkarte erfolgreich hinzugefügt</string>
+    <string name="txt_psnger">Passagier</string>
+    <string name="txt_invalid_borading_pass">Ungültige Bordkarte. Bitte geben Sie eine gültige Bordkarte</string>
+    <string name="txt_failed_to_scan">Fehler beim Barcode-Scannen</string>
+    <string name="msg_error">Fehler</string>
+    <string name="msg_invalid_value">Ungültiger Wert</string>
+    <string name="txt_reminder_msz">Anmelden oder Registrieren kostenlos, um Ihren sozialen Funktionen zu nutzen und mit Ihrem Sitznachbarn zu verbinden</string>
+    <string name="txt_enter_old_pass">Bitte geben Sie Ihr altes Passwort ein</string>
+    <string name="txt_enter_new_pass">Geben Sie Ihr neues Passwort</string>
+    <string name="txt_enter_status">Bitte geben Sie den Status</string>
+    <string name="txt_confirm_new_pass">Bitte bestätigen Sie Ihr neues Kennwort ein</string>
+    <string name="txt_edit_profesion">Bearbeiten Beruf</string>
+    <string name="txt_sm_about">Etwas über dich</string>
+    <string name="txt_say_sm_about">Sagen Sie etwas über dich</string>
+    <string name="txt_confirm">bestätigen</string>
+    <string name="txt_gender_rather_not_say">Lieber nicht sagen</string>
+    <string name="txt_sign_out_msz">Sind Sie sicher, dass Sie wirklich abmelden?</string>
+    <string name="app_name_seatunity">SeatUnity</string>
+    <string name="txt_startscan_forboardingpass">Suchlauf starten für Bordkarte</string>
+    <string name="txt_select_country">Land wählen</string>
+    <string name="txt_select_photo">Profilbild ändern</string>
+    <string name="txt_select_age">Wählen Sie eine Alters</string>
+    <string name="txt_gender">Geschlecht</string>
+    <string name="txt_gender_female">weiblich</string>
+    <string name="txt_gender_male">männlich</string>
+    <string name="txt_gender_not_say">Ich ziehe es nicht sagen</string>
+    <string name="txt_cancel_cap" tools:ignore="ButtonCase">ZURÜCK</string>
+    <string name="txt_apply_cap">BEWERBEN</string>
+    <string name="txt_status">Ihr Status geht hier</string>
+    <string name="acc_live_in">bewohnen</string>
+    <string name="acc_age">Alter</string>
+    <string name="acc_gender">Geschlecht</string>
+    <string name="acc_prof">Beruf</string>
+    <string name="acc_seatting_pref">Sitzeinstellungen</string>
+    <string name="acc_som_about_you">Etwas über dich</string>
+    <string name="acc_change_pass">Kennwort ändern</string>
+    <string name="acc_sign_out">austragen</string>
+    <string name="txt_cdg">CDG</string>
+    <string name="txt_jfk">JFK</string>
+    <string name="txt_flight_no">Flug</string>
+    <string name="txt_seat_nno">Sitz</string>
+    <string name="txt_class">Klasse</string>
+    <string name="txt_seatmate">Seatmates</string>
+    <string name="txt_boarding_pass">Bordkarte</string>
+    <string name="txt_user_name">Benutzername</string>
+    <string name="txt_email_addess" tools:ignore="Typos">E-Mail-Addresse</string>
+    <string name="txt_myaccounts">Mein Konto</string>
+    <string name="txt_past_boarding_passes">Vergangenheit Bordkarten</string>
+    <string name="txt_ok">OK</string>
+    <string name="txt_add">hinzufügen</string>
+    <string name="txt_shared_flight_title">Gemeinschafts-Flüge</string>
+    <string name="txt_cancel">stornieren</string>
+    <string name="txt_scan_boardingpass">Scannen Sie Ihre Bordkarte-Code</string>
+    <string name="txt_add_from_locall">Fügen Sie lokal gespeichert</string>
+    <string name="txt_email_senttomail">E-Mail erfolgreich an Ihre Adresse geschickt. Sie werden eine Bestätigungsmail bald zu erhalten. Bitte bestätigen Sie das Konto.</string>
+    <string name="txt_confirmtaion" tools:ignore="TypographyEllipsis">Sie werden eine Bestätigungsmail bald zu erhalten. Bitte bestätigen Sie die Konto ...</string>
+    <string name="txt_wrong_email">Falsche E-Mail oder Passwort. Bitte versuchen Sie es erneut</string>
+    <string name="txt_no_pastbpass">Kein Vergangenheit Bordkarten.</string>
+    <string name="txt_email_sent">E-Mail an Ihre E-Mail-Konto gesendet. Bitte aktivieren Sie Ihr Konto von dort.</string>
+    <string name="txt_signup_failed1">Registrieren ist fehlgeschlagen. Bitte versuchen Sie es erneut.</string>
+    <string name="txt_login_failed">Fehler bei der Anmeldung. Bitte versuchen Sie es erneut.</string>
+    <string name="txt_login_success">Anmeldung erfolgreich</string>
+    <string name="txt_update_success">Erfolgreich aktualisiert Ihr Profil</string>
+    <string name="txt_update_failed" tools:ignore="TypographyEllipsis">Fehlgeschlagen Ihr Profil aktualisieren. Bitte versuchen Sie es erneut ... </string>
+    <string name="txt_logout_success">Erfolgreich abgemeldet </string>
+    <string name="txt_logout_failed">Konnte zu unterzeichnen-out. Bitte versuchen Sie es erneut </string>
+    <string name="txt_select_city">Alter</string>
+    <string name="txt_add_boardingpass">Fügen Sie Ihre Bordkarte und finden Sie heraus, der mit
+                              Sie kämpfen gemeinsam</string>
+    <string name="txt_say_to_register">Registrieren Sie sich kostenlos, um unsere soziale Funktionen zu verwenden und
+                               mit Ihrem Sitz Kumpels verbinden</string>
+    <string name="txt_welcome">willkommen</string>
+    <string name="txt_enter_password">Bitte Passwort eingeben</string>
+    <string name="txt_fillup_required_field">Bitte füllen Sie Pflichtfeld</string>
+    <string name="txt_check_internet">Bitte überprüfen Sie Ihre Internetverbindung</string>
+    <string name="txt_enter_valid_email">Bitte geben Sie gültige E-Mail</string>
+    <string name="txt_password_mismatched">Kennwort und Kennwort bestätigen nicht übereinstimmen</string>
+    <string name="txt_please_wait">warten Sie mal</string>
+    <string name="txt_email">E-Mail</string>
+    <string name="txt_confirm_password">Passwort bestätigen</string>
+    <string name="txt_signup_message">Persönliche Angaben sind optional und können in Ihr Konto hinzugefügt werden</string>
+    <string name="txt_first_name">Vorname</string>
+    <string name="txt_last_name">Nachname</string>
+    <string name="txt_livein">bewohnen</string>
+    <string name="txt_age">Alter</string>
+    <string name="txt_profession">Beruf</string>
+    <string name="txt_seatting_pref_cap">Sitz Vorlieben</string>
+    <string name="txt_seatting_pref">Sitz Präferenz</string>
+    <string name="txt_register">Registrieren</string>
+    <string name="txt_register_msz">Mit der Registrierung bestätigen Sie, dass Sie gelesen haben und mit der SeatUnity zugestimmt haben</string>
+    <string name="txt_term_off_condition">Nutzungsbedingungen AGB</string>
+    <string name="txt_term_and_condition">Geschäftsbedingungen</string>
+    <string name="txt_password">Passwort</string>
+    <string name="txt_login">Einloggen</string>
+    <string name="txt_forgot_pass">Passwort vergessen?</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="hello_world">Hallo Welt!</string>
+    <string name="drawer_open">Slider-Menü geöffnet</string>
+    <string name="drawer_close">Slider-Menü geschlossen</string>
+
+    <!-- Nav Drawer Menu Items -->
+
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_people</item>
+        <item>@drawable/ic_photos</item>
+        <item>@drawable/ic_communities</item>
+        <item>@drawable/ic_pages</item>
+        <item>@drawable/ic_whats_hot</item>
+    </array>
+
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
+    <string name="app_picker_name">Applications</string>
+    <string name="bookmark_picker_name">Bookmarks</string>
+    <string name="button_add_calendar">Add to calendar</string>
+    <string name="button_add_contact">Add contact</string>
+    <string name="button_book_search">Book Search</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_custom_product_search">Custom search</string>
+    <string name="button_dial">Dial number</string>
+    <string name="button_email">Send email</string>
+    <string name="button_get_directions">Get directions</string>
+    <string name="button_mms">Send MMS</string>
+    <string name="button_ok">OK</string>
+    <string name="button_open_browser">Open browser</string>
+    <string name="button_product_search">Product search</string>
+    <string name="button_search_book_contents">Search contents</string>
+    <string name="button_share_app">Application</string>
+    <string name="button_share_bookmark">Bookmark</string>
+    <string name="button_share_by_email">Share via email</string>
+    <string name="button_share_by_sms">Share via SMS</string>
+    <string name="button_share_clipboard">Clipboard</string>
+    <string name="button_share_contact">Contact</string>
+    <string name="button_show_map">Show map</string>
+    <string name="button_sms">Send SMS</string>
+    <string name="button_web_search">Web search</string>
+    <string name="button_wifi">Connect to Network</string>
+    <string name="contents_contact">Contact info</string>
+    <string name="contents_email">Email address</string>
+    <string name="contents_location">Geographic coordinates</string>
+    <string name="contents_phone">Phone number</string>
+    <string name="contents_sms">SMS address</string>
+    <string name="contents_text">Plain text</string>
+    <string name="history_clear_text">Clear history</string>
+    <string name="history_clear_one_history_text">Clear</string>
+    <string name="history_email_title">Barcode Scanner history</string>
+    <string name="history_empty">Empty</string>
+    <string name="history_empty_detail">No barcode scans have been recorded</string>
+    <string name="history_send">Send history</string>
+    <string name="history_title">History</string>
+    <string name="menu_encode_mecard">Use MECARD</string>
+    <string name="menu_encode_vcard">Use vCard</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_history">History</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_share">Share</string>
+    <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>
+    <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
+    <string name="msg_default_format">Format</string>
+    <string name="msg_default_meta">Metadata</string>
+    <string name="msg_default_mms_subject">Hi</string>
+    <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to scan it.</string>
+    <string name="msg_default_time">Time</string>
+    <string name="msg_default_type">Type</string>
+    <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.</string>
+    <string name="msg_google_books">Google</string>
+    <string name="msg_google_product">Google</string>
+    <string name="msg_intent_failed">Sorry, the requested application could not be launched. The barcode contents may be invalid.</string>
+    <string name="msg_redirect">Redirect</string>
+    <string name="msg_sbc_book_not_searchable">Sorry, this book is not searchable.</string>
+    <string name="msg_sbc_failed">Sorry, the search encountered a problem.</string>
+    <string name="msg_sbc_no_page_returned">No page returned</string>
+    <string name="msg_sbc_page">Page</string>
+    <string name="msg_sbc_results">Results</string>
+    <string name="msg_sbc_searching_book">Searching book\u2026</string>
+    <string name="msg_sbc_snippet_unavailable">Snippet not available</string>
+    <string name="msg_share_explanation">You can share data by displaying a barcode on your screen and scanning it with another phone.</string>
+    <string name="msg_share_text">Or type some text and press Enter</string>
+    <string name="msg_sure">Are you sure?</string>
+    <string name="msg_unmount_usb">Sorry, the SD card is not accessible.</string>
+    <string name="preferences_actions_title">When a barcode is found\u2026</string>
+    <string name="preferences_auto_focus_title">Use auto focus</string>
+    <string name="preferences_bulk_mode_summary">Scan and save many barcodes continuously</string>
+    <string name="preferences_bulk_mode_title">Bulk scan mode</string>
+    <string name="preferences_copy_to_clipboard_title">Copy to clipboard</string>
+    <string name="preferences_custom_product_search_summary" formatted="false">Substitutions: %s = contents, %f = format, %t = type</string>
+    <string name="preferences_custom_product_search_title">Custom search URL</string>
+    <string name="preferences_decode_1D_title">1D barcodes</string>
+    <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+    <string name="preferences_decode_QR_title">QR Codes</string>
+    <string name="preferences_device_bug_workarounds_title">Device Bug Workarounds</string>
+    <string name="preferences_disable_continuous_focus_summary">Use only standard focus mode</string>
+    <string name="preferences_disable_continuous_focus_title">No continuous focus</string>
+    <string name="preferences_disable_exposure_title">No exposure</string>
+    <string name="preferences_front_light_summary">Improves scanning in low light on some phones, but may cause glare. Does not work on all phones.</string>
+    <string name="preferences_front_light_title">Use front light</string>
+    <string name="preferences_front_light_auto">Automatic</string>
+    <string name="preferences_front_light_off">Off</string>
+    <string name="preferences_front_light_on">On</string>
+    <string name="preferences_general_title">General settings</string>
+    <string name="preferences_invert_scan_title">Invert scan</string>
+    <string name="preferences_invert_scan_summary">Scan for white barcodes on black background. Not available on some devices.</string>
+    <string name="preferences_name">Settings</string>
+    <string name="preferences_play_beep_title">Beep</string>
+    <string name="preferences_remember_duplicates_summary">Store multiple scans of the same barcode in History</string>
+    <string name="preferences_remember_duplicates_title">Remember duplicates</string>
+    <string name="preferences_result_title">Result settings</string>
+    <string name="preferences_scanning_title">When scanning for barcodes, decode\u2026</string>
+    <string name="preferences_search_country">Search country</string>
+    <string name="preferences_try_bsplus">Try Barcode Scanner+</string>
+    <string name="preferences_try_bsplus_summary">Enhanced with new features and interface</string>
+    <string name="preferences_supplemental_summary">Try to retrieve more information about the barcode contents</string>
+    <string name="preferences_supplemental_title">Retrieve more info</string>
+    <string name="preferences_vibrate_title">Vibrate</string>
+    <string name="result_address_book">Found contact info</string>
+    <string name="result_calendar">Found calendar event</string>
+    <string name="result_email_address">Found email address</string>
+    <string name="result_geo">Found geographic coordinates</string>
+    <string name="result_isbn">Found book</string>
+    <string name="result_product">Found product</string>
+    <string name="result_sms">Found SMS address</string>
+    <string name="result_tel">Found phone number</string>
+    <string name="result_text">Found plain text</string>
+    <string name="result_uri">Found URL</string>
+    <string name="result_wifi">Found WLAN Configuration</string>
+    <string name="sbc_name">Google Book Search</string>
+    <string name="wifi_changing_network">Requesting connection to network\u2026</string>
+    <string name="wifi_ssid_label">Network Name</string>
+    <string name="wifi_type_label">Type</string>
+    <string name="lorem_text" tools:ignore="Typos">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tincidunt elit elit, quis interdum mauris vehicula ac. Vestibulum et felis volutpat, tincidunt elit et, vehicula nunc. Nullam cursus viverra nulla vel malesuada. Ut tortor risus, egestas at dolor sit amet, pharetra faucibus tortor. Morbi mauris dui, condimentum nec fringilla nec, congue vitae dolor. Quisque dictum libero ac velit pharetra venenatis. Etiam non massa aliquet, facilisis magna ut, convallis leo. Pellentesque eu iaculis nibh. Maecenas aliquet, elit at viverra sagittis, massa augue eleifend eros, eget tempus mauris nibh quis neque. Nulla et ligula hendrerit, pulvinar felis nec, pulvinar metus. Pellentesque venenatis neque eu sem aliquet posuere. Quisque in vehicula dui, vel ultrices massa.
+
+Proin nec tortor ac enim commodo gravida a a dolor. Praesent sed ipsum mi. Nam adipiscing eget turpis ut viverra. Cras ut auctor metus. Vivamus vehicula, ligula sed pharetra molestie, massa libero malesuada est, nec semper arcu nibh vel felis. Curabitur porta justo ac purus condimentum semper nec vel dolor. Suspendisse massa dui, lacinia nec aliquet a, eleifend vitae velit. Suspendisse pulvinar ante justo.
+
+Nullam volutpat elementum tellus, ac rutrum nulla ultrices sit amet. Etiam iaculis, nulla eu sollicitudin euismod, lorem sem tincidunt dolor, nec molestie eros ipsum eget leo. Phasellus varius ut tellus ac congue. Aliquam velit nunc, sagittis in nibh non, ultricies sagittis tellus. Nulla facilisi. Proin sed sem eu velit volutpat volutpat ut et massa. Integer nec dolor magna. Praesent vel congue erat. Ut accumsan nisi nec pulvinar euismod. Pellentesque fermentum orci id massa aliquet hendrerit. Pellentesque vehicula, ligula ut blandit euismod, odio urna vehicula nisi, sed fringilla ante elit nec tellus. Integer cursus tellus pulvinar turpis suscipit, et vulputate mi auctor. Maecenas eu erat pharetra, vestibulum sem sit amet, malesuada arcu. Nam sit amet condimentum mi. Sed volutpat nec justo sit amet mollis.
+
+Nullam vel adipiscing odio. Integer risus lectus, scelerisque eget varius et, accumsan eget est. Ut eget fringilla ipsum. Vivamus tempus odio ut elementum suscipit. Phasellus facilisis pellentesque mollis. Nunc convallis aliquam sagittis. Sed quis condimentum risus. Quisque gravida lectus orci, in pulvinar magna consectetur quis. Nunc nibh turpis, placerat quis mattis sit amet, convallis porta turpis. Suspendisse malesuada odio eu porttitor molestie. Aliquam ligula justo, varius id odio at, tincidunt malesuada felis. Suspendisse vulputate rutrum ullamcorper. Duis arcu mauris, fermentum a fringilla sed, vulputate id massa.
+
+Vivamus ultrices massa lacus, nec euismod ligula tempus cursus. Pellentesque tincidunt porta velit, in fermentum mi eleifend vel. Praesent sed erat eget dolor ultrices fringilla vel eu orci. Aenean cursus ipsum ut mi mollis, non viverra eros vestibulum. Donec eget tortor id felis tristique auctor. Pellentesque hendrerit vulputate sem, a lacinia nibh elementum id. Mauris varius ultricies nunc, quis ultricies ligula hendrerit id. Pellentesque sed eros at nisl dictum varius. Mauris lorem lorem, consectetur sit amet lobortis sit amet, hendrerit a tortor. Ut at leo venenatis, viverra turpis a, euismod justo. Integer eleifend libero non lectus interdum hendrerit. Aliquam pharetra malesuada lacus, non ornare tortor vehicula rhoncus. Aenean ligula sem, varius ut ipsum ac, consectetur aliquam nisi. Praesent pellentesque blandit egestas. Nunc hendrerit viverra magna hendrerit feugiat. Aliquam vitae sodales augue.</string>
+    <string name="outline_title">Umriss</string>
+    <string name="print">drucken</string>
+
+</resources>
