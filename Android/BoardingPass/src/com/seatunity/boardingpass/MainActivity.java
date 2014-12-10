@@ -85,6 +85,7 @@ import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 import com.touhiDroid.filepicker.FilePickerActivity;
 
+@SuppressWarnings("deprecation")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
 public class MainActivity extends FragmentActivity implements CallBackApiCall {

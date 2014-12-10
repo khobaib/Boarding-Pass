@@ -53,8 +53,7 @@ public class FragmentAbout extends Fragment implements OnClickListener {
 		tv_report_prob.setPaintFlags(tv_report_prob.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 		tv_trmsof_srvs.setPaintFlags(tv_trmsof_srvs.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 		tv_prvcy_pilcy.setPaintFlags(tv_prvcy_pilcy.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-		((MainActivity) getActivity()).setTitle(getActivity().getResources().getString(R.string.about) + " "
-				+ getActivity().getResources().getString(R.string.app_name));
+		((MainActivity) getActivity()).setTitle("About SeatUnity");
 		tv_send_feedback.setOnClickListener(this);
 		tv_report_prob.setOnClickListener(this);
 		tv_rate_app.setOnClickListener(this);

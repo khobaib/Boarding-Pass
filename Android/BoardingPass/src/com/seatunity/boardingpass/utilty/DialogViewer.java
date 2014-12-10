@@ -9,10 +9,10 @@ import android.widget.Toast;
 
 /**
  * @author Touhid
- *
+ * 
  */
 public class DialogViewer {
-	
+
 	public static void toastConnectionTimeOut(Activity activity) {
 		final Context ctx = activity;
 		if (Looper.myLooper() != Looper.getMainLooper())
@@ -44,8 +44,8 @@ public class DialogViewer {
 			Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
 	}
 
-	public static void alertSimple(Context ctx, String message) {
-		AlertDialog.Builder bld = new AlertDialog.Builder(ctx);
+	public static void alertSimple(Activity activity, String message) {
+		final AlertDialog.Builder bld = new AlertDialog.Builder(activity);
 		bld.setMessage(message);
 		bld.setNeutralButton("OK", new DialogInterface.OnClickListener() {
 			@Override
@@ -53,10 +53,17 @@ public class DialogViewer {
 				dialog.dismiss();
 			}
 		});
-		bld.create().show();
+		if (Looper.myLooper() == Looper.getMainLooper())
+			bld.create().show();
+		else
+			activity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					bld.create().show();
+				}
+			});
 	}
 }
-
 
 // public static void editStatusDialog(final Activity activity) {
 // final Dialog verifDialog = new Dialog((Context) activity,

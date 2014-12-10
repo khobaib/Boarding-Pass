@@ -5,7 +5,6 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -57,9 +56,11 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		Log.i(TAG, "onCreateView");
-		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.login, container, false);
+		ViewGroup v = (ViewGroup) inflater.inflate(R.layout.login, container,
+				false);
 		initview(v);
 		return v;
 	}
@@ -79,13 +80,16 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 		tv_forgot_pass = (TextView) v.findViewById(R.id.tv_forgot_pass);
 		et_password.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				et_password.setBackgroundResource(android.R.drawable.editbox_background_normal);
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				et_password
+						.setBackgroundResource(android.R.drawable.editbox_background_normal);
 				tv_errorshow.setVisibility(View.GONE);
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
 			}
 
 			@Override
@@ -94,13 +98,15 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 		});
 		et_email.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
 				et_email.setBackgroundResource(android.R.drawable.editbox_background_normal);
 				tv_errorshow.setVisibility(View.GONE);
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
 			}
 
 			@Override
@@ -115,21 +121,29 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 				password = et_password.getText().toString();
 				if (Constants.isOnline(getActivity())) {
 					if (!Constants.isValidEmail(email)) {
-						Toast.makeText(getActivity(),
-								getActivity().getResources().getString(R.string.txt_enter_valid_email),
+						Toast.makeText(
+								getActivity(),
+								getActivity().getResources().getString(
+										R.string.txt_enter_valid_email),
 								Toast.LENGTH_SHORT).show();
 						et_email.setBackgroundResource(R.drawable.rounded_text_nofield);
 					} else if (password.equals("")) {
-						Toast.makeText(getActivity(),
-								getActivity().getResources().getString(R.string.txt_enter_password), Toast.LENGTH_SHORT)
-								.show();
-						et_password.setBackgroundResource(R.drawable.rounded_text_nofield);
+						Toast.makeText(
+								getActivity(),
+								getActivity().getResources().getString(
+										R.string.txt_enter_password),
+								Toast.LENGTH_SHORT).show();
+						et_password
+								.setBackgroundResource(R.drawable.rounded_text_nofield);
 
 					} else {
 						callloginApi();
 					}
 				} else {
-					Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_check_internet),
+					Toast.makeText(
+							getActivity(),
+							getActivity().getResources().getString(
+									R.string.txt_check_internet),
 							Toast.LENGTH_SHORT).show();
 				}
 
@@ -139,7 +153,8 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 
 			@Override
 			public void onClick(View arg0) {
-				Intent intent = new Intent(getActivity(), ForgotPassActivity.class);
+				Intent intent = new Intent(getActivity(),
+						ForgotPassActivity.class);
 				startActivity(intent);
 			}
 		});
@@ -154,8 +169,9 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 			loginObj.put("email", email);
 			loginObj.put("password", password);
 			String loginData = loginObj.toString();
-			AsyncaTaskApiCall log_in_lisenar = new AsyncaTaskApiCall(FragmentLogin.this, loginData, getActivity(),
-					"login", Constants.REQUEST_TYPE_POST);
+			AsyncaTaskApiCall log_in_lisenar = new AsyncaTaskApiCall(
+					FragmentLogin.this, loginData, getActivity(), "login",
+					Constants.REQUEST_TYPE_POST);
 			log_in_lisenar.execute();
 
 		} catch (JSONException e) {
@@ -163,55 +179,9 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 		}
 	}
 
-	/**
-	 * Calls the {@link #setUsercredential(String) } method with the passed
-	 * {@link ServerResponse} object's JSON-formatted string.
-	 * 
-	 * @param serverResponse
-	 */
-	public void callBackFromApicall(ServerResponse serverResponse) {
-		setUsercredential(serverResponse.getjObj().toString());
-	}
-
-	/**
-	 * Saves the user's credentials in the {@link SharedPreferences} if the
-	 * status of the passed {@link ServerResponse} objectis "true", otherwise
-	 * sets the visibility of the error-message text-view {@link View#VISIBLE}.
-	 * 
-	 * @param result
-	 *            The {@link ServerResponse} object's JSON-formatted string,
-	 *            without the integer status-code
-	 */
-	public void setUsercredential(String result) {
-		UserCred usercred = new UserCred();
-		try {
-			JSONObject job = new JSONObject(result);
-			String status = job.getString("success");
-			if (status.equals("true")) {
-				usercred = UserCred.parseUserCred(job);
-				usercred.setEmail(email);
-				usercred.setPassword(password);
-				appInstance.setUserCred(usercred);
-				appInstance.setRememberMe(true);
-
-				Intent intent = new Intent(getActivity(), MainActivity.class);
-				intent.putExtra("select", 1);
-				startActivity(intent);
-				getActivity().finish();
-				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_login_success),
-						Toast.LENGTH_SHORT).show();
-
-			} else {
-				tv_errorshow.setVisibility(View.VISIBLE);
-				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_login_failed),
-						Toast.LENGTH_SHORT).show();
-			}
-		} catch (Exception e) {
-		}
-	}
-
 	@Override
 	public void responseOk(JSONObject job) {
+		Log.d(TAG, "responseOk : " + job.toString());
 		try {
 			UserCred usercred = new UserCred();
 			String status = job.getString("success");
@@ -228,9 +198,18 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 				getActivity().finish();
-				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.txt_login_success),
-						Toast.LENGTH_SHORT).show();
-
+				Toast.makeText(
+						getActivity(),
+						getActivity().getResources().getString(
+								R.string.txt_login_success), Toast.LENGTH_SHORT)
+						.show();
+			} else {
+				tv_errorshow.setVisibility(View.VISIBLE);
+				Toast.makeText(
+						getActivity(),
+						getActivity().getResources().getString(
+								R.string.txt_login_failed), Toast.LENGTH_SHORT)
+						.show();
 			}
 		} catch (NotFoundException e) {
 			e.printStackTrace();
@@ -239,20 +218,29 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 		}
 	}
 
-	// {"error":{"message":"email in use","code":"x03"},"success":"false"}
-
 	@Override
 	public void responseFailure(JSONObject job) {
-		Log.e("SignUp", "responseFailure:: \n" + job.toString());
+		Log.e(TAG, "responseFailure:: \n" + job.toString());
 
 		try {
-			if (job.getJSONObject("error").getString("code").equals("x13"))
-				DialogViewer.alertSimple(getActivity(),
-						"You haven't confirmed this registered email.\nCheck your email to confirm this account.");
+			String code = job.getJSONObject("error").getString("code");
+			if (code.equals("x04")) {
+				tv_errorshow.setVisibility(View.VISIBLE);
+				Toast.makeText(
+						getActivity(),
+						getActivity().getResources().getString(
+								R.string.txt_login_failed), Toast.LENGTH_SHORT)
+						.show();
+			} else if (code.equals("x13"))
+				DialogViewer
+						.alertSimple(
+								getActivity(),
+								"You haven't confirmed this registered email.\nCheck your email to confirm this account.");
 		} catch (JSONException e) {
 			e.printStackTrace();
 			try {
-				DialogViewer.alertSimple(getActivity(), "Error: " + job.getJSONObject("error").getString("message"));
+				DialogViewer.alertSimple(getActivity(), "Error: "
+						+ job.getJSONObject("error").getString("message"));
 			} catch (JSONException e1) {
 				e1.printStackTrace();
 			}
@@ -261,16 +249,71 @@ public class FragmentLogin extends Fragment implements CallBackApiCall {
 
 	@Override
 	public void saveLoginCred(JSONObject job) {
+		Log.d(TAG, "saveLoginCred : " + job.toString());
 	}
 
 	@Override
 	public void LoginFailed(JSONObject job) {
+		Log.d(TAG, "LoginFailed : " + job.toString());
 	}
 
 	@Override
 	public void responseFailure(ServerResponse response) {
+		Log.d(TAG, "responseFailure : " + response.toString());
 		if (response.getStatus() != 200) {
-			BoardingPassApplication.alert(getActivity(), "Internet connectivity is lost! Please retry the operation.");
+			BoardingPassApplication
+					.alert(getActivity(),
+							"Internet connectivity is lost! Please retry the operation.");
 		}
 	}
 }
+
+// /**
+// * Calls the {@link #setUsercredential(String) } method with the passed
+// * {@link ServerResponse} object's JSON-formatted string.
+// *
+// * @param serverResponse
+// */
+// public void callBackFromApicall(ServerResponse serverResponse) {
+// setUsercredential(serverResponse.getjObj().toString());
+// }
+
+// /**
+// * Saves the user's credentials in the {@link SharedPreferences} if the
+// * status of the passed {@link ServerResponse} objectis "true", otherwise
+// * sets the visibility of the error-message text-view {@link
+// View#VISIBLE}.
+// *
+// * @param result
+// * The {@link ServerResponse} object's JSON-formatted string,
+// * without the integer status-code
+// */
+// public void setUsercredential(String result) {
+// UserCred usercred = new UserCred();
+// try {
+// JSONObject job = new JSONObject(result);
+// String status = job.getString("success");
+// if (status.equals("true")) {
+// usercred = UserCred.parseUserCred(job);
+// usercred.setEmail(email);
+// usercred.setPassword(password);
+// appInstance.setUserCred(usercred);
+// appInstance.setRememberMe(true);
+//
+// Intent intent = new Intent(getActivity(), MainActivity.class);
+// intent.putExtra("select", 1);
+// startActivity(intent);
+// getActivity().finish();
+// Toast.makeText(getActivity(),
+// getActivity().getResources().getString(R.string.txt_login_success),
+// Toast.LENGTH_SHORT).show();
+//
+// } else {
+// tv_errorshow.setVisibility(View.VISIBLE);
+// Toast.makeText(getActivity(),
+// getActivity().getResources().getString(R.string.txt_login_failed),
+// Toast.LENGTH_SHORT).show();
+// }
+// } catch (Exception e) {
+// }
+// }

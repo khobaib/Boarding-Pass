@@ -526,14 +526,14 @@ public class FragmentSeatMet extends Fragment implements CallBackApiCall {
 					loginObj.put("message", savedMessage);
 					callfrom = 1;
 					AsyncaTaskApiCall sendmessage = new AsyncaTaskApiCall(FragmentSeatMet.this, loginObj.toString(),
-							context, Savedurl, Constants.REQUEST_TYPE_POST);
+							getActivity(), Savedurl, Constants.REQUEST_TYPE_POST);
 					sendmessage.execute();
 				} else if (callfrom == 2) {
 					callfrom = 2;
 					String extendedurl = "seatmatelist/" + bpass.getCarrier() + "/" + bpass.getFlight_no() + "/"
 							+ bpass.getJulian_date();
 					extendedurl = extendedurl.replace(" ", "");
-					AsyncaTaskApiCall get_list = new AsyncaTaskApiCall(FragmentSeatMet.this, getJsonObjet(), context,
+					AsyncaTaskApiCall get_list = new AsyncaTaskApiCall(FragmentSeatMet.this, getJsonObjet(), getActivity(),
 							extendedurl, Constants.REQUEST_TYPE_POST);
 					get_list.execute();
 				}

@@ -47,10 +47,12 @@ public class LisAlertDialog {
 		final Dialog dia = new Dialog(context);
 		dia.setContentView(R.layout.list_alert);
 		cancel_button = (Button) dia.findViewById(R.id.cancel_button);
-		dia.setTitle(context.getResources().getString(R.string.txt_shared_flight_title));
+		dia.setTitle(context.getResources().getString(
+				R.string.txt_shared_flight_title));
 		dia.setCancelable(true);
 		list_alert1 = (ListView) dia.findViewById(R.id.alert_list);
-		AdapterForBoardingPass arrayAdapter = new AdapterForBoardingPass(context, item);
+		AdapterForBoardingPass arrayAdapter = new AdapterForBoardingPass(
+				context, item, true);
 
 		cancel_button.setOnClickListener(new OnClickListener() {
 			@Override
@@ -61,7 +63,8 @@ public class LisAlertDialog {
 		list_alert1.setAdapter(arrayAdapter);
 		list_alert1.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
 
 				dia.cancel();
 			}

@@ -166,7 +166,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 			callfrom = 2;
 			Constants.CHANGE_PHOTO_FLAG = true;
 			AsyncaTaskApiCall update_prof_lisenar = new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj.toString(),
-					context, "reg_update", Constants.REQUEST_TYPE_POST);
+					getActivity(), "reg_update", Constants.REQUEST_TYPE_POST);
 			update_prof_lisenar.execute();
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -344,7 +344,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 									callfrom = 1;
 									if (Constants.isOnline(activity)) {
 										AsyncaTaskApiCall log_in_lisenar = new AsyncaTaskApiCall(
-												FragmentMyAccount.this, loginObj.toString(), context, "logout",
+												FragmentMyAccount.this, loginObj.toString(), getActivity(), "logout",
 												Constants.REQUEST_TYPE_POST);
 										// TODO Check table delete when logged
 										// out;
@@ -447,7 +447,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 					callfrom = 2;
 					if (Constants.isOnline(activity)) {
 						AsyncaTaskApiCall update_prof_lisenar = new AsyncaTaskApiCall(FragmentMyAccount.this, loginObj
-								.toString(), context, "reg_update", Constants.REQUEST_TYPE_POST);
+								.toString(), getActivity(), "reg_update", Constants.REQUEST_TYPE_POST);
 						update_prof_lisenar.execute();
 					} else {
 						Toast.makeText(getActivity(),
@@ -570,7 +570,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 								callfrom = 2;
 								if (Constants.isOnline(activity)) {
 									AsyncaTaskApiCall update_prof_lisenar = new AsyncaTaskApiCall(
-											FragmentMyAccount.this, loginObj.toString(), context, "reg_update",
+											FragmentMyAccount.this, loginObj.toString(), getActivity(), "reg_update",
 											Constants.REQUEST_TYPE_POST);
 									update_prof_lisenar.execute();
 								} else {
@@ -939,12 +939,12 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 					loginObj2.put("token", appInstance.getUserCred().getToken());
 					callfrom = 1;
 					AsyncaTaskApiCall log_in_lisenar = new AsyncaTaskApiCall(FragmentMyAccount.this,
-							loginObj2.toString(), context, "logout", Constants.REQUEST_TYPE_POST);
+							loginObj2.toString(), getActivity(), "logout", Constants.REQUEST_TYPE_POST);
 					log_in_lisenar.execute();
 				} else if (callfrom == 2) {
 					callfrom = 2;
 					AsyncaTaskApiCall update_prof_lisenar = new AsyncaTaskApiCall(FragmentMyAccount.this,
-							loginObjnew.toString(), context, "reg_update", Constants.REQUEST_TYPE_POST);
+							loginObjnew.toString(), getActivity(), "reg_update", Constants.REQUEST_TYPE_POST);
 					update_prof_lisenar.execute();
 				}
 

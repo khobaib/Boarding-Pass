@@ -146,7 +146,7 @@ public class PastBoardingPassListFragment extends TabFragment {
 	}
 
 	/**
-	 * Shows the details of the passed boaring-pass in the
+	 * Shows the details of the boarding-pass in the
 	 * {@link FragmentUpcomingBoardingPassDetails } fragment.
 	 * 
 	 * @param bpass

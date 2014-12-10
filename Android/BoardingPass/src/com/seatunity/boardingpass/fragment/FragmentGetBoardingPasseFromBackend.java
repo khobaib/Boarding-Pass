@@ -180,7 +180,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 		// needtoReusedBoardingPass = bpass;
 		String bpassdata = "";
 		bpassdata = getJsonOfBoardingPass(bpass);
-		AsyncaTaskApiCall upBPass = new AsyncaTaskApiCall(this, bpassdata, context, "newbp",
+		AsyncaTaskApiCall upBPass = new AsyncaTaskApiCall(this, bpassdata, getActivity(), "newbp",
 				Constants.REQUEST_TYPE_POST);
 		upBPass.execute();
 	}
@@ -320,7 +320,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 				appInstance.setUserCred(userCred);
 				appInstance.setRememberMe(true);
 				// callfrom = 1;
-				apiCaller = new AsyncaTaskApiCall(FragmentGetBoardingPasseFromBackend.this, getJsonObjet(), context,
+				apiCaller = new AsyncaTaskApiCall(FragmentGetBoardingPasseFromBackend.this, getJsonObjet(), getActivity(),
 						"bplist", Constants.REQUEST_TYPE_POST);
 				apiCaller.execute();
 			}

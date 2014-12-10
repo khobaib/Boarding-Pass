@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,7 +40,7 @@ import com.seatunity.model.SeatMate;
 public class AdapterForSeatmet extends BaseAdapter {
 	String month;
 	String day;
-	private Context context;
+	private Activity activity;
 	private ArrayList<SeatMate> list;
 	FragmentSeatMet lisenar;
 	BoardingPassApplication appInstance;
@@ -60,10 +59,11 @@ public class AdapterForSeatmet extends BaseAdapter {
 	 * @param context
 	 * @param item
 	 */
-	public AdapterForSeatmet(String token, FragmentSeatMet lisenar, Context context, ArrayList<SeatMate> item,
+	public AdapterForSeatmet(String token, FragmentSeatMet lisenar,
+			Activity activity, ArrayList<SeatMate> item,
 			CollapseClassSelectionList collapseClsSelector) {
 		this.lisenar = lisenar;
-		this.context = context;
+		this.activity = activity;
 		this.token = token;
 		this.list = item;
 		this.collapseClsSelector = collapseClsSelector;
@@ -102,14 +102,19 @@ public class AdapterForSeatmet extends BaseAdapter {
 		LayoutInflater mInflater;
 		ViewHolder holder = new ViewHolder();
 		if (convertView == null) {
-			mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+			mInflater = (LayoutInflater) activity
+					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 			convertView = mInflater.inflate(R.layout.seatmate_inflate, null);
 
-			holder.txt_name = (TextView) convertView.findViewById(R.id.txt_name);
+			holder.txt_name = (TextView) convertView
+					.findViewById(R.id.txt_name);
 			holder.tv_prof = (TextView) convertView.findViewById(R.id.tv_prof);
-			holder.tv_seat_pref = (TextView) convertView.findViewById(R.id.tv_seat_pref);
-			holder.img_profile = (ImageView) convertView.findViewById(R.id.img_profile);
-			holder.img_send_msz = (ImageView) convertView.findViewById(R.id.img_send_msz);
+			holder.tv_seat_pref = (TextView) convertView
+					.findViewById(R.id.tv_seat_pref);
+			holder.img_profile = (ImageView) convertView
+					.findViewById(R.id.img_profile);
+			holder.img_send_msz = (ImageView) convertView
+					.findViewById(R.id.img_send_msz);
 			convertView.setTag(holder);
 
 		} else {
@@ -118,18 +123,23 @@ public class AdapterForSeatmet extends BaseAdapter {
 		if (list.get(position).getName() != null) {
 			holder.txt_name.setText(list.get(position).getName());
 		}
-		if ((list.get(position).getTravel_class() != null) && (list.get(position).getSeat() != null)) {
-			holder.tv_seat_pref.setText(list.get(position).getTravel_class() + ", "
-					+ Constants.removeingprecingZero(list.get(position).getSeat()));
+		if ((list.get(position).getTravel_class() != null)
+				&& (list.get(position).getSeat() != null)) {
+			holder.tv_seat_pref.setText(list.get(position).getTravel_class()
+					+ ", "
+					+ Constants.removeingprecingZero(list.get(position)
+							.getSeat()));
 		}
 		Log.e("Error", position + " " + list.get(position).getProfession());
 		if (list.get(position).getProfession() != null) {
 			holder.tv_prof.setText(list.get(position).getProfession());
 		}
-		if ((list.get(position).getImage_url() == null) || (list.get(position).getImage_url().equals(""))) {
+		if ((list.get(position).getImage_url() == null)
+				|| (list.get(position).getImage_url().equals(""))) {
 
 		} else {
-			ImageLoader.getInstance().displayImage(list.get(position).getImage_url(), holder.img_profile);
+			ImageLoader.getInstance().displayImage(
+					list.get(position).getImage_url(), holder.img_profile);
 		}
 		holder.img_send_msz.setOnClickListener(new OnClickListener() {
 			@Override
@@ -151,16 +161,24 @@ public class AdapterForSeatmet extends BaseAdapter {
 	 */
 	@SuppressWarnings("static-access")
 	public void showAlertDilog(final int position) {
-		hint = context.getResources().getString(R.string.txt_message);
-		input = new EditText(context);
-		d = new AlertDialog.Builder(context).setView(input)
+		hint = activity.getResources().getString(R.string.txt_message);
+		input = new EditText(activity);
+		d = new AlertDialog.Builder(activity)
+				.setView(input)
 				// Set to null. We override the onclick
-				.setPositiveButton(context.getResources().getString(R.string.txt_ok), null)
-				.setNegativeButton(context.getResources().getString(R.string.txt_cancel), null).create();
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-		View customTitleView = inflater.inflate(R.layout.custom_title_view, null);
+				.setPositiveButton(
+						activity.getResources().getString(R.string.txt_ok),
+						null)
+				.setNegativeButton(
+						activity.getResources().getString(R.string.txt_cancel),
+						null).create();
+		LayoutInflater inflater = (LayoutInflater) activity
+				.getSystemService(activity.LAYOUT_INFLATER_SERVICE);
+		View customTitleView = inflater.inflate(R.layout.custom_title_view,
+				null);
 		TextView title = (TextView) customTitleView.findViewById(R.id.tv_title);
-		title.setText(context.getResources().getString(R.string.txt_send_email));
+		title.setText(activity.getResources()
+				.getString(R.string.txt_send_email));
 		d.setCustomTitle(customTitleView);
 		d.setOnShowListener(new DialogInterface.OnShowListener() {
 
@@ -175,9 +193,12 @@ public class AdapterForSeatmet extends BaseAdapter {
 						String value = input.getText().toString();
 
 						if ((value == null) || (value.equals(""))) {
-							Toast.makeText(context,
-									context.getResources().getString(R.string.txt_please_enter) + " " + hint,
-									Toast.LENGTH_SHORT).show();
+							Toast.makeText(
+									activity,
+									activity.getResources().getString(
+											R.string.txt_please_enter)
+											+ " " + hint, Toast.LENGTH_SHORT)
+									.show();
 						} else {
 							d.cancel();
 							try {
@@ -186,9 +207,12 @@ public class AdapterForSeatmet extends BaseAdapter {
 								loginObj.put("message", value);
 								lisenar.callfrom = 1;
 								lisenar.savedMessage = value;
-								lisenar.Savedurl = "messagemate/" + list.get(position).getId();
-								AsyncaTaskApiCall sendmessage = new AsyncaTaskApiCall(lisenar, loginObj.toString(),
-										context, "messagemate/" + list.get(position).getId(),
+								lisenar.Savedurl = "messagemate/"
+										+ list.get(position).getId();
+								AsyncaTaskApiCall sendmessage = new AsyncaTaskApiCall(
+										lisenar, loginObj.toString(), activity,
+										"messagemate/"
+												+ list.get(position).getId(),
 										Constants.REQUEST_TYPE_POST);
 								sendmessage.execute();
 

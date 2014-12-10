@@ -509,7 +509,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 					String url = "bpdelete/" + bpass.getId();
 					callfrom = 1;
 					AsyncaTaskApiCall get_list = new AsyncaTaskApiCall(FragmentUpcomingBoardingPassDetails.this,
-							getJsonObjet(), context, url, Constants.REQUEST_TYPE_POST);
+							getJsonObjet(), getActivity(), url, Constants.REQUEST_TYPE_POST);
 					get_list.execute();
 				} else if (callfrom == 2) {
 					callfrom = 2;
@@ -517,7 +517,7 @@ public class FragmentUpcomingBoardingPassDetails extends Fragment implements Cal
 							+ bpass.getJulian_date();
 					extendedurl = extendedurl.replace(" ", "");
 					AsyncaTaskApiCall get_list = new AsyncaTaskApiCall(FragmentUpcomingBoardingPassDetails.this,
-							getJsonObjet(), context, extendedurl, Constants.REQUEST_TYPE_POST);
+							getJsonObjet(), getActivity(), extendedurl, Constants.REQUEST_TYPE_POST);
 					get_list.execute();
 				}
 

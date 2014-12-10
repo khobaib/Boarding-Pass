@@ -124,6 +124,33 @@ public class BoardingPassApplication extends Application {
 		return userCred;
 	}
 
+	/**
+	 * @return a {@link UserCred } object retrieved from the default
+	 *         shared-preference of the application.
+	 */
+	public static UserCred getStaticUserCred() {
+		// if(User==null)
+		// User =
+		// PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		String email = User.getString(Constants.EMAIL, "");
+		String password = User.getString(Constants.PASSWORD, "");
+		String token = User.getString(Constants.TOKEN, "");
+		String language = User.getString(Constants.LANGUAGE, "");
+		String firstname = User.getString(Constants.FIRSTNAME, "");
+		String lastname = User.getString(Constants.LASTNAME, "");
+		String gender = User.getString(Constants.GENDER, "");
+		String live_in = User.getString(Constants.LIVE_IN, "");
+		String age = User.getString(Constants.AGE, "");
+		String profession = User.getString(Constants.PROFESSION, "");
+		String seating_pref = User.getString(Constants.SEATING, "");
+		String image_url = User.getString(Constants.IMAGE_URL, "");
+		String som_thing_about_you = User.getString(Constants.SOME_THING_ABOUT_YOU, "");
+		String status = User.getString(Constants.STATUS, "");
+		UserCred userCred = new UserCred(email, password, token, language, firstname, lastname, gender, live_in, age,
+				profession, seating_pref, image_url, som_thing_about_you, status);
+		return userCred;
+	}
+
 	// public boolean isFirstTime(){
 	// Boolean firstTimeFlag = User.getBoolean(Constants.FIRST_TIME, true);
 	// return firstTimeFlag;

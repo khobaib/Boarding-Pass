@@ -10,6 +10,7 @@ import org.json.JSONObject;
  * 
  */
 public class ServerResponse {
+
 	JSONObject jObj;
 	int status;
 
@@ -37,4 +38,14 @@ public class ServerResponse {
 		this.status = status;
 	}
 
+	@Override
+	public String toString() {
+		try {
+			return "ServerResponse [jObj=" + jObj.toString() + ", status="
+					+ status + "]";
+		} catch (Exception e) {
+			// e.printStackTrace();
+			return super.toString();
+		}
+	}
 }

@@ -132,7 +132,7 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 					if (Constants.isOnline(getActivity())) {
 						callfrom = 2;
 						AsyncaTaskApiCall getSharedFlight = new AsyncaTaskApiCall(FragmentSingleSeatMet.this, loginObj
-								.toString(), context, "sharedflight/" + seatmate.getId(), Constants.REQUEST_TYPE_POST);
+								.toString(), getActivity(), "sharedflight/" + seatmate.getId(), Constants.REQUEST_TYPE_POST);
 						getSharedFlight.execute();
 					} else {
 						Toast.makeText(getActivity(),
@@ -354,7 +354,7 @@ public class FragmentSingleSeatMet extends Fragment implements CallBackApiCall {
 					JSONObject loginObj = new JSONObject();
 					loginObj.put("token", appInstance.getUserCred().getToken());
 					AsyncaTaskApiCall getSharedFlight = new AsyncaTaskApiCall(FragmentSingleSeatMet.this,
-							loginObj.toString(), context, "sharedflight/" + seatmate.getId(),
+							loginObj.toString(), getActivity(), "sharedflight/" + seatmate.getId(),
 							Constants.REQUEST_TYPE_POST);
 					getSharedFlight.execute();
 				}

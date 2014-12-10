@@ -204,7 +204,7 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 	public void setListViewWithSizeChecks() {
 		if (futureBPList != null) {
 			if (futureBPList.size() > 0) {
-				AdapterForBoardingPass adapter = new AdapterForBoardingPass(getActivity(), futureBPList);
+				AdapterForBoardingPass adapter = new AdapterForBoardingPass(getActivity(), futureBPList,false);
 				lv_boarding_pass.setAdapter(adapter);
 			} else {
 				if (appInstance.isRememberMe()) {
