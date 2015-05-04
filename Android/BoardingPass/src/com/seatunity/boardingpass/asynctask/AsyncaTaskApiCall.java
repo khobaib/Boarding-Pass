@@ -11,6 +11,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -228,6 +229,8 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 			response = jsonParser.retrieveServerData(requestType, url, null,
 					body, null);
 		}
+		if(response!=null)
+			Log.e("MSG",response.toString());
 		return response;
 
 	}

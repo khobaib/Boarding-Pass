@@ -352,7 +352,7 @@ public class Constants {
 	public static String photofromcamera;
 	public static int notificationcount;
 	public static String userid = "8150";
-	public static String baseurl = "http://seatunity.net/";
+	public static String baseurl = "http://seat-unity.com/backend/";
 
 	/**
 	 * @param context
