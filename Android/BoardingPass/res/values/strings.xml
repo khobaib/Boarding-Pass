@@ -285,5 +285,10 @@ Nullam vel adipiscing odio. Integer risus lectus, scelerisque eget varius et, ac
 Vivamus ultrices massa lacus, nec euismod ligula tempus cursus. Pellentesque tincidunt porta velit, in fermentum mi eleifend vel. Praesent sed erat eget dolor ultrices fringilla vel eu orci. Aenean cursus ipsum ut mi mollis, non viverra eros vestibulum. Donec eget tortor id felis tristique auctor. Pellentesque hendrerit vulputate sem, a lacinia nibh elementum id. Mauris varius ultricies nunc, quis ultricies ligula hendrerit id. Pellentesque sed eros at nisl dictum varius. Mauris lorem lorem, consectetur sit amet lobortis sit amet, hendrerit a tortor. Ut at leo venenatis, viverra turpis a, euismod justo. Integer eleifend libero non lectus interdum hendrerit. Aliquam pharetra malesuada lacus, non ornare tortor vehicula rhoncus. Aenean ligula sem, varius ut ipsum ac, consectetur aliquam nisi. Praesent pellentesque blandit egestas. Nunc hendrerit viverra magna hendrerit feugiat. Aliquam vitae sodales augue.</string>
     <string name="outline_title">Outline</string>
     <string name="print">Print</string>
-
+	<string name="premium_account_flight">Add flights easier\n with two additional options:\nEnter your flight details manually or\n upload your booking information.</string>
+    <string name="premium_account_ideal_seatmate">Find ideal seatmate based on your sitting profile. Whatever you prefer(seatmates that belong to your generation,speak the same languages,share hobbies with you, etc.). SeatUnity will find perfect seat  mate for you.</string>
+    <string name="premium_account_messaging_feature">Get directly in touch with seat-mates even before  or after the flight.</string>
+    <string name="premium_account_full_profile">See all information of your seat-mates such as full name,Profession,Country,Hobbies.</string>
+    <string name="premium_account_shared_flight">Find how many flights you have shared with your seat-mates.</string>
+	
 </resources>
