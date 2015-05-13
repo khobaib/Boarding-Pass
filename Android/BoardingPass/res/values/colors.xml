@@ -24,6 +24,7 @@
     <color name="black_transparent_back">#90000000</color>
     <color name="half_transparent">#7F000000</color>
     <color name="red">#ffff0000</color>
+    <color name="blue">#ff1c79bc</color>
     <color name="white">#ffffffff</color>
     <color name="gray70">#ffb3b3b3</color>
     <color name="tab_text_normal">#ff646464</color>
