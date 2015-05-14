@@ -88,7 +88,11 @@
     <string name="txt_user_name">User Name</string>
     <string name="txt_email_addess">email address</string>
     <string name="txt_myaccounts">My Account</string>
-    <string name="txt_past_boarding_passes">Past Boarding Passes</string>
+     <string name="txt_past_flight">Past Flights</string>
+     <string name="txt_home">Home</string>
+     <string name="txt_seating_profile">Seating Profile</string>
+    <string name="txt_premium_account">Premium Account</string>
+   <string name="txt_past_boarding_passes">Past Boarding Passes</string>
     <string name="txt_ok">OK</string>
     <string name="txt_add">Add</string>
     <string name="txt_shared_flight_title">Shared Flights</string>

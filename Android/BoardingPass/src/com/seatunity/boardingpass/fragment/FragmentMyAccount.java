@@ -88,18 +88,65 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 	private Bundle savedState = null;
 
 	private final String TAG = this.getClass().getSimpleName();
-
-	/**
-	 * Empty constructor doing nothing special inside
-	 */
-	public FragmentMyAccount() {
-	}
-
-	@SuppressLint("NewApi")
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		// Log.e("inside", "onCreate");
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		v = (ViewGroup) inflater.inflate(R.layout.fragment_my_account, container, false);
+		Log.i(TAG, "onCreateView");
+		tv_uname = (TextView) v.findViewById(R.id.tv_uname);
+		tv_email = (TextView) v.findViewById(R.id.tv_email);
+		tv_stataus = (TextView) v.findViewById(R.id.tv_stataus);
+		img_prof_pic = (ImageView) v.findViewById(R.id.img_prof_pic);
+		lv_setting = (ListView) v.findViewById(R.id.lv_setting);
+		img_status = (ImageView) v.findViewById(R.id.img_status);
+		tv_stataus.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				ShowStatus();
+			}
+		});
+		img_status.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				ShowStatus();
+			}
+		});
+		img_edit = (ImageView) v.findViewById(R.id.img_edit);
+		spn_country = (Spinner) v.findViewById(R.id.spn_country);
+
+		img_edit.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, EditUserNameActivity.class);
+				startActivity(intent);
+			}
+		});
+		img_prof_pic.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (Constants.isOnline(activity)) {
+					String[] photochooser = context.getResources().getStringArray(R.array.upload_photo_from);
+					showDialogTochosePhoto(photochooser, context.getResources().getString(R.string.txt_select_photo));
+				} else {
+					Toast.makeText(getActivity(),
+							activity.getResources().getString(R.string.txt_please_check_internet), Toast.LENGTH_SHORT)
+							.show();
+				}
+
+			}
+		});
+		
+
+		
+
+		return v;
+	}
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 		if (getActivity() != null) {
 			context = getActivity();
 			activity = getActivity();
@@ -115,15 +162,18 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 		setting_criteria.add(getActivity().getResources().getString(R.string.acc_som_about_you));
 		setting_criteria.add(getActivity().getResources().getString(R.string.acc_change_pass));
 		setting_criteria.add(getActivity().getResources().getString(R.string.acc_sign_out));
-	}
+		
+		appInstance = (BoardingPassApplication) getActivity().getApplication();
+		userCred = appInstance.getUserCred();
+		setListView();
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		if (getActivity() != null) {
-			context = getActivity();
-			activity = getActivity();
+		if ( (appInstance.getUserCred().getImage_url() == null) || (appInstance.getUserCred().getImage_url().equals(""))) {
+
+		} else {
+			ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url(), img_prof_pic);
 		}
+		Constants.IMG_PROF_PIC = img_prof_pic;
+		setView();
 	}
 
 	/**
@@ -179,73 +229,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 
 	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
-		v = (ViewGroup) inflater.inflate(R.layout.fragment_my_account, container, false);
-		Log.i(TAG, "onCreateView");
-		tv_uname = (TextView) v.findViewById(R.id.tv_uname);
-		tv_email = (TextView) v.findViewById(R.id.tv_email);
-		tv_stataus = (TextView) v.findViewById(R.id.tv_stataus);
-		img_prof_pic = (ImageView) v.findViewById(R.id.img_prof_pic);
-		lv_setting = (ListView) v.findViewById(R.id.lv_setting);
-		img_status = (ImageView) v.findViewById(R.id.img_status);
-		tv_stataus.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				ShowStatus();
-			}
-		});
-		img_status.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				ShowStatus();
-			}
-		});
-		img_edit = (ImageView) v.findViewById(R.id.img_edit);
-		spn_country = (Spinner) v.findViewById(R.id.spn_country);
-
-		img_edit.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(context, EditUserNameActivity.class);
-				startActivity(intent);
-			}
-		});
-		img_prof_pic.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (Constants.isOnline(activity)) {
-					String[] photochooser = context.getResources().getStringArray(R.array.upload_photo_from);
-					showDialogTochosePhoto(photochooser, context.getResources().getString(R.string.txt_select_photo));
-				} else {
-					Toast.makeText(getActivity(),
-							activity.getResources().getString(R.string.txt_please_check_internet), Toast.LENGTH_SHORT)
-							.show();
-				}
-
-			}
-		});
-		Log.e("onResume", "onResume test ");
-		Log.e("Image Url", "" + this.img_prof_pic);
-
-		appInstance = (BoardingPassApplication) getActivity().getApplication();
-		userCred = appInstance.getUserCred();
-		setListView();
-
-		if ((appInstance.getUserCred().getImage_url().equals("")) || (appInstance.getUserCred().getImage_url() == null)) {
-
-		} else {
-			ImageLoader.getInstance().displayImage(appInstance.getUserCred().getImage_url(), img_prof_pic);
-		}
-		Constants.IMG_PROF_PIC = img_prof_pic;
-		setView();
-
-		return v;
-	}
+	
 
 	/**
 	 * This method sets the list-view containing the user-data & sign-out

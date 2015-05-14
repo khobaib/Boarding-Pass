@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.Menu;
 
 public class PremiumAccountActivity extends FragmentActivity{
 	private ViewPager viewPager;
@@ -38,6 +39,12 @@ public class PremiumAccountActivity extends FragmentActivity{
 				
 			}
 		});
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
 	}
 
 }

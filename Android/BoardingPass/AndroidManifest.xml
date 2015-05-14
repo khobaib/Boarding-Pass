@@ -215,6 +215,7 @@
             </intent-filter>
         </receiver>
         <activity android:name="PremiumAccountActivity"></activity>
+        <activity android:name="SeatingPreferenceActivity"></activity>
     </application>
 
 </manifest>

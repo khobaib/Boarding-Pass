@@ -20,6 +20,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.seatunity.boardingpass.R;
 import com.seatunity.boardingpass.UpdateStatusDialog;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
+import com.seatunity.model.NavDrawerItem;
 
 /**
  * Adapter for the navigation-drawer
@@ -30,35 +31,26 @@ import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 public class NavDrawerListAdapter extends BaseAdapter {
 
 	private Context context;
-	private ArrayList<String> item;
+	private ArrayList<NavDrawerItem> items;
 	BoardingPassApplication appInstance;
 	Activity activity;
 
-	/**
-	 * The only constructor
-	 * 
-	 * @param context
-	 * @param appInstance
-	 */
-	public NavDrawerListAdapter(Activity activity, Context context, BoardingPassApplication appInstance) {
-		this.context = context;
-		this.appInstance = appInstance;
-		item = new ArrayList<String>();
-		item.add("1");
-		item.add("2");
-		item.add("3");
+	public NavDrawerListAdapter(Activity activity,ArrayList<NavDrawerItem> list) {
+		this.context = (Context)activity;
+		this.appInstance = (BoardingPassApplication)activity.getApplication();
+		this.items=list;
 		this.activity = activity;
 
 	}
 
 	@Override
 	public int getCount() {
-		return item.size();
+		return items.size();
 	}
 
 	@Override
-	public Object getItem(int position) {
-		return item.get(position);
+	public NavDrawerItem getItem(int position) {
+		return items.get(position);
 	}
 
 	@Override
@@ -72,20 +64,20 @@ public class NavDrawerListAdapter extends BaseAdapter {
 		LayoutInflater mInflater;
 		if (convertView == null) {
 			mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-			convertView = mInflater.inflate(R.layout.drawer_list_item, null);
+			if(position==0)
+				convertView = mInflater.inflate(R.layout.row_nav_menu_1, null);
+			else
+					convertView = mInflater.inflate(R.layout.row_nav_menu, null);
+		
 		}
 
 		ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);
-		TextView userName = (TextView) convertView.findViewById(R.id.user_name);
-		TextView email = (TextView) convertView.findViewById(R.id.email);
-		LinearLayout le_unameandemail_holder = (LinearLayout) convertView.findViewById(R.id.le_unameandemail_holder);
-		TextView item = (TextView) convertView.findViewById(R.id.item);
+		TextView tvUserName = (TextView) convertView.findViewById(R.id.user_name);
+		TextView tvEmail = (TextView) convertView.findViewById(R.id.email);
+		
 		ImageView img_edit_profile = (ImageView) convertView.findViewById(R.id.img_edit_profile);
 
 		if (position == 0) {
-			item.setVisibility(View.GONE);
-			imgIcon.setVisibility(View.VISIBLE);
-			img_edit_profile.setVisibility(View.VISIBLE);
 			img_edit_profile.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -97,8 +89,6 @@ public class NavDrawerListAdapter extends BaseAdapter {
 					activity.startActivity(intent);
 				}
 			});
-
-			le_unameandemail_holder.setVisibility(View.VISIBLE);
 			if (appInstance.getUserCred().getImage_url().equals("")) {
 				imgIcon.setImageResource(R.drawable.ic_contact_picture);
 			} else {
@@ -106,29 +96,24 @@ public class NavDrawerListAdapter extends BaseAdapter {
 
 			}
 			if (appInstance.getUserCred().getEmail().equals("")) {
-				email.setText(context.getResources().getText(R.string.txt_email_addess));
+				tvEmail.setText(context.getResources().getText(R.string.txt_email_addess));
 			} else {
-				email.setText(appInstance.getUserCred().getEmail());
+				tvEmail.setText(appInstance.getUserCred().getEmail());
 			}
 			if (appInstance.getUserCred().getFirstname().equals("")) {
-				userName.setText(context.getResources().getText(R.string.txt_user_name));
-				email.setText("Status");
+				tvUserName.setText(context.getResources().getText(R.string.txt_user_name));
+				tvEmail.setText("Status");
 			} else {
-				userName.setText(appInstance.getUserCred().getFirstname());
-				email.setText(appInstance.getUserCred().getStatus());
+				tvUserName.setText(appInstance.getUserCred().getFirstname());
+				tvEmail.setText(appInstance.getUserCred().getStatus());
 			}
 		} else {
 			img_edit_profile.setVisibility(View.GONE);
-			imgIcon.setVisibility(View.GONE);
-			le_unameandemail_holder.setVisibility(View.GONE);
-			item.setVisibility(View.VISIBLE);
+		
+			tvEmail.setVisibility(View.GONE);
 
-			if (position == 1) {
-				item.setText(context.getResources().getText(R.string.txt_myaccounts));
-			} else {
-				item.setText(context.getResources().getText(R.string.txt_past_boarding_passes));
-
-			}
+			tvUserName.setText(getItem(position).getTitle());
+			imgIcon.setImageResource(getItem(position).getIcon());
 		}
 		return convertView;
 	}
