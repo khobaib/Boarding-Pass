@@ -41,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.seatunity.boardingpass.EditAccountActivity;
 import com.seatunity.boardingpass.EditUserNameActivity;
 import com.seatunity.boardingpass.PasswordChangeActivity;
 import com.seatunity.boardingpass.R;
@@ -119,7 +120,8 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 		img_edit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(context, EditUserNameActivity.class);
+				//Intent intent = new Intent(context, EditUserNameActivity.class);
+				Intent intent = new Intent(context, EditAccountActivity.class);
 				startActivity(intent);
 			}
 		});

@@ -1,6 +1,5 @@
 package com.seatunity.boardingpass;
 
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,15 +7,17 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class StatusEditActivity extends Activity {
-	private EditText etStatus;
+public class EditAccountActivity extends Activity{
+	private EditText etStatus,et_first_name,et_last_name;
 	private TextView tv_ch_remaining;
 	private int CHAR_LIMIT=70;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_status_update);
+		setContentView(R.layout.activity_edit_account);
 		etStatus=(EditText)findViewById(R.id.et_status);
+		et_first_name=(EditText)findViewById(R.id.et_first_name);
+		et_last_name=(EditText)findViewById(R.id.et_last_name);
 		tv_ch_remaining=(TextView)findViewById(R.id.tv_ch_remaining);
 		etStatus.addTextChangedListener(new TextWatcher() {
 			

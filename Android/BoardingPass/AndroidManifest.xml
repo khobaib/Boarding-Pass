@@ -217,6 +217,7 @@
         <activity android:name="PremiumAccountActivity"></activity>
         <activity android:name="SeatingPreferenceActivity"></activity>
         <activity android:name="StatusEditActivity"></activity>
+        <activity android:name="EditAccountActivity"></activity>
     </application>
 
 </manifest>
