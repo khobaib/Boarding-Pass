@@ -10,7 +10,7 @@
         android:background="@color/white" >
 
         <TextView
-            android:id="@+id/tv_haeder"
+            android:id="@+id/tv_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
@@ -25,7 +25,7 @@
             android:id="@+id/tv_sub_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_haeder"
+            android:layout_below="@+id/tv_header"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:text="This becomes relvant for more features in the premium app."
@@ -61,7 +61,6 @@
             android:layout_alignBottom="@+id/tv_op_same_generation"
             android:layout_alignParentRight="true"
             android:layout_margin="10dp"
-            android:checked="true"
             android:background="@drawable/custom_check_box" />
 
         <TextView
@@ -200,6 +199,7 @@
             android:layout_below="@+id/v2"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="2dp"
+            android:layout_marginBottom="20dp"
             android:text="Prefer to relax"
             android:textColor="@color/black_transparent_back"
             android:textSize="15dp" />

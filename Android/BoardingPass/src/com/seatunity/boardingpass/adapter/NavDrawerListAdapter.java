@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.seatunity.boardingpass.R;
+import com.seatunity.boardingpass.StatusEditActivity;
 import com.seatunity.boardingpass.UpdateStatusDialog;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.model.NavDrawerItem;
@@ -85,7 +86,8 @@ public class NavDrawerListAdapter extends BaseAdapter {
 					Log.i("STATUS EDIT", "showing edit status");
 					// DialogViewer.toastSimple(activity,
 					// "showing edit status");
-					Intent intent = new Intent((Context) activity, UpdateStatusDialog.class);
+					//Intent intent = new Intent((Context) activity, UpdateStatusDialog.class);
+					Intent intent = new Intent((Context) activity, StatusEditActivity.class);
 					activity.startActivity(intent);
 				}
 			});

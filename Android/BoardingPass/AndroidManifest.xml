@@ -216,6 +216,7 @@
         </receiver>
         <activity android:name="PremiumAccountActivity"></activity>
         <activity android:name="SeatingPreferenceActivity"></activity>
+        <activity android:name="StatusEditActivity"></activity>
     </application>
 
 </manifest>

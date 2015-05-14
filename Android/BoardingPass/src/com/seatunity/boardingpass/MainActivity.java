@@ -17,6 +17,7 @@ import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.YuvImage;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -35,6 +37,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +45,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -70,6 +74,7 @@ import com.seatunity.boardingpass.db.SeatUnityDatabase;
 import com.seatunity.boardingpass.fragment.AccountListFragment;
 import com.seatunity.boardingpass.fragment.FragmentAbout;
 import com.seatunity.boardingpass.fragment.FragmentGetBoardingPasseFromBackend;
+import com.seatunity.boardingpass.fragment.FragmentMyAccount;
 import com.seatunity.boardingpass.fragment.HomeListFragment;
 import com.seatunity.boardingpass.fragment.PastBoardingPassListFragment;
 import com.seatunity.boardingpass.fragment.TabFragment;
@@ -151,7 +156,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 
 		// First of all, check for hook-intent
 
-		getOverflowMenu();
+		//getOverflowMenu();
 
 		ImageView icon = (ImageView) findViewById(android.R.id.home);
 		FrameLayout.LayoutParams iconLp = (FrameLayout.LayoutParams) icon.getLayoutParams();
@@ -177,12 +182,16 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
 		navDrawerItems = new ArrayList<NavDrawerItem>();
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
-		navMenuIcons.recycle();
-		mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
-		adapter = new NavDrawerListAdapter(MainActivity.this, getApplicationContext(), appInstance);
+		navDrawerItems.add(new NavDrawerItem(getResources().getString(R.string.txt_home), R.drawable.ic_home_not_active));
+		navDrawerItems.add(new NavDrawerItem(getResources().getString(R.string.txt_home), R.drawable.ic_home_not_active));
+		navDrawerItems.add(new NavDrawerItem(getResources().getString(R.string.txt_myaccounts), R.drawable.ic_my_account_not_active));
+		navDrawerItems.add(new NavDrawerItem(getResources().getString(R.string.txt_past_flight), R.drawable.ic_past_flights_not_active));
+		navDrawerItems.add(new NavDrawerItem(getResources().getString(R.string.txt_seating_profile), R.drawable.ic_seating_profile_not_acti));
+		navDrawerItems.add(new NavDrawerItem(getResources().getString(R.string.txt_premium_account), R.drawable.ic_my_account_not_active));
+		
+		//navMenuIcons.recycle();
+		//mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+		adapter = new NavDrawerListAdapter(MainActivity.this, navDrawerItems);
 		mDrawerList.setAdapter(adapter);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_navigation_drawer_closed,
@@ -198,6 +207,40 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 				invalidateOptionsMenu();
 			}
 		};
+		mDrawerList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				if (position == 0) {
+
+				} else if (position == 1) {
+
+				} else if (position == 2) {
+					FragmentMyAccount fragmentMyAccount=new FragmentMyAccount();
+					FragmentTransaction ft=getFragmentManager().beginTransaction();
+					ft.replace(R.id.frame_container,fragmentMyAccount);
+					ft.addToBackStack(null);
+					ft.commit();
+					
+
+				} else if (position == 3) {
+
+				} else if (position == 4) {
+					Intent intent=new Intent(MainActivity.this,SeatingPreferenceActivity.class);
+					startActivity(intent);
+				}
+				else if (position == 5) {
+					
+					Intent intent=new Intent(MainActivity.this,PremiumAccountActivity.class);
+					startActivity(intent);
+
+				}
+				
+				mDrawerLayout.closeDrawer(Gravity.LEFT);
+
+			}
+			
+		});
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 		// if (savedInstanceState == null) {
 		if (!isHookSuccessful)
