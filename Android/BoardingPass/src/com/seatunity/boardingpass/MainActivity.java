@@ -75,6 +75,7 @@ import com.seatunity.boardingpass.fragment.AccountListFragment;
 import com.seatunity.boardingpass.fragment.FragmentAbout;
 import com.seatunity.boardingpass.fragment.FragmentGetBoardingPasseFromBackend;
 import com.seatunity.boardingpass.fragment.FragmentMyAccount;
+import com.seatunity.boardingpass.fragment.FragmentPastFlights;
 import com.seatunity.boardingpass.fragment.HomeListFragment;
 import com.seatunity.boardingpass.fragment.PastBoardingPassListFragment;
 import com.seatunity.boardingpass.fragment.TabFragment;
@@ -83,6 +84,7 @@ import com.seatunity.boardingpass.interfaces.CollapseClassSelectionList;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
 import com.seatunity.boardingpass.utilty.PkpassReader;
+import com.seatunity.boardingpass.utilty.Utility;
 import com.seatunity.model.BoardingPass;
 import com.seatunity.model.BoardingPassParser;
 import com.seatunity.model.NavDrawerItem;
@@ -106,7 +108,6 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	public CharSequence mDrawerTitle;
 	public CharSequence mTitle;
 	private String[] navMenuTitles;
-	private TypedArray navMenuIcons;
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
 	private BoardingPassApplication appInstance;
@@ -178,7 +179,6 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	 */
 	private void initDrawerAndOtherFields(boolean isHookSuccessful) {
 		navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
-		navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
 		navDrawerItems = new ArrayList<NavDrawerItem>();
@@ -224,6 +224,11 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 					
 
 				} else if (position == 3) {
+					FragmentPastFlights fragmentPastFlights=new FragmentPastFlights();
+					FragmentTransaction ft=getFragmentManager().beginTransaction();
+					ft.replace(R.id.frame_container,fragmentPastFlights);
+					ft.addToBackStack(null);
+					ft.commit();
 
 				} else if (position == 4) {
 					Intent intent=new Intent(MainActivity.this,SeatingPreferenceActivity.class);
@@ -785,18 +790,6 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		}
 	}
 
-	// private void showProgDialog(final String message) {
-	// // runOnUiThread(new Runnable() {
-	// // @Override
-	// // public void run() {
-	// progDialog = new ProgressDialog(MainActivity.this);
-	// progDialog.setContentView(R.layout.progress_content);
-	// ((TextView) progDialog.findViewById(R.id.tv_message)).setText(message);
-	// if (!progDialog.isShowing())
-	// progDialog.show();
-	// // }
-	// // });
-	// }
 
 	private boolean scanAndSaveBPassFromBmp(Bitmap bmap) {
 		Result scanResult = scanBPassFromBmp(bmap);
@@ -879,7 +872,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 				Log.e(TAG, "User not logged in : Contents=" + contents);
 				saveBoardingpassInLocalDB();
 			} else {
-				if (Constants.isOnline(MainActivity.this)) {
+				if (Utility.hasInternet(MainActivity.this)) {
 					Log.i(TAG, "Saving boardingpass in local-db & server");
 					saveBoardingpassInLocalDB();
 					// TODO Check - will it update the boarding pass in

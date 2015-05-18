@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Luhtansha"
+        android:textColor="@color/black_transparent_back"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/tv_from_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_name"
+        android:layout_below="@+id/tv_name"
+        android:text="CDG"
+        android:textColor="@color/black"
+        android:textSize="32dp" />
+
+    <TextView
+        android:id="@+id/tv_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_name"
+        android:layout_below="@+id/tv_from_code"
+        android:text="Paris"
+        android:textColor="@color/black_transparent_back"
+        android:textSize="18dp" />
+
+    <ImageView
+        android:id="@+id/iv_air"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tv_from"
+        android:layout_margin="10dp"
+        android:layout_toRightOf="@+id/tv_from_code"
+        android:src="@drawable/ic_airplane" />
+
+    <TextView
+        android:id="@+id/tv_to_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_name"
+        android:layout_toRightOf="@+id/iv_air"
+        android:text="JFK"
+        android:textColor="@color/black"
+        android:textSize="32dp" />
+
+    <TextView
+        android:id="@+id/tv_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_to_code"
+        android:layout_toRightOf="@+id/iv_air"
+        android:text="New York"
+        android:textColor="@color/black_transparent_back"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:text="10.4.2014"
+        android:textColor="@color/black"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/tv_seat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_date"
+        android:layout_marginTop="40dp"
+        android:layout_toRightOf="@+id/tv_to_code"
+        android:text="Seat E14"
+        android:textColor="@color/black_transparent_back"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/tv_flight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tv_to"
+        android:layout_alignRight="@+id/tv_seat"
+        android:layout_below="@+id/tv_seat"
+        android:text="Flight AF56"
+        android:textColor="@color/black_transparent_back"
+        android:textSize="18dp" />
+
+    <LinearLayout
+        android:id="@+id/tv_buttonholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_from"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnSeatmeats"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_seatmates" />
+         <Button
+            android:id="@+id/btnIdealSeatmate"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_ideal_seatmates" />
+    </LinearLayout>
+
+</RelativeLayout>

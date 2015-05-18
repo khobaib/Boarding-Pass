@@ -53,13 +53,6 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 	// private BoardingPass highlitedboardingpass;
 	private BoardingPassApplication appInstance;
 
-	// private ListView lv_boarding_pass;
-	// private TextView tv_from, tv_to, tv_month_inside_icon,
-	// tv_date_inside_icon, tv_seat_no, tv_flight_no, tv_start_time,
-	// tv_arrival_time, tv_cdg, tv_jfk;
-	// private int callfrom = 0;
-
-	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -95,26 +88,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 			}
 		} else {
 			Log.e(TAG, "Net connection is disabled");
-			// SeatUnityDatabase dbInstance = new
-			// SeatUnityDatabase(getActivity());
-			// dbInstance.open();
-			// list = (ArrayList<BoardingPass>)
-			// dbInstance.retrieveBoardingPassList();
-			// dbInstance.close();
-			// Calendar c = Calendar.getInstance();
-			// int dayofyear = c.get(Calendar.DAY_OF_YEAR);
-			// futureBoardingPassList = (ArrayList<BoardingPass>)
-			// dbInstance.retrieveFutureBoardingPassList();
-			// dbInstance.close();
-			// for (int i = 0; i < list.size(); i++) {
-			// Log.i(TAG, "Traveler name: " +
-			// list.get(i).getTravel_from_name());
-			// int ju_date =
-			// Integer.parseInt(list.get(i).getJulian_date().trim());
-			// if ((ju_date >= dayofyear) && (!list.get(i).getDeletestate())) {
-			// list_greaterthan.add(list.get(i));
-			// }
-			// }
+			
 
 			if (appInstance.isRememberMe()) {
 				Log.e(TAG, "appInstance.isRememberMe()=true");

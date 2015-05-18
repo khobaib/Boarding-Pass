@@ -58,18 +58,10 @@ public class PastBoardingPassListFragment extends TabFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// ViewParent parent = (ViewParent) container.getParent();
-		Log.e("testting", "PastBoardingPassListFragmentonCreateView");
-		Log.i(TAG, "onCreateView");
-		// if (parent instanceof View) {
-		// ((TextView) ((View) parent).findViewById(R.id.welcome_title))
-		// .setText(this.getTag());
-		// }
 		View v = inflater.inflate(R.layout.fragment_tab3, container, false);
 		return v;
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public void onStart() {
 		// Log.e("testting", "PastBoardingPassListFragmentStart");
 		// Constants.GOTABFROMWRITETOPIC=2;
