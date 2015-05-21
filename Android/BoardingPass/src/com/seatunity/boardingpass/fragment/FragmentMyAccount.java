@@ -2,6 +2,7 @@ package com.seatunity.boardingpass.fragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.json.JSONException;
@@ -52,9 +53,12 @@ import com.seatunity.boardingpass.interfaces.CallBackApiCall;
 import com.seatunity.boardingpass.utilty.Base64;
 import com.seatunity.boardingpass.utilty.BoardingPassApplication;
 import com.seatunity.boardingpass.utilty.Constants;
+import com.seatunity.boardingpass.utilty.Utility;
 import com.seatunity.model.ImageScale;
 import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
+import com.seatunity.model.UserPicture;
+
 
 /**
  * This fragment shows the profile-data of the user.
@@ -83,12 +87,17 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 	private Context context;
 	private String contentbodyremeber = "";
 	private ViewGroup v;
-	private Bitmap photo;
 	private int callfrom = 0;
 	private JSONObject loginObj;
 	private Bundle savedState = null;
+	private UserPicture userPic;
+	private Bitmap picture;
 
+	private String selectedImagePath;
+	 private Uri outputFileUri;
 	private final String TAG = this.getClass().getSimpleName();
+	private static final int SELECT_PICTURE = 1;
+	private static final int CAMERA_REQUEST=2;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
@@ -129,7 +138,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 
 			@Override
 			public void onClick(View v) {
-				if (Constants.isOnline(activity)) {
+				if (Utility.hasInternet(activity)) {
 					String[] photochooser = context.getResources().getStringArray(R.array.upload_photo_from);
 					showDialogTochosePhoto(photochooser, context.getResources().getString(R.string.txt_select_photo));
 				} else {
@@ -211,7 +220,12 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 			loginObj.put("image_name", appInstance.getUserCred().getLastname() + System.currentTimeMillis() + ".png");
 			loginObj.put("image_type", "image/png");
 			ByteArrayOutputStream bao = new ByteArrayOutputStream();
+		if(bitmap==null)
+			Log.e("null","bitmap null");
+		else
+		{Log.e("not null","bitmap not null");
 			bitmap.compress(CompressFormat.JPEG, 100, bao);
+		}
 			byte[] ba = bao.toByteArray();
 			String base64Str = Base64.encodeBytes(ba);
 			loginObj.put("image_content", base64Str);
@@ -617,7 +631,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 				dialog.cancel();
 				if (which == 0) {
 					// Intent cameraIntent = new
-					// Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+					/*// Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 					// //Intent cameraIntent = new
 					// Intent("android.media.action.IMAGE_CAPTURE");
 					// //Intent cameraIntent = new
@@ -634,10 +648,11 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 					Log.e("pos", drectory + photofromcamera + " " + f.exists());
 					intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 					startActivityForResult(intent, ACTION_REQUEST_CAMERA);
-					Constants.SELECTEDBOARDINGPASSPOSITION = 1;
+					Constants.SELECTEDBOARDINGPASSPOSITION = 1;*/
+					prepareCamera();
 				} else if (which == 1) {
 
-					if (Build.VERSION.SDK_INT < 19) {
+					/*if (Build.VERSION.SDK_INT < 19) {
 						Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 						intent.setType("image/*");
 
@@ -650,7 +665,12 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 						intent.setType("image/jpeg");
 						startActivityForResult(intent, ACTION_REQUEST_GALLERY_KITKAT);
 					}
-					Constants.SELECTEDBOARDINGPASSPOSITION = 1;
+					Constants.SELECTEDBOARDINGPASSPOSITION = 1;*/
+					Intent intent = new Intent();
+					intent.setType("image/*");
+					intent.setAction(Intent.ACTION_GET_CONTENT);
+					startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
+					
 				}
 			}
 		});
@@ -661,7 +681,48 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		if ((requestCode == ACTION_REQUEST_GALLERY) || (requestCode == ACTION_REQUEST_GALLERY_KITKAT)) {
+		if (resultCode == Activity.RESULT_OK) {
+			if (requestCode == SELECT_PICTURE) {
+				Uri selectedImageUri = data.getData();
+				userPic = new UserPicture(selectedImageUri, getActivity().getContentResolver());
+				try {
+					picture = userPic.getBitmap();
+					if (picture != null)
+						selectedImagePath = userPic.getPath();
+					else
+						Log.e("msg","picture null");
+						
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
+                
+				
+				img_prof_pic.setImageBitmap(picture);
+				
+				uploadProfileImage(picture);
+
+
+			}
+		}
+	 if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {  
+            Log.e("msg","picture saved");
+           
+			userPic = new UserPicture(outputFileUri, getActivity().getContentResolver());
+			try {
+				picture = userPic.getBitmap();
+				if (picture != null)
+					selectedImagePath = userPic.getPath();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			img_prof_pic.setImageBitmap(picture);
+			uploadProfileImage(picture);
+        }  
+	super.onActivityResult(requestCode, resultCode, data);
+		/*if ((requestCode == ACTION_REQUEST_GALLERY) || (requestCode == ACTION_REQUEST_GALLERY_KITKAT)) {
 			Uri selectedImageUri;
 			ImageScale scaleimage = new ImageScale();
 			String tempPath = "";
@@ -676,33 +737,13 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 
 			File file = new File(tempPath);
 			photo = scaleimage.decodeImagetoUpload(file.getAbsolutePath());
+			img_prof_pic.setImageBitmap(photo);
 			file.delete();
+			
 			uploadProfileImage(photo);
 		} else if (requestCode == ACTION_REQUEST_CAMERA) {
 			try {
-				// //Toast.makeText(activity, "working", 2000).show();
-				// Log.e("tag", "1");
-				// Uri selectedImageUri ;
-				// Log.e("tag", "2");
-				// ImageScale scaleimage=new ImageScale();
-				// Log.e("tag", "3");
-				//
-				// String tempPath ="";
-				// selectedImageUri = data.getData();
-				// Log.e("tag", "4");
-				//
-				// Log.e("Path", "ab "+data);
-				// Log.e("tag", "5");
-				//
-				// tempPath =Constants.getPath(activity, selectedImageUri);
-				// Log.e("tag", "6");
-				//
-				// Log.e("Path", "ab "+tempPath);
-				// //File file=new File(tempPath);
-				// photo = scaleimage.decodeFile(tempPath);
-				// Log.e("height", photo.getHeight()+" ab "+photo.getWidth());
-				// //file.delete();
-				// uploadProfileImage(photo);
+
 				if (drectory == null) {
 					drectory = Constants.drectory;
 				}
@@ -718,8 +759,9 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 					ImageScale scaleimage = new ImageScale();
 					photo = scaleimage.decodeFile(file.getAbsolutePath());
 					file.delete();
-
+					img_prof_pic.setImageBitmap(photo);
 					uploadProfileImage(photo);
+					
 				}
 				// else{
 				// Toast.makeText(activity, "Not working", 2000).show();
@@ -728,10 +770,27 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 			} catch (Exception e) {
 				Log.e("Could not save", e.toString());
 			}
-		}
+		}*/
 	}
 
-	@SuppressWarnings("deprecation")
+	void prepareCamera()
+	{
+		final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/picFolder/"; 
+        File newdir = new File(dir); 
+        newdir.mkdirs();
+        String file = dir+System.currentTimeMillis()+".jpg";
+        File newfile = new File(file);
+        try {
+            newfile.createNewFile();
+        } catch (IOException e) {}       
+
+        outputFileUri = Uri.fromFile(newfile);
+
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); 
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+
+        startActivityForResult(cameraIntent,CAMERA_REQUEST);
+	}
 	public String getPath(Uri uri, Activity activity) {
 		String[] projection = { MediaColumns.DATA };
 		Cursor cursor = activity.managedQuery(uri, projection, null, null, null);
@@ -810,7 +869,7 @@ public class FragmentMyAccount extends Fragment implements CallBackApiCall {
 
 					appInstance.setUserCred(userCred);
 					setListView();
-					Constants.photo = null;
+					//Constants.photo = null;
 				}
 				// this.img_prof_pic.setImageBitmap(photo);
 				ImageLoader.getInstance()

@@ -160,7 +160,7 @@ public class BoardingPassApplication extends Application {
 	 *         ticked during the last log-in.<br>
 	 *         {@code false} otherwise.
 	 */
-	public boolean isRememberMe() {
+	public boolean isUserLoggedIn() {
 		Boolean rememberMeFlag = User.getBoolean(Constants.REMEMBER_ME, false);
 		return rememberMeFlag;
 	}

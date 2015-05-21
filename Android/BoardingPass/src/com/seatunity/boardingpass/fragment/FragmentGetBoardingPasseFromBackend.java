@@ -57,7 +57,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = getActivity();
-		// Log.e("again", "onCreate");
+		Log.e("again", "onCreate");
 		appInstance = (BoardingPassApplication) getActivity().getApplication();
 		if (parent == null) {
 			parent = Constants.parent;
@@ -68,8 +68,8 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 		futureBoardingPassList = (ArrayList<BoardingPass>) dbInstance.retrieveFutureBoardingPassList();
 		dbInstance.close();
 		if (Constants.isOnline(getActivity())) {
-			Log.d(TAG, "User remembered: " + appInstance.isRememberMe());
-			if (!appInstance.isRememberMe()) {
+			Log.d(TAG, "User remembered: " + appInstance.isUserLoggedIn());
+			if (!appInstance.isUserLoggedIn()) {
 				int sz = futureBoardingPassList.size();
 				if (sz < 1) {
 					Log.e(TAG, "futureBoardingPassList.size() = " + sz + ", so starting HomeFragment");
@@ -82,6 +82,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 			// User is registered, so try to retrieve his/her bpasses from
 			// server
 			else {
+				Log.e("msg", "calling api");
 				apiCaller = new AsyncaTaskApiCall(this, getJsonObjet(), getActivity(), "bplist",
 						Constants.REQUEST_TYPE_POST);
 				apiCaller.execute();
@@ -90,7 +91,7 @@ public class FragmentGetBoardingPasseFromBackend extends Fragment implements Cal
 			Log.e(TAG, "Net connection is disabled");
 			
 
-			if (appInstance.isRememberMe()) {
+			if (appInstance.isUserLoggedIn()) {
 				Log.e(TAG, "appInstance.isRememberMe()=true");
 				if (futureBoardingPassList.size() < 1) {
 					parent.startAddBoardingPassDuringLogin();

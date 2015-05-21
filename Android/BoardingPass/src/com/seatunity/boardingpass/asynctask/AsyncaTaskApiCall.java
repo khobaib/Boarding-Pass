@@ -129,7 +129,7 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 		this.cbListenar = CaBLisenar;
 		this.requestType = requestType;
 		jsonParser = new JsonParser();
-		showDialog(activity);
+		//showDialog(activity);
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 					Constants.REQUEST_TYPE_POST, url, null, body, null);
 		} else if (localDbSyncer != null) {
 			String url = Constants.baseurl + "newbp";
-			response = jsonParser.retrieveServerData(
+			response = jsonParser.retrieveServerData( 
 					Constants.REQUEST_TYPE_POST, url, null, body, null);
 		} else if (netstatelisenaer != null) {
 			String url = Constants.baseurl + "newbp";
@@ -226,6 +226,8 @@ public class AsyncaTaskApiCall extends AsyncTask<Void, Void, ServerResponse> {
 					Constants.REQUEST_TYPE_POST, url, null, body, null);
 		} else if (cbListenar != null) {
 			String url = Constants.baseurl + addedurl;
+			Log.e("server url",url);
+			Log.e("req body",body);
 			response = jsonParser.retrieveServerData(requestType, url, null,
 					body, null);
 		}

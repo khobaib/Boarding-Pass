@@ -213,7 +213,7 @@ public class FragmentPastBoardingPasses extends Fragment implements
 						getActivity(), pastBPasslist, true);
 				lv_boarding_past_pass.setAdapter(adapter);
 			} else {
-				if (appInstance.isRememberMe()) {
+				if (appInstance.isUserLoggedIn()) {
 					parent.backEndStack.pop();
 					Log.e(TAG,
 							"Going back to FragmentAddBoardingPassDuringLogin");

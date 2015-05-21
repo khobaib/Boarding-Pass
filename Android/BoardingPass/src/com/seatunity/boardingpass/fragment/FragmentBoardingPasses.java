@@ -207,7 +207,7 @@ public class FragmentBoardingPasses extends Fragment implements CallBackApiCall 
 				AdapterForBoardingPass adapter = new AdapterForBoardingPass(getActivity(), futureBPList,false);
 				lv_boarding_pass.setAdapter(adapter);
 			} else {
-				if (appInstance.isRememberMe()) {
+				if (appInstance.isUserLoggedIn()) {
 					parent.backEndStack.pop();
 					parent.startAddBoardingPassDuringLogin();
 				} else {

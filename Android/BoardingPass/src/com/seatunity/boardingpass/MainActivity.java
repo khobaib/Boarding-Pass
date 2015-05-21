@@ -28,6 +28,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.YuvImage;
+import android.graphics.Paint.Join;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -56,6 +57,7 @@ import android.widget.Toast;
 import com.artifex.mupdfdemo.ChoosePDFActivity;
 import com.artifex.mupdfdemo.MuPDFActivity;
 import com.bugsense.trace.BugSenseHandler;
+import com.google.gson.JsonObject;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
@@ -92,9 +94,7 @@ import com.seatunity.model.ServerResponse;
 import com.seatunity.model.UserCred;
 import com.touhiDroid.filepicker.FilePickerActivity;
 
-@SuppressWarnings("deprecation")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-@SuppressLint("NewApi")
+
 public class MainActivity extends FragmentActivity implements CallBackApiCall {
 
 	private final String TAG = this.getClass().getSimpleName();
@@ -476,24 +476,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		}
 	}
 
-	// /**
-	// * The method calls the intent to share the application with
-	// * {@link Intent.ACTION_SEND} flag & share-text as : <br>
-	// * {@code
-	// "Hey I am using SeatUnity. This is a nice app to store boarding pass and to communicate with seatmates."
-	// }
-	// */
-	// private void shareApp() {
-	// Intent sendIntent = new Intent();
-	// sendIntent.setAction(Intent.ACTION_SEND);
-	// sendIntent
-	// .putExtra(Intent.EXTRA_TEXT,
-	// "Hey I am using SeatUnity. This is a nice app to store boarding pass and to communicate with seatmates.");
-	// sendIntent.setType("text/plain");
-	// startActivity(Intent.createChooser(sendIntent,
-	// getResources().getString(R.string.share_via)));
-	// }
-
+	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
@@ -666,57 +649,6 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		startActivityForResult(intent, BARCODE_SCAN_FROM_CAMERA);
 	}
 
-	// /**
-	// * When user selects any file from any file-browser, the app can be chosen
-	// * from the chooser & this activity is opened with this method called,
-	// which
-	// * actually decides the file-type (image/pdf/pkpass) & prompts the user to
-	// * scan it for any boarding-pass.
-	// *
-	// * @param filename
-	// * The chosen file's absolute name.
-	// */
-	// private void showAlert(final String filename) {
-	// AlertDialog.Builder alertDialogBuilder = new
-	// AlertDialog.Builder(MainActivity.this);
-	// alertDialogBuilder.setTitle(getResources().getString(R.string.app_name));
-	// alertDialogBuilder
-	// .setMessage(getResources().getString(R.string.txt_startscan_forboardingpass))
-	// .setCancelable(false)
-	// .setPositiveButton(getResources().getString(R.string.txt_ok), new
-	// DialogInterface.OnClickListener() {
-	// public void onClick(DialogInterface dialog, int id) {
-	// dialog.cancel();
-	// if (Constants.isImage(filename)) {
-	// Bitmap bitmap = BitmapFactory.decodeFile(filename);
-	// scanAndSaveBPassFromBmp(bitmap);
-	// } else if (Constants.isPdf(filename)) {
-	// getBoardingPassFromPDF(filename);
-	// } else if (Constants.isPkPass(filename)) {
-	// try {
-	// String boardingpass = PkpassReader.getPassbookBarcodeString(filename);
-	// JSONObject job = new JSONObject(boardingpass);
-	// saveScannedBoardingPassToDB(job.getString("message"),
-	// job.getString("format"));
-	// } catch (JSONException e) {
-	// Toast.makeText(MainActivity.this,
-	// getResources().getString(R.string.txt_invalid_borading_pass),
-	// Toast.LENGTH_SHORT).show();
-	// }
-	// }
-	//
-	// }
-	// })
-	// .setNegativeButton(getResources().getString(R.string.txt_cancel),
-	// new DialogInterface.OnClickListener() {
-	// public void onClick(DialogInterface dialog, int id) {
-	// MainActivity.this.finish();
-	// }
-	// });
-	// AlertDialog alertDialog = alertDialogBuilder.create();
-	// alertDialog.show();
-	// }
-
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		if (resultCode == RESULT_OK) {
@@ -868,18 +800,18 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 
 			if (appInstance == null)
 				appInstance = (BoardingPassApplication) getApplication();
-			if (!appInstance.isRememberMe()) {
+			if (!appInstance.isUserLoggedIn()) {
 				Log.e(TAG, "User not logged in : Contents=" + contents);
 				saveBoardingpassInLocalDB();
 			} else {
 				if (Utility.hasInternet(MainActivity.this)) {
-					Log.i(TAG, "Saving boardingpass in local-db & server");
+					Log.e(TAG, "Saving boardingpass in local-db & server");
 					saveBoardingpassInLocalDB();
 					// TODO Check - will it update the boarding pass in
 					// the remote-server in any later phase, rather than
 					// instantly?
-					if (Looper.myLooper() == Looper.getMainLooper())
-						saveBoardingPasstoServer(boardingPass);
+					//if (Looper.myLooper() == Looper.getMainLooper())
+					saveBoardingPasstoServer(boardingPass);
 				} else {
 					Log.e("No Internet", contents);
 					saveBoardingpassInLocalDB();
@@ -898,18 +830,39 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 	 * @param bpass
 	 */
 	private void saveBoardingPasstoServer(BoardingPass bpass) {
-		Log.d(TAG, "saveBoardingPasstoServer : inside");
+		Log.e(TAG, "saveBoardingPasstoServer : inside");
 		needtoReusedBoardingPass = bpass;
 		String bpassdata = "";
 		bpassdata = getJsonOfBoardingPass(bpass);
+		bpassdata=getJsonToPostInServer(bpassdata);
 		AsyncaTaskApiCall change_pass = new AsyncaTaskApiCall(MainActivity.this, bpassdata, MainActivity.this, "newbp",
 				Constants.REQUEST_TYPE_POST);
 		change_pass.execute();
 	}
 
+	private String getJsonToPostInServer(String bdata)
+	{
+		JSONObject bpassRequest=new JSONObject();
+		try {
+			JSONObject session_json=new JSONObject();
+			session_json.put("session_id", appInstance.getUserCred().getToken());
+			
+			bpassRequest.put("authentication",session_json);
+			bpassRequest.put("version","1");
+			bpassRequest.put("year","2014");
+			JSONObject jobj=new JSONObject(bdata);
+			bpassRequest.put("bpdata",jobj);
+			return bpassRequest.toString();
+		} catch (JSONException e) {
+			
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
 	/**
 	 * Forms a JSON-string to send boarding-pass data to save at the server.
-	 * 
+	 *  
 	 * @param bpass
 	 *            The boarding-pass to save in the server.
 	 * @return
@@ -948,10 +901,8 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		SeatUnityDatabase dbInstance = new SeatUnityDatabase(MainActivity.this);
 		dbInstance.open();
 		dbInstance.insertOrUpdateBoardingPass(boardingPass);
-		// ArrayList<BoardingPass>list=(ArrayList<BoardingPass>)
-		// dbInstance.retrieveBoardingPassList();
 		dbInstance.close();
-		boolean isMainThread = (Looper.myLooper() == Looper.getMainLooper());
+		/*boolean isMainThread = (Looper.myLooper() == Looper.getMainLooper());
 		Log.d(TAG, "Calling displayView from ui thread, where currnt thread is-main=" + (isMainThread));
 		if (isMainThread) {
 			if (Constants.isBPassDateInFuture(boardingPass.getJulian_date().trim())) {
@@ -973,7 +924,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 						displayView(2);
 					}
 				}
-			});
+			});*/
 	}
 
 	/**
@@ -1039,6 +990,7 @@ public class MainActivity extends FragmentActivity implements CallBackApiCall {
 		String success;
 		try {
 			success = job.getString("success");
+			Log.e("success",job.toString());
 			if (success.equals("true")) {
 				String id = job.getString("id");
 				boardingPass.setId(id);
